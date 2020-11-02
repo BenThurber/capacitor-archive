@@ -3,10 +3,8 @@ stages:
   - test
 
 default:
-before_script:
-    - which gradle
-    - which java
-    - which npm
+  before_script:
+
 
 setup:
   stage: setup
