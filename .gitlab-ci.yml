@@ -1,0 +1,32 @@
+stages:
+  - setup
+  - test
+
+default:
+before_script:
+    - which gradle
+    - which java
+    - which npm
+
+setup:
+  stage: setup
+  image: node:alpine
+  script:
+    - cd client
+    - npm install
+  cache:
+    paths:
+      - client/node_modules/
+  artifacts:
+    paths:
+      - client/node_modules/
+
+variables:
+  GIT_DEPTH: 0
+
+junit:
+  stage: test
+  image: adoptopenjdk/openjdk11:alpine
+  script:
+    - cd server
+    - ./gradlew test
