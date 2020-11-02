@@ -2,6 +2,8 @@ package com.example.demo.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.NotNull;
+
 
 public class UserRegisterRequest {
 
@@ -11,9 +13,11 @@ public class UserRegisterRequest {
     @JsonProperty("lastName")
     private String lastName;
 
+    @NotNull(message = "This user needs an email")
     @JsonProperty("email")
     private String email;
 
+    @NotNull(message = "This user needs a password")
     @JsonProperty("password")
     private String password;
 

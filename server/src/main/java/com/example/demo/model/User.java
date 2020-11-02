@@ -47,7 +47,7 @@ public class User {
         setFirstName(r.getFirstName());
         setLastName(r.getLastName());
         setEmail(r.getEmail());
-        setPasswordHash(r.getPassword());
+        setPassword(r.getPassword());
         setEmailVisible(r.getEmailVisible());
         setUsername(r.getUsername());
         setBio(r.getBio());
@@ -97,7 +97,7 @@ public class User {
      * Converts plaintext password to a hash with BCryptPasswordEncoder
      * @param password a plaintext password
      */
-    public void setPasswordHash(String password) {
+    public void setPassword(String password) {
         this.passwordHash = password != null ? encoder.encode(password) : null;
     }
 
