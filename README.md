@@ -33,14 +33,34 @@ Add a new user with password and grant them privileges on all databases
 
 ### Installing a gitlab-runner
 
-Create a volume in docker for gitlab-runner
-`docker volume create gitlab-runner-config`
+cd into the directory `capacitor-gitlab-runner/` and compile the docker file for the gitlab runner using  
+`sudo docker build -t capacitor-gitlab-runner ./`  
 
-Install and start gitlab-runner inside docker
+
+Create a volume in docker for gitlab-runner  
+`sudo docker volume create gitlab-runner-config`  
+
+
+Install and start the runner inside docker  
 ```
-   docker run -d --name gitlab-runner --restart always \
+   sudo docker run -d --name gitlab-runner --restart always \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v gitlab-runner-config:/etc/gitlab-runner \
-    gitlab/gitlab-runner:latest
+    capacitor-gitlab-runner:latest
 
-```
+```  
+
+
+Register the runner  
+`sudo docker run --rm -it -v gitlab-runner-config:/etc/gitlab-runner capacitor-gitlab-runner:latest register`  
+
+Follow the onscreen prompts:
+- Enter the domain of your gitlab (https://gitlab.com/ if you are not hosing your own repository)  
+- It will ask for a "gitlab-ci token".  Find this in your gitlab repository in the left bar under Settings > CI/CD > Runners.  Hit expand, and it is under the heading "Set up a specific Runner manually".  
+- Enter a description  
+- Enter any tags  
+- Select docker  
+
+
+
+
