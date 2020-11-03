@@ -33,7 +33,7 @@ Add a new user with password and grant them privileges on all databases
 
 ### Installing a gitlab-runner
 
-cd into the directory `capacitor-gitlab-runner/` and compile the docker file for the gitlab runner using  
+cd into the directory `capacitor-runner-docker/` and compile the docker file for the gitlab runner using  
 `sudo docker build -t capacitor-gitlab-runner ./`  
 
 
