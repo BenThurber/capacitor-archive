@@ -24,7 +24,7 @@ variables:
 
 junit:
   stage: test
-  image: adoptopenjdk/openjdk11:alpine
+  image: gradle:6.7.0-jdk11
   script:
     - cd server
     - ./gradlew test
