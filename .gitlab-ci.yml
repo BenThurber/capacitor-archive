@@ -8,7 +8,6 @@ default:
 
 setup:
   stage: setup
-  image: node:alpine
   script:
     - cd client
     - echo n | npm install
@@ -24,7 +23,6 @@ variables:
 
 junit:
   stage: test
-  image: gradle:6.7.0-jdk11
   script:
     - cd server
     - ./gradlew test
