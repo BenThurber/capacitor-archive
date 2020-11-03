@@ -59,7 +59,7 @@ Follow the onscreen prompts:
 - It will ask for a "gitlab-ci token".  Find this in your gitlab repository in the left bar under Settings > CI/CD > Runners.  Hit expand, and it is under the heading "Set up a specific Runner manually".  
 - Enter a description  
 - Enter any tags  
-- Select docker  
+- Select shell  
 
 
 
