@@ -11,7 +11,7 @@ setup:
   image: node:alpine
   script:
     - cd client
-    - npm install
+    - echo n | npm install
   cache:
     paths:
       - client/node_modules/
