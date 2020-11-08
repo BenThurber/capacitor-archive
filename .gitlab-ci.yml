@@ -26,3 +26,11 @@ junit:
   script:
     - cd server
     - ./gradlew test
+
+jasmine:
+  stage: test
+  script:
+    - cd client
+    - ng test
+
+
