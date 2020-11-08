@@ -30,6 +30,10 @@ Add a new user with password and grant them privileges on all databases
 `CREATE USER '<New User>'@'%' IDENTIFIED WITH caching_sha2_password BY '<password>';`  
 `GRANT ALL PRIVILEGES ON *.* TO '<New User>'@'%' WITH GRANT OPTION;`
 
+Install phpmyadmin  
+`sudo docker run --name phpmyadmin -d -e PMA_ARBITRARY=1 --restart always -p 8081:80 -p 8082:443 phpmyadmin:5.0.2-apache`  
+Phpmyadmin can be accessed from http://<Host-Address>:8081/.  The server address of the database is <Host-Address>:3306  
+
 
 ### Installing a gitlab-runner
 
