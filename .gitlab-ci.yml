@@ -8,10 +8,9 @@ default:
 
 setup:
   stage: setup
-  image: node:alpine
   script:
     - cd client
-    - npm install
+    - echo n | npm install
   cache:
     paths:
       - client/node_modules/
@@ -24,7 +23,15 @@ variables:
 
 junit:
   stage: test
-  image: adoptopenjdk/openjdk11:alpine
   script:
     - cd server
     - ./gradlew test
+
+jasmine:
+  stage: test
+  script:
+    - cd client
+    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
+
+
+
