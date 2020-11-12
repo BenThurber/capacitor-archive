@@ -42,14 +42,17 @@ deploy-test-server:
     - cd server
     - ./gradlew bootJar
     # Move artifact to clean directory
-    - rm -rf /home/gitlab-runner/test-server/
-    - mkdir -p /home/gitlab-runner/test-server/
-    - cp -r ./build/libs /home/gitlab-runner/test-server
+    - rm -rf ~/test-server/ || true
+    - mkdir -p ~/test-server/
+    - cp -r ./build/libs ~/test-server
     # Update bash script and restart service
     - rm -f /home/gitlab-runner/runTestServer.sh || true
     - cp ../deployment-scripts/runTestServer.sh /home/gitlab-runner/runTestServer.sh
     - cd /home/gitlab-runner/test-server/
-    - 
+    # Copy new service file and restart service
+    - cp ../deployment-scripts/testServer.service /etc/systemd/system/
+    - sudo systemctl enable testServer.service|| true   # Is the || true nessesary?
+    - sudo systemctl restart testServer 
 #  only:
 #    refs:
 #      - development
