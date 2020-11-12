@@ -1,6 +1,7 @@
 stages:
   - setup
   - test
+  - deploy
 
 default:
   before_script:
@@ -33,5 +34,24 @@ jasmine:
     - cd client
     - ng test --browsers ChromeHeadlessNoSandbox --watch=false
 
+
+deploy-test-server:
+  stage: deploy
+  script:
+    # Create artifact
+    - cd server
+    - ./gradlew bootJar
+    # Move artifact to clean directory
+    - rm -rf /home/gitlab-runner/test-server/
+    - mkdir -p /home/gitlab-runner/test-server/
+    - cp -r ./build/libs /home/gitlab-runner/test-server
+    # Update bash script and restart service
+    - rm -f /home/gitlab-runner/runTestServer.sh || true
+    - cp ../deployment-scripts/runTestServer.sh /home/gitlab-runner/runTestServer.sh
+    - cd /home/gitlab-runner/test-server/
+    - 
+#  only:
+#    refs:
+#      - development
 
 

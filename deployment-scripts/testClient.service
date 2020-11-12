@@ -1,0 +1,13 @@
+[Unit]
+Description=Capacitor Archive Test Client service
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+User=bgt26
+WorkingDirectory=/home/bgt26
+ExecStart=/bin/bash runTestClient.sh
+
+[Install]
+WantedBy=multi-user.target
