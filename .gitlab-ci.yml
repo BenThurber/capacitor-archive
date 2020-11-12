@@ -46,9 +46,8 @@ deploy-test-server:
     - mkdir -p ~/test-server/
     - cp -r ./build/libs ~/test-server
     # Update bash script and restart service
-    - rm -f /home/gitlab-runner/runTestServer.sh || true
-    - cp ../deployment-scripts/runTestServer.sh /home/gitlab-runner/runTestServer.sh
-    - cd /home/gitlab-runner/test-server/
+    - rm -f ~/runTestServer.sh || true
+    - cp ../deployment-scripts/runTestServer.sh ~/runTestServer.sh
     # Copy new service file and restart service
     - cp ../deployment-scripts/testServer.service /etc/systemd/system/
     - sudo systemctl enable testServer.service|| true   # Is the || true nessesary?
