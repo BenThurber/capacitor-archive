@@ -1,3 +1,2 @@
-fuser -k 9500/tcp || true
-source ./test-client/envVars.txt
-serve -s test-client/dist/ -l 9500
+fuser -k 35504/tcp || true
+serve -s test-client/dist/ -l 35504
