@@ -23,13 +23,6 @@ RUN echo "Installing JDK11" \
  && java --version
 
 
-################
-# Install Apache
-################
-
-# ToDo...
-
-
 
 #########################
 # Install Headless Chrome
@@ -42,4 +35,12 @@ RUN apk add chromium
 
 ENV CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/
+
+
+###########################
+# Install OpenRC (services)
+###########################
+
+RUN apk add openrc
+
 
