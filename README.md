@@ -12,7 +12,7 @@ Start and enable docker
 `sudo systemctl enable docker`
 
 
-### Installing mysql inside docker
+Installing mysql inside docker
 
 Install and start mysql 8.0.22 Inside docker.  Replace <password> with your password:  
 `sudo docker run --name capacitor-mysql --restart always -p 3306:3306 -e MYSQL_ROOT_PASSWORD=<password> -d mysql:8.0.22`
@@ -27,7 +27,7 @@ Create a new database
 `CREATE DATABASE capacitor_test;`
 
 Add a new user with password and grant them privileges on all databases  
-`CREATE USER '<New User>'@'%' IDENTIFIED WITH caching_sha2_password BY '<password>';`  
+`CREATE USER '<New User>'@'%' IDENTIFIED WITH mysql_native_password BY '<password>';`  
 `GRANT ALL PRIVILEGES ON *.* TO '<New User>'@'%' WITH GRANT OPTION;`
 
 Install phpmyadmin  
