@@ -38,20 +38,22 @@ jasmine:
 deploy-test-server:
   stage: deploy
   script:
-    - printenv
     # Create artifact
     - cd server
     - ./gradlew bootJar
     # Move artifact to clean directory
-    - rm -rf ~/test-server/ || true
-    - mkdir -p ~/test-server/
+    - rm -rf /home/gitlab-runner/test-server/ || true
+    - mkdir -p /home/gitlab-runner/test-server/
     - cp -r ./build/libs ~/test-server
     # Update bash script and restart service
-    - rm -f ~/runTestServer.sh || true
-    - cp ../deployment-scripts/runTestServer.sh ~/runTestServer.sh
+    - rm -f /home/gitlab-runner/runTestServer.sh || true
+    - cp ../deployment-scripts/runTestServer.sh /home/gitlab-runner/runTestServer.sh
     # Copy new service file and restart service
+    - cd /home/gitlab-runner
     - kill -9 $(cat testServer.pid) || true
-    - nohup ~/runTestServer.sh > nohup.out 2>&1 & echo $! > run.pid
+    - pwd > my_pwd.txt
+    - ls >> my_pwd.txt
+    - nohup ./runTestServer.sh > nohupTestServer.out 2>&1 & echo $! > run.pid
 #  only:
 #    refs:
 #      - development
