@@ -49,9 +49,8 @@ deploy-test-server:
     - rm -f ~/runTestServer.sh || true
     - cp ../deployment-scripts/runTestServer.sh ~/runTestServer.sh
     # Copy new service file and restart service
-    - cp ../deployment-scripts/testServer.service /etc/systemd/system/
-    - sudo systemctl enable testServer.service || true   # Is the || true nessesary?
-    - sudo systemctl restart testServer 
+    - kill -9 $(cat testServer.pid) || true
+    - nohup runTestServer.sh > /dev/null 2>&1 & echo $! > run.pid
 #  only:
 #    refs:
 #      - development
