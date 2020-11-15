@@ -50,7 +50,7 @@ deploy-test-server:
     - cp ../deployment-scripts/runTestServer.sh ~/runTestServer.sh
     # Copy new service file and restart service
     - cp ../deployment-scripts/testServer.service /etc/systemd/system/
-    - sudo systemctl enable testServer.service|| true   # Is the || true nessesary?
+    - sudo systemctl enable testServer.service || true   # Is the || true nessesary?
     - sudo systemctl restart testServer 
 #  only:
 #    refs:
