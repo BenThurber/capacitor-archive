@@ -27,7 +27,7 @@ Create a new database
 `CREATE DATABASE capacitor_test;`
 
 Add a new user with password and grant them privileges on all databases  
-`CREATE USER '<New User>'@'%' IDENTIFIED WITH caching_sha2_password BY '<password>';`  
+`CREATE USER '<New User>'@'%' IDENTIFIED WITH mysql_native_password BY '<password>';`  
 `GRANT ALL PRIVILEGES ON *.* TO '<New User>'@'%' WITH GRANT OPTION;`
 
 Install phpmyadmin  

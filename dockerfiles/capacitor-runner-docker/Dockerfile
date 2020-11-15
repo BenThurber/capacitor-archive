@@ -23,13 +23,6 @@ RUN echo "Installing JDK11" \
  && java --version
 
 
-################
-# Install Apache
-################
-
-# ToDo...
-
-
 
 #########################
 # Install Headless Chrome
@@ -38,8 +31,10 @@ RUN echo "Installing JDK11" \
 
 # Installs latest Chromium package.
 
-RUN apk add chromium
+RUN echo "Installing Headless Chrome" && apk add chromium
 
 ENV CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/
+
+
 
