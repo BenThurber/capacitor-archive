@@ -38,6 +38,7 @@ jasmine:
 deploy-test-server:
   stage: deploy
   script:
+    - printenv
     # Create artifact
     - cd server
     - ./gradlew bootJar
@@ -50,7 +51,7 @@ deploy-test-server:
     - cp ../deployment-scripts/runTestServer.sh ~/runTestServer.sh
     # Copy new service file and restart service
     - kill -9 $(cat testServer.pid) || true
-    - nohup runTestServer.sh > /dev/null 2>&1 & echo $! > run.pid
+    - nohup runTestServer.sh > nohup.out 2>&1 & echo $! > run.pid
 #  only:
 #    refs:
 #      - development
