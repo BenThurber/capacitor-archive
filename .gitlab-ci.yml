@@ -44,18 +44,37 @@ deploy-test-server:
     # Move artifact to clean directory
     - rm -rf /home/gitlab-runner/test-server/ || true
     - mkdir -p /home/gitlab-runner/test-server/
-    - cp -r ./build/libs ~/test-server
+    - cp -r ./build/libs /home/gitlab-runner/test-server
     # Update bash script and restart service
     - rm -f /home/gitlab-runner/runTestServer.sh || true
     - cp ../deployment-scripts/runTestServer.sh /home/gitlab-runner/runTestServer.sh
     # Copy new service file and restart service
     - cd /home/gitlab-runner
     - kill -9 $(cat testServer.pid) || true
-    - pwd > my_pwd.txt
-    - ls >> my_pwd.txt
-    - nohup ./runTestServer.sh > nohupTestServer.out 2>&1 & echo $! > run.pid
+    - nohup ./runTestServer.sh > nohupTestServer.out 2>&1 & echo $! > testServer.pid
 #  only:
 #    refs:
 #      - development
 
 
+
+deploy-test-client:
+  stage: deploy
+  script:
+    # Create artifact
+    - cd client
+    - ng --prod --aot build
+    # Move artifact to clean directory
+    - rm -rf /home/gitlab-runner/test-client/ || true
+    - mkdir -p /home/gitlab-runner/test-client/
+    - cp -r ./dist /home/gitlab-runner/test-client
+    # Update bash script and restart service
+    - rm -f /home/gitlab-runner/runTestClient.sh || true
+    - cp ../deployment-scripts/runTestClient.sh /home/gitlab-runner/runTestClient.sh
+    # Copy new service file and restart service
+    - cd /home/gitlab-runner
+    - kill -9 $(cat testClient.pid) || true
+    - nohup ./runTestClient.sh > nohupTestClient.out 2>&1 & echo $! > testClient.pid
+#  only:
+#    refs:
+#      - development

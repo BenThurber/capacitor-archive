@@ -13,6 +13,7 @@ RUN echo "Installing Node" \
  && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.18.4-r0 \
  && node -v \
  && npm install -g @angular/cli
+ && npm install -g http-server
 
 
 ###############
