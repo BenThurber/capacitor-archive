@@ -2,62 +2,38 @@
 
 ## Setting up a VM for CI/CD and MySQL using docker containers
 
-### Install docker
-Inside a linux machine, (either a VM or bare metal) install docker  
+### Install docker and docker-compose
+Inside a linux machine, (either a VM or bare metal) install docker    
 `sudo apt-get update`  
-`sudo apt install docker.io`
+`sudo apt install docker.io`  
 
 Start and enable docker  
 `sudo systemctl start docker`  
-`sudo systemctl enable docker`
+`sudo systemctl enable docker`  
 
+Install Docker Compose  
+`sudo apt install docker-compose`  
 
-### Installing mysql inside docker
-
-Install and start mysql 8.0.22 Inside docker.  Replace <password> with your password:  
-`sudo docker run --name capacitor-mysql --restart always --net=host -e MYSQL_ROOT_PASSWORD=<password> -d mysql:8.0.22`
-
-Get a terminal inside the capacitor-mysql docker container  
-`sudo docker exec -it capacitor-mysql bash`
-
-Login to mysql with  
-`mysql -u root -p`
-
-Create a new database  
-`CREATE DATABASE capacitor_test;`
-
-Add a new user with password and grant them privileges on all databases  
-`CREATE USER '<New User>'@'%' IDENTIFIED WITH caching_sha2_password BY '<password>';`  
-`GRANT ALL PRIVILEGES ON *.* TO '<New User>'@'%' WITH GRANT OPTION;`
-
-Install phpmyadmin  
-`sudo docker run --name phpmyadmin -d -e PMA_ARBITRARY=1 --restart always -p 8081:80 -p 8082:443 phpmyadmin:5.0.2-apache`  
-Phpmyadmin can be accessed from http://<Host-Address>:8081/.  The server address of the database is <Host-Address>:3306  
-
-
-### Installing a gitlab-runner
-
-cd into the directory `capacitor-runner-docker/` and compile the docker file for the gitlab runner using  
-`sudo docker build -t capacitor-gitlab-runner ./`  
-
-
-Create a volume in docker for gitlab-runner  
-`sudo docker volume create gitlab-runner-config`  
-
-
-Install and start the runner inside docker  
+### Set mysql credentials
+Store the credentials for mysql in a file mysql-variables.env in the root directory of the project.  
 ```
-   sudo docker run -d --name gitlab-runner --restart always \
-    -v /var/run/docker.sock:/var/run/docker.sock \
-    -v gitlab-runner-config:/etc/gitlab-runner \
-    --net=host \
-    capacitor-gitlab-runner:latest
+CAP_DB_ROOT_PASSWORD=<root-pass>
+CAP_DB_DBA_USERNAME=<dba-username>
+CAP_DB_DBA_PASSWORD=<dba-password>
+```
 
-```  
+### Create docker containers for mysql, phpmyadmin and gitlab-runner
+Run the following command which executes docker-compose.yml  
+`sudo docker-compose up -d`  
 
 
-Register the runner  
-`sudo docker run --rm -it -v gitlab-runner-config:/etc/gitlab-runner capacitor-gitlab-runner:latest register`  
+### Register the runner  
+This should only have to be done once after running docker-compose for the first time.  
+Open a shell inside the container.  
+`sudo docker exec -it gitlab-runner bash`  
+And register with  
+`gitlab-runner register`  
+
 
 Follow the onscreen prompts:
 - Enter the domain of your gitlab (https://gitlab.com/ if you are not hosing your own repository)  
@@ -67,5 +43,9 @@ Follow the onscreen prompts:
 - Select shell  
 
 
-
-
+## Accessing database and phpmyadmin
+The command `sudo docker ps` can be used to see all running docker containers.  There should be three; phpmyadmin, capacitor-mysql and gitlab-runner.   
+By default a database named `capacitor_test` is created inside the capacitor-mysql container.  
+Phpmyadmin can be accessed from http://<Host-Address>:8081/.  (The server address of the database is <Host-Address>:3306)  
+Any container can be accessed through a shell using  
+`sudo docker exec -it <container-name> bash`
