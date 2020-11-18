@@ -15,11 +15,11 @@ Install Docker Compose
 `sudo apt install docker-compose`  
 
 ### Set mysql credentials
-Store the credentials for mysql in a file mysql-variables.env in the root directory of the project.  
+Store the credentials for mysql in a file `mysql-variables.env` in the root directory of the project.  
 ```
-CAP_DB_ROOT_PASSWORD=<root-pass>
-CAP_DB_DBA_USERNAME=<dba-username>
-CAP_DB_DBA_PASSWORD=<dba-password>
+MYSQL_ROOT_PASSWORD=<root-pass>
+MYSQL_USER=<dba-username>
+MYSQL_PASSWORD=<dba-password>
 ```
 
 ### Create docker containers for mysql, phpmyadmin and gitlab-runner
@@ -46,6 +46,6 @@ Follow the onscreen prompts:
 ## Accessing database and phpmyadmin
 The command `sudo docker ps` can be used to see all running docker containers.  There should be three; phpmyadmin, capacitor-mysql and gitlab-runner.   
 By default a database named `capacitor_test` is created inside the capacitor-mysql container.  
-Phpmyadmin can be accessed from http://<Host-Address>:8081/.  (The server address of the database is <Host-Address>:3306)  
+Phpmyadmin can be accessed from `http://<Host-Address>:8081/`.  (The server address of the database is `<Host-Address>:3306`)  
 Any container can be accessed through a shell using  
 `sudo docker exec -it <container-name> bash`
