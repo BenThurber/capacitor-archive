@@ -24,6 +24,7 @@ MYSQL_PASSWORD=<dba-password>
 
 ### Create docker containers for mysql, phpmyadmin and gitlab-runner
 Run the following command which executes docker-compose.yml  
+`sudo docker-compose build`
 `sudo docker-compose up -d`  
 
 
