@@ -1,9 +1,11 @@
 # The Capacitor Archive setup
 
-## Setting up a VM for CI/CD and MySQL using docker containers
+## Setting up CI/CD and MySQL using docker containers
+
+This project uses gitlab-runner to perform Continuous Integration (automated building and testing) and Continuous Deployment of the capacitor-archive application.  The following steps should be performed on a continuously running machine (VM or bare metal) that can be accessed from the ports 20, 403 and 8081 (phpMyAdmin).
 
 ### Install docker and docker-compose
-Inside a linux machine, (either a VM or bare metal) install docker    
+Inside the machine, (either a VM or bare metal) install docker    
 `sudo apt-get update`  
 `sudo apt install docker.io`  
 
@@ -24,7 +26,7 @@ MYSQL_PASSWORD=<dba-password>
 
 ### Create docker containers for mysql, phpmyadmin and gitlab-runner
 Run the following command which executes docker-compose.yml  
-`sudo docker-compose build`
+`sudo docker-compose build`  
 `sudo docker-compose up -d`  
 
 
