@@ -50,3 +50,25 @@ By default a database named `capacitor_test` is created inside the capacitor-mys
 Phpmyadmin can be accessed from `http://<Host-Address>:8081/`.  (The server address of the database is `<Host-Address>:3306`)  
 Any container can be accessed through a shell using  
 `sudo docker exec -it <container-name> bash`
+
+## Adding a firewall with ufw
+Allow ssh  
+`sudo ufw allow 22/tcp`  
+Allow client  
+`sudo ufw allow 35504/tcp`  
+Allow server  
+`sudo ufw allow 35503/tcp`  
+Allow phpmyadmin  
+`sudo ufw allow 8081/tcp`  
+Allow phpmyadmin to connect to database  
+`sudo ufw allow 3306/tcp`  
+
+Turn on the firewall  
+`sudo ufw enable`  
+
+**IMPORTANT** Fix an exploit where docker bypasses ufw's firewall.  (See the issue [here](https://github.com/docker/for-linux/issues/690#issuecomment-529319051))  
+`curl -s https://gist.githubusercontent.com/rubot/418ecbcef49425339528233b24654a7d/raw/22bc857b97e63fa65eb4b89d2b2745289a51641c/docker_ufw_setup.sh | sudo bash`  
+
+
+
+

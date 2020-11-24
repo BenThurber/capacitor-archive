@@ -15,7 +15,9 @@ services:
         image: 'phpmyadmin:5.0.2-apache'
         container_name: phpmyadmin
         environment:
-            - PMA_ARBITRARY=1
+            # The address 172.17.0.1 is localhost for docker
+            - PMA_HOST=172.17.0.1
+            - PMA_PORT=3306
         restart: always
         ports:
             - '8081:80'
