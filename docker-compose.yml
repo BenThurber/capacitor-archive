@@ -12,7 +12,7 @@ services:
                 - mysql-variables.env
 
     phpmyadmin:
-        image: 'phpmyadmin:5.0.2-apache'
+        build: ./dockerfiles/custom-phpmyadmin-container/
         container_name: phpmyadmin
         environment:
             # The address 172.17.0.1 is localhost for docker
@@ -20,8 +20,10 @@ services:
             - PMA_PORT=3306
         restart: always
         ports:
-            - '8081:80'
-            - '8082:443'
+            - '8081:443'
+        volumes:
+            - '/etc/apache2/ssl:/certs:ro'
+        hostname: 'capacitor-archive.com'
 
     capacitor-gitlab-runner:
         container_name: gitlab-runner

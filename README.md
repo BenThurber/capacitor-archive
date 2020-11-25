@@ -22,6 +22,14 @@ MYSQL_USER=<dba-username>
 MYSQL_PASSWORD=<dba-password>
 ```
 
+
+### Create a self signed certificate for phpMyAdmin
+Create a directory to store certificates
+`sudo mkdir -p /etc/apache2/ssl`
+Create a self-signed certificate and answer the prompts.  The common name should be the domain name, i.e. capacitor-archive.com
+`sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt`
+
+
 ### Create docker containers for mysql, phpmyadmin and gitlab-runner
 Run the following command which executes docker-compose.yml  
 `sudo docker-compose build`
@@ -47,9 +55,10 @@ Follow the onscreen prompts:
 ## Accessing database and phpmyadmin
 The command `sudo docker ps` can be used to see all running docker containers.  There should be three; phpmyadmin, capacitor-mysql and gitlab-runner.   
 By default a database named `capacitor_test` is created inside the capacitor-mysql container.  
-Phpmyadmin can be accessed from `http://<Host-Address>:8081/`.  (The server address of the database is `<Host-Address>:3306`)  
+Phpmyadmin can be accessed from `https://<Host-Address>:8081/`  
 Any container can be accessed through a shell using  
 `sudo docker exec -it <container-name> bash`
+
 
 ## Adding a firewall with ufw
 Allow ssh  
@@ -68,6 +77,7 @@ Turn on the firewall
 
 **IMPORTANT** Fix an exploit where docker bypasses ufw's firewall.  (See the issue [here](https://github.com/docker/for-linux/issues/690#issuecomment-529319051))  
 `curl -s https://gist.githubusercontent.com/rubot/418ecbcef49425339528233b24654a7d/raw/22bc857b97e63fa65eb4b89d2b2745289a51641c/docker_ufw_setup.sh | sudo bash`  
+
 
 
 
