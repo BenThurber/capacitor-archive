@@ -64,17 +64,9 @@ deploy-test-client:
     # Create artifact
     - cd client
     - ng --prod --aot build
-    # Move artifact to clean directory
-    - rm -rf /home/gitlab-runner/test-client/ || true
-    - mkdir -p /home/gitlab-runner/test-client/
-    - cp -r ./dist /home/gitlab-runner/test-client
-    # Update bash script and restart service
-    - rm -f /home/gitlab-runner/runTestClient.sh || true
-    - cp ../deployment-scripts/runTestClient.sh /home/gitlab-runner/runTestClient.sh
-    # Copy new service file and restart service
-    - cd /home/gitlab-runner
-    - kill -9 $(cat testClient.pid) || true
-    - nohup ./runTestClient.sh > nohupTestClient.out 2>&1 & echo $! > testClient.pid
+    # Move artifact to volume shared by apache
+    - rm -rf /home/gitlab-runner/test-client/* || true
+    - cp -r ./dist/client/* /home/gitlab-runner/test-client/
 #  only:
 #    refs:
 #      - development

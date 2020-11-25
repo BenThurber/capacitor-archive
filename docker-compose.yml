@@ -12,8 +12,9 @@ services:
                 - mysql-variables.env
 
     phpmyadmin:
-        build: ./dockerfiles/custom-phpmyadmin-container/
         container_name: phpmyadmin
+        image: 'capacitor-phpmyadmin:latest'
+        build: ./dockerfiles/custom-phpmyadmin-container/
         environment:
             # The address 172.17.0.1 is localhost for docker
             - PMA_HOST=172.17.0.1
@@ -33,11 +34,24 @@ services:
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
+            - 'test-client-build:/home/gitlab-runner/test-client/'
         network_mode: host
+
+    testClient:
+        container_name: test-client
+        image: 'httpd:alpine'
+        restart: always
+        ports:
+            - '35504:80'
+        volumes:
+            - 'test-client-build:/usr/local/apache2/htdocs/'
+
 
 
 volumes:
     gitlab-runner-config:
+        external: false
+    test-client-build:
         external: false
 
 
