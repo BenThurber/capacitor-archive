@@ -42,6 +42,8 @@ Run the following command which executes docker-compose.yml
 This should only have to be done once after running docker-compose for the first time.  
 Open a shell inside the container.  
 `sudo docker exec -it gitlab-runner bash`  
+**Important** Set permissions on the following volume  
+`chown gitlab-runner /home/gitlab-runner/test-client/`  
 And register with  
 `gitlab-runner register`  
 
