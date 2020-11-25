@@ -33,11 +33,23 @@ services:
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
+            - 'test-client-build:/home/gitlab-runner/test-server/dist/client/'
         network_mode: host
+
+    testClient:
+        container_name: test-client
+        image 'httpd:alpine'
+        restart: always
+        ports:
+            - '8080:35504'
+        volumes:
+            - 'test-client-build:/usr/local/apache2/htdocs/'
 
 
 volumes:
     gitlab-runner-config:
+        external: false
+    test-client-build:
         external: false
 
 

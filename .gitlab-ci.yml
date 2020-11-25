@@ -67,7 +67,7 @@ deploy-test-client:
     # Move artifact to clean directory
     - rm -rf /home/gitlab-runner/test-client/ || true
     - mkdir -p /home/gitlab-runner/test-client/
-    - cp -r ./dist /home/gitlab-runner/test-client
+    - cp -r ./dist/client/ /home/gitlab-runner/test-client/
     # Update bash script and restart service
     - rm -f /home/gitlab-runner/runTestClient.sh || true
     - cp ../deployment-scripts/runTestClient.sh /home/gitlab-runner/runTestClient.sh
