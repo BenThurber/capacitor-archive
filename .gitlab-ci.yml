@@ -40,8 +40,10 @@ deploy-test-server:
   script:
     # Create artifact
     - cd server
+      # Use development spring profile for ./gradlew build 
+    - cp src/main/resources/application-dev.properties src/main/resources/application.properties
     - rm -f ./build/libs/*.war || true
-    - ./gradlew bootWar
+    - ./gradlew build -x test   # Don't re-run unit tests
     # Move artifact to volume shared by tomcat
     - rm -f /home/gitlab-runner/test-server/*.war || true
     - rm -rf /home/gitlab-runner/test-server/ROOT || true
