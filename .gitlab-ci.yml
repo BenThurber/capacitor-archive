@@ -41,7 +41,7 @@ deploy-test-server:
     # Create artifact
     - cd server
     - rm -f ./build/libs/*.war || true
-    - ./gradlew bootWar -PspringProfile=local
+    - ./gradlew bootWar
     # Move artifact to volume shared by tomcat
     - rm -f /home/gitlab-runner/test-server/*.war || true
     - rm -rf /home/gitlab-runner/test-server/ROOT || true
