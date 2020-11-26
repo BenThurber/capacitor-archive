@@ -35,6 +35,7 @@ services:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
             - 'test-client-build:/home/gitlab-runner/test-client/'
+            - 'test-server-build:/home/gitlab-runner/test-server/'
         network_mode: host
 
     testClient:
@@ -47,11 +48,23 @@ services:
             - 'test-client-build:/usr/local/apache2/htdocs/'
 
 
+    testServer:
+        container_name: test-server
+        image: 'tomcat:9.0-slim'
+        restart: always
+        ports:
+            - '35503:8080'
+            #- '3306:3306'  # Run server with in-memory database for now
+        volumes:
+            - 'test-server-build:/usr/local/tomcat/webapps/'
+
 
 volumes:
     gitlab-runner-config:
         external: false
     test-client-build:
+        external: false
+    test-server-build:
         external: false
 
 

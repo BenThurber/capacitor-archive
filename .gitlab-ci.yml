@@ -40,18 +40,11 @@ deploy-test-server:
   script:
     # Create artifact
     - cd server
-    - ./gradlew bootJar
-    # Move artifact to clean directory
-    - rm -rf /home/gitlab-runner/test-server/ || true
-    - mkdir -p /home/gitlab-runner/test-server/
-    - cp -r ./build/libs /home/gitlab-runner/test-server
-    # Update bash script and restart service
-    - rm -f /home/gitlab-runner/runTestServer.sh || true
-    - cp ../deployment-scripts/runTestServer.sh /home/gitlab-runner/runTestServer.sh
-    # Copy new service file and restart service
-    - cd /home/gitlab-runner
-    - kill -9 $(cat testServer.pid) || true
-    - nohup ./runTestServer.sh > nohupTestServer.out 2>&1 & echo $! > testServer.pid
+    - rm -f ./build/libs/*.war || true
+    - ./gradlew bootWar -PspringProfile=local
+    # Move artifact to volume shared by tomcat
+    - rm -f /home/gitlab-runner/test-server/*.war || true
+    - cp ./build/libs/*.war /home/gitlab-runner/test-server
 #  only:
 #    refs:
 #      - development
