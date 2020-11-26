@@ -1,6 +1,6 @@
 stages:
   - setup
-  - test
+  #- test
   - deploy
 
 default:
@@ -22,17 +22,17 @@ setup:
 variables:
   GIT_DEPTH: 0
 
-junit:
-  stage: test
-  script:
-    - cd server
-    - ./gradlew test
+#junit:
+#  stage: test
+#  script:
+#    - cd server
+#    - ./gradlew test
 
-jasmine:
-  stage: test
-  script:
-    - cd client
-    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
+#jasmine:
+#  stage: test
+#  script:
+#    - cd client
+#    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
 
 
 deploy-test-server:
