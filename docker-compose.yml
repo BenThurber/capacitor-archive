@@ -5,7 +5,9 @@ services:
         image: 'mysql:8.0.22'
         container_name: capacitor-mysql
         restart: always
-        network_mode: host
+        #network_mode: host
+        ports:
+            - '3306:3306'
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
@@ -36,7 +38,7 @@ services:
             - 'gitlab-runner-config:/etc/gitlab-runner'
             - 'test-client-build:/home/gitlab-runner/test-client/'
             - 'test-server-build:/home/gitlab-runner/test-server/'
-        network_mode: host
+        #network_mode: host
 
     testClient:
         container_name: test-client
@@ -54,7 +56,6 @@ services:
         restart: always
         ports:
             - '35503:8080'
-            #- '3306:3306'  # Run server with in-memory database for now
         volumes:
             - 'test-server-build:/usr/local/tomcat/webapps/'
 
