@@ -5,7 +5,8 @@ services:
         image: 'mysql:8.0.22'
         container_name: capacitor-mysql
         restart: always
-        network_mode: host
+        ports:
+            - '3306:3306'
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
@@ -35,7 +36,7 @@ services:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
             - 'test-client-build:/home/gitlab-runner/test-client/'
-        network_mode: host
+            - 'test-server-build:/home/gitlab-runner/test-server/'
 
     testClient:
         container_name: test-client
@@ -47,11 +48,22 @@ services:
             - 'test-client-build:/usr/local/apache2/htdocs/'
 
 
+    testServer:
+        container_name: test-server
+        image: 'tomcat:9.0-slim'
+        restart: always
+        ports:
+            - '35503:8080'
+        volumes:
+            - 'test-server-build:/usr/local/tomcat/webapps/'
+
 
 volumes:
     gitlab-runner-config:
         external: false
     test-client-build:
+        external: false
+    test-server-build:
         external: false
 
 
