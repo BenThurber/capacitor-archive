@@ -36,16 +36,34 @@ services:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
             - 'test-client-build:/home/gitlab-runner/test-client/'
+            - 'prod-client-build:/home/gitlab-runner/prod-client/'
             - 'test-server-build:/home/gitlab-runner/test-server/'
+
+
+
+
+#########################
+# Deployment Environments
+#########################
 
     testClient:
         container_name: test-client
         image: 'httpd:alpine'
         restart: always
         ports:
-            - '35504:80'
+            - '35506:80'
         volumes:
             - 'test-client-build:/usr/local/apache2/htdocs/'
+
+
+    prodClient:
+        container_name: prod-client
+        image: 'httpd:alpine'
+        restart: always
+        ports:
+            - '35504:80'
+        volumes:
+            - 'prod-client-build:/usr/local/apache2/htdocs/'
 
 
     testServer:
@@ -58,11 +76,18 @@ services:
             - 'test-server-build:/usr/local/tomcat/webapps/'
 
 
+
+
 volumes:
     gitlab-runner-config:
         external: false
+
     test-client-build:
         external: false
+
+    prod-client-build:
+        external: false
+    
     test-server-build:
         external: false
 
