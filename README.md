@@ -2,7 +2,7 @@
 
 ## Setting up CI/CD and MySQL using docker containers
 
-This project uses gitlab-runner to perform Continuous Integration (automated building and testing) and Continuous Deployment of the capacitor-archive application.  The following steps should be performed on a continuously running machine (VM or bare metal) that can be accessed from the ports 20, 403 and 8081 (phpMyAdmin).
+This project uses gitlab-runner to perform Continuous Integration (automated building and testing) and Continuous Deployment of the capacitor-archive application.  The following steps should be performed on a continuously running machine (VM or bare metal) that can be accessed from the ports 80 and 8081 (phpMyAdmin).
 
 ### Install docker and docker-compose
 Inside the machine, (either a VM or bare metal) install docker    
