@@ -26,6 +26,7 @@ junit:
   stage: test
   script:
     - cd server
+    - export SPRING_DATASOURCE_URL=jdbc:mysql://localhost/capacitor_test
     - ./gradlew test
 
 jasmine:
