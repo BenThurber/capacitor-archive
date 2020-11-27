@@ -1,5 +1,5 @@
 stages:
-  - setup
+#  - setup
 #  - test
   - deploy
 
@@ -7,17 +7,17 @@ default:
   before_script:
 
 
-setup:
-  stage: setup
-  script:
-    - cd client
+#setup:
+#  stage: setup
+#  script:
+#    - cd client
 #    - echo n | npm install
-  cache:
-    paths:
-      - client/node_modules/
-  artifacts:
-    paths:
-      - client/node_modules/
+#  cache:
+#    paths:
+#      - client/node_modules/
+#  artifacts:
+#    paths:
+#      - client/node_modules/
 
 variables:
   GIT_DEPTH: 0
