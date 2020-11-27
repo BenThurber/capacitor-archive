@@ -5,21 +5,27 @@ services:
         image: 'mysql:8.0.22'
         container_name: capacitor-mysql
         restart: always
-        network_mode: host
+        ports:
+            - '3306:3306'
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
                 - mysql-variables.env
 
     phpmyadmin:
-        image: 'phpmyadmin:5.0.2-apache'
         container_name: phpmyadmin
+        image: 'capacitor-phpmyadmin:latest'
+        build: ./dockerfiles/custom-phpmyadmin-container/
         environment:
-            - PMA_ARBITRARY=1
+            # The address 172.17.0.1 is localhost for docker
+            - PMA_HOST=172.17.0.1
+            - PMA_PORT=3306
         restart: always
         ports:
-            - '8081:80'
-            - '8082:443'
+            - '8081:443'
+        volumes:
+            - '/etc/apache2/ssl:/certs:ro'
+        hostname: 'capacitor-archive.com'
 
     capacitor-gitlab-runner:
         container_name: gitlab-runner
@@ -29,11 +35,35 @@ services:
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
-        network_mode: host
+            - 'test-client-build:/home/gitlab-runner/test-client/'
+            - 'test-server-build:/home/gitlab-runner/test-server/'
+
+    testClient:
+        container_name: test-client
+        image: 'httpd:alpine'
+        restart: always
+        ports:
+            - '35504:80'
+        volumes:
+            - 'test-client-build:/usr/local/apache2/htdocs/'
+
+
+    testServer:
+        container_name: test-server
+        image: 'tomcat:9.0-slim'
+        restart: always
+        ports:
+            - '35503:8080'
+        volumes:
+            - 'test-server-build:/usr/local/tomcat/webapps/'
 
 
 volumes:
     gitlab-runner-config:
+        external: false
+    test-client-build:
+        external: false
+    test-server-build:
         external: false
 
 
