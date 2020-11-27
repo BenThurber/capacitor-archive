@@ -41,3 +41,10 @@ ENV CHROME_BIN=/usr/bin/chromium-browser \
 
 
 
+##################
+# Install envsubst
+##################
+
+RUN echo "Installing other tools" \
+ && apk add gettext
+

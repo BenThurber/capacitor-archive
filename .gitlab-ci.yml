@@ -38,10 +38,11 @@ variables:
 deploy-test-server:
   stage: deploy
   script:
-    # Create artifact
+    # Set configure profile for deployment
     - cd server
-      # Use development spring profile for ./gradlew build 
     - cp src/main/resources/application-dev.properties src/main/resources/application.properties
+    - envsubst < src/main/resources/application.properties    # Subsitutes in environment variables
+    # Create artifact
     - rm -f ./build/libs/*.war || true
     - ./gradlew bootWar
     # Move artifact to volume shared by tomcat

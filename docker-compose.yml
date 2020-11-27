@@ -5,8 +5,7 @@ services:
         image: 'mysql:8.0.22'
         container_name: capacitor-mysql
         restart: always
-        ports:
-            - '3306:3306'
+        network_mode: host
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
@@ -50,10 +49,9 @@ services:
 
     testServer:
         container_name: test-server
-        image: 'tomcat:9.0-slim'
+        image: 'tomcat:9.0'
         restart: always
-        ports:
-            - '35503:8080'
+        network_mode: host
         volumes:
             - 'test-server-build:/usr/local/tomcat/webapps/'
 
