@@ -26,7 +26,7 @@ junit:
   stage: test
   script:
     - cd server
-    - ./gradlew test
+    - ./gradlew -PspringProfile=local test
 
 jasmine:
   stage: test
