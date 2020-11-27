@@ -11,7 +11,7 @@ setup:
   stage: setup
   script:
     - cd client
-    - echo n | npm install
+#    - echo n | npm install
   cache:
     paths:
       - client/node_modules/
