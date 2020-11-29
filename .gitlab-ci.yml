@@ -40,7 +40,9 @@ deploy-test-server:
   script:
     # Set configure profile for deployment
     - cd server
+    - cat src/main/resources/*
     - envsubst < src/main/resources/application-dev.properties    # Subsitutes in environment variables
+    - cat src/main/resources/*
     # Create artifact
     - rm -f ./build/libs/*.war || true
     - ./gradlew bootWar
