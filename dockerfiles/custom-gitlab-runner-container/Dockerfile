@@ -1,7 +1,5 @@
 FROM gitlab/gitlab-runner:alpine
 
-# Expose server and client ports
-EXPOSE 35503 35504
 
 ##############
 # Install Node

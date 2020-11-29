@@ -52,6 +52,8 @@ services:
         image: 'tomcat:9.0'
         restart: always
         network_mode: host
+        environment:
+            - JAVA_OPTS=-Dspring.profiles.active=dev
         volumes:
             - 'test-server-build:/usr/local/tomcat/webapps/'
 
