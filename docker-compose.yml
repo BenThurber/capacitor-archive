@@ -54,6 +54,7 @@ services:
         network_mode: host
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=dev
+            - TOMCAT_HTTP_PORT_NUMBER=35503
         volumes:
             - 'test-server-build:/usr/local/tomcat/webapps/'
 
