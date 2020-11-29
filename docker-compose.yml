@@ -52,7 +52,11 @@ services:
         container_name: test-server
         image: 'tomcat:9.0'
         restart: always
-        network_mode: host
+        #network_mode: host
+        ports:
+            - '35503:8080'
+        extra_hosts:
+            - "docker:172.17.0.1"
         depends_on:
             - mysql
         environment:
