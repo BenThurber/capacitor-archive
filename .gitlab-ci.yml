@@ -38,8 +38,11 @@ jasmine:
 deploy-test-server:
   stage: deploy
   script:
-    # Create artifact
     - cd server
+    # Subsitute in environment variables
+    - envsubst < src/main/resources/application-dev.properties > src/main/resources/application-dev.properties.swp
+    - mv src/main/resources/application-dev.properties.swp src/main/resources/application-dev.properties
+    # Create artifact
     - rm -f ./build/libs/*.war || true
     - ./gradlew bootWar
     # Move artifact to volume shared by tomcat

@@ -1,7 +1,5 @@
 FROM gitlab/gitlab-runner:alpine
 
-# Expose server and client ports
-EXPOSE 35503 35504
 
 ##############
 # Install Node
@@ -40,4 +38,11 @@ ENV CHROME_BIN=/usr/bin/chromium-browser \
     CHROME_PATH=/usr/lib/chromium/
 
 
+
+##################
+# Install envsubst
+##################
+
+RUN echo "Installing other tools" \
+ && apk add gettext
 
