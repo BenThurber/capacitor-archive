@@ -31,14 +31,16 @@ services:
         build: ./dockerfiles/custom-phpmyadmin-container/
         environment:
             # The address 172.17.0.1 is localhost for docker
-            - PMA_HOST=172.17.0.1
-            - PMA_PORTS=3306
+            - PMA_HOSTS=172.17.0.1,172.17.0.1
+            - PMA_PORTS=3306,3307
+            - PMA_VERBOSES=prod,test
         restart: always
         ports:
             - '8081:443'
         volumes:
             - '/etc/apache2/ssl:/certs:ro'
         hostname: 'capacitor-archive.com'
+
 
     capacitor-gitlab-runner:
         container_name: gitlab-runner
