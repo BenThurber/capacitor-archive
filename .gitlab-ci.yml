@@ -38,17 +38,44 @@ jasmine:
 deploy-test-server:
   stage: deploy
   script:
-    # Create artifact
     - cd server
+    # Subsitute in environment variables
+    - envsubst < src/main/resources/application-dev.properties > src/main/resources/application-dev.properties.swp
+    - mv src/main/resources/application-dev.properties.swp src/main/resources/application-dev.properties
+    # Replace localhost with docker's localhost 172.17.0.1 to connect to the database (this is very hacky)
+    - sed -i "s/localhost/172.17.0.1/" src/main/resources/application-*
+    # Create artifact
     - rm -f ./build/libs/*.war || true
     - ./gradlew bootWar
     # Move artifact to volume shared by tomcat
     - rm -f /home/gitlab-runner/test-server/*.war || true
     - rm -rf /home/gitlab-runner/test-server/ROOT || true
     - cp ./build/libs/*.war /home/gitlab-runner/test-server/ROOT.war
-#  only:
-#    refs:
-#      - development
+  only:
+    refs:
+      - development
+
+
+
+deploy-prod-server:
+  stage: deploy
+  script:
+    - cd server
+    # Subsitute in environment variables
+    - envsubst < src/main/resources/application-prod.properties > src/main/resources/application-prod.properties.swp
+    - mv src/main/resources/application-prod.properties.swp src/main/resources/application-prod.properties
+    # Replace localhost with docker's localhost 172.17.0.1 to connect to the database (this is very hacky)
+    - sed -i "s/localhost/172.17.0.1/" src/main/resources/application-*
+    # Create artifact
+    - rm -f ./build/libs/*.war || true
+    - ./gradlew bootWar
+    # Move artifact to volume shared by tomcat
+    - rm -f /home/gitlab-runner/prod-server/*.war || true
+    - rm -rf /home/gitlab-runner/prod-server/ROOT || true
+    - cp ./build/libs/*.war /home/gitlab-runner/prod-server/ROOT.war
+  only:
+    refs:
+      - master
 
 
 
@@ -61,6 +88,24 @@ deploy-test-client:
     # Move artifact to volume shared by apache
     - rm -rf /home/gitlab-runner/test-client/* || true
     - cp -r ./dist/client/* /home/gitlab-runner/test-client/
-#  only:
-#    refs:
-#      - development
+  only:
+    refs:
+      - development
+
+
+
+deploy-prod-client:
+  stage: deploy
+  script:
+    # Create artifact
+    - cd client
+    - ng --prod --aot build
+    # Move artifact to volume shared by apache
+    - rm -rf /home/gitlab-runner/prod-client/* || true
+    - cp -r ./dist/client/* /home/gitlab-runner/prod-client/
+  only:
+    refs:
+      - master
+
+
+

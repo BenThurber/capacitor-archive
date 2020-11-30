@@ -1,16 +1,29 @@
 version: '3.3'
 services:
     
-    mysql:
+    prodDatabase:
         image: 'mysql:8.0.22'
-        container_name: capacitor-mysql
+        container_name: prod-mysql
         restart: always
         ports:
             - '3306:3306'
         environment:
+                MYSQL_DATABASE: capacitor_prod
+        env_file:
+                - mysql-variables.env
+    
+
+    testDatabase:
+        image: 'mysql:8.0.22'
+        container_name: test-mysql
+        restart: always
+        ports:
+            - '3307:3306'
+        environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
                 - mysql-variables.env
+
 
     phpmyadmin:
         container_name: phpmyadmin
@@ -18,14 +31,16 @@ services:
         build: ./dockerfiles/custom-phpmyadmin-container/
         environment:
             # The address 172.17.0.1 is localhost for docker
-            - PMA_HOST=172.17.0.1
-            - PMA_PORT=3306
+            - PMA_HOSTS=172.17.0.1,172.17.0.1
+            - PMA_PORTS=3306,3307
+            - PMA_VERBOSES=prod,test
         restart: always
         ports:
             - '8081:443'
         volumes:
             - '/etc/apache2/ssl:/certs:ro'
         hostname: 'capacitor-archive.com'
+
 
     capacitor-gitlab-runner:
         container_name: gitlab-runner
@@ -37,25 +52,64 @@ services:
             - 'gitlab-runner-config:/etc/gitlab-runner'
             - 'test-client-build:/home/gitlab-runner/test-client/'
             - 'test-server-build:/home/gitlab-runner/test-server/'
+            - 'prod-client-build:/home/gitlab-runner/prod-client/'
+            - 'prod-server-build:/home/gitlab-runner/prod-server/'
+
+
+
+#########################
+# Deployment Environments
+#########################
+
 
     testClient:
         container_name: test-client
         image: 'httpd:alpine'
         restart: always
         ports:
-            - '35504:80'
+            - '35506:80'
         volumes:
             - 'test-client-build:/usr/local/apache2/htdocs/'
 
 
     testServer:
         container_name: test-server
-        image: 'tomcat:9.0-slim'
+        image: 'tomcat:9.0'
+        restart: always
+        ports:
+            - '35505:8080'
+        depends_on:
+            - testDatabase
+        environment:
+            - JAVA_OPTS=-Dspring.profiles.active=dev
+        volumes:
+            - 'test-server-build:/usr/local/tomcat/webapps/'
+
+
+    prodClient:
+        container_name: prod-client
+        image: 'httpd:alpine'
+        restart: always
+        ports:
+            - '35504:80'
+        volumes:
+            - 'prod-client-build:/usr/local/apache2/htdocs/'
+
+
+    prodServer:
+        container_name: prod-server
+        image: 'tomcat:9.0'
         restart: always
         ports:
             - '35503:8080'
+        depends_on:
+            - prodDatabase
+        environment:
+            - JAVA_OPTS=-Dspring.profiles.active=prod
         volumes:
-            - 'test-server-build:/usr/local/tomcat/webapps/'
+            - 'prod-server-build:/usr/local/tomcat/webapps/'
+
+
 
 
 volumes:
@@ -65,5 +119,7 @@ volumes:
         external: false
     test-server-build:
         external: false
-
-
+    prod-client-build:
+        external: false
+    prod-server-build:
+        external: false
