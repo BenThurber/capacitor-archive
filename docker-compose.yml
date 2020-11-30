@@ -49,9 +49,15 @@ services:
 
     testServer:
         container_name: test-server
-        image: 'tomcat:9.0'
+        image: 'capacitor-tomcat:latest'
+        build: 
+          context: ./dockerfiles/custom-tomcat-container/
+          args:
+            - port=35503
         restart: always
         network_mode: host
+        depends_on:
+            - mysql
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=dev
         volumes:
