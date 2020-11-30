@@ -51,9 +51,9 @@ deploy-test-server:
     - rm -f /home/gitlab-runner/test-server/*.war || true
     - rm -rf /home/gitlab-runner/test-server/ROOT || true
     - cp ./build/libs/*.war /home/gitlab-runner/test-server/ROOT.war
-#  only:
-#    refs:
-#      - development
+  only:
+    refs:
+      - development
 
 
 
@@ -73,9 +73,9 @@ deploy-prod-server:
     - rm -f /home/gitlab-runner/prod-server/*.war || true
     - rm -rf /home/gitlab-runner/prod-server/ROOT || true
     - cp ./build/libs/*.war /home/gitlab-runner/prod-server/ROOT.war
-#  only:
-#    refs:
-#      - master
+  only:
+    refs:
+      - master
 
 
 
@@ -88,9 +88,9 @@ deploy-test-client:
     # Move artifact to volume shared by apache
     - rm -rf /home/gitlab-runner/test-client/* || true
     - cp -r ./dist/client/* /home/gitlab-runner/test-client/
-#  only:
-#    refs:
-#      - development
+  only:
+    refs:
+      - development
 
 
 
@@ -103,9 +103,9 @@ deploy-prod-client:
     # Move artifact to volume shared by apache
     - rm -rf /home/gitlab-runner/prod-client/* || true
     - cp -r ./dist/client/* /home/gitlab-runner/prod-client/
-#  only:
-#    refs:
-#      - master
+  only:
+    refs:
+      - master
 
 
 
