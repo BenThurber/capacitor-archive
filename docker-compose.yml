@@ -5,7 +5,8 @@ services:
         image: 'mysql:8.0.22'
         container_name: capacitor-mysql
         restart: always
-        network_mode: host
+        ports:
+            - '3306:3306'
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
