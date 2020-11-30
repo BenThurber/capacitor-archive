@@ -78,7 +78,8 @@ services:
           args:
             - port=35505
         restart: always
-        network_mode: host
+        ports:
+            - '35505:35505'
         depends_on:
             - testDatabase
         environment:
@@ -105,7 +106,8 @@ services:
           args:
             - port=35503
         restart: always
-        network_mode: host
+        ports:
+            - '35503:35503'
         depends_on:
             - prodDatabase
         environment:
