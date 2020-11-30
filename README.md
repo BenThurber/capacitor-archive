@@ -63,11 +63,11 @@ Follow the onscreen prompts:
 
 
 ## Accessing database and phpmyadmin
-The command `sudo docker ps` can be used to see all running docker containers.  There should be three; phpmyadmin, capacitor-mysql and gitlab-runner.   
-By default a database named `capacitor_test` is created inside the capacitor-mysql container.  
 Phpmyadmin can be accessed from `https://<Host-Address>:8081/`  
 Any container can be accessed through a shell using  
 `sudo docker exec -it <container-name> bash`  
+The container prod-mysql has a database named capacitor_prod.  
+The container test-mysql has a database named capacitor_test.  
 
 
 ## Adding a firewall with ufw
@@ -87,6 +87,17 @@ Turn on the firewall
 `curl -s https://gist.githubusercontent.com/rubot/418ecbcef49425339528233b24654a7d/raw/22bc857b97e63fa65eb4b89d2b2745289a51641c/docker_ufw_setup.sh | sudo bash`  
 
 
+## Port mappings
 
+| service       | port  |
+|---------------|-------|
+| ssh           | 22    |
+| prod-database | 3306  |
+| test-database | 3307  |
+| phpmyadmin    | 8081  |
+| prod-server   | 35503 |
+| prod-client   | 35504 |
+| test-server   | 35505 |
+| test-client   | 35506 |
 
 

@@ -32,7 +32,7 @@ services:
         environment:
             # The address 172.17.0.1 is localhost for docker
             - PMA_HOST=172.17.0.1
-            - PMA_PORT=3306
+            - PMA_PORTS=3306
         restart: always
         ports:
             - '8081:443'
