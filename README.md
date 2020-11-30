@@ -49,7 +49,7 @@ This should only have to be done once after running docker-compose for the first
 Open a shell inside the container.  
 `sudo docker exec -it gitlab-runner bash`  
 **Important** Set permissions on the following volumes  
-`chown gitlab-runner /home/gitlab-runner/test-client/ /home/gitlab-runner/test-server/ /home/gitlab-runner/prod-client/`  
+`chown gitlab-runner /home/gitlab-runner/test-client/ /home/gitlab-runner/test-server/ /home/gitlab-runner/prod-client/ /home/gitlab-runner/prod-server/`  
 And register with  
 `gitlab-runner register`  
 
@@ -73,14 +73,12 @@ Any container can be accessed through a shell using
 ## Adding a firewall with ufw
 Allow ssh  
 `sudo ufw allow 22/tcp`  
-Allow client  
-`sudo ufw allow 35504/tcp`  
-Allow server  
-`sudo ufw allow 35503/tcp`  
+Allow server and client  
+`sudo ufw allow 35503:35506/tcp`  
 Allow phpmyadmin  
 `sudo ufw allow 8081/tcp`  
-Allow phpmyadmin to connect to database  
-`sudo ufw allow 3306/tcp`  
+Allow phpmyadmin to connect to test and prod databases  
+`sudo ufw allow 3306:3307/tcp`  
 
 Turn on the firewall  
 `sudo ufw enable`  
