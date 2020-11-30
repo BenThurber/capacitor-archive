@@ -67,3 +67,21 @@ deploy-test-client:
 #  only:
 #    refs:
 #      - development
+
+
+
+deploy-prod-client:
+  stage: deploy
+  script:
+    # Create artifact
+    - cd client
+    - ng --prod --aot build
+    # Move artifact to volume shared by apache
+    - rm -rf /home/gitlab-runner/prod-client/* || true
+    - cp -r ./dist/client/* /home/gitlab-runner/prod-client/
+#  only:
+#    refs:
+#      - development
+
+
+

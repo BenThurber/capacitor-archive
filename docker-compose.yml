@@ -36,13 +36,21 @@ services:
             - 'gitlab-runner-config:/etc/gitlab-runner'
             - 'test-client-build:/home/gitlab-runner/test-client/'
             - 'test-server-build:/home/gitlab-runner/test-server/'
+            - 'prod-client-build:/home/gitlab-runner/prod-client/'
+
+
+
+#########################
+# Deployment Environments
+#########################
+
 
     testClient:
         container_name: test-client
         image: 'httpd:alpine'
         restart: always
         ports:
-            - '35504:80'
+            - '35506:80'
         volumes:
             - 'test-client-build:/usr/local/apache2/htdocs/'
 
@@ -64,6 +72,18 @@ services:
             - 'test-server-build:/usr/local/tomcat/webapps/'
 
 
+    prodClient:
+        container_name: prod-client
+        image: 'httpd:alpine'
+        restart: always
+        ports:
+            - '35504:80'
+        volumes:
+            - 'prod-client-build:/usr/local/apache2/htdocs/'
+
+
+
+
 volumes:
     gitlab-runner-config:
         external: false
@@ -71,5 +91,6 @@ volumes:
         external: false
     test-server-build:
         external: false
-
+    prod-client-build:
+        external: false
 
