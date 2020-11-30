@@ -72,14 +72,10 @@ services:
 
     testServer:
         container_name: test-server
-        image: 'capacitor-tomcat:latest'
-        build: 
-          context: ./dockerfiles/custom-tomcat-container/
-          args:
-            - port=35505
+        image: 'tomcat:9.0'
         restart: always
         ports:
-            - '35505:35505'
+            - '35505:8080'
         depends_on:
             - testDatabase
         environment:
@@ -100,14 +96,10 @@ services:
 
     prodServer:
         container_name: prod-server
-        image: 'capacitor-tomcat:latest'
-        build:
-          context: ./dockerfiles/custom-tomcat-container/
-          args:
-            - port=35503
+        image: 'tomcat:9.0'
         restart: always
         ports:
-            - '35503:35503'
+            - '35503:8080'
         depends_on:
             - prodDatabase
         environment:
