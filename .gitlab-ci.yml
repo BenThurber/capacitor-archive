@@ -1,38 +1,38 @@
 stages:
   - setup
-  - test
+    #  - test
   - deploy
 
 default:
   before_script:
 
 
-setup:
-  stage: setup
-  script:
-    - cd client
-    - echo n | npm install
-  cache:
-    paths:
-      - client/node_modules/
-  artifacts:
-    paths:
-      - client/node_modules/
+#setup:
+#  stage: setup
+#  script:
+#    - cd client
+#    - echo n | npm install
+#  cache:
+#    paths:
+#      - client/node_modules/
+#  artifacts:
+#    paths:
+#      - client/node_modules/
 
 variables:
   GIT_DEPTH: 0
 
-junit:
-  stage: test
-  script:
-    - cd server
-    - ./gradlew test
+  #junit:
+  #  stage: test
+  #  script:
+  #    - cd server
+  #    - ./gradlew test
 
-jasmine:
-  stage: test
-  script:
-    - cd client
-    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
+  #jasmine:
+  #stage: test
+  #script:
+  #  - cd client
+  #  - ng test --browsers ChromeHeadlessNoSandbox --watch=false
 
 
 deploy-test-server:
