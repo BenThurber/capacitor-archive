@@ -49,7 +49,7 @@ This should only have to be done once after running docker-compose for the first
 Open a shell inside the container.  
 `sudo docker exec -it gitlab-runner bash`  
 **Important** Set permissions on the following volumes  
-`chown gitlab-runner /home/gitlab-runner/test-client/ /home/gitlab-runner/test-server/ /home/gitlab-runner/prod-client/`  
+`chown gitlab-runner /home/gitlab-runner/test-client/ /home/gitlab-runner/test-server/ /home/gitlab-runner/prod-client/ /home/gitlab-runner/prod-server/`  
 And register with  
 `gitlab-runner register`  
 
