@@ -1,6 +1,10 @@
 # The Capacitor Archive setup
+<sup>**If visiting from github please come to [gitlab.com](https://gitlab.com/capacitor-archive/capacitor-archive)**</sup>
 
-This is a web application that will allow users to upload images historical information about vintage [electronic capacitors](https://en.wikipedia.org/wiki/Capacitor).  The format will be similar to that of Wikipedia or [radiomuseum.org](https://www.radiomuseum.org/tubes/tube_5z3.html) where there is a page for each historical articact (capacitor) with links to similar pages.
+The web application capacitor-archive.com<sup>**</sup> will allow users to upload images and historical information about vintage [electronic capacitors](https://en.wikipedia.org/wiki/Capacitor).  The format will be similar to that of Wikipedia or [radiomuseum.org](https://www.radiomuseum.org/tubes/tube_5z3.html) where each vintage component (capacitor) has a page with links to similar pages.  It is the hope of the devs that this website will encourage the documentation of vintage electronic components, and aid in the creation of reproductions for radio and guitar restorations.
+
+<sup>**</sup><sup><sub>The original name for capacitor was condenser, though condenser-archive sounded less agreeable.</sub></sup>
+
 
 ## Overview
 
