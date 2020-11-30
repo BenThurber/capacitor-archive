@@ -1,16 +1,29 @@
 version: '3.3'
 services:
     
-    mysql:
+    prodDatabase:
         image: 'mysql:8.0.22'
-        container_name: capacitor-mysql
+        container_name: prod-mysql
         restart: always
         ports:
             - '3306:3306'
         environment:
+                MYSQL_DATABASE: capacitor_prod
+        env_file:
+                - mysql-variables.env
+    
+
+    testDatabase:
+        image: 'mysql:8.0.22'
+        container_name: test-mysql
+        restart: always
+        ports:
+            - '3307:3306'
+        environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
                 - mysql-variables.env
+
 
     phpmyadmin:
         container_name: phpmyadmin
@@ -38,6 +51,7 @@ services:
             - 'test-client-build:/home/gitlab-runner/test-client/'
             - 'test-server-build:/home/gitlab-runner/test-server/'
             - 'prod-client-build:/home/gitlab-runner/prod-client/'
+            - 'prod-server-build:/home/gitlab-runner/prod-server/'
 
 
 
@@ -62,11 +76,11 @@ services:
         build: 
           context: ./dockerfiles/custom-tomcat-container/
           args:
-            - port=35503
+            - port=35505
         restart: always
         network_mode: host
         depends_on:
-            - mysql
+            - testDatabase
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=dev
         volumes:
@@ -83,6 +97,23 @@ services:
             - 'prod-client-build:/usr/local/apache2/htdocs/'
 
 
+    prodServer:
+        container_name: prod-server
+        image: 'capacitor-tomcat:latest'
+        build:
+          context: ./dockerfiles/custom-tomcat-container/
+          args:
+            - port=35503
+        restart: always
+        network_mode: host
+        depends_on:
+            - prodDatabase
+        environment:
+            - JAVA_OPTS=-Dspring.profiles.active=prod
+        volumes:
+            - 'prod-server-build:/usr/local/tomcat/webapps/'
+
+
 
 
 volumes:
@@ -94,4 +125,5 @@ volumes:
         external: false
     prod-client-build:
         external: false
-
+    prod-server-build:
+        external: false

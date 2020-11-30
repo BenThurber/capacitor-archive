@@ -1,38 +1,38 @@
 stages:
-  - setup
-  - test
+#  - setup
+#  - test
   - deploy
 
 default:
   before_script:
 
 
-setup:
-  stage: setup
-  script:
-    - cd client
-    - echo n | npm install
-  cache:
-    paths:
-      - client/node_modules/
-  artifacts:
-    paths:
-      - client/node_modules/
+#setup:
+#  stage: setup
+#  script:
+#    - cd client
+#    - echo n | npm install
+#  cache:
+#    paths:
+#      - client/node_modules/
+#  artifacts:
+#    paths:
+#      - client/node_modules/
 
 variables:
   GIT_DEPTH: 0
 
-junit:
-  stage: test
-  script:
-    - cd server
-    - ./gradlew test
+#junit:
+#  stage: test
+#  script:
+#    - cd server
+#    - ./gradlew test
 
-jasmine:
-  stage: test
-  script:
-    - cd client
-    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
+#jasmine:
+#  stage: test
+#  script:
+#    - cd client
+#    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
 
 
 deploy-test-server:
@@ -52,6 +52,26 @@ deploy-test-server:
 #  only:
 #    refs:
 #      - development
+
+
+
+deploy-prod-server:
+  stage: deploy
+  script:
+    - cd server
+    # Subsitute in environment variables
+    - envsubst < src/main/resources/application-prod.properties > src/main/resources/application-prod.properties.swp
+    - mv src/main/resources/application-prod.properties.swp src/main/resources/application-prod.properties
+    # Create artifact
+    - rm -f ./build/libs/*.war || true
+    - ./gradlew bootWar
+    # Move artifact to volume shared by tomcat
+    - rm -f /home/gitlab-runner/prod-server/*.war || true
+    - rm -rf /home/gitlab-runner/prod-server/ROOT || true
+    - cp ./build/libs/*.war /home/gitlab-runner/prod-server/ROOT.war
+#  only:
+#    refs:
+#      - master
 
 
 
@@ -81,7 +101,7 @@ deploy-prod-client:
     - cp -r ./dist/client/* /home/gitlab-runner/prod-client/
 #  only:
 #    refs:
-#      - development
+#      - master
 
 
 
