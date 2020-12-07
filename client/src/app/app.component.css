@@ -4,7 +4,7 @@ html, body {
 }
 
 .wrapper {
-  min-height: calc(100vh - 60px);
+  min-height: calc(100vh - 50px);
 }
 
 
