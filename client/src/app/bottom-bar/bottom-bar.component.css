@@ -19,7 +19,7 @@ footer {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  padding: 30px 3%;
+  padding: 10px 2%;
 }
 
 .nav__links li {
