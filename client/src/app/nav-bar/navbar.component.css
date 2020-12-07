@@ -37,10 +37,6 @@ header {
   padding-bottom: 2px;
 }
 
-.nav__links {
-  /*list-style: none;*/
-}
-
 .nav__links li {
   display: inline-block;
   padding: 0px 20px;

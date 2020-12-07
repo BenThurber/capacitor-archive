@@ -1,42 +1,46 @@
-<div style="text-align: center">
+<div class="wrapper">
+  <div style="text-align: center">
 
-  <app-navbar></app-navbar>
+    <app-navbar></app-navbar>
 
-  <h1>LCO Todo List</h1>
-</div>
-
-
-<div>
-  Add a Todo...
-  <br/>
-  <input
-    type="text"
-    class="input-text"
-    placeholder="Type a todo"
-    [(ngModel)]="todoValue"
-    (keyup.enter)="addItem()"
-  />
-  <button class="add-butn" (click)="addItem()">Add Todo</button>
-
-  <div class="list">
-    <ul>
-      <li *ngFor="let item of list">
-        <input
-          type="checkbox"
-          name="Is Done"
-          [(ngModel)]="item.isDone"
-        />
-        {{item.value}}
-        <button class="btn" (click)="deleteItem(item.id)">Delete</button>
-      </li>
-    </ul>
+    <h1>LCO Todo List</h1>
   </div>
 
+
+  <div>
+    Add a Todo...
+    <br/>
+    <input
+      type="text"
+      class="input-text"
+      placeholder="Type a todo"
+      [(ngModel)]="todoValue"
+      (keyup.enter)="addItem()"
+    />
+    <button class="add-butn" (click)="addItem()">Add Todo</button>
+
+    <div class="list">
+      <ul>
+        <li *ngFor="let item of list">
+          <input
+            type="checkbox"
+            name="Is Done"
+            [(ngModel)]="item.isDone"
+          />
+          {{item.value}}
+          <button class="btn" (click)="deleteItem(item.id)">Delete</button>
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+
+  <router-outlet></router-outlet>
+  <!--Routed Views go here-->
+
+
+
 </div>
-
-
-<router-outlet></router-outlet>
-<!--Routed Views go here-->
-
 
 <app-bottom-bar></app-bottom-bar>
