@@ -4,6 +4,7 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import {NavbarComponent} from './components/nav-bar/navbar.component';
 import {Title} from '@angular/platform-browser';
+import {BottomBarComponent} from './components/bottom-bar/bottom-bar.component';
 
 describe('AppComponent', () => {
 
@@ -17,7 +18,8 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        NavbarComponent
+        NavbarComponent,
+        BottomBarComponent
       ],
       providers: [
         { provide: Title, useClass: Title }],
