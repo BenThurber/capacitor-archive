@@ -26,6 +26,9 @@ header {
 .logo {
   cursor: pointer;
 }
+.banner {
+  margin-left: 10%;
+}
 
 .title__nav__links {
   padding: 0px 20px;
