@@ -25,6 +25,7 @@ header {
 
 .logo {
   cursor: pointer;
+  margin: -20px -20px;
 }
 .banner {
   margin-left: 5%;
