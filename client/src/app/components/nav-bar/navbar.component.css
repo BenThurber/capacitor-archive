@@ -4,7 +4,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background-color: #844b13;
 }
 
 
@@ -21,6 +20,7 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 30px 3%;
+  background-color: #844b13;
 }
 
 .logo {
