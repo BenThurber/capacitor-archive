@@ -4,7 +4,6 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background-color: #844b13;
 }
 
 
@@ -21,10 +20,15 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 30px 3%;
+  background-color: #844b13;
 }
 
 .logo {
   cursor: pointer;
+  margin: -20px -20px;
+}
+.banner {
+  margin-left: 5%;
 }
 
 .title__nav__links {
