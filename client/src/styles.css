@@ -4,3 +4,17 @@
 body {
   background-color: #e3e3e3;
 }
+
+
+.basic-link:link {
+  color: blue;
+}
+
+a:visited {
+  color: purple;
+}
+
+.basic-link:hover {
+  color: green;
+}
+
