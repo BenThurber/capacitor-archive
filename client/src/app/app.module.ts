@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/nav-bar/navbar.component';
 import { BottomBarComponent } from './components/bottom-bar/bottom-bar.component';
 import { NotImplementedComponent } from './views/not-implemented/not-implemented.component';
+import { AboutComponent } from './views/about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     BottomBarComponent,
-    NotImplementedComponent
+    NotImplementedComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
