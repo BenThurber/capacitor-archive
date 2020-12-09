@@ -10,7 +10,7 @@ import { NotImplementedComponent } from './views/not-implemented/not-implemented
 import { AboutComponent } from './views/about/about.component';
 import { HomeComponent } from './views/home/home.component';
 import { CreateManufacturerComponent } from './views/create-manufacturer/create-manufacturer.component';
-import { ManufacturerFormComponent } from './manufacturer-form/manufacturer-form.component';
+import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
 
 @NgModule({
   declarations: [
