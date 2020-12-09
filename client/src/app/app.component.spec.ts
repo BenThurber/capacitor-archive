@@ -31,7 +31,7 @@ describe('AppComponent', () => {
   });
 
   it(`should have as title 'client'`, () => {
-    titleService = TestBed.get(Title);
+    titleService = TestBed.inject(Title);
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
     expect(titleService.getTitle()).toEqual(app.title);
