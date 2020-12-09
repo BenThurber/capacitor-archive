@@ -6,7 +6,7 @@ body {
 }
 
 
-.basic-link:link {
+a:link {
   color: blue;
 }
 
@@ -14,7 +14,7 @@ a:visited {
   color: purple;
 }
 
-.basic-link:hover {
+a:hover {
   color: green;
 }
 
