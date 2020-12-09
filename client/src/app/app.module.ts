@@ -8,6 +8,7 @@ import { NavbarComponent } from './components/nav-bar/navbar.component';
 import { BottomBarComponent } from './components/bottom-bar/bottom-bar.component';
 import { NotImplementedComponent } from './views/not-implemented/not-implemented.component';
 import { AboutComponent } from './views/about/about.component';
+import { HomeComponent } from './views/home/home.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { AboutComponent } from './views/about/about.component';
     NavbarComponent,
     BottomBarComponent,
     NotImplementedComponent,
-    AboutComponent
+    AboutComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
