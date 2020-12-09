@@ -3,8 +3,13 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import {NavbarComponent} from './components/nav-bar/navbar.component';
+import {Title} from '@angular/platform-browser';
+import {BottomBarComponent} from './components/bottom-bar/bottom-bar.component';
 
 describe('AppComponent', () => {
+
+  let titleService: Title;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
@@ -13,8 +18,10 @@ describe('AppComponent', () => {
       ],
       declarations: [
         AppComponent,
-        NavbarComponent
+        NavbarComponent,
+        BottomBarComponent
       ],
+      providers: [Title],
     }).compileComponents();
   });
 
@@ -25,9 +32,10 @@ describe('AppComponent', () => {
   });
 
   it(`should have as title 'client'`, () => {
+    titleService = TestBed.inject(Title);
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('The Capacitor Archive');
+    expect(titleService.getTitle()).toEqual(app.title);
   });
 
   it('should render header', () => {
