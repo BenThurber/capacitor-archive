@@ -11,6 +11,7 @@ import { AboutComponent } from './views/about/about.component';
 import { HomeComponent } from './views/home/home.component';
 import { CreateManufacturerComponent } from './views/create-manufacturer/create-manufacturer.component';
 import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import { ManufacturerFormComponent } from './components/manufacturer-form/manufa
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

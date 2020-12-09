@@ -1,6 +1,41 @@
 <div>
 
-  <form>
+  <form [formGroup]="manufacturerForm" (ngSubmit)="onSubmit(manufacturerForm.value)">
+
+
+    <div>
+      <label for="company-name">
+        Manufacturer Name
+      </label>
+      <input id="company-name" type="text" formControlName="companyName">
+    </div>
+
+    <div>
+      <label for="open-year">
+        Date Opened
+      </label>
+      <input id="open-year" type="number" formControlName="openYear">
+    </div>
+
+    <div>
+      <label for="close-year">
+        Date Closed
+      </label>
+      <input id="close-year" type="number" formControlName="closeYear">
+    </div>
+
+    <div>
+      <label for="summary">
+        Summary
+      </label>
+    <br>
+      <textarea id=summary formControlName="summary" name="message" rows="7" cols="50"></textarea>
+    </div>
+
+
+
+    <button class="button" type="submit">Submit</button>
+
 
   </form>
 
