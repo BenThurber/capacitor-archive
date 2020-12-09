@@ -21,8 +21,7 @@ describe('AppComponent', () => {
         NavbarComponent,
         BottomBarComponent
       ],
-      providers: [
-        { provide: Title, useClass: Title }],
+      providers: [Title],
     }).compileComponents();
   });
 
