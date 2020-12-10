@@ -16,8 +16,8 @@ public class ManufacturerCreateRequest {
     @JsonProperty("closeYear")
     private Short closeYear;
 
-    @JsonProperty("bio")
-    private String bio;
+    @JsonProperty("summary")
+    private String summary;
 
 
     public ManufacturerCreateRequest() { }
@@ -48,10 +48,10 @@ public class ManufacturerCreateRequest {
     }
 
     public String getBio() {
-        return bio;
+        return summary;
     }
 
     public void setBio(String bio) {
-        this.bio = bio;
+        this.summary = bio;
     }
 }

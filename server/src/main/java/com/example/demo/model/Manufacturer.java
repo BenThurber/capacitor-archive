@@ -19,16 +19,16 @@ public class Manufacturer {
     @Column(name = "company_name", length = FIELD_LEN, nullable = false, unique = true)
     private String companyName;
 
-    @Column(name = "open-year", columnDefinition = "SMALLINT")
+    @Column(name = "open_year", columnDefinition = "SMALLINT")
     @Type(type = "org.hibernate.type.ShortType")
     private Short openYear;
 
-    @Column(name = "close-year", columnDefinition = "SMALLINT")
+    @Column(name = "close_year", columnDefinition = "SMALLINT")
     @Type(type = "org.hibernate.type.ShortType")
     private Short closeYear;
 
-    @Column(name = "bio", length = SUMMARY_LEN)
-    private String bio;
+    @Column(name = "summary", length = SUMMARY_LEN)
+    private String summary;
 
 
     public Manufacturer(ManufacturerCreateRequest manufacturerCreateRequest) {
@@ -39,6 +39,8 @@ public class Manufacturer {
         setCloseYear(r.getCloseYear());
         setBio(r.getBio());
     }
+
+    public Manufacturer() { }
 
 
     public String getCompanyName() {
@@ -66,10 +68,10 @@ public class Manufacturer {
     }
 
     public String getBio() {
-        return bio;
+        return summary;
     }
 
     public void setBio(String bio) {
-        this.bio = bio;
+        this.summary = bio;
     }
 }
