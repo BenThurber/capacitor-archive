@@ -3,40 +3,40 @@
   <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm)">
 
 
-    <div>
+    <div class="input">
       <label for="company-name">
         Manufacturer Name*
       </label>
       <input id="company-name" type="text" formControlName="companyName" placeholder="e.g. Solar, Aerovox" required
              [ngClass]="{ 'is-invalid': formControls.companyName.errors }">
-      <div *ngIf="formControls.companyName.errors && formControls.companyName.errors.required">
-        Full Name is required and must be a valid name
+      <div class="error__msg" *ngIf="formControls.companyName.errors && formControls.companyName.errors.required">
+        Please provide the name of the Manufacturer
       </div>
     </div>
 
-    <div>
+    <div class="input">
       <label for="open-year">
         Date Opened
       </label>
       <input id="open-year" type="text" formControlName="openYear"
              [ngClass]="{ 'is-invalid': formControls.openYear.errors }">
-      <div *ngIf="formControls.openYear.errors">
+      <div class="error__msg" *ngIf="formControls.openYear.errors">
         Year is not valid
       </div>
     </div>
 
-    <div>
+    <div class="input">
       <label for="close-year">
         Date Closed
       </label>
       <input id="close-year" type="text" formControlName="closeYear"
              [ngClass]="{ 'is-invalid': formControls.closeYear.errors }">
-      <div *ngIf="formControls.closeYear.errors">
+      <div class="error__msg" *ngIf="formControls.closeYear.errors">
         Year is not valid
       </div>
     </div>
 
-    <div>
+    <div class="input">
       <label for="summary">
         Summary
       </label>

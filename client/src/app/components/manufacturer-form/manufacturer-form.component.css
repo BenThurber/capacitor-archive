@@ -1,3 +1,11 @@
-:host ::ng-deep .is-invalid {
+.is-invalid {
   color: red;
+}
+
+.error__msg {
+  color: red;
+}
+
+.input {
+  margin: 15px;
 }
