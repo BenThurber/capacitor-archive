@@ -1,0 +1,12 @@
+.is-invalid {
+  color: red;
+}
+
+.error__msg {
+  color: red;
+  font-size: 15px;
+}
+
+.input {
+  margin: 15px;
+}
