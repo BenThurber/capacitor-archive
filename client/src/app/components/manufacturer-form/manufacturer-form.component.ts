@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
-import {INT_TYPE} from '@angular/compiler/src/output/output_ast';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+
 
 @Component({
   selector: 'app-manufacturer-form',
@@ -12,22 +12,28 @@ export class ManufacturerFormComponent implements OnInit {
   manufacturerForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {
+    const integerPattern: RegExp = /^\d+$/;
     this.manufacturerForm = this.formBuilder.group({
-      companyName: '',
-      openYear: Number,
-      closeYear: Number,
-      summary: '',
+      companyName: ['', Validators.required],
+      openYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
+      closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
+      summary: ['', [Validators.required]],
     });
   }
 
   ngOnInit(): void {
   }
 
-  onSubmit(customerData): void {
+  onSubmit(manufacturerData): void {
     // Process checkout data here
     this.manufacturerForm.reset();
 
-    console.warn('Your order has been submitted', customerData);
+    console.warn('Your order has been submitted', manufacturerData);
   }
+
+  public get formControls(): any {
+    return this.manufacturerForm.controls;
+  }
+
 
 }
