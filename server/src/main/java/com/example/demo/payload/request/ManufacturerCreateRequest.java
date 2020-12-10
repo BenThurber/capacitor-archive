@@ -1,18 +1,34 @@
 package com.example.demo.payload.request;
 
+import com.example.demo.annotation.YearsInOrder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
+
+
+@YearsInOrder(
+        startYear = "openYear",
+        endYear = "closeYear",
+        message = "closeYear is before openYear"
+)
 public class ManufacturerCreateRequest {
 
+    @NotNull(message = "Manufacturer is missing a name")
+    @Size(min=1, message="Manufacturer is missing a name")
     @JsonProperty("companyName")
-    @NotNull(message = "A manufacturer needs a name")
     private String companyName;
 
+    @Max(value = 2025, message = "openYear is greater than 2025")
+    @Min(value = 1000, message = "openYear is less than 1000")
     @JsonProperty("openYear")
     private Short openYear;
 
+    @Max(value = 2025, message = "closeYear is greater than 2025")
+    @Min(value = 1000, message = "closeYear is less than 1000")
     @JsonProperty("closeYear")
     private Short closeYear;
 
