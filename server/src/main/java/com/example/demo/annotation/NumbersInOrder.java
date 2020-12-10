@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface NumbersInOrder {
 
-    String message() default "secondNumber is before firstNumber";
+    String message() default "secondNumber is less than firstNumber";
 
     Class<?>[] groups() default {};
     Class<?>[] payload() default {};

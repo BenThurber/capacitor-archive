@@ -9,7 +9,7 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 /**
- * Validates that two numbers (long, int, short) are in sorted order.  i.e. firstNumber <= secondNumber.
+ * Validates that two Numbers (long, int, short, float, double) are in sorted order.  i.e. firstNumber <= secondNumber.
  */
 public class NumbersInOrderValidator implements ConstraintValidator<NumbersInOrder, Object> {
 
