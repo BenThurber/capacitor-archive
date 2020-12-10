@@ -31,7 +31,7 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'client'`, () => {
+  it('should have as correct browser title', () => {
     titleService = TestBed.inject(Title);
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;

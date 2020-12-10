@@ -9,6 +9,9 @@ import { BottomBarComponent } from './components/bottom-bar/bottom-bar.component
 import { NotImplementedComponent } from './views/not-implemented/not-implemented.component';
 import { AboutComponent } from './views/about/about.component';
 import { HomeComponent } from './views/home/home.component';
+import { CreateManufacturerComponent } from './views/create-manufacturer/create-manufacturer.component';
+import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -17,12 +20,15 @@ import { HomeComponent } from './views/home/home.component';
     BottomBarComponent,
     NotImplementedComponent,
     AboutComponent,
-    HomeComponent
+    HomeComponent,
+    CreateManufacturerComponent,
+    ManufacturerFormComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
