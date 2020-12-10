@@ -1,7 +1,7 @@
 package com.example.demo.annotation;
 
 
-import com.example.demo.validator.ManufacturerValidator;
+import com.example.demo.validator.NumbersInOrderValidator;
 
 import javax.validation.Constraint;
 import java.lang.annotation.ElementType;
@@ -9,23 +9,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Constraint(validatedBy = ManufacturerValidator.class)
+@Constraint(validatedBy = NumbersInOrderValidator.class)
 @Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface YearsInOrder {
+public @interface NumbersInOrder {
 
-    String message() default "endYear is before startYear";
+    String message() default "secondNumber is before firstNumber";
 
     Class<?>[] groups() default {};
     Class<?>[] payload() default {};
 
-    String startYear();
+    String firstNumber();
 
-    String endYear();
+    String secondNumber();
 
     @Target({ ElementType.TYPE })
     @Retention(RetentionPolicy.RUNTIME)
     @interface List {
-        YearsInOrder[] value();
+        NumbersInOrder[] value();
     }
 }

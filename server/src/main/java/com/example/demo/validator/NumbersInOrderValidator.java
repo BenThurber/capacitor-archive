@@ -1,6 +1,6 @@
 package com.example.demo.validator;
 
-import com.example.demo.annotation.YearsInOrder;
+import com.example.demo.annotation.NumbersInOrder;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanWrapperImpl;
@@ -8,35 +8,49 @@ import org.springframework.beans.BeanWrapperImpl;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-public class ManufacturerValidator implements ConstraintValidator<YearsInOrder, Object> {
+/**
+ * Validates that two numbers (long, int, short) are in sorted order.  i.e. firstNumber <= secondNumber.
+ */
+public class NumbersInOrderValidator implements ConstraintValidator<NumbersInOrder, Object> {
 
-    private static Log log = LogFactory.getLog(ManufacturerValidator.class);
+    private static Log log = LogFactory.getLog(NumbersInOrderValidator.class);
 
-    private String  startYear;
-    private String  endYear;
+    private String firstFieldName;
+    private String secondFieldName;
 
-    public void initialize(YearsInOrder constraintAnnotation) {
-        this.startYear = constraintAnnotation.startYear();
-        this.endYear = constraintAnnotation.endYear();
+    public void initialize(NumbersInOrder constraintAnnotation) {
+        this.firstFieldName = constraintAnnotation.firstNumber();
+        this.secondFieldName = constraintAnnotation.secondNumber();
     }
 
     public boolean isValid(Object value, ConstraintValidatorContext context) {
 
-        Object startYearValue = new BeanWrapperImpl(value)
-                .getPropertyValue(startYear);
-        Object endYearValue = new BeanWrapperImpl(value)
-                .getPropertyValue(endYear);
+        Object firstNumberObj = new BeanWrapperImpl(value)
+                .getPropertyValue(firstFieldName);
+        Object secondNumberObj = new BeanWrapperImpl(value)
+                .getPropertyValue(secondFieldName);
 
 
-        if (startYearValue == null || endYearValue == null) {
+        if (firstNumberObj == null || secondNumberObj == null) {
             return true;
         }
 
+        // Determine the type of Object
         try {
-            return (Short) startYearValue <= (Short) endYearValue;
+            Number firstNumber = (Number)firstNumberObj;
+            Number secondNumber = (Number)secondNumberObj;
+
+            if (firstNumber.equals(firstNumber.longValue()) && secondNumber.equals(secondNumber.longValue())) {
+                // It is integer
+                return firstNumber.longValue() <= secondNumber.longValue();
+            } else {
+                // It is floating point
+                return firstNumber.doubleValue() <= secondNumber.doubleValue();
+            }
+
         } catch (ClassCastException e) {
             log.error("Can't parse values during validation");
-            return false;
         }
+        return false;
     }
 }
