@@ -57,12 +57,11 @@ class ManufacturerControllerTest {
             "closeYear", 1939,
             "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
     );
-
     /**
      * Test successful creation of new manufacturer.
      */
     @Test
-    void newManufacturer() throws Exception {
+    void newManufacturer_success() throws Exception {
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
                 .content(newManufacturer1Json)
@@ -72,6 +71,113 @@ class ManufacturerControllerTest {
         mvc.perform(httpReq)
                 .andExpect(status().isCreated());
     }
+
+
+    private final String newManufacturerOnlyNameJson = JsonConverter.toJson(true,
+            "companyName", "Hunts"
+    );
+    /**
+     * Test successful creation of new manufacturer.
+     */
+    @Test
+    void newManufacturer_onlyNameField_success() throws Exception {
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(newManufacturerOnlyNameJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isCreated());
+    }
+
+
+    private final String manufacturerNoNameJson = JsonConverter.toJson(true,
+            "openYear", 1918,
+            "closeYear", 1939,
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
+    );
+    /**
+     * Test creation of new manufacturer without name fail.
+     */
+    @Test
+    void newManufacturer_noName_fail() throws Exception {
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(manufacturerNoNameJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isBadRequest());
+    }
+
+
+    private final String manufacturerDatesToLowJson = JsonConverter.toJson(true,
+            "companyName", "Hunts",
+            "openYear", 33,
+            "closeYear", 67,
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
+    );
+    /**
+     * Test creation of new manufacturer with years before 1000.
+     */
+    @Test
+    void newManufacturer_datesTooLow_fail() throws Exception {
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(manufacturerDatesToLowJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isBadRequest());
+    }
+
+    private final String manufacturerDatesToHighJson = JsonConverter.toJson(true,
+            "companyName", "Hunts",
+            "openYear", 2099,
+            "closeYear", 2101,
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
+    );
+    /**
+     * Test creation of new manufacturer with years after 2025.
+     */
+    @Test
+    void newManufacturer_datesTooHigh_fail() throws Exception {
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(manufacturerDatesToHighJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isBadRequest());
+    }
+
+    private final String manufacturerDatesInWrongOrder = JsonConverter.toJson(true,
+            "companyName", "Hunts",
+            "openYear", 1935,
+            "closeYear", 1920,
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
+    );
+    /**
+     * Test creation of new manufacturer with years after 2025.
+     */
+    @Test
+    void newManufacturer_datesWrongOrder_fail() throws Exception {
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(manufacturerDatesToHighJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isBadRequest());
+    }
+
+
+
 
 }
 
