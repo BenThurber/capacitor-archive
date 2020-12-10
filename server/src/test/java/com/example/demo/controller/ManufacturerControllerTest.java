@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.model.Manufacturer;
+import com.example.demo.repository.ManufacturerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,53 +22,50 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
-class UserControllerTest {
+@WebMvcTest(ManufacturerController.class)
+class ManufacturerControllerTest {
 
 
     @Autowired
     private MockMvc mvc;
     @MockBean
-    private UserRepository userRepository;
+    private ManufacturerRepository manufacturerRepository;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private List<User> userMockTable = new ArrayList<>();
+    private List<Manufacturer> manufacturerMockTable = new ArrayList<>();
 
     @BeforeEach
     void mockRepository() {
-        when(userRepository.save(Mockito.any(User.class))).thenAnswer(i -> {
-            User newUser = i.getArgument(0);
-            ReflectionTestUtils.setField(newUser, "id", (DEFAULT_USER_ID + userCount++));
-            userMockTable.add(newUser);
-            return newUser;
+        when(manufacturerRepository.save(Mockito.any(Manufacturer.class))).thenAnswer(i -> {
+            Manufacturer newManufacturer = i.getArgument(0);
+            ReflectionTestUtils.setField(newManufacturer, "id", (DEFAULT_MANUFACTURER_ID + manufacturerCount++));
+            manufacturerMockTable.add(newManufacturer);
+            return newManufacturer;
         });
     }
 
-    private static Long userCount = 0L;
-    private static final Long DEFAULT_USER_ID = 1L;
+    private static Long manufacturerCount = 0L;
+    private static final Long DEFAULT_MANUFACTURER_ID = 1L;
 
 
     // ----------- Tests -----------
 
-    private final String newUser1Json = JsonConverter.toJson(true,
-            "firstName", "Joey",
-            "lastName", "Diaz",
-            "email", "comicjoe@aol.com",
-            "password", "pass",
-            "emailVisible", true,
-            "username", "joeylikescapacitors",
-            "bio", "Comedian turned radio collector"
+    private final String newManufacturer1Json = JsonConverter.toJson(true,
+            "companyName", "Hunts",
+            "openYear", 1920,
+            "closeYear", 1939,
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
     );
 
     /**
-     * Test successful creation of new user.
+     * Test successful creation of new manufacturer.
      */
     @Test
-    void newUser() throws Exception {
+    void newManufacturer() throws Exception {
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/user/register")
-                .content(newUser1Json)
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(newManufacturer1Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
