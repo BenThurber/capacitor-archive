@@ -37,11 +37,14 @@ public class Manufacturer {
         setCompanyName(r.getCompanyName());
         setOpenYear(r.getOpenYear());
         setCloseYear(r.getCloseYear());
-        setBio(r.getBio());
+        setSummary(r.getBio());
     }
 
     public Manufacturer() { }
 
+    public Long getId() {
+        return id;
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -67,11 +70,11 @@ public class Manufacturer {
         this.closeYear = closeYear;
     }
 
-    public String getBio() {
+    public String getSummary() {
         return summary;
     }
 
-    public void setBio(String bio) {
-        this.summary = bio;
+    public void setSummary(String summary) {
+        this.summary = summary;
     }
 }
