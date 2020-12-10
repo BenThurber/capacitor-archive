@@ -17,18 +17,18 @@ export class ManufacturerFormComponent implements OnInit {
       companyName: ['', Validators.required],
       openYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
-      summary: ['', [Validators.required]],
+      summary: ['', []],
     });
   }
 
   ngOnInit(): void {
   }
 
-  onSubmit(manufacturerData): void {
+  onSubmit(manufacturerForm: FormGroup): void {
     // Process checkout data here
-    this.manufacturerForm.reset();
+    manufacturerForm.reset();
 
-    console.warn('Your order has been submitted', manufacturerData);
+    console.warn('Your form has been submitted', manufacturerForm.value);
   }
 
   public get formControls(): any {
