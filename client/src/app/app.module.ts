@@ -12,6 +12,7 @@ import { HomeComponent } from './views/home/home.component';
 import { CreateManufacturerComponent } from './views/create-manufacturer/create-manufacturer.component';
 import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
