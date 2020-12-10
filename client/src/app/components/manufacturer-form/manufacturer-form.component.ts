@@ -24,11 +24,11 @@ export class ManufacturerFormComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(manufacturerForm: FormGroup): void {
+  onSubmit(manufacturerData): void {
     // Process checkout data here
-    manufacturerForm.reset();
+    this.manufacturerForm.reset();
 
-    console.warn('Your form has been submitted', manufacturerForm.value);
+    console.warn('Your form has been submitted', manufacturerData);
   }
 
   public get formControls(): any {

@@ -1,6 +1,6 @@
 <div>
 
-  <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm)">
+  <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm.value)">
 
 
     <div class="input">
