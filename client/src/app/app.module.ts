@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +15,7 @@ import { ManufacturerFormComponent } from './components/manufacturer-form/manufa
 import { ReactiveFormsModule } from '@angular/forms';
 import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufacturer.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
+
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
