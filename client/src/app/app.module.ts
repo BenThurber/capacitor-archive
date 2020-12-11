@@ -12,6 +12,7 @@ import { HomeComponent } from './views/home/home.component';
 import { CreateManufacturerComponent } from './views/create-manufacturer/create-manufacturer.component';
 import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     AboutComponent,
     HomeComponent,
     CreateManufacturerComponent,
-    ManufacturerFormComponent
+    ManufacturerFormComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
