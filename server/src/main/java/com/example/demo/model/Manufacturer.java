@@ -16,8 +16,18 @@ public class Manufacturer {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "company_name", length = FIELD_LEN, nullable = false, unique = true)
+    @Column(name = "company_name", length = FIELD_LEN, nullable = false)
     private String companyName;
+
+    @Column(name = "company_name_lower", length = FIELD_LEN, nullable = false, unique = true)
+    private String companyNameLower;
+
+    /**This allows company_name to be case insensitive unique*/
+    @PrePersist
+    @PreUpdate
+    private void prepare() {
+        this.companyNameLower = companyName == null ? null : companyName.toLowerCase();
+    }
 
     @Column(name = "open_year", columnDefinition = "SMALLINT")
     @Type(type = "org.hibernate.type.ShortType")

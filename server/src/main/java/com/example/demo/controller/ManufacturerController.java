@@ -58,7 +58,7 @@ public class ManufacturerController {
      */
     @GetMapping("name/{companyName}")
     public ManufacturerResponse getManufacturerByNameIgnoreCase(@PathVariable String companyName, HttpServletResponse response) {
-        Manufacturer manufacturer = manufacturerRepository.findByCompanyNameIgnoreCase(companyName);
+        Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
 
         if (manufacturer == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
