@@ -31,6 +31,8 @@ public class ManufacturerResponse {
         setSummary(m.getSummary());
     }
 
+    public ManufacturerResponse() { }
+
     public Long getId() {
         return id;
     }
@@ -69,5 +71,19 @@ public class ManufacturerResponse {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof ManufacturerResponse) {
+            final ManufacturerResponse other = (ManufacturerResponse) obj;
+            return other.getId().equals(this.getId()) || (
+                    other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
+                            other.getOpenYear().equals(this.getOpenYear()) && other.getOpenYear().equals(this.getOpenYear()) &&
+                            other.getCloseYear().equals(this.getOpenYear()) && other.getSummary().equals(this.getSummary()));
+
+        }
+        return false;
     }
 }

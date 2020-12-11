@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.ManufacturerCreateRequest;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -86,5 +87,19 @@ public class Manufacturer {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Manufacturer) {
+            final Manufacturer other = (Manufacturer) obj;
+            return other.getId().equals(this.getId()) || (
+                    other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
+                    other.getOpenYear().equals(this.getOpenYear()) && other.getOpenYear().equals(this.getOpenYear()) &&
+                    other.getCloseYear().equals(this.getOpenYear()) && other.getSummary().equals(this.getSummary()));
+
+        }
+        return false;
     }
 }
