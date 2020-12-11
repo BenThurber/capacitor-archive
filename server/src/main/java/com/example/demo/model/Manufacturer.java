@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.ManufacturerCreateRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

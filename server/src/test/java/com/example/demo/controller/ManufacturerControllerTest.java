@@ -66,13 +66,9 @@ class ManufacturerControllerTest {
 
         when(manufacturerRepository.findByCompanyNameLowerIgnoreCase(Mockito.any(String.class))).thenAnswer(i -> {
             String companyName = i.getArgument(0);
-            Manufacturer man = manufacturerMockTable.stream().filter(
+            return manufacturerMockTable.stream().filter(
                     m -> companyName.toLowerCase().equals(m.getCompanyName().toLowerCase())
             ).findFirst().orElse(null);
-            System.out.println(man);
-            System.out.println(companyName);
-            System.out.println(manufacturerMockTable.get(0).getCompanyName());
-            return man;
         });
     }
 
