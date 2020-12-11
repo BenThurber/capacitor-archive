@@ -16,8 +16,18 @@ public class Manufacturer {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "company_name", length = FIELD_LEN, nullable = false, unique = true)
+    @Column(name = "company_name", length = FIELD_LEN, nullable = false)
     private String companyName;
+
+    @Column(name = "company_name_lower", length = FIELD_LEN, nullable = false, unique = true)
+    private String companyNameLower;
+
+    /**This allows company_name to be case insensitive unique*/
+    @PrePersist
+    @PreUpdate
+    private void prepare() {
+        this.companyNameLower = companyName == null ? null : companyName.toLowerCase();
+    }
 
     @Column(name = "open_year", columnDefinition = "SMALLINT")
     @Type(type = "org.hibernate.type.ShortType")
@@ -37,11 +47,14 @@ public class Manufacturer {
         setCompanyName(r.getCompanyName());
         setOpenYear(r.getOpenYear());
         setCloseYear(r.getCloseYear());
-        setBio(r.getBio());
+        setSummary(r.getBio());
     }
 
     public Manufacturer() { }
 
+    public Long getId() {
+        return id;
+    }
 
     public String getCompanyName() {
         return companyName;
@@ -67,11 +80,25 @@ public class Manufacturer {
         this.closeYear = closeYear;
     }
 
-    public String getBio() {
+    public String getSummary() {
         return summary;
     }
 
-    public void setBio(String bio) {
-        this.summary = bio;
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Manufacturer) {
+            final Manufacturer other = (Manufacturer) obj;
+            return other.getId().equals(this.getId()) || (
+                    other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
+                    other.getOpenYear().equals(this.getOpenYear()) && other.getOpenYear().equals(this.getOpenYear()) &&
+                    other.getCloseYear().equals(this.getOpenYear()) && other.getSummary().equals(this.getSummary()));
+
+        }
+        return false;
     }
 }

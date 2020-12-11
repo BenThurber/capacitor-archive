@@ -13,6 +13,7 @@ import { CreateManufacturerComponent } from './views/create-manufacturer/create-
 import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufacturer.component';
+import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufa
     HomeComponent,
     CreateManufacturerComponent,
     ManufacturerFormComponent,
-    ViewManufacturerComponent
+    ViewManufacturerComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
