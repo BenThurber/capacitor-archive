@@ -6,6 +6,7 @@ import { AboutComponent } from './views/about/about.component';
 import { HomeComponent } from './views/home/home.component';
 import {CreateManufacturerComponent} from './views/create-manufacturer/create-manufacturer.component';
 import {PageNotFoundComponent} from './views/page-not-found/page-not-found.component';
+import {ViewManufacturerComponent} from './views/view-manufacturer/view-manufacturer.component';
 
 const routes: Routes = [
   {path: 'not-implemented', component: NotImplementedComponent},
@@ -13,6 +14,7 @@ const routes: Routes = [
   {path: 'about', component: AboutComponent},
   {path: 'contact', component: ContactComponent},
   {path: 'manufacturer/create', component: CreateManufacturerComponent},
+  {path: 'manufacturer/view/:manufacturerName', component: ViewManufacturerComponent},
   {path: '**', component: PageNotFoundComponent },  // This must be the last element of the Routes array
 ];
 
