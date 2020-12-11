@@ -1,0 +1,28 @@
+<div style="text-align: center;">
+  <div *ngIf="manufacturer$; else loading" class="center__box">
+
+    <div *ngIf="manufacturer$.companyName">
+      <h2>{{manufacturer$.companyName}}</h2>
+    </div>
+
+    <div *ngIf="manufacturer$.openYear">
+      <strong>Opened: </strong>{{manufacturer$.openYear}}
+    </div>
+
+    <div *ngIf="manufacturer$.closeYear">
+      <strong>Closed: </strong>{{manufacturer$.closeYear}}
+    </div>
+
+    <div *ngIf="manufacturer$.summary">
+      <p>
+      {{manufacturer$.summary}}
+      </p>
+    </div>
+
+  </div>
+
+  <ng-template #loading>
+    <h3>Loading Data...</h3>
+  </ng-template>
+
+</div>

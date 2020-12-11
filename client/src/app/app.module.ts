@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {HttpClientModule} from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,7 +13,11 @@ import { HomeComponent } from './views/home/home.component';
 import { CreateManufacturerComponent } from './views/create-manufacturer/create-manufacturer.component';
 import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufacturer.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
+
+import {RestService} from './services/rest.service';
+
 
 @NgModule({
   declarations: [
@@ -24,15 +29,17 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
     HomeComponent,
     CreateManufacturerComponent,
     ManufacturerFormComponent,
-    PageNotFoundComponent
+    ViewManufacturerComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [RestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
