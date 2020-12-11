@@ -14,7 +14,7 @@ export class RestService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getManufacturerById(id: number): Observable<Manufacturer> {
-    return this.httpClient.get<Manufacturer>(this.baseUrl + '/manufacturer/id/' + id);
+  getManufacturerByName(name: string): Observable<Manufacturer> {
+    return this.httpClient.get<Manufacturer>(this.baseUrl + '/manufacturer/name/' + name);
   }
 }

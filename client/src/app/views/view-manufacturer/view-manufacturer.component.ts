@@ -18,7 +18,7 @@ export class ViewManufacturerComponent implements OnInit {
   }
 
   ngOnInit(): Subscription {
-    return this.restService.getManufacturerById(1).subscribe(manufacturer => this.manufacturer$ = manufacturer);
+    return this.restService.getManufacturerByName('hunts').subscribe(manufacturer => this.manufacturer$ = manufacturer);
   }
 
 }
