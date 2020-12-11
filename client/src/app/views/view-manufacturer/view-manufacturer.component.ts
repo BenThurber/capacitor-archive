@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import {Subscription} from 'rxjs';
+import {Manufacturer} from '../../models/manufacturer.model';
+import {RestService} from '../../services/rest.service';
 
 @Component({
   selector: 'app-view-manufacturer',
@@ -7,9 +10,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ViewManufacturerComponent implements OnInit {
 
-  constructor() { }
+  manufacturer$: Manufacturer;
+  restService: RestService;
 
-  ngOnInit(): void {
+  constructor(restService: RestService) {
+    this.restService = restService;
+  }
+
+  ngOnInit(): Subscription {
+    return this.restService.getManufacturerById(1).subscribe(manufacturer => this.manufacturer$ = manufacturer);
   }
 
 }

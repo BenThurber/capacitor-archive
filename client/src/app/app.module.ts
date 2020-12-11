@@ -16,6 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufacturer.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 
+import {RestService} from './services/rest.service';
+
 
 @NgModule({
   declarations: [
@@ -37,7 +39,7 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [RestService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
