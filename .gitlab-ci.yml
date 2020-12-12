@@ -84,7 +84,7 @@ deploy-test-client:
   script:
     # Create artifact
     - cd client
-    - ng --prod --aot build
+    - ng --prod --aot --configuration=dev build
     # Move artifact to volume shared by apache
     - rm -rf /home/gitlab-runner/test-client/* || true
     - cp -r ./dist/client/* /home/gitlab-runner/test-client/
@@ -99,7 +99,7 @@ deploy-prod-client:
   script:
     # Create artifact
     - cd client
-    - ng --prod --aot build
+    - ng --prod --aot --configuration=prod build
     # Move artifact to volume shared by apache
     - rm -rf /home/gitlab-runner/prod-client/* || true
     - cp -r ./dist/client/* /home/gitlab-runner/prod-client/

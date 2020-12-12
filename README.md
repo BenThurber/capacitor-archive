@@ -7,7 +7,7 @@ Please see the [backlog on the Wiki](https://gitlab.com/capacitor-archive/capaci
 
 ## Overview
 
-This app uses an [Angular](https://angular.io/) front end and [Spring Boot](https://spring.io/projects/spring-boot) backend.  A DevOps methodology has been imployed through gitlab-runner's [CI/CD pipeline](https://docs.gitlab.com/ee/ci/) that performs automatic testing and deployment.
+This app uses an [Angular](https://angular.io/) front end and [Spring Boot](https://spring.io/projects/spring-boot) backend.  A DevOps methodology has been employed through gitlab-runner's [CI/CD pipeline](https://docs.gitlab.com/ee/ci/) that performs automatic testing and deployment.
 
 ## Setting up CI/CD and MySQL using docker containers
 
@@ -63,6 +63,13 @@ Follow the onscreen prompts:
 - Enter a description  
 - Enter any tags  
 - Select shell  
+
+
+## Add environment variables to GitLab
+In GitLab, in the left bar, go to settings > CI / CD > Variables.  Set the variables:  
+- SPRING_DATASOURCE_USERNAME  
+- SPRING_DATASOURCE_PASSWORD  
+(The same values as were used when [setting mysql credentials](#set-mysql-credentials))  
 
 
 ## Accessing database and phpmyadmin
