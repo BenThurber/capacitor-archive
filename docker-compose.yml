@@ -64,7 +64,8 @@ services:
 
     testClient:
         container_name: test-client
-        image: 'httpd:alpine'
+        image: 'httpd-custom-config:latest'
+        build: ./dockerfiles/custom-httpd-container/
         restart: always
         ports:
             - '35506:80'
@@ -88,7 +89,8 @@ services:
 
     prodClient:
         container_name: prod-client
-        image: 'httpd:alpine'
+        image: 'httpd-custom-config:latest'
+        build: ./dockerfiles/custom-httpd-container/
         restart: always
         ports:
             - '35504:80'
