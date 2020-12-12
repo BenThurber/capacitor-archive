@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {runTempPackageBin} from '@angular/cli/tasks/install-package';
 import {Manufacturer} from '../models/manufacturer.model';
 import {Observable} from 'rxjs';
 
@@ -10,7 +10,7 @@ import {Observable} from 'rxjs';
 export class RestService {
 
   // **This needs to be an environment variable**
-  baseUrl = 'http://localhost:35505';
+  baseUrl: string = environment.serverBaseUrl;
 
   constructor(private httpClient: HttpClient) { }
 
