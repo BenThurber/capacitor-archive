@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/manufacturer")
@@ -67,5 +68,18 @@ public class ManufacturerController {
 
         response.setStatus(HttpServletResponse.SC_OK);
         return new ManufacturerResponse(manufacturer);
+    }
+
+
+    /**
+     * Get a List of all manufacturer names in the Database.
+     * @return a list of manufacturer names as strings
+     */
+    @GetMapping("all-names")
+    public List<String> getAllManufacturerNames(HttpServletResponse response) {
+        List<String> manufacturers = manufacturerRepository.getAllCompanyNames();
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        return manufacturers;
     }
 }
