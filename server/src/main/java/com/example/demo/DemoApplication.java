@@ -33,8 +33,8 @@ public class DemoApplication extends SpringBootServletInitializer {
 		config.setAllowedOrigins(Arrays.asList(
 				"http://localhost:35504",
 				"http://localhost:35506",
-				"http://192.168.1.117:35504",
-				"http://192.168.1.117:35506"));
+				"http://172.17.0.1:35504",
+				"http://172.17.0.1:35506"));
 		config.setAllowedMethods(Collections.singletonList("*"));
 		config.setAllowedHeaders(Collections.singletonList("*"));
 		config.setExposedHeaders(exposedHeaders);
