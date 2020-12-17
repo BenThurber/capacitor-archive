@@ -4,6 +4,7 @@ import com.example.demo.model.Manufacturer;
 import com.example.demo.payload.response.ManufacturerResponse;
 import com.example.demo.repository.ManufacturerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import utilities.JsonConverter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,6 +42,7 @@ class ManufacturerControllerTest {
     private final List<Manufacturer> manufacturerMockTable = new ArrayList<>();
 
     private final Manufacturer manufacturer1 = new Manufacturer();
+    private final Manufacturer manufacturer2 = new Manufacturer();
 
 
     @BeforeAll
@@ -46,6 +50,11 @@ class ManufacturerControllerTest {
         manufacturer1.setCompanyName("Cornell Dubilier");
         manufacturer1.setOpenYear((short)1909);
         manufacturer1.setSummary("A company still in business");
+
+        manufacturer2.setCompanyName("Solar");
+        manufacturer2.setOpenYear((short)1917);
+        manufacturer2.setCloseYear((short)1948);
+        manufacturer2.setSummary("A company that made high quality wax paper capacitors");
 
     }
 
@@ -70,6 +79,10 @@ class ManufacturerControllerTest {
                     m -> companyName.toLowerCase().equals(m.getCompanyName().toLowerCase())
             ).findFirst().orElse(null);
         });
+
+        when(manufacturerRepository.getAllCompanyNames()).thenAnswer(i ->  manufacturerMockTable.stream()
+                .map(Manufacturer::getCompanyName)
+                .collect(Collectors.toList()));
     }
 
     @AfterEach
@@ -292,6 +305,34 @@ class ManufacturerControllerTest {
                 .accept(MediaType.APPLICATION_JSON);
 
         mvc.perform(httpReq).andExpect(status().isNotFound());
+    }
+
+
+    /**
+     * Test getting all manufacturer names.
+     */
+    @Test
+    void getAllManufacturerNames_success() throws Exception {
+        manufacturerRepository.save(manufacturer1);
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/all-names")
+                .content(newManufacturer1Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Convert response json to List of Strings
+        List<String> nameList = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TypeFactory.defaultInstance().constructCollectionType(List.class, String.class));
+
+
+        assertTrue(nameList.containsAll(Arrays.asList("Cornell Dubilier", "Solar")));
+
     }
 
 
