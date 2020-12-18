@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Manufacturer} from '../../models/manufacturer.model';
+import {RestService} from '../../services/rest/rest.service';
+import {Location} from '@angular/common';
 
 
 @Component({
@@ -9,9 +12,21 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 })
 export class ManufacturerFormComponent implements OnInit {
 
-  manufacturerForm: FormGroup;
+  editMode: boolean;
 
-  constructor(private formBuilder: FormBuilder) {
+  manufacturerForm: FormGroup;
+  formBuilder: FormBuilder;
+  restService: RestService;
+  location: Location;
+
+  constructor(formBuilder: FormBuilder, restService: RestService, location: Location) {
+    this.formBuilder = formBuilder;
+    this.restService = restService;
+    this.location = location;
+  }
+
+
+  ngOnInit(): void {
     const integerPattern: RegExp = /^\d+$/;
     this.manufacturerForm = this.formBuilder.group({
       companyName: ['', Validators.required],
@@ -19,16 +34,27 @@ export class ManufacturerFormComponent implements OnInit {
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
     }, { validator: checkIfCloseYearAfterOpenYear });
-  }
 
-
-  ngOnInit(): void {
+    this.editMode = false;  // Temporary
   }
 
   onSubmit(manufacturerData): void {
-    // this.manufacturerForm.reset();
 
-    console.warn('Your form has been submitted', manufacturerData);
+    if (this.editMode) {
+      // Edit end point goes here
+
+    } else {
+
+      const manufacturer = new Manufacturer();
+      manufacturer.insertData(manufacturerData);
+
+      return this.restService.createManufacturer(manufacturer).subscribe({
+        next: () => this.location.back(),
+        error: error => console.error(error),  // This should be improved
+      });
+    }
+
+
   }
 
   get formFields(): any {
