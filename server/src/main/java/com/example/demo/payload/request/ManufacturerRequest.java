@@ -15,7 +15,7 @@ import javax.validation.constraints.Size;
         secondNumber = "closeYear",
         message = "closeYear is before openYear"
 )
-public class ManufacturerCreateRequest {
+public class ManufacturerRequest {
 
     @NotNull(message = "Manufacturer is missing a name")
     @Size(min=1, message="Manufacturer is missing a name")
@@ -36,7 +36,7 @@ public class ManufacturerCreateRequest {
     private String summary;
 
 
-    public ManufacturerCreateRequest() { }
+    public ManufacturerRequest() { }
 
 
     public String getCompanyName() {

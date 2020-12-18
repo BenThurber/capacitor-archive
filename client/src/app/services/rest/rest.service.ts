@@ -21,4 +21,8 @@ export class RestService {
   createManufacturer(manufacturer: Manufacturer): any {
     return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer);
   }
+
+  editManufacturer(name: string, manufacturer: Manufacturer): any {
+    return this.httpClient.put<any>(this.baseUrl + '/manufacturer/edit/' + name, manufacturer);
+  }
 }

@@ -17,6 +17,8 @@ import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufa
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 
 import {RestService} from './services/rest/rest.service';
+import { EditManufacturerComponent } from './views/edit-manufacturer/edit-manufacturer.component';
+import {CommonModule} from '@angular/common';
 
 
 @NgModule({
@@ -31,6 +33,7 @@ import {RestService} from './services/rest/rest.service';
     ManufacturerFormComponent,
     ViewManufacturerComponent,
     PageNotFoundComponent,
+    EditManufacturerComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -38,6 +41,7 @@ import {RestService} from './services/rest/rest.service';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    CommonModule,
   ],
   providers: [RestService],
   bootstrap: [AppComponent]

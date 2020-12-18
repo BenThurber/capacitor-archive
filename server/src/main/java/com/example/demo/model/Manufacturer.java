@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import com.example.demo.payload.request.ManufacturerCreateRequest;
+import com.example.demo.payload.request.ManufacturerRequest;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -41,8 +41,16 @@ public class Manufacturer {
     private String summary;
 
 
-    public Manufacturer(ManufacturerCreateRequest manufacturerCreateRequest) {
-        ManufacturerCreateRequest r = manufacturerCreateRequest;
+    public Manufacturer(ManufacturerRequest manufacturerRequest) {
+        this.edit(manufacturerRequest);
+    }
+
+    /**
+     * Edit the fields of a Manufacturer but not the id.
+     * @param manufacturerRequest a request from the client containing the fields for the manufacturer
+     */
+    public void edit(ManufacturerRequest manufacturerRequest) {
+        ManufacturerRequest r = manufacturerRequest;
 
         setCompanyName(r.getCompanyName());
         setOpenYear(r.getOpenYear());
@@ -95,8 +103,9 @@ public class Manufacturer {
             final Manufacturer other = (Manufacturer) obj;
             return other.getId().equals(this.getId()) || (
                     other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
-                    other.getOpenYear().equals(this.getOpenYear()) && other.getOpenYear().equals(this.getOpenYear()) &&
-                    other.getCloseYear().equals(this.getOpenYear()) && other.getSummary().equals(this.getSummary()));
+                    other.getOpenYear().equals(this.getOpenYear()) &&
+                    other.getCloseYear().equals(this.getCloseYear()) &&
+                    other.getSummary().equals(this.getSummary()));
 
         }
         return false;
