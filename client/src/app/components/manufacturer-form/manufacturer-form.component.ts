@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {RestService} from '../../services/rest/rest.service';
@@ -12,7 +12,7 @@ import {Location} from '@angular/common';
 })
 export class ManufacturerFormComponent implements OnInit {
 
-  editMode: boolean;
+  @Input('edit-mode') editMode = false;
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -35,7 +35,8 @@ export class ManufacturerFormComponent implements OnInit {
       summary: ['', []],
     }, { validator: checkIfCloseYearAfterOpenYear });
 
-    this.editMode = false;  // Temporary
+    // Convert string to boolean if it is given as a string
+    this.editMode = this.editMode == true;
   }
 
   onSubmit(manufacturerData): void {
