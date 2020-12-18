@@ -80,8 +80,9 @@ public class ManufacturerResponse {
             final ManufacturerResponse other = (ManufacturerResponse) obj;
             return other.getId().equals(this.getId()) || (
                     other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
-                            other.getOpenYear().equals(this.getOpenYear()) && other.getOpenYear().equals(this.getOpenYear()) &&
-                            other.getCloseYear().equals(this.getOpenYear()) && other.getSummary().equals(this.getSummary()));
+                            other.getOpenYear().equals(this.getOpenYear()) &&
+                            other.getCloseYear().equals(this.getCloseYear()) &&
+                            other.getSummary().equals(this.getSummary()));
 
         }
         return false;

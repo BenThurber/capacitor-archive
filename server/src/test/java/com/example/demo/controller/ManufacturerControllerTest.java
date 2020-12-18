@@ -41,16 +41,18 @@ class ManufacturerControllerTest {
 
     private final List<Manufacturer> manufacturerMockTable = new ArrayList<>();
 
-    private final Manufacturer manufacturer1 = new Manufacturer();
-    private final Manufacturer manufacturer2 = new Manufacturer();
+    private Manufacturer manufacturer1;
+    private Manufacturer manufacturer2;
 
 
-    @BeforeAll
+    @BeforeEach
     void initializeTestEntities() {
+        manufacturer1 = new Manufacturer();
         manufacturer1.setCompanyName("Cornell Dubilier");
         manufacturer1.setOpenYear((short)1909);
         manufacturer1.setSummary("A company still in business");
 
+        manufacturer2 = new Manufacturer();
         manufacturer2.setCompanyName("Solar");
         manufacturer2.setOpenYear((short)1917);
         manufacturer2.setCloseYear((short)1948);
@@ -62,10 +64,17 @@ class ManufacturerControllerTest {
     @BeforeEach
     void mockRepository() {
         when(manufacturerRepository.save(Mockito.any(Manufacturer.class))).thenAnswer(i -> {
-            Manufacturer newManufacturer = i.getArgument(0);
-            ReflectionTestUtils.setField(newManufacturer, "id", (DEFAULT_MANUFACTURER_ID + manufacturerCount++));
-            manufacturerMockTable.add(newManufacturer);
-            return newManufacturer;
+            Manufacturer manufacturer = i.getArgument(0);
+            if (manufacturer.getId() == null) {
+                ReflectionTestUtils.setField(manufacturer, "id", (DEFAULT_MANUFACTURER_ID + manufacturerCount++));
+            }
+
+            Long id = manufacturer.getId();
+            manufacturerMockTable.stream().filter(m -> id != null && id.equals(m.getId())).findFirst().ifPresent(manufacturerMockTable::remove);
+
+            manufacturerMockTable.add(manufacturer);
+
+            return manufacturer;
         });
 
         when(manufacturerRepository.findById(Mockito.any(Long.class))).thenAnswer(i -> {
@@ -227,6 +236,55 @@ class ManufacturerControllerTest {
 
         mvc.perform(httpReq)
                 .andExpect(status().isBadRequest());
+    }
+
+
+    private final String editedManufacturer2Json = JsonConverter.toJson(true,
+            "companyName", "Hunts",
+            "openYear", 1920,
+            "closeYear", 1939,
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
+    );
+    /**
+     * Test successful creation of new manufacturer.
+     */
+    @Test
+    void editManufacturer_success() throws Exception {
+
+        manufacturerRepository.save(manufacturer2);
+        Long originalId = manufacturerMockTable.get(0).getId();
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/solar")
+                .content(editedManufacturer2Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+
+        ManufacturerResponse editedManufacturerExpected = objectMapper.readValue(editedManufacturer2Json, ManufacturerResponse.class);
+        ManufacturerResponse editedManufacturerActual = new ManufacturerResponse(manufacturerMockTable.get(0));
+
+        assertEquals(editedManufacturerExpected, editedManufacturerActual);
+        assertEquals(originalId, manufacturerMockTable.get(0).getId());
+
+    }
+
+
+    @Test
+    void editManufacturer_doesNotExist_fail() throws Exception {
+
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/unknown")
+                .content(editedManufacturer2Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isNotFound());
+
     }
 
 

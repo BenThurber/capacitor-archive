@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Manufacturer;
-import com.example.demo.payload.request.ManufacturerCreateRequest;
+import com.example.demo.payload.request.ManufacturerRequest;
 import com.example.demo.payload.response.ManufacturerResponse;
 import com.example.demo.repository.ManufacturerRepository;
 import org.springframework.http.HttpStatus;
@@ -25,12 +25,31 @@ public class ManufacturerController {
 
     /**
      * Create a manufacturer
-     * @param manufacturerCreateRequest the new manufacturer to create
+     * @param manufacturerRequest the new manufacturer to create
      */
     @PostMapping(value = "create")
-    public void createManufacturer(@Validated @RequestBody ManufacturerCreateRequest manufacturerCreateRequest, HttpServletResponse response) {
-        manufacturerRepository.save(new Manufacturer(manufacturerCreateRequest));
+    public void createManufacturer(@Validated @RequestBody ManufacturerRequest manufacturerRequest, HttpServletResponse response) {
+        manufacturerRepository.save(new Manufacturer(manufacturerRequest));
         response.setStatus(HttpServletResponse.SC_CREATED);
+    }
+
+
+    /**
+     * Edit a manufacturer
+     * @param manufacturerRequest the new manufacturer to create
+     */
+    @PutMapping(value = "edit/{companyName}")
+    public void editManufacturer(@PathVariable String companyName, @Validated @RequestBody ManufacturerRequest manufacturerRequest, HttpServletResponse response) {
+        Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
+
+        if (manufacturer == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The manufacturer to edit can not be found");
+        }
+
+        manufacturer.edit(manufacturerRequest);
+
+        manufacturerRepository.save(manufacturer);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
 
