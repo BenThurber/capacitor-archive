@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import {HttpClient} from '@angular/common/http';
-import {Manufacturer} from '../models/manufacturer.model';
+import {Manufacturer} from '../../models/manufacturer.model';
 import {Observable} from 'rxjs';
 
 @Injectable({
@@ -16,5 +16,9 @@ export class RestService {
 
   getManufacturerByName(name: string): Observable<Manufacturer> {
     return this.httpClient.get<Manufacturer>(this.baseUrl + '/manufacturer/name/' + name);
+  }
+
+  createManufacturer(manufacturer: Manufacturer): any {
+    return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer);
   }
 }

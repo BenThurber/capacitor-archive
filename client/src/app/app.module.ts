@@ -16,7 +16,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufacturer.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 
-import {RestService} from './services/rest.service';
+import {RestService} from './services/rest/rest.service';
 
 
 @NgModule({
