@@ -3,6 +3,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ManufacturerFormComponent } from './manufacturer-form.component';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {RouterModule} from '@angular/router';
 
 describe('ManufacturerFormComponent', () => {
   let component: ManufacturerFormComponent;
@@ -12,7 +13,11 @@ describe('ManufacturerFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ManufacturerFormComponent ],
-      imports: [ReactiveFormsModule, HttpClientTestingModule]
+      imports: [
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        RouterModule.forRoot([]),
+      ]
     })
     .compileComponents();
   });
