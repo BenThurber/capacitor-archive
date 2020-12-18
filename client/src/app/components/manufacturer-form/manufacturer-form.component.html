@@ -8,6 +8,7 @@
         Manufacturer Name*
       </label>
       <input id="company-name" type="text" formControlName="companyName" placeholder="e.g. Solar, Aerovox" required
+             [(ngModel)]="manufacturer && manufacturer.companyName"
              [ngClass]="{ 'is-invalid': formFields.companyName.errors }">
       <div class="error__msg" *ngIf="formFields.companyName.errors && formFields.companyName.errors.required">
         Please provide the name of the Manufacturer
@@ -19,6 +20,7 @@
         Year Opened
       </label>
       <input id="open-year" type="text" formControlName="openYear"
+             [(ngModel)]="manufacturer && manufacturer.openYear"
              [ngClass]="{ 'is-invalid': formFields.openYear.errors || closeYearAfterOpenYearError }">
       <div class="error__msg" *ngIf="formFields.openYear.errors">
         Year is not valid (YYY)
@@ -30,6 +32,7 @@
         Year Closed
       </label>
       <input id="close-year" type="text" formControlName="closeYear"
+             [(ngModel)]="manufacturer && manufacturer.closeYear"
              [ngClass]="{ 'is-invalid': formFields.closeYear.errors || closeYearAfterOpenYearError }">
       <div class="error__msg" *ngIf="formFields.closeYear.errors">
         Year is not valid (YYYY)
@@ -44,7 +47,10 @@
         Summary
       </label>
     <br>
-      <textarea id=summary formControlName="summary" name="message" rows="7" cols="50"></textarea>
+      <textarea id=summary formControlName="summary"
+                name="message" rows="7" cols="50"
+                [(ngModel)]="manufacturer && manufacturer.summary">
+      </textarea>
     </div>
 
 

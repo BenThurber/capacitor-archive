@@ -12,7 +12,7 @@ import {Location} from '@angular/common';
 })
 export class ManufacturerFormComponent implements OnInit {
 
-  @Input('edit-mode') editMode = false;
+  @Input() manufacturer: Manufacturer;
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -35,27 +35,47 @@ export class ManufacturerFormComponent implements OnInit {
       summary: ['', []],
     }, { validator: checkIfCloseYearAfterOpenYear });
 
-    // Convert string to boolean if it is given as a string
-    this.editMode = this.editMode == true;
   }
 
   onSubmit(manufacturerData): void {
 
-    if (this.editMode) {
-      // Edit end point goes here
+    if (this.manufacturer === undefined) {
+
+      this.submitCreate(manufacturerData);
 
     } else {
 
-      const manufacturer = new Manufacturer();
-      manufacturer.insertData(manufacturerData);
+      if (!(this.manufacturer instanceof Object && this.manufacturer.id >= 1)) {
+        console.error('Can\'t determine type of manufacturer to edit');
+        return;
+      }
 
-      return this.restService.createManufacturer(manufacturer).subscribe({
-        next: () => this.location.back(),
-        error: error => console.error(error),  // This should be improved
-      });
+      this.submitEdit(manufacturerData);
+
     }
 
 
+  }
+
+  submitCreate(manufacturerData): void {
+    const manufacturer = new Manufacturer();
+    manufacturer.insertData(manufacturerData);
+
+    return this.restService.createManufacturer(manufacturer).subscribe({
+      next: () => this.location.back(),
+      error: error => console.error(error),  // This should be improved
+    });
+  }
+
+  submitEdit(manufacturerData): void {
+    const manufacturer = new Manufacturer();
+    manufacturer.id = this.manufacturer.id;
+    manufacturer.insertData(manufacturerData);
+
+    return this.restService.editManufacturer(this.manufacturer.companyName, manufacturer).subscribe({
+      next: () => this.location.back(),
+      error: error => console.error(error),  // This should be improved
+    });
   }
 
   get formFields(): any {
