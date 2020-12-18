@@ -5,3 +5,8 @@
   margin-right: 35%;
   margin-top: 50px;
 }
+
+.edit__button {
+  float: right;
+  margin-top: 5px;
+}
