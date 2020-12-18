@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ManufacturerFormComponent } from './manufacturer-form.component';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
@@ -11,7 +12,7 @@ describe('ManufacturerFormComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ ManufacturerFormComponent ],
-      imports: [ReactiveFormsModule]
+      imports: [ReactiveFormsModule, HttpClientTestingModule]
     })
     .compileComponents();
   });
