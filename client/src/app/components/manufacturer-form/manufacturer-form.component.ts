@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {RestService} from '../../services/rest/rest.service';
+import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 
 
@@ -17,11 +18,13 @@ export class ManufacturerFormComponent implements OnInit {
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
   restService: RestService;
+  router: Router;
   location: Location;
 
-  constructor(formBuilder: FormBuilder, restService: RestService, location: Location) {
+  constructor(formBuilder: FormBuilder, restService: RestService, router: Router, location: Location) {
     this.formBuilder = formBuilder;
     this.restService = restService;
+    this.router = router;
     this.location = location;
   }
 
@@ -62,7 +65,7 @@ export class ManufacturerFormComponent implements OnInit {
     manufacturer.insertData(manufacturerData);
 
     return this.restService.createManufacturer(manufacturer).subscribe({
-      next: () => this.location.back(),
+      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]),
       error: error => console.error(error),  // This should be improved
     });
   }
@@ -73,7 +76,7 @@ export class ManufacturerFormComponent implements OnInit {
     manufacturer.insertData(manufacturerData);
 
     return this.restService.editManufacturer(this.manufacturer.companyName, manufacturer).subscribe({
-      next: () => this.location.back(),
+      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]),
       error: error => console.error(error),  // This should be improved
     });
   }
