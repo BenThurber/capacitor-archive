@@ -11,7 +11,7 @@ import {Subscription} from 'rxjs';
 })
 export class EditManufacturerComponent implements OnInit {
 
-  manufacturerName: string;
+  companyName: string;
   manufacturer$: Manufacturer;
 
   restService: RestService;
@@ -19,12 +19,12 @@ export class EditManufacturerComponent implements OnInit {
 
   constructor(restService: RestService, activatedRoute: ActivatedRoute, changeDetectorRef: ChangeDetectorRef) {
     this.restService = restService;
-    this.manufacturerName = activatedRoute.snapshot.paramMap.get('manufacturerName');
+    this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.changeDetectorRef = changeDetectorRef;
   }
 
   ngOnInit(): Subscription {
-    return this.restService.getManufacturerByName(this.manufacturerName).subscribe({
+    return this.restService.getManufacturerByName(this.companyName).subscribe({
       next: manufacturer => {
         this.manufacturer$ = manufacturer;
         this.changeDetectorRef.detectChanges();

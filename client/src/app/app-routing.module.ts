@@ -15,8 +15,8 @@ const routes: Routes = [
   {path: 'about', component: AboutComponent},
   {path: 'contact', component: ContactComponent},
   {path: 'manufacturer/create', component: CreateManufacturerComponent},
-  {path: 'manufacturer/edit/:manufacturerName', component: EditManufacturerComponent},
-  {path: 'manufacturer/view/:manufacturerName', component: ViewManufacturerComponent},
+  {path: 'manufacturer/edit/:companyName', component: EditManufacturerComponent},
+  {path: 'manufacturer/view/:companyName', component: ViewManufacturerComponent},
   {path: '**', component: PageNotFoundComponent },  // This must be the last element of the Routes array
 ];
 

@@ -1,10 +1,6 @@
 <div class="sidenav">
   <h3>Manufacturers</h3>
-  <div>
-    <a href="#about">About</a>
-    <a href="#services">Serviceswoeiwoiefwoiefoiwewlekwieo</a>
-    <a href="#clients">Clients</a>
-    <a href="#contact">Contact</a>
-    <a href="#about">About</a>
+  <div *ngFor="let companyName of manufacturers$;">
+    <a [routerLink]="'/manufacturer/view/' + companyName.toLowerCase()">{{companyName}}</a>
   </div>
 </div>
