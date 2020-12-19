@@ -1,6 +1,6 @@
 .sidenav {
   float: left;
-  width: 150px;
+  width: 200px;
   z-index: 1;
   top: 20px;
   left: 10px;
@@ -17,6 +17,10 @@
   font-family: "Courier", serif;
   text-decoration: none;
   font-size: 14px;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: #565959;
   display: block;
   cursor: pointer;
@@ -28,6 +32,7 @@
 
 .link__padding {
   padding-left: 16px;
+  padding-right: 16px;
   padding-bottom: 2px;
 }
 
