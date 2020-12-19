@@ -1,12 +1,15 @@
 import { TestBed } from '@angular/core/testing';
 
 import { DynamicRouterService } from './dynamic-router.service';
+import {RouterModule} from '@angular/router';
 
 describe('DynamicRouterService', () => {
   let service: DynamicRouterService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [RouterModule.forRoot([]),]
+    });
     service = TestBed.inject(DynamicRouterService);
   });
 

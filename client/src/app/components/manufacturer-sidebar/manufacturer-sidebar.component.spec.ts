@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ManufacturerSidebarComponent } from './manufacturer-sidebar.component';
+import {HttpClientModule} from '@angular/common/http';
+import {RouterModule} from '@angular/router';
 
 describe('ManufacturerSidebarComponent', () => {
   let component: ManufacturerSidebarComponent;
@@ -8,7 +10,11 @@ describe('ManufacturerSidebarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ManufacturerSidebarComponent ]
+      declarations: [ ManufacturerSidebarComponent ],
+      imports: [
+        HttpClientModule,
+        RouterModule.forRoot([]),
+      ],
     })
     .compileComponents();
   });
