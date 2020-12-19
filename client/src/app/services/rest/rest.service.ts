@@ -18,6 +18,10 @@ export class RestService {
     return this.httpClient.get<Manufacturer>(this.baseUrl + '/manufacturer/name/' + name);
   }
 
+  getAllCompanyNames(): Observable<Array<string>> {
+    return this.httpClient.get<Array<string>>(this.baseUrl + '/manufacturer/all-names');
+  }
+
   createManufacturer(manufacturer: Manufacturer): any {
     return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer);
   }

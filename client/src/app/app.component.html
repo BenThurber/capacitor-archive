@@ -1,12 +1,15 @@
 <div class="wrapper">
 
 
-  <app-navbar style="text-align: center"></app-navbar>
+  <app-navbar></app-navbar>
 
-  <router-outlet></router-outlet>
-  <!--Routed Views go here-->
+  <app-manufacturer-sidebar></app-manufacturer-sidebar>
+
+  <div class="views">
+    <router-outlet></router-outlet>
+    <!--Routed Views go here-->
+  </div>
 
 </div>
-
 
 <app-bottom-bar></app-bottom-bar>
