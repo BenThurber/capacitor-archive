@@ -1,6 +1,9 @@
 <div class="sidenav">
   <h3>Manufacturers</h3>
-  <div *ngFor="let companyName of manufacturers$;">
-    <a [routerLink]="'/manufacturer/view/' + companyName.toLowerCase()">{{companyName}}</a>
+  <div *ngFor="let companyNamey of manufacturers$;">
+    <div class="link__padding">
+      <a (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', companyNamey])">{{companyNamey}}</a>
+    </div>
   </div>
 </div>
+

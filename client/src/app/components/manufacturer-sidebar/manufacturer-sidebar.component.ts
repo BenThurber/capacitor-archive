@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {RestService} from '../../services/rest/rest.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 @Component({
   selector: 'app-manufacturer-sidebar',
@@ -14,10 +15,12 @@ export class ManufacturerSidebarComponent implements OnInit {
   manufacturers$: Array<string>;
 
   restService: RestService;
+  dynamicRouter: DynamicRouterService;
 
-  constructor(restService: RestService, activatedRoute: ActivatedRoute) {
+  constructor(restService: RestService, activatedRoute: ActivatedRoute, dynamicRouter: DynamicRouterService) {
     this.restService = restService;
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
+    this.dynamicRouter = dynamicRouter;
   }
 
   ngOnInit(): Subscription {
