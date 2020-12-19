@@ -19,6 +19,7 @@ import { PageNotFoundComponent } from './views/page-not-found/page-not-found.com
 import {RestService} from './services/rest/rest.service';
 import { EditManufacturerComponent } from './views/edit-manufacturer/edit-manufacturer.component';
 import {CommonModule} from '@angular/common';
+import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/manufacturer-sidebar.component';
 
 
 @NgModule({
@@ -34,6 +35,7 @@ import {CommonModule} from '@angular/common';
     ViewManufacturerComponent,
     PageNotFoundComponent,
     EditManufacturerComponent,
+    ManufacturerSidebarComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

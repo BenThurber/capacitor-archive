@@ -54,38 +54,38 @@ describe('ManufacturerFormComponent', () => {
     });
 
     it('should be valid with only manufacturer name', () => {
-      const manufacturerNameInput = form.controls.companyName;
-      manufacturerNameInput.setValue('Hunts');
+      const companyNameInput = form.controls.companyName;
+      companyNameInput.setValue('Hunts');
       expect(form.valid).toBeTruthy();
     });
 
     it('should be invalid with bad date format', () => {
-      const manufacturerNameInput = form.controls.companyName;
-      manufacturerNameInput.setValue('Hunts');
+      const companyNameInput = form.controls.companyName;
+      companyNameInput.setValue('Hunts');
       const openYearInput = form.controls.openYear;
       openYearInput.setValue('abcd');
       expect(form.valid).toBeFalsy();
     });
 
     it('should be invalid with an unrealistic date', () => {
-      const manufacturerNameInput = form.controls.companyName;
-      manufacturerNameInput.setValue('Hunts');
+      const companyNameInput = form.controls.companyName;
+      companyNameInput.setValue('Hunts');
       const openYearInput = form.controls.openYear;
       openYearInput.setValue('999');
       expect(form.valid).toBeFalsy();
     });
 
     it('should be valid with openYear 1935', () => {
-      const manufacturerNameInput = form.controls.companyName;
-      manufacturerNameInput.setValue('Hunts');
+      const companyNameInput = form.controls.companyName;
+      companyNameInput.setValue('Hunts');
       const openYearInput = form.controls.openYear;
       openYearInput.setValue('1935');
       expect(form.valid).toBeTruthy();
     });
 
     it('should be invalid with closeYear before openYear', () => {
-      const manufacturerNameInput = form.controls.companyName;
-      manufacturerNameInput.setValue('Hunts');
+      const companyNameInput = form.controls.companyName;
+      companyNameInput.setValue('Hunts');
       const openYearInput = form.controls.openYear;
       openYearInput.setValue('1923');
       const closeYearInput = form.controls.closeYear;
@@ -94,8 +94,8 @@ describe('ManufacturerFormComponent', () => {
     });
 
     it('should be valid with correct companyName, openYear and closeYear', () => {
-      const manufacturerNameInput = form.controls.companyName;
-      manufacturerNameInput.setValue('Hunts');
+      const companyNameInput = form.controls.companyName;
+      companyNameInput.setValue('Hunts');
       const openYearInput = form.controls.openYear;
       openYearInput.setValue('1923');
       const closeYearInput = form.controls.closeYear;

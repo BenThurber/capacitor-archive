@@ -11,18 +11,18 @@ import {ActivatedRoute} from '@angular/router';
 })
 export class ViewManufacturerComponent implements OnInit {
 
-  manufacturerName: string;
+  companyName: string;
   manufacturer$: Manufacturer;
 
   restService: RestService;
 
   constructor(restService: RestService, activatedRoute: ActivatedRoute) {
     this.restService = restService;
-    this.manufacturerName = activatedRoute.snapshot.paramMap.get('manufacturerName');
+    this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
   }
 
   ngOnInit(): Subscription {
-    return this.restService.getManufacturerByName(this.manufacturerName).subscribe(manufacturer => this.manufacturer$ = manufacturer);
+    return this.restService.getManufacturerByName(this.companyName).subscribe(manufacturer => this.manufacturer$ = manufacturer);
   }
 
 }

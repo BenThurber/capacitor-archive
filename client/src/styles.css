@@ -25,3 +25,7 @@ a:hover {
   color: green;
 }
 
+.content {
+  margin-left: 10%;
+  margin-right: 20%;
+}
