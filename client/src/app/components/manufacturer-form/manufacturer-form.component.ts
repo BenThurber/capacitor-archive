@@ -65,7 +65,9 @@ export class ManufacturerFormComponent implements OnInit {
     manufacturer.insertData(manufacturerData);
 
     return this.restService.createManufacturer(manufacturer).subscribe({
-      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]),
+      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
+        () => null // Reload sidebar component here
+      ),
       error: error => console.error(error),  // This should be improved
     });
   }

@@ -19,7 +19,7 @@
       <label for="open-year">
         Year Opened
       </label>
-      <input id="open-year" type="text" formControlName="openYear"
+      <input id="open-year" type="text" formControlName="openYear" placeholder="optional"
              [ngModel]="manufacturer && manufacturer.openYear"
              [ngClass]="{ 'is-invalid': formFields.openYear.errors || closeYearAfterOpenYearError }">
       <div class="error__msg" *ngIf="formFields.openYear.errors">
@@ -31,7 +31,7 @@
       <label for="close-year">
         Year Closed
       </label>
-      <input id="close-year" type="text" formControlName="closeYear"
+      <input id="close-year" type="text" formControlName="closeYear" placeholder="optional"
              [ngModel]="manufacturer && manufacturer.closeYear"
              [ngClass]="{ 'is-invalid': formFields.closeYear.errors || closeYearAfterOpenYearError }">
       <div class="error__msg" *ngIf="formFields.closeYear.errors">
