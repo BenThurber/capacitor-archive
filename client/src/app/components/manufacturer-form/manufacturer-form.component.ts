@@ -4,6 +4,7 @@ import {Manufacturer} from '../../models/manufacturer.model';
 import {RestService} from '../../services/rest/rest.service';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
+import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 
 
 @Component({
@@ -20,12 +21,15 @@ export class ManufacturerFormComponent implements OnInit {
   restService: RestService;
   router: Router;
   location: Location;
+  refreshManufacturers: RefreshManufacturersService;
 
-  constructor(formBuilder: FormBuilder, restService: RestService, router: Router, location: Location) {
+  constructor(formBuilder: FormBuilder, restService: RestService, router: Router, location: Location,
+              refreshManufacturers: RefreshManufacturersService) {
     this.formBuilder = formBuilder;
     this.restService = restService;
     this.router = router;
     this.location = location;
+    this.refreshManufacturers = refreshManufacturers;
   }
 
 
@@ -57,8 +61,9 @@ export class ManufacturerFormComponent implements OnInit {
 
     }
 
-
   }
+
+
 
   submitCreate(manufacturerData): void {
     const manufacturer = new Manufacturer();
@@ -66,11 +71,13 @@ export class ManufacturerFormComponent implements OnInit {
 
     return this.restService.createManufacturer(manufacturer).subscribe({
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
-        () => null // Reload sidebar component here
+        () => this.refreshManufacturers.refresh()
       ),
       error: error => console.error(error),  // This should be improved
     });
   }
+
+
 
   submitEdit(manufacturerData): void {
     const manufacturer = new Manufacturer();
@@ -78,7 +85,9 @@ export class ManufacturerFormComponent implements OnInit {
     manufacturer.insertData(manufacturerData);
 
     return this.restService.editManufacturer(this.manufacturer.companyName, manufacturer).subscribe({
-      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]),
+      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
+        () => this.refreshManufacturers.refresh()
+      ),
       error: error => console.error(error),  // This should be improved
     });
   }
