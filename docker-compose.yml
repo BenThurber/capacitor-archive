@@ -1,24 +1,28 @@
 version: '3.3'
 services:
     
-    prodDatabase:
+    prodMySQL:
         image: 'mysql:8.0.22'
         container_name: prod-mysql
         restart: always
         ports:
             - '3306:3306'
+        volumes:
+            - 'prod-mysql-data:/var/lib/mysql'
         environment:
                 MYSQL_DATABASE: capacitor_prod
         env_file:
                 - mysql-variables.env
     
 
-    testDatabase:
+    testMySQL:
         image: 'mysql:8.0.22'
         container_name: test-mysql
         restart: always
         ports:
             - '3307:3306'
+        volumes:
+            - 'test-mysql-data:/var/lib/mysql'
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
@@ -80,7 +84,7 @@ services:
         ports:
             - '35505:8080'
         depends_on:
-            - testDatabase
+            - testMySQL
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=dev
         volumes:
@@ -105,7 +109,7 @@ services:
         ports:
             - '35503:8080'
         depends_on:
-            - prodDatabase
+            - prodMySQL
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=prod
         volumes:
@@ -117,6 +121,12 @@ services:
 volumes:
     gitlab-runner-config:
         external: false
+
+    test-mysql-data:
+        external: false
+    prod-mysql-data:
+        external: false
+
     test-client-build:
         external: false
     test-server-build:
