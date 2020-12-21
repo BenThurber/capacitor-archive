@@ -13,7 +13,7 @@ describe('ManufacturerSidebarComponent', () => {
       declarations: [ ManufacturerSidebarComponent ],
       imports: [
         HttpClientModule,
-        RouterModule.forRoot([]),
+        RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
       ],
     })
     .compileComponents();

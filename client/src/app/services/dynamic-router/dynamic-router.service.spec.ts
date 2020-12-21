@@ -8,7 +8,7 @@ describe('DynamicRouterService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([]),]
+      imports: [RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),]
     });
     service = TestBed.inject(DynamicRouterService);
   });

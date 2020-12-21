@@ -16,7 +16,7 @@ describe('ManufacturerFormComponent', () => {
       imports: [
         ReactiveFormsModule,
         HttpClientTestingModule,
-        RouterModule.forRoot([]),
+        RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
       ]
     })
     .compileComponents();
