@@ -93,6 +93,19 @@ export class ManufacturerFormComponent implements OnInit {
     });
   }
 
+
+  handleCaptchaSuccess(captchaResponse: string): void {
+    console.log('This is the response: "' + captchaResponse + '\"');
+
+    return this.restService.verifyCaptcha(captchaResponse).subscribe({
+      next: response => console.log(response),
+      error: error => console.error(error),  // This should be improved
+    });
+
+
+  }
+
+
   get formFields(): any {
     return this.manufacturerForm.controls;
   }
