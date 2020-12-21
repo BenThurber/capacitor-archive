@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {Observable} from 'rxjs';
 
@@ -9,24 +9,37 @@ import {Observable} from 'rxjs';
 })
 export class RestService {
 
-  // **This needs to be an environment variable**
-  baseUrl: string = environment.serverBaseUrl;
 
-  constructor(private httpClient: HttpClient) { }
+  baseUrl: string = environment.serverBaseUrl;
+  options: object;
+
+
+  httpClient: HttpClient;
+
+  constructor(httpClient: HttpClient) {
+    this.httpClient = httpClient;
+
+    const httpHeaders = new HttpHeaders({
+      'Access-Control-Allow-Origin': this.baseUrl,
+      'Content-Type': 'application/json; charset=utf-8',
+    });
+
+    this.options = {headers: httpHeaders};
+  }
 
   getManufacturerByName(name: string): Observable<Manufacturer> {
-    return this.httpClient.get<Manufacturer>(this.baseUrl + '/manufacturer/name/' + name);
+    return this.httpClient.get<Manufacturer>(this.baseUrl + '/manufacturer/name/' + name, this.options);
   }
 
   getAllCompanyNames(): Observable<Array<string>> {
-    return this.httpClient.get<Array<string>>(this.baseUrl + '/manufacturer/all-names');
+    return this.httpClient.get<Array<string>>(this.baseUrl + '/manufacturer/all-names', this.options);
   }
 
   createManufacturer(manufacturer: Manufacturer): any {
-    return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer);
+    return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer, this.options);
   }
 
   editManufacturer(name: string, manufacturer: Manufacturer): any {
-    return this.httpClient.put<any>(this.baseUrl + '/manufacturer/edit/' + name, manufacturer);
+    return this.httpClient.put<any>(this.baseUrl + '/manufacturer/edit/' + name, manufacturer, this.options);
   }
 }
