@@ -10,7 +10,7 @@ services:
         environment:
                 MYSQL_DATABASE: capacitor_prod
         env_file:
-                - mysql-variables.env
+            - mysql-variables.env
     
 
     testDatabase:
@@ -22,7 +22,24 @@ services:
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
-                - mysql-variables.env
+            - mysql-variables.env
+    
+
+    testDatabaseBackup:
+        image: 'databack/mysql-backup'
+        container_name: test-mysql-backup
+        restart: always
+        environment:
+            - DB_SERVER=172.17.0.1
+            - DB_USER=root
+            - DB_PORT=3307
+            # Once a day 60*24=1440
+            - DB_DUMP_FREQ=1440
+            # Makes first backup immediatley (Change to midnight after working)
+            - DB_DUMP_BEGIN=+0
+            - DB_DUMP_SAFECHARS
+        env_file:
+            - mysql-backup.env
 
 
     phpmyadmin:

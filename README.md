@@ -25,13 +25,24 @@ Start and enable docker
 Install Docker Compose  
 `sudo apt install docker-compose`  
 
-### Set mysql credentials
-Store the credentials for mysql in a file `mysql-variables.env` in the root directory of the project.  
+### Set credentials for mysql and mysql-backup
+Create an environment variable file called `mysql-variables.env` in the root directory of the project. This will be used by docker-compose to create the two mysql database containers.
 ```
 MYSQL_ROOT_PASSWORD=<root-pass>
 MYSQL_USER=<dba-username>
 MYSQL_PASSWORD=<dba-password>
 ```
+Create another environment variable file `mysql-backup.env` that stores the location and credentials of where to backup the two databases.  The variable DB_DUMP_TARGET could be a smb or [s3 server](https://aws.amazon.com/s3/) (e.g. s3://mysql-backups). The database dump filename is in the format <test|prod>_db_backup_YYYY-MM-DDTHH:mm:ssZ.<compression>.  
+See the [databack/mysql-backup documentation](https://hub.docker.com/r/databack/mysql-backup) for more info.
+```
+DB_PASS=<root-pass>
+DB_DUMP_TARGET=<server URL>
+AWS_ACCESS_KEY_ID=<Amazon Web Services Key Id>
+AWS_SECRET_ACCESS_KEY=<Amazon Web Services Key>
+AWS_DEFAULT_REGION=<Amazon Web Services Region>
+```
+NOTE: DB_PASS is the same as MYSQL_ROOT_PASSWORD above.  
+
 
 
 ### Create a self signed certificate for phpMyAdmin
