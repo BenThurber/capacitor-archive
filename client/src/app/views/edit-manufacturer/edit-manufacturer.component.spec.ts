@@ -11,7 +11,7 @@ describe('EditManufacturerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [ EditManufacturerComponent ],
-      imports: [ HttpClientTestingModule, RouterModule.forRoot([]) ],
+      imports: [ HttpClientTestingModule, RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }) ],
     })
     .compileComponents();
   });
