@@ -1,1 +1,1 @@
-echo /tmp/backups/db_backup_201809301513.gz | sed 's|.*/|test_|'
+echo $DUMPFILE | sed 's|.*/|test_|'
