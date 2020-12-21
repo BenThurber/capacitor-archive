@@ -1,4 +1,4 @@
-<div>
+<div style="margin-bottom: 70px">
 
   <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm.value)">
 
@@ -53,7 +53,18 @@
       </textarea>
     </div>
 
-
+    <div class="input">
+      <!--This siteKey is a publicly known key for testing so can be committed-->
+      <ngx-recaptcha2
+        #captchaElem
+        siteKey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+        [useGlobalDomain]="false"
+        size="normal"
+        hl="en"
+        formControlName="captcha"
+      >
+      </ngx-recaptcha2>
+    </div>
 
 
     <div>

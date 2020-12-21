@@ -40,6 +40,7 @@ export class ManufacturerFormComponent implements OnInit {
       openYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
+      captcha: ['', Validators.required],
     }, { validator: checkIfCloseYearAfterOpenYear });
 
   }
