@@ -10,7 +10,7 @@ services:
         environment:
                 MYSQL_DATABASE: capacitor_prod
         env_file:
-            - mysql-variables.env
+            - mysql.env
     
 
     testDatabase:
@@ -22,7 +22,7 @@ services:
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
-            - mysql-variables.env
+            - mysql.env
     
 
     testDatabaseBackup:

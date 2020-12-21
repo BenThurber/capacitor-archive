@@ -26,7 +26,7 @@ Install Docker Compose
 `sudo apt install docker-compose`  
 
 ### Set credentials for mysql and mysql-backup
-Create an environment variable file called `mysql-variables.env` in the root directory of the project. This will be used by docker-compose to create the two mysql database containers.
+Create an environment variable file called `mysql.env` in the root directory of the project. This will be used by docker-compose to create the two mysql database containers.
 ```
 MYSQL_ROOT_PASSWORD=<root-pass>
 MYSQL_USER=<dba-username>
