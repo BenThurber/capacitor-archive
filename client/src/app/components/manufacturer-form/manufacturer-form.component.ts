@@ -5,7 +5,6 @@ import {RestService} from '../../services/rest/rest.service';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
-import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 
@@ -13,16 +12,16 @@ import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 @Component({
   selector: 'app-manufacturer-form',
   templateUrl: './manufacturer-form.component.html',
-  styleUrls: ['./manufacturer-form.component.css']
+  styleUrls: ['./manufacturer-form.component.css', '../../styles/animations.css']
 })
 export class ManufacturerFormComponent implements OnInit {
 
   @Input() manufacturer: Manufacturer;
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
+  submitting = false;
+
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
-  captchaResponse: GoogleCaptchaAPIResponse = null;
-  captchaError: boolean;
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -54,6 +53,7 @@ export class ManufacturerFormComponent implements OnInit {
   }
 
   onSubmit(manufacturerData): void {
+    this.submitting = true;
 
     if (this.manufacturer === undefined) {
 
@@ -100,29 +100,8 @@ export class ManufacturerFormComponent implements OnInit {
   }
 
 
-  handleCaptchaSuccess(captchaResponse: string): void {
-
-    return this.restService.verifyCaptcha(captchaResponse).subscribe({
-      next: (response: GoogleCaptchaAPIResponse) => {
-        this.captchaError = false;
-        this.captchaResponse = response;
-        if (!response.success) { this.captchaElem.resetCaptcha(); }
-      },
-      error: () => {
-        this.captchaError = true;
-        this.captchaElem.resetCaptcha();
-      },
-    });
-
-  }
-
-
   get formFields(): any {
     return this.manufacturerForm.controls;
-  }
-
-  get captchaSuccess(): any {
-    return this.captchaResponse && this.captchaResponse.success;
   }
 
   get closeYearAfterOpenYearError(): any {
