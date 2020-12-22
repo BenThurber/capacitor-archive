@@ -83,8 +83,8 @@ In GitLab, in the left bar, go to settings > CI / CD > Variables.  Set the varia
 (The same values as were used when [setting mysql credentials](#set-mysql-credentials))  
 
 The keys from Google's reCAPTCHA API  
-- RECAPTCHA_SITE_KEY
-- RECAPTCHA_SECRET_KEY
+- RECAPTCHA_SITE_KEY  
+- RECAPTCHA_SECRET_KEY  
 <sub>(If unknown, the development keys can be used: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI and 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe)</sub>  
 
 
