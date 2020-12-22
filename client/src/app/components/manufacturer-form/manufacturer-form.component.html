@@ -79,9 +79,11 @@
     </div>
 
 
-    <div>
+    <div style="display: inline-flex">
       <button class="button" (click)="location.back()">Back</button>
       <button class="button" [disabled]="manufacturerForm.invalid" type="submit">Submit</button>
+      <!--Spinner-->
+      <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>
     </div>
 
 
