@@ -2,7 +2,7 @@
 
   <form
     [formGroup]="manufacturerForm"
-    (ngSubmit)="!manufacturerForm.invalid && captchaSuccess && onSubmit(manufacturerForm.value)"
+    (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm.value)"
   >
 
 
@@ -68,12 +68,12 @@
       >
       </ngx-recaptcha2>
 
-      <div class="captcha__error__msg error__msg" *ngIf="captchaResponse && !captchaSuccess">
-        Could not validate CAPTCHA
+      <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('rejectedCaptcha')">
+        CAPTCHA check did not pass
       </div>
 
-      <div class="captcha__error__msg error__msg" *ngIf="captchaError">
-        Error in CAPTCHA check
+      <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('noResponse')">
+        Error in CAPTCHA check verification
       </div>
 
     </div>
@@ -81,7 +81,7 @@
 
     <div>
       <button class="button" (click)="location.back()">Back</button>
-      <button class="button" type="submit">Submit</button>
+      <button class="button" [disabled]="manufacturerForm.invalid" type="submit">Submit</button>
     </div>
 
 

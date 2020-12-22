@@ -100,29 +100,8 @@ export class ManufacturerFormComponent implements OnInit {
   }
 
 
-  handleCaptchaSuccess(captchaToken: string): void {
-
-    return this.restService.verifyCaptcha(captchaToken).subscribe({
-      next: (response: GoogleCaptchaAPIResponse) => {
-        this.captchaError = false;
-        this.captchaResponse = response;
-        if (!response.success) { this.captchaElem.resetCaptcha(); }
-      },
-      error: () => {
-        this.captchaError = true;
-        this.captchaElem.resetCaptcha();
-      },
-    });
-
-  }
-
-
   get formFields(): any {
     return this.manufacturerForm.controls;
-  }
-
-  get captchaSuccess(): any {
-    return this.captchaResponse && this.captchaResponse.success;
   }
 
   get closeYearAfterOpenYearError(): any {

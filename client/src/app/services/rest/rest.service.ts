@@ -51,6 +51,20 @@ export class RestService {
       this.baseUrl + '/captcha/verify', captchaTokenResponse, this.options);
   }
 
+
+
+
+
+
+
+  /**
+   * This function is called by a ngx-recaptcha2 component in a (success) event.  It automatically adds errors to the formGroup depending
+   * on the result of the verification request to the back-end.  Assumes that there is formControlName="captcha" set in the ngx-recaptcha2
+   * component.
+   * @param captchaToken set to $event to capture event from component
+   * @param formGroup FormGroup containing the ngx-recaptcha2 component
+   * @param captchaElem the html element retrieved with @ViewChild
+   */
   handleCaptchaSuccess(captchaToken: string, formGroup: FormGroup, captchaElem: ReCaptcha2Component): void {
 
     return this.verifyCaptcha(captchaToken).subscribe({
@@ -67,10 +81,8 @@ export class RestService {
 
         if (!response.success) {
           const errors = {...existingErrors, rejectedCaptcha: true};   // Set rejectedCaptcha error
-          console.log(formGroup.controls.captcha.errors);
           captchaElem.resetCaptcha();
           formGroup.controls.captcha.setErrors({...errors, ...formGroup.controls.captcha.errors});
-          console.log(formGroup.controls.captcha.errors);
         }
 
         if (formGroup.controls.captcha.errors === {}) {
@@ -82,10 +94,8 @@ export class RestService {
         const existingErrors = formGroup.controls.captcha.errors == null ? {} : formGroup.controls.captcha.errors;
 
         const errors = {...existingErrors, noResponse: true};   // Set noResponse error
-        console.log(formGroup.controls.captcha.errors);
         captchaElem.resetCaptcha();
         formGroup.controls.captcha.setErrors({...errors, ...formGroup.controls.captcha.errors});
-        console.log(formGroup.controls.captcha.errors);
 
       },
     });
