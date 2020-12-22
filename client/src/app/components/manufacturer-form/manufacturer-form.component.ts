@@ -100,9 +100,9 @@ export class ManufacturerFormComponent implements OnInit {
   }
 
 
-  handleCaptchaSuccess(captchaResponse: string): void {
+  handleCaptchaSuccess(captchaToken: string): void {
 
-    return this.restService.verifyCaptcha(captchaResponse).subscribe({
+    return this.restService.verifyCaptcha(captchaToken).subscribe({
       next: (response: GoogleCaptchaAPIResponse) => {
         this.captchaError = false;
         this.captchaResponse = response;

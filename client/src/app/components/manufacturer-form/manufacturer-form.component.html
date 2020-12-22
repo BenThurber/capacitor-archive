@@ -61,7 +61,7 @@
         #captchaElem
         [siteKey]="reCaptchaSiteKey"
         [useGlobalDomain]="false"
-        (success)="handleCaptchaSuccess($event)"
+        (success)="restService.handleCaptchaSuccess($event, manufacturerForm, captchaElem)"
         size="normal"
         hl="en"
         formControlName="captcha"
