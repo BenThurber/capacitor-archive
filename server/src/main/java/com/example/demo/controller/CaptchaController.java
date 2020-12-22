@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.payload.response.GoogleCaptchaAPIResponse;
+import com.example.demo.service.GoogleReCaptchaAPIKey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
@@ -28,8 +29,11 @@ public class CaptchaController {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    private final GoogleReCaptchaAPIKey keyService;
 
-    public CaptchaController() {
+
+    public CaptchaController(GoogleReCaptchaAPIKey keyService) {
+        this.keyService = keyService;
     }
 
 
@@ -38,7 +42,7 @@ public class CaptchaController {
 
         // Construct Request Body
         MultiValueMap<String, String> googleRequestBody = new LinkedMultiValueMap<>(2);
-        googleRequestBody.add("secret", "6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe");
+        googleRequestBody.add("secret", this.keyService.getKey());
         googleRequestBody.add("response", captchaClientToken);
 
         // Construct request and send
