@@ -3,6 +3,7 @@ import { environment } from '../../../environments/environment';
 import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {Observable} from 'rxjs';
+import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 
 @Injectable({
   providedIn: 'root'
@@ -43,8 +44,8 @@ export class RestService {
     return this.httpClient.put<any>(this.baseUrl + '/manufacturer/edit/' + name, manufacturer, this.options);
   }
 
-  verifyCaptcha(captchaResponse: string): any {
-    const requestObject = {captchaResponseToken: captchaResponse};
-    return this.httpClient.post<HttpResponse<object>>(this.baseUrl + '/captcha/verify', requestObject, this.options);
+  verifyCaptcha(captchaTokenResponse: string): any {
+    return this.httpClient.post<HttpResponse<GoogleCaptchaAPIResponse>>(
+      this.baseUrl + '/captcha/verify', captchaTokenResponse, this.options);
   }
 }

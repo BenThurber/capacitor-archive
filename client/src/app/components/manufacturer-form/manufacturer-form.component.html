@@ -1,6 +1,6 @@
 <div style="margin-bottom: 70px">
 
-  <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm.value)">
+  <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && captchaSuccess && onSubmit(manufacturerForm.value)">
 
 
     <div class="input">

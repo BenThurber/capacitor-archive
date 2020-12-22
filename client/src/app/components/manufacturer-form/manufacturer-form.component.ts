@@ -5,6 +5,7 @@ import {RestService} from '../../services/rest/rest.service';
 import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
+import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 
 
 @Component({
@@ -15,6 +16,7 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 export class ManufacturerFormComponent implements OnInit {
 
   @Input() manufacturer: Manufacturer;
+  captchaSuccess = false;
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -95,10 +97,9 @@ export class ManufacturerFormComponent implements OnInit {
 
 
   handleCaptchaSuccess(captchaResponse: string): void {
-    console.log('This is the response: "' + captchaResponse + '\"');
 
     return this.restService.verifyCaptcha(captchaResponse).subscribe({
-      next: response => console.log(response),
+      next: (response: GoogleCaptchaAPIResponse) => this.captchaSuccess = response.success,  // Can be improved from a simple boolean
       error: error => console.error(error),  // This should be improved
     });
 
