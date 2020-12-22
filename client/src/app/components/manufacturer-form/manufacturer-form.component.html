@@ -1,6 +1,9 @@
-<div>
+<div style="margin-bottom: 70px">
 
-  <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm.value)">
+  <form
+    [formGroup]="manufacturerForm"
+    (ngSubmit)="!manufacturerForm.invalid && captchaSuccess && onSubmit(manufacturerForm.value)"
+  >
 
 
     <div class="input">
@@ -53,7 +56,27 @@
       </textarea>
     </div>
 
+    <div class="input">
+      <ngx-recaptcha2
+        #captchaElem
+        [siteKey]="reCaptchaSiteKey"
+        [useGlobalDomain]="false"
+        (success)="handleCaptchaSuccess($event)"
+        size="normal"
+        hl="en"
+        formControlName="captcha"
+      >
+      </ngx-recaptcha2>
 
+      <div class="captcha__error__msg error__msg" *ngIf="captchaResponse && !captchaSuccess">
+        Could not validate CAPTCHA
+      </div>
+
+      <div class="captcha__error__msg error__msg" *ngIf="captchaError">
+        Error in CAPTCHA check
+      </div>
+
+    </div>
 
 
     <div>
