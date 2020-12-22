@@ -1,6 +1,9 @@
 <div style="margin-bottom: 70px">
 
-  <form [formGroup]="manufacturerForm" (ngSubmit)="!manufacturerForm.invalid && captchaSuccess && onSubmit(manufacturerForm.value)">
+  <form
+    [formGroup]="manufacturerForm"
+    (ngSubmit)="!manufacturerForm.invalid && captchaSuccess && onSubmit(manufacturerForm.value)"
+  >
 
 
     <div class="input">
@@ -57,7 +60,7 @@
       <!--This siteKey is a publicly known key for testing so can be committed-->
       <ngx-recaptcha2
         #captchaElem
-        siteKey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+        [siteKey]="reCaptchaSiteKey"
         [useGlobalDomain]="false"
         (success)="handleCaptchaSuccess($event)"
         size="normal"
@@ -65,6 +68,15 @@
         formControlName="captcha"
       >
       </ngx-recaptcha2>
+
+      <div class="captcha__error__msg error__msg" *ngIf="captchaResponse && !captchaSuccess">
+        Could not validate CAPTCHA
+      </div>
+
+      <div class="captcha__error__msg error__msg" *ngIf="captchaError">
+        Error in CAPTCHA check
+      </div>
+
     </div>
 
 

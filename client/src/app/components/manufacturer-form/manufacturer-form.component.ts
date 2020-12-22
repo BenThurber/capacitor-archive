@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {RestService} from '../../services/rest/rest.service';
@@ -6,6 +6,8 @@ import {Router} from '@angular/router';
 import {Location} from '@angular/common';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
+import {environment} from '../../../environments/environment';
+import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 
 
 @Component({
@@ -16,7 +18,11 @@ import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 export class ManufacturerFormComponent implements OnInit {
 
   @Input() manufacturer: Manufacturer;
-  captchaSuccess = false;
+  @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
+
+  reCaptchaSiteKey = environment.reCaptchaSiteKey;
+  captchaResponse: GoogleCaptchaAPIResponse = null;
+  captchaError: boolean;
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -43,7 +49,7 @@ export class ManufacturerFormComponent implements OnInit {
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
       captcha: ['', Validators.required],
-    }, { validator: checkIfCloseYearAfterOpenYear });
+    }, {validator: checkIfCloseYearAfterOpenYear});
 
   }
 
@@ -67,7 +73,6 @@ export class ManufacturerFormComponent implements OnInit {
   }
 
 
-
   submitCreate(manufacturerData): void {
     const manufacturer = new Manufacturer();
     manufacturer.insertData(manufacturerData);
@@ -79,7 +84,6 @@ export class ManufacturerFormComponent implements OnInit {
       error: error => console.error(error),  // This should be improved
     });
   }
-
 
 
   submitEdit(manufacturerData): void {
@@ -99,16 +103,26 @@ export class ManufacturerFormComponent implements OnInit {
   handleCaptchaSuccess(captchaResponse: string): void {
 
     return this.restService.verifyCaptcha(captchaResponse).subscribe({
-      next: (response: GoogleCaptchaAPIResponse) => this.captchaSuccess = response.success,  // Can be improved from a simple boolean
-      error: error => console.error(error),  // This should be improved
+      next: (response: GoogleCaptchaAPIResponse) => {
+        this.captchaError = false;
+        this.captchaResponse = response;
+        if (!response.success) { this.captchaElem.resetCaptcha(); }
+      },
+      error: () => {
+        this.captchaError = true;
+        this.captchaElem.resetCaptcha();
+      },
     });
-
 
   }
 
 
   get formFields(): any {
     return this.manufacturerForm.controls;
+  }
+
+  get captchaSuccess(): any {
+    return this.captchaResponse && this.captchaResponse.success;
   }
 
   get closeYearAfterOpenYearError(): any {
@@ -121,7 +135,7 @@ export class ManufacturerFormComponent implements OnInit {
 function checkIfCloseYearAfterOpenYear(c: AbstractControl): any {
   // Safety Check
   const openDate: number = parseInt(c.value.openYear, 10);
-  const closedDate: number  = parseInt(c.value.closeYear, 10);
+  const closedDate: number = parseInt(c.value.closeYear, 10);
 
   if (!openDate || !closedDate) { return null; }
 
