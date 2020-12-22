@@ -4,6 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ManufacturerFormComponent } from './manufacturer-form.component';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule} from '@angular/router';
+import {NgxCaptchaModule} from '@niteshp/ngx-captcha';
 
 describe('ManufacturerFormComponent', () => {
   let component: ManufacturerFormComponent;
@@ -17,6 +18,7 @@ describe('ManufacturerFormComponent', () => {
         ReactiveFormsModule,
         HttpClientTestingModule,
         RouterModule.forRoot([], { relativeLinkResolution: 'legacy' }),
+        NgxCaptchaModule,
       ]
     })
     .compileComponents();
@@ -47,6 +49,7 @@ describe('ManufacturerFormComponent', () => {
 
     beforeEach(() => {
       form = component.manufacturerForm;
+      form.removeControl('captcha');
     });
 
     it('should be invalid without manufacturer name', () => {
