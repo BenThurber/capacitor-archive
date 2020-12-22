@@ -9,7 +9,7 @@ Please see the [backlog on the Wiki](https://gitlab.com/capacitor-archive/capaci
 
 This app uses an [Angular](https://angular.io/) front end and [Spring Boot](https://spring.io/projects/spring-boot) backend.  A DevOps methodology has been employed through gitlab-runner's [CI/CD pipeline](https://docs.gitlab.com/ee/ci/) that performs automatic testing and deployment.
 
-## Setting up CI/CD and MySQL using docker containers
+## Setup a server to run  CI/CD and MySQL using docker containers
 
 This project uses gitlab-runner to perform Continuous Integration (automated building and testing) and Continuous Deployment of the capacitor-archive application.  The following steps should be performed on a continuously running machine (VM or bare metal) that can be accessed from the ports 80 and 8081 (phpMyAdmin).
 
@@ -81,6 +81,11 @@ In GitLab, in the left bar, go to settings > CI / CD > Variables.  Set the varia
 - SPRING_DATASOURCE_USERNAME  
 - SPRING_DATASOURCE_PASSWORD  
 (The same values as were used when [setting mysql credentials](#set-mysql-credentials))  
+
+The keys from Google's reCAPTCHA API  
+- RECAPTCHA_SITE_KEY  
+- RECAPTCHA_SECRET_KEY  
+<sub>(If unknown, the development keys can be used: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI and 6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe)</sub>  
 
 
 ## Accessing database and phpmyadmin

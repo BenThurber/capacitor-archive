@@ -7,6 +7,11 @@
   font-size: 15px;
 }
 
+.captcha__error__msg {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
 .input {
   margin: 15px;
 }

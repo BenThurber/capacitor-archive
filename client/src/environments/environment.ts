@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  serverBaseUrl: 'http://localhost:35503'
+  serverBaseUrl: 'http://localhost:35503',
+  reCaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',   // Development key
 };
 
 /*

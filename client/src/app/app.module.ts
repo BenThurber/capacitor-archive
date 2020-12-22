@@ -13,6 +13,7 @@ import { HomeComponent } from './views/home/home.component';
 import { CreateManufacturerComponent } from './views/create-manufacturer/create-manufacturer.component';
 import { ManufacturerFormComponent } from './components/manufacturer-form/manufacturer-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgxCaptchaModule } from '@niteshp/ngx-captcha';
 import { ViewManufacturerComponent } from './views/view-manufacturer/view-manufacturer.component';
 import { PageNotFoundComponent } from './views/page-not-found/page-not-found.component';
 
@@ -42,6 +43,7 @@ import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxCaptchaModule,
     HttpClientModule,
     CommonModule,
   ],

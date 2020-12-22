@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {Observable} from 'rxjs';
+import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,10 @@ export class RestService {
 
   editManufacturer(name: string, manufacturer: Manufacturer): any {
     return this.httpClient.put<any>(this.baseUrl + '/manufacturer/edit/' + name, manufacturer, this.options);
+  }
+
+  verifyCaptcha(captchaTokenResponse: string): any {
+    return this.httpClient.post<HttpResponse<GoogleCaptchaAPIResponse>>(
+      this.baseUrl + '/captcha/verify', captchaTokenResponse, this.options);
   }
 }
