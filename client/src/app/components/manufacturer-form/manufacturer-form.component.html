@@ -2,7 +2,7 @@
 
   <form
     [formGroup]="manufacturerForm"
-    (ngSubmit)="!manufacturerForm.invalid && captchaSuccess && onSubmit(manufacturerForm.value)"
+    (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm.value)"
   >
 
 
@@ -61,27 +61,29 @@
         #captchaElem
         [siteKey]="reCaptchaSiteKey"
         [useGlobalDomain]="false"
-        (success)="handleCaptchaSuccess($event)"
+        (success)="restService.handleCaptchaSuccess($event, manufacturerForm, captchaElem)"
         size="normal"
         hl="en"
         formControlName="captcha"
       >
       </ngx-recaptcha2>
 
-      <div class="captcha__error__msg error__msg" *ngIf="captchaResponse && !captchaSuccess">
-        Could not validate CAPTCHA
+      <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('rejectedCaptcha')">
+        CAPTCHA check did not pass
       </div>
 
-      <div class="captcha__error__msg error__msg" *ngIf="captchaError">
-        Error in CAPTCHA check
+      <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('noResponse')">
+        Error in CAPTCHA check verification
       </div>
 
     </div>
 
 
-    <div>
+    <div style="display: inline-flex">
       <button class="button" (click)="location.back()">Back</button>
-      <button class="button" type="submit">Submit</button>
+      <button class="button" [disabled]="manufacturerForm.invalid" type="submit">Submit</button>
+      <!--Spinner-->
+      <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>
     </div>
 
 
