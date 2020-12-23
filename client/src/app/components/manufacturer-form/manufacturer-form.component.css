@@ -16,6 +16,10 @@
   margin: 15px;
 }
 
+#summary {
+  margin: 5px
+}
+
 button {
   margin-left: 7px;
   margin-right: 7px;

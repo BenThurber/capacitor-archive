@@ -21,6 +21,8 @@ import {RestService} from './services/rest/rest.service';
 import { EditManufacturerComponent } from './views/edit-manufacturer/edit-manufacturer.component';
 import {CommonModule} from '@angular/common';
 import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/manufacturer-sidebar.component';
+import {QuillModule} from 'ngx-quill';
+import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 
 
 @NgModule({
@@ -37,6 +39,7 @@ import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/
     PageNotFoundComponent,
     EditManufacturerComponent,
     ManufacturerSidebarComponent,
+    RichTextInputComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -46,6 +49,7 @@ import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/
     NgxCaptchaModule,
     HttpClientModule,
     CommonModule,
+    QuillModule.forRoot(),
   ],
   providers: [RestService],
   bootstrap: [AppComponent]

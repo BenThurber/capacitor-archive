@@ -49,11 +49,10 @@
       <label for="summary">
         Summary
       </label>
-    <br>
-      <textarea id=summary formControlName="summary"
-                name="message" rows="7" cols="50"
-                [ngModel]="manufacturer && manufacturer.summary">
-      </textarea>
+      <br>
+      <div>
+        <app-rich-text-input id="summary" formControlName="summary"></app-rich-text-input>
+      </div>
     </div>
 
     <div class="input">
