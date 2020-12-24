@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {RestService} from '../../services/rest/rest.service';
@@ -14,7 +14,7 @@ import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
   templateUrl: './manufacturer-form.component.html',
   styleUrls: ['./manufacturer-form.component.css', '../../styles/animations.css']
 })
-export class ManufacturerFormComponent implements OnInit {
+export class ManufacturerFormComponent implements OnInit, OnChanges {
 
   @Input() manufacturer: Manufacturer;
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
@@ -50,7 +50,29 @@ export class ManufacturerFormComponent implements OnInit {
       captcha: ['', Validators.required],
     }, {validator: checkIfCloseYearAfterOpenYear});
 
+    // Populate form values
+    if (this.manufacturer) {
+      this.manufacturerForm.setValue({
+        companyName: this.manufacturer.companyName,
+        openYear: this.manufacturer.openYear,
+        closeYear: this.manufacturer.closeYear,
+        summary: this.manufacturer.summary,
+        captcha: null,
+      });
+    }
+
   }
+
+
+  /**
+   * Initialize manufacturer when its value is returned from back end
+   */
+  ngOnChanges(changes): void {
+    // manufacturer isn't initialized because its value if from an async function
+    this.manufacturer = changes.manufacturer.currentValue;
+    this.ngOnInit();
+  }
+
 
   onSubmit(manufacturerData): void {
     this.submitting = true;
