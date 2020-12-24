@@ -1,6 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
+import Quill from 'quill';
+import ImageUploader from 'quill-image-uploader';
+
+Quill.register('modules/imageUploader', ImageUploader);
+require('aws-sdk/dist/aws-sdk');
 
 @Component({
   selector: 'app-rich-text-input',
@@ -14,9 +19,19 @@ import {QuillEditorComponent} from 'ngx-quill';
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor, OnInit {
+export class RichTextInputComponent implements ControlValueAccessor, OnChanges {
+
+  // File format configurations
+  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'jfif', 'webp'];
+  static readonly maxImageSize = 5000000;
+
 
   @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
+
+  /**
+   * The name of the directory on the server to store media.  This should be unique like manufacturer.companyName
+   */
+  @Input() mediaDirectoryName: string;
 
 
   quillConfig = {
@@ -27,18 +42,69 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
       [{ font: [] }],
       // [{ header: 1 }],   This may be confusing to users
       [{ align: [false, 'center', 'right'] }],
-
       ['link', 'image'],
-    ]
+    ],
+    imageUploader: {
+      upload: this.uploadImage
+    },
   };
 
   quillStyles = {
-    height: '250px',
+    height: '300px',
     backgroundColor: '#ffff'
   };
 
 
-  ngOnInit(): void {}
+
+
+  ngOnChanges(changes): void {
+    // mediaDirectoryName isn't initialized because its value is from an async function
+    this.mediaDirectoryName = changes.mediaDirectoryName.currentValue;
+  }
+
+
+
+
+  uploadImage(file: File): Promise<string> {  // This shouldn't be any
+
+    let serverFilePath;
+    if (this.mediaDirectoryName) {
+      serverFilePath = '/editor/' + this.mediaDirectoryName;
+    } else {
+      serverFilePath = '/misc-editor-files';
+    }
+
+
+    return new Promise((resolve, reject) => {
+
+      // Check file attributes
+      if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+        reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + RichTextInputComponent.supportedImageTypes);
+        return;
+      }
+      if (file.size > RichTextInputComponent.maxImageSize) {
+        reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
+        return;
+      }
+
+
+      const AWSService = (window as any).AWS;
+      const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
+      const params = {Key: file.name, Body: file};
+      return bucket.upload(params, (error, response) => {
+
+        if (error) {
+          reject('Error uploading to server: ' + error);
+        } else {
+          resolve(response.Location);
+        }
+
+      });
+    });
+
+  }
+
+
 
 
 
