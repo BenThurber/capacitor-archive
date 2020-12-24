@@ -1,6 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { RichTextInputComponent } from './rich-text-input.component';
+import Quill from 'quill';
+import ImageResize from 'quill-image-resize-module';
+
+Quill.register('modules/imageResize', ImageResize);
 
 describe('RichTextInputComponent', () => {
   let component: RichTextInputComponent;
@@ -8,7 +12,7 @@ describe('RichTextInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RichTextInputComponent ]
+      declarations: [ RichTextInputComponent ],
     })
     .compileComponents();
   });

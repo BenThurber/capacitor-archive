@@ -2,6 +2,12 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 
+import Quill from 'quill';
+import ImageResize from 'quill-image-resize-module';
+
+Quill.register('modules/imageResize', ImageResize);
+
+
 @Component({
   selector: 'app-rich-text-input',
   templateUrl: './rich-text-input.component.html',
@@ -29,7 +35,10 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
       [{ align: [false, 'center', 'right'] }],
 
       ['link', 'image'],
-    ]
+    ],
+    imageResize: {
+      modules: ['Resize', 'DisplaySize', 'Toolbar']
+    },
   };
 
   quillStyles = {
