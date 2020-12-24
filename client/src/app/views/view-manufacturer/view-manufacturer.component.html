@@ -18,9 +18,7 @@
     </div>
 
     <div *ngIf="manufacturer$.summary">
-      <p>
-      {{manufacturer$.summary}}
-      </p>
+      <div class="ql-editor" [innerHTML]="manufacturer$.summary"></div>
     </div>
 
   </div>
