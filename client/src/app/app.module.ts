@@ -49,7 +49,9 @@ import { RichTextInputComponent } from './components/rich-text-input/rich-text-i
     NgxCaptchaModule,
     HttpClientModule,
     CommonModule,
-    QuillModule.forRoot(),
+    QuillModule.forRoot({
+      suppressGlobalRegisterWarning: true
+    }),
   ],
   providers: [RestService, QuillEditorComponent],
   bootstrap: [AppComponent]

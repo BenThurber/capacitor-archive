@@ -1,6 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
+import Quill from 'quill';
+import {ImageHandler, Options, VideoHandler} from 'ngx-quill-upload';
+
+Quill.register('modules/imageHandler', ImageHandler);
+Quill.register('modules/videoHandler', VideoHandler);
 
 @Component({
   selector: 'app-rich-text-input',
@@ -29,7 +34,20 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
       [{ align: [false, 'center', 'right'] }],
 
       ['link', 'image'],
-    ]
+    ],
+
+    imageHandler: {
+      upload: (file) => {
+        return new Promise((resolve, reject) => {}); // your uploaded image URL as Promise<string>
+      },
+      accepts: ['png', 'jpg', 'jpeg', 'jfif', 'webp'] // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
+    } as Options,
+    videoHandler: {
+      upload: (file) => {
+        return new Promise((resolve, reject) => {}); // your uploaded video URL as Promise<string>
+      },
+      accepts: ['mp4', 'webm']  // Extensions to allow for videos (Optional) | Default - ['mp4', 'webm']
+    } as Options,
   };
 
   quillStyles = {
