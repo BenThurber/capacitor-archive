@@ -11,7 +11,6 @@
         Manufacturer Name*
       </label>
       <input id="company-name" type="text" formControlName="companyName" placeholder="e.g. Solar, Aerovox" required
-             [ngModel]="manufacturer && manufacturer.companyName"
              [ngClass]="{ 'is-invalid': formFields.companyName.errors }">
       <div class="error__msg" *ngIf="formFields.companyName.errors && formFields.companyName.errors.required">
         Please provide the name of the Manufacturer
@@ -23,7 +22,6 @@
         Year Opened
       </label>
       <input id="open-year" type="text" formControlName="openYear" placeholder="optional"
-             [ngModel]="manufacturer && manufacturer.openYear"
              [ngClass]="{ 'is-invalid': formFields.openYear.errors || closeYearAfterOpenYearError }">
       <div class="error__msg" *ngIf="formFields.openYear.errors">
         Year is not valid (YYY)
@@ -35,7 +33,6 @@
         Year Closed
       </label>
       <input id="close-year" type="text" formControlName="closeYear" placeholder="optional"
-             [ngModel]="manufacturer && manufacturer.closeYear"
              [ngClass]="{ 'is-invalid': formFields.closeYear.errors || closeYearAfterOpenYearError }">
       <div class="error__msg" *ngIf="formFields.closeYear.errors">
         Year is not valid (YYYY)
@@ -45,14 +42,14 @@
       </div>
     </div>
 
-    <div class="input">
+    <div style="margin-top: 40px" class="input">
       <label for="summary">
         Summary
       </label>
       <br>
-      <div>
-        <app-rich-text-input id="summary" formControlName="summary"></app-rich-text-input>
-      </div>
+      <app-rich-text-input id="summary"
+                           formControlName="summary"
+      ></app-rich-text-input>
     </div>
 
     <div class="input">

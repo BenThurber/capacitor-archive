@@ -1,5 +1,5 @@
-import {Component, forwardRef, ViewChild} from '@angular/core';
-import {ControlValueAccessor, DefaultValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 
 @Component({
@@ -9,16 +9,27 @@ import {QuillEditorComponent} from 'ngx-quill';
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => QuillEditorComponent),
+      useExisting: RichTextInputComponent,
       multi: true,
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor {
-  @ViewChild(DefaultValueAccessor) private valueAccessor: DefaultValueAccessor;
+export class RichTextInputComponent implements ControlValueAccessor, OnInit {
+
+  @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
+
 
   quillConfig = {
+    toolbar: [
+      ['bold', 'italic', 'underline'],
+      [{ color: [] }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      [{ font: [] }],
+      // [{ header: 1 }],   This may be confusing to users
+      [{ align: [false, 'center', 'right'] }],
 
+      ['link', 'image'],
+    ]
   };
 
   quillStyles = {
@@ -26,6 +37,8 @@ export class RichTextInputComponent implements ControlValueAccessor {
     backgroundColor: '#ffff'
   };
 
+
+  ngOnInit(): void {}
 
 
 
@@ -36,19 +49,19 @@ export class RichTextInputComponent implements ControlValueAccessor {
   // ------ControlValueAccessor implementations------
 
   writeValue(obj: any): void {
-    this.valueAccessor.writeValue(obj);
+    this.editorElementRef.writeValue(obj);
   }
 
   registerOnChange(fn: any): void {
-    this.valueAccessor.registerOnChange(fn);
+    this.editorElementRef.registerOnChange(fn);
   }
 
   registerOnTouched(fn: any): void {
-    this.valueAccessor.registerOnTouched(fn);
+    this.editorElementRef.registerOnTouched(fn);
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.valueAccessor.setDisabledState(isDisabled);
+    this.editorElementRef.setDisabledState(isDisabled);
   }
 
 }
