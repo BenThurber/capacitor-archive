@@ -19,6 +19,19 @@ export class ManufacturerSidebarComponent implements OnInit {
   dynamicRouter: DynamicRouterService;
   refreshManufacturers: RefreshManufacturersService;
 
+  static caseInsensitiveCompare(a, b): number {
+    const nameA = a.toUpperCase(); // ignore upper and lowercase
+    const nameB = b.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  }
+
   constructor(restService: RestService, activatedRoute: ActivatedRoute, dynamicRouter: DynamicRouterService,
               refreshManufacturers: RefreshManufacturersService) {
     this.restService = restService;
@@ -33,26 +46,12 @@ export class ManufacturerSidebarComponent implements OnInit {
   ngOnInit(): Subscription {
     return this.restService.getAllCompanyNames().subscribe({
       next: manufacturers => {
-        manufacturers.sort(this.caseInsensitiveCompare);
+        manufacturers.sort(ManufacturerSidebarComponent.caseInsensitiveCompare);
         this.manufacturers$ = manufacturers;
       },
 
       error: () => console.error('Couldn\'t get company names')
     });
-  }
-
-
-  caseInsensitiveCompare(a, b): number {
-    const nameA = a.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    // names must be equal
-    return 0;
   }
 
 }
