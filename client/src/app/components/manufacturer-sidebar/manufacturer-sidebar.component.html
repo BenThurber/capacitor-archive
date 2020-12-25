@@ -2,7 +2,7 @@
   <h3>Manufacturers</h3>
   <div *ngFor="let barCompanyName of manufacturers$;">
     <div class="link__padding">
-      <a (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', barCompanyName])">{{barCompanyName}}</a>
+      <a (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', barCompanyName.toLowerCase()])">{{barCompanyName}}</a>
     </div>
   </div>
   <div class="link__padding" style="padding-top: 15px; font-weight: bold">
