@@ -3,6 +3,7 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import {ImageHandler, Options, VideoHandler} from 'ngx-quill-upload';
+import {HttpClient} from '@angular/common/http';
 
 Quill.register('modules/imageHandler', ImageHandler);
 Quill.register('modules/videoHandler', VideoHandler);
@@ -21,6 +22,11 @@ Quill.register('modules/videoHandler', VideoHandler);
 })
 export class RichTextInputComponent implements ControlValueAccessor, OnInit {
 
+  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'jfif', 'webp'];
+  static readonly maxImageSize = 5000000;
+  static readonly supportedVideoTypes: ReadonlyArray<string> = ['mp4', 'webm'];
+
+
   @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
 
 
@@ -37,16 +43,14 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
     ],
 
     imageHandler: {
-      upload: (file) => {
-        return new Promise((resolve, reject) => {}); // your uploaded image URL as Promise<string>
-      },
-      accepts: ['png', 'jpg', 'jpeg', 'jfif', 'webp'] // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
+      upload: this.uploadImage,
+      accepts: RichTextInputComponent.supportedImageTypes // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
     } as Options,
     videoHandler: {
       upload: (file) => {
         return new Promise((resolve, reject) => {}); // your uploaded video URL as Promise<string>
       },
-      accepts: ['mp4', 'webm']  // Extensions to allow for videos (Optional) | Default - ['mp4', 'webm']
+      accepts: RichTextInputComponent.supportedVideoTypes  // Extensions to allow for videos (Optional) | Default - ['mp4', 'webm']
     } as Options,
   };
 
@@ -56,9 +60,44 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
   };
 
 
+  constructor(private httpClient: HttpClient) {}
+
   ngOnInit(): void {}
 
 
+
+
+  uploadImage(file): any {  // This shouldn't be any
+    console.log(file);
+    return new Promise((resolve, reject) => {
+      if (RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) { // File types supported for image
+        if (file.size < RichTextInputComponent.maxImageSize) { // Customize file size as per requirement
+
+          // Sample API Call
+          const uploadData = new FormData();
+          uploadData.append('file', file, file.name);
+
+          const config = { headers: {'Content-Type': undefined}};
+
+          return this.httpClient.put('https://s3-ap-southeast-2.amazonaws.com/capacitor-archive-media/myFile', uploadData, config).toPromise()
+            .then(result => {
+              console.log('result is:', result);
+              resolve(result.message.url); // RETURN IMAGE URL from response
+            })
+            .catch(error => {
+              reject('Upload failed');
+              // Handle error control
+            });
+        } else {
+          reject('Size too large');
+          // Handle Image size large logic
+        }
+      } else {
+        reject('Unsupported type');
+        // Handle Unsupported type logic
+      }
+    });
+  }
 
 
 
