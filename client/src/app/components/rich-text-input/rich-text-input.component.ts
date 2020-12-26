@@ -94,6 +94,17 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
 }
 
 
+function randomString(length: number): string {
+  let result           = '';
+  const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for ( let i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
 function uploadImage(file: File): Promise<string> {
 
   let serverFilePath;
@@ -116,12 +127,13 @@ function uploadImage(file: File): Promise<string> {
       return;
     }
 
+    const uploadName = randomString(10) + '_' + file.name;
 
     const AWSService = (window as any).AWS;
     AWSService.config.accessKeyId = Environment.AWS_ACCESS_KEY_ID;
     AWSService.config.secretAccessKey = Environment.AWS_SECRET_ACCESS_KEY;
     const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
-    const params = {Key: file.name, Body: file};
+    const params = {Key: uploadName, Body: file};
     return bucket.upload(params, (error, response) => {
 
       if (error) {
