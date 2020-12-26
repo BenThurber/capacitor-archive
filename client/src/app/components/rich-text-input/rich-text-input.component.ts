@@ -23,7 +23,7 @@ require('aws-sdk/dist/aws-sdk');
 export class RichTextInputComponent implements ControlValueAccessor, OnChanges, OnInit {
 
   // File format configurations
-  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'jfif', 'webp'];
+  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'webp'];
   static readonly maxImageSize = 5000000;
 
 
