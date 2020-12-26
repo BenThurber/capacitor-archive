@@ -5,8 +5,6 @@ const keys = Object.keys(process.env);
 let env = {};
 keys.forEach(key => env[key] = JSON.stringify(process.env[key]));
 
-console.log('env=', env);
-
 
 
 module.exports = {

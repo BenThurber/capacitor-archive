@@ -33,7 +33,7 @@ MYSQL_USER=<dba-username>
 MYSQL_PASSWORD=<dba-password>
 ```
 Create another environment variable file `mysql-backup.env` that stores the location and credentials of where to backup the two databases.  The variable DB_DUMP_TARGET could be a smb or [s3 server](https://aws.amazon.com/s3/) (e.g. s3://mysql-backups). The database dump filename is in the format <test|prod>_db_backup_YYYY-MM-DDTHH:mm:ssZ.<compression>.  
-See the [databack/mysql-backup documentation](https://hub.docker.com/r/databack/mysql-backup) for more info.
+See the [databack/mysql-backup documentation](https://hub.docker.com/r/databack/mysql-backup) for more info.  
 ```
 DB_PASS=<root-pass>
 DB_DUMP_TARGET=<server URL>
@@ -76,11 +76,20 @@ Follow the onscreen prompts:
 - Select shell  
 
 
+## Create an Amazon Web Services (AWS) S3 server
+The web app uses an S3 server to upload and serve images and other media.  This can be the same server that is used to backup mysql.  
+Since there are several config files to add to the server, please see the page [Configure AWS S3 Server](https://gitlab.com/capacitor-archive/capacitor-archive/-/wikis/Configure-AWS-S3-Server) on the  Wiki for how to do this.  
+
+
 ## Add environment variables to GitLab
 In GitLab, in the left bar, go to settings > CI / CD > Variables.  Set the variables:  
 - SPRING_DATASOURCE_USERNAME  
 - SPRING_DATASOURCE_PASSWORD  
 (The same values as were used when [setting mysql credentials](#set-mysql-credentials))  
+
+The keys for the AWS S3 server used for for hosting images and media.  These can be the same keys used in mysql-backup.env (see above)  
+- AWS_SECRET_ACCESS_KEY  
+- AWS_ACCESS_KEY_ID  
 
 The keys from Google's reCAPTCHA API  
 - RECAPTCHA_SITE_KEY  

@@ -123,8 +123,6 @@ services:
             - '35506:80'
         volumes:
             - 'test-client-build:/usr/local/apache2/htdocs/'
-        env_file:
-            - mysql-backup.env
 
 
     testServer:
@@ -150,8 +148,6 @@ services:
             - '35504:80'
         volumes:
             - 'prod-client-build:/usr/local/apache2/htdocs/'
-        env_file:
-            - mysql-backup.env
 
 
     prodServer:

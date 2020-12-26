@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
@@ -20,10 +20,10 @@ require('aws-sdk/dist/aws-sdk');
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor, OnChanges {
+export class RichTextInputComponent implements ControlValueAccessor, OnChanges, OnInit {
 
   // File format configurations
-  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'jfif', 'webp'];
+  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'webp'];
   static readonly maxImageSize = 5000000;
 
 
@@ -41,74 +41,32 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges {
       [{ color: [] }],
       [{ size: ['small', false, 'large', 'huge'] }],
       [{ font: [] }],
-      // [{ header: 1 }],   This may be confusing to users
+      [{ header: 1 }],   // This may be confusing to users
       [{ align: [false, 'center', 'right'] }],
       ['link', 'image'],
     ],
     imageUploader: {
-      upload: this.uploadImage
+      upload: uploadImage
     },
   };
 
   quillStyles = {
-    height: '300px',
+    height: '450px',
     backgroundColor: '#ffff'
   };
 
 
+  ngOnInit(): void {
+    // Set an attribute on the function uploadImage so it can be modified after passing the function to the imageUploader
+    (uploadImage as any).mediaDirectoryName = this.mediaDirectoryName;
+  }
 
 
   ngOnChanges(changes): void {
     // mediaDirectoryName isn't initialized because its value is from an async function
     this.mediaDirectoryName = changes.mediaDirectoryName.currentValue;
+    this.ngOnInit();
   }
-
-
-
-
-  uploadImage(file: File): Promise<string> {  // This shouldn't be any
-
-    let serverFilePath;
-    if (this.mediaDirectoryName) {
-      serverFilePath = '/editor/' + this.mediaDirectoryName;
-    } else {
-      serverFilePath = '/misc-editor-files';
-    }
-
-
-    return new Promise((resolve, reject) => {
-
-      // Check file attributes
-      if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
-        reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + RichTextInputComponent.supportedImageTypes);
-        return;
-      }
-      if (file.size > RichTextInputComponent.maxImageSize) {
-        reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
-        return;
-      }
-
-
-      const AWSService = (window as any).AWS;
-      AWSService.config.accessKeyId = Environment.AWS_ACCESS_KEY_ID;
-      AWSService.config.secretAccessKey = Environment.AWS_SECRET_ACCESS_KEY;
-      const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
-      const params = {Key: file.name, Body: file};
-      return bucket.upload(params, (error, response) => {
-
-        if (error) {
-          reject('Error uploading to server: ' + error);
-        } else {
-          resolve(response.Location);
-        }
-
-      });
-    });
-
-  }
-
-
-
 
 
 
@@ -133,4 +91,57 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges {
     this.editorElementRef.setDisabledState(isDisabled);
   }
 
+}
+
+
+function randomString(length: number): string {
+  let result           = '';
+  const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for ( let i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
+function uploadImage(file: File): Promise<string> {
+
+  let serverFilePath;
+  if (this.upload && this.upload.mediaDirectoryName) {
+    serverFilePath = '/editor/' + this.upload.mediaDirectoryName;
+  } else {
+    serverFilePath = '/misc-editor-files';
+  }
+
+
+  return new Promise((resolve, reject) => {
+
+    // Check file attributes
+    if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+      reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + RichTextInputComponent.supportedImageTypes);
+      return;
+    }
+    if (file.size > RichTextInputComponent.maxImageSize) {
+      reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
+      return;
+    }
+
+    const uploadName = randomString(10) + '_' + file.name;
+
+    const AWSService = (window as any).AWS;
+    AWSService.config.accessKeyId = Environment.AWS_ACCESS_KEY_ID;
+    AWSService.config.secretAccessKey = Environment.AWS_SECRET_ACCESS_KEY;
+    const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
+    const params = {Key: uploadName, Body: file};
+    return bucket.upload(params, (error, response) => {
+
+      if (error) {
+        reject('Error uploading to server: ' + error);
+      } else {
+        resolve(response.Location);
+      }
+
+    });
+  });
 }
