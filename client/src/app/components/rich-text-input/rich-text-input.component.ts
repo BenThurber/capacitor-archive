@@ -2,10 +2,10 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
-import {ImageHandler, Options, VideoHandler} from 'ngx-quill-upload';
+import ImageUploader from 'quill-image-uploader';
 
-Quill.register('modules/imageHandler', ImageHandler);
-Quill.register('modules/videoHandler', VideoHandler);
+Quill.register('modules/imageUploader', ImageUploader);
+require('aws-sdk/dist/aws-sdk');
 
 @Component({
   selector: 'app-rich-text-input',
@@ -47,16 +47,9 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
       ['link', 'image'],
     ],
 
-    imageHandler: {
-      upload: this.uploadImage,
-      accepts: RichTextInputComponent.supportedImageTypes // Extensions to allow for images (Optional) | Default - ['jpg', 'jpeg', 'png']
-    } as Options,
-    videoHandler: {
-      upload: (file) => {
-        return new Promise((resolve, reject) => {}); // your uploaded video URL as Promise<string>
-      },
-      accepts: RichTextInputComponent.supportedVideoTypes  // Extensions to allow for videos (Optional) | Default - ['mp4', 'webm']
-    } as Options,
+    imageUploader: {
+      upload: this.uploadImage
+    },
   };
 
   quillStyles = {
@@ -74,6 +67,8 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
 
   uploadImage(file): any {  // This shouldn't be any
 
+    const AWSService = (window as any).AWS;
+
     let serverFilePath;
     if (this.mediaDirectoryName) {
       serverFilePath = encodeURI('/editor/' + this.mediaDirectoryName);
@@ -85,17 +80,16 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
     return new Promise((resolve, reject) => {
 
       // Check file attributes
-      if (RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+      if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
         reject('Unsupported file type ' + file.type);
         return;
       }
-      if (file.size < RichTextInputComponent.maxImageSize) {
+      if (file.size > RichTextInputComponent.maxImageSize) {
         reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
         return;
       }
 
-      const AWSService = (window as any).AWS;
-      AWSService.config.accessKeyId = '';  // These need values but can't be committed
+      AWSService.config.accessKeyId = '';
       AWSService.config.secretAccessKey = '';
       const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
       const params = {Key: file.name, Body: file};
