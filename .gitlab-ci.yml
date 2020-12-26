@@ -18,6 +18,10 @@ setup:
   artifacts:
     paths:
       - client/node_modules/
+  only:
+    refs:
+      - master
+      - development
 
 variables:
   GIT_DEPTH: 0
@@ -27,12 +31,6 @@ junit:
   script:
     - cd server
     - ./gradlew test
-
-jasmine:
-  stage: test
-  script:
-    - cd client
-    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
 
 
 deploy-test-server:
