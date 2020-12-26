@@ -29,7 +29,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": ["./node_modules/quill/dist/quill.min.js"]
           },
           "configurations": {
             "dev": {
@@ -123,7 +123,7 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": ["node_modules/quill/dist/quill.js"]
           }
         },
         "lint": {

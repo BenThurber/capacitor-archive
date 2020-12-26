@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class Manufacturer {
 
     private final static int FIELD_LEN = 60;
-    private final static int SUMMARY_LEN = 5000;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class Manufacturer {
     @Type(type = "org.hibernate.type.ShortType")
     private Short closeYear;
 
-    @Column(name = "summary", length = SUMMARY_LEN)
+    @Column(name = "summary", columnDefinition="MEDIUMTEXT")
     private String summary;
 
 
