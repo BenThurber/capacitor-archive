@@ -28,12 +28,6 @@ junit:
     - cd server
     - ./gradlew test
 
-jasmine:
-  stage: test
-  script:
-    - cd client
-    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
-
 
 deploy-test-server:
   stage: deploy
