@@ -1,9 +1,8 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import {ImageHandler, Options, VideoHandler} from 'ngx-quill-upload';
-import {HttpClient} from '@angular/common/http';
 
 Quill.register('modules/imageHandler', ImageHandler);
 Quill.register('modules/videoHandler', VideoHandler);
@@ -22,12 +21,18 @@ Quill.register('modules/videoHandler', VideoHandler);
 })
 export class RichTextInputComponent implements ControlValueAccessor, OnInit {
 
+  // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'jfif', 'webp'];
   static readonly maxImageSize = 5000000;
   static readonly supportedVideoTypes: ReadonlyArray<string> = ['mp4', 'webm'];
 
 
   @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
+
+  /**
+   * The name of the directory on the server to store media.  This should be unique like manufacturer.companyName
+   */
+  @Input() mediaDirectoryName: string;
 
 
   quillConfig = {
@@ -60,7 +65,7 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
   };
 
 
-  constructor(private httpClient: HttpClient) {}
+  constructor() {}
 
   ngOnInit(): void {}
 
@@ -68,36 +73,49 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
 
 
   uploadImage(file): any {  // This shouldn't be any
-    console.log(file);
+
+    let serverFilePath;
+    if (this.mediaDirectoryName) {
+      serverFilePath = encodeURI('/editor/' + this.mediaDirectoryName);
+    } else {
+      serverFilePath = encodeURI('/editor-files');
+    }
+
+
     return new Promise((resolve, reject) => {
-      if (RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) { // File types supported for image
-        if (file.size < RichTextInputComponent.maxImageSize) { // Customize file size as per requirement
 
-          // Sample API Call
-          const uploadData = new FormData();
-          uploadData.append('file', file, file.name);
-
-          const config = { headers: {'Content-Type': undefined}};
-
-          return this.httpClient.put('https://s3-ap-southeast-2.amazonaws.com/capacitor-archive-media/myFile', uploadData, config).toPromise()
-            .then(result => {
-              console.log('result is:', result);
-              resolve(result.message.url); // RETURN IMAGE URL from response
-            })
-            .catch(error => {
-              reject('Upload failed');
-              // Handle error control
-            });
-        } else {
-          reject('Size too large');
-          // Handle Image size large logic
-        }
-      } else {
-        reject('Unsupported type');
-        // Handle Unsupported type logic
+      // Check file attributes
+      if (RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+        reject('Unsupported file type ' + file.type);
+        return;
       }
+      if (file.size < RichTextInputComponent.maxImageSize) {
+        reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
+        return;
+      }
+
+      const AWSService = (window as any).AWS;
+      AWSService.config.accessKeyId = '';  // These need values but can't be committed
+      AWSService.config.secretAccessKey = '';
+      const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
+      const params = {Key: file.name, Body: file};
+      return bucket.upload(params, (error, response) => {
+        console.log('error:', error);
+        console.log('response', response);
+        if (error) {
+          reject('Error uploading');
+        } else {
+          resolve(response.Location);
+        }
+      });
+
     });
+
   }
+
+
+
+
 
 
 
