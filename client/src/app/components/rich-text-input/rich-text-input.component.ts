@@ -3,10 +3,14 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
+import ImageResize from 'quill-image-resize-module';
 import {Environment} from '../../models/environment';
 
 Quill.register('modules/imageUploader', ImageUploader);
+Quill.register('modules/imageResize', ImageResize);
 require('aws-sdk/dist/aws-sdk');
+
+
 
 @Component({
   selector: 'app-rich-text-input',
@@ -47,6 +51,9 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
     ],
     imageUploader: {
       upload: uploadImage
+    },
+    imageResize: {
+      modules: ['Resize', 'DisplaySize', 'Toolbar']
     },
   };
 
