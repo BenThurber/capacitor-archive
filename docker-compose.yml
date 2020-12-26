@@ -123,6 +123,8 @@ services:
             - '35506:80'
         volumes:
             - 'test-client-build:/usr/local/apache2/htdocs/'
+        env_file:
+            - mysql-backup.env
 
 
     testServer:
@@ -148,6 +150,8 @@ services:
             - '35504:80'
         volumes:
             - 'prod-client-build:/usr/local/apache2/htdocs/'
+        env_file:
+            - mysql-backup.env
 
 
     prodServer:
@@ -162,7 +166,6 @@ services:
             - JAVA_OPTS=-Dspring.profiles.active=prod
         volumes:
             - 'prod-server-build:/usr/local/tomcat/webapps/'
-
 
 
 

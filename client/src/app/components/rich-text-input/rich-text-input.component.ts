@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
@@ -19,12 +19,11 @@ require('aws-sdk/dist/aws-sdk');
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor, OnInit {
+export class RichTextInputComponent implements ControlValueAccessor, OnChanges {
 
   // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'jfif', 'webp'];
   static readonly maxImageSize = 5000000;
-  static readonly supportedVideoTypes: ReadonlyArray<string> = ['mp4', 'webm'];
 
 
   @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
@@ -43,37 +42,36 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
       [{ font: [] }],
       // [{ header: 1 }],   This may be confusing to users
       [{ align: [false, 'center', 'right'] }],
-
       ['link', 'image'],
     ],
-
     imageUploader: {
       upload: this.uploadImage
     },
   };
 
   quillStyles = {
-    height: '250px',
+    height: '300px',
     backgroundColor: '#ffff'
   };
 
 
-  constructor() {}
-
-  ngOnInit(): void {}
 
 
+  ngOnChanges(changes): void {
+    // mediaDirectoryName isn't initialized because its value is from an async function
+    this.mediaDirectoryName = changes.mediaDirectoryName.currentValue;
+  }
 
 
-  uploadImage(file): any {  // This shouldn't be any
 
-    const AWSService = (window as any).AWS;
+
+  uploadImage(file: File): Promise<string> {  // This shouldn't be any
 
     let serverFilePath;
     if (this.mediaDirectoryName) {
-      serverFilePath = encodeURI('/editor/' + this.mediaDirectoryName);
+      serverFilePath = '/editor/' + this.mediaDirectoryName;
     } else {
-      serverFilePath = encodeURI('/editor-files');
+      serverFilePath = '/misc-editor-files';
     }
 
 
@@ -81,7 +79,7 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
 
       // Check file attributes
       if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
-        reject('Unsupported file type ' + file.type);
+        reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + RichTextInputComponent.supportedImageTypes);
         return;
       }
       if (file.size > RichTextInputComponent.maxImageSize) {
@@ -89,20 +87,19 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
         return;
       }
 
-      AWSService.config.accessKeyId = '';
-      AWSService.config.secretAccessKey = '';
+
+      const AWSService = (window as any).AWS;
       const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
       const params = {Key: file.name, Body: file};
       return bucket.upload(params, (error, response) => {
-        console.log('error:', error);
-        console.log('response', response);
+
         if (error) {
-          reject('Error uploading');
+          reject('Error uploading to server: ' + error);
         } else {
           resolve(response.Location);
         }
-      });
 
+      });
     });
 
   }
