@@ -68,7 +68,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
    * Initialize manufacturer when its value is returned from back end
    */
   ngOnChanges(changes): void {
-    // manufacturer isn't initialized because its value if from an async function
+    // manufacturer isn't initialized because its value is from an async function
     this.manufacturer = changes.manufacturer.currentValue;
     this.ngOnInit();
   }

@@ -165,7 +165,6 @@ services:
 
 
 
-
 volumes:
     gitlab-runner-config:
         external: false

@@ -1,6 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
+import Quill from 'quill';
+import ImageUploader from 'quill-image-uploader';
+import {Environment} from '../../models/environment';
+
+Quill.register('modules/imageUploader', ImageUploader);
+require('aws-sdk/dist/aws-sdk');
 
 @Component({
   selector: 'app-rich-text-input',
@@ -14,9 +20,19 @@ import {QuillEditorComponent} from 'ngx-quill';
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor, OnInit {
+export class RichTextInputComponent implements ControlValueAccessor, OnChanges, OnInit {
+
+  // File format configurations
+  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'webp'];
+  static readonly maxImageSize = 5000000;
+
 
   @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
+
+  /**
+   * The name of the directory on the server to store media.  This should be unique like manufacturer.companyName
+   */
+  @Input() dirName: string;
 
 
   quillConfig = {
@@ -25,21 +41,32 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
       [{ color: [] }],
       [{ size: ['small', false, 'large', 'huge'] }],
       [{ font: [] }],
-      // [{ header: 1 }],   This may be confusing to users
+      [{ header: 1 }],   // This may be confusing to users
       [{ align: [false, 'center', 'right'] }],
-
       ['link', 'image'],
-    ]
+    ],
+    imageUploader: {
+      upload: uploadImage
+    },
   };
 
   quillStyles = {
-    height: '250px',
+    height: '450px',
     backgroundColor: '#ffff'
   };
 
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Set an attribute on the function uploadImage so it can be modified after passing the function to the imageUploader
+    (uploadImage as any).dirName = this.dirName;
+  }
 
+
+  ngOnChanges(changes): void {
+    // dirName isn't initialized because its value is from an async function
+    this.dirName = changes.dirName.currentValue;
+    this.ngOnInit();
+  }
 
 
 
@@ -64,4 +91,57 @@ export class RichTextInputComponent implements ControlValueAccessor, OnInit {
     this.editorElementRef.setDisabledState(isDisabled);
   }
 
+}
+
+
+function randomString(length: number): string {
+  let result           = '';
+  const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  const charactersLength = characters.length;
+  for ( let i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
+}
+
+
+function uploadImage(file: File): Promise<string> {
+
+  let serverFilePath;
+  if (this.upload && this.upload.dirName) {
+    serverFilePath = '/manufacturer-editor/' + this.upload.dirName;
+  } else {
+    serverFilePath = '/misc-editor-files';
+  }
+
+
+  return new Promise((resolve, reject) => {
+
+    // Check file attributes
+    if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+      reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + RichTextInputComponent.supportedImageTypes);
+      return;
+    }
+    if (file.size > RichTextInputComponent.maxImageSize) {
+      reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
+      return;
+    }
+
+    const uploadName = randomString(10) + '_' + file.name;
+
+    const AWSService = (window as any).AWS;
+    AWSService.config.accessKeyId = Environment.AWS_ACCESS_KEY_ID;
+    AWSService.config.secretAccessKey = Environment.AWS_SECRET_ACCESS_KEY;
+    const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
+    const params = {Key: uploadName, Body: file};
+    return bucket.upload(params, (error, response) => {
+
+      if (error) {
+        reject('Error uploading to server: ' + error);
+      } else {
+        resolve(response.Location);
+      }
+
+    });
+  });
 }
