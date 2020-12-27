@@ -11,7 +11,7 @@
       <quill-editor #editorElem
                     [styles]="quillStyles"
                     [modules]="quillConfig"
-                    (onEditorChanged)="editorChanged($event)"
+                    (onContentChanged)="content = $event.html;"
       >
       </quill-editor>
 
@@ -22,7 +22,7 @@
         <label>Preview</label>
       </ng-template>
 
-      <div class="ql-editor" [innerHTML]="content"></div>
+      <div class="ql-editor" [innerHTML]="content | safeHtml"></div>
 
     </mat-tab>
 

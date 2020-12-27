@@ -25,6 +25,7 @@ import {QuillEditorComponent, QuillModule} from 'ngx-quill';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
+import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import {MatTabsModule} from '@angular/material/tabs';
     EditManufacturerComponent,
     ManufacturerSidebarComponent,
     RichTextInputComponent,
+    SafeHtmlPipe,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

@@ -92,11 +92,6 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
 
 
 
-  editorChanged(event): void {
-    if (event.event === 'text-change') {
-      this.content = event.html;
-    }
-  }
 
 
 
