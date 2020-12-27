@@ -10,7 +10,9 @@
 
       <quill-editor #editorElem
                     [styles]="quillStyles"
-                    [modules]="quillConfig">
+                    [modules]="quillConfig"
+                    (onEditorChanged)="editorChanged($event)"
+      >
       </quill-editor>
 
     </mat-tab>
@@ -20,7 +22,7 @@
         <label>Preview</label>
       </ng-template>
 
-      <div class="ql-editor" [innerHTML]="editorElementRef.content"></div>
+      <div class="ql-editor" [innerHTML]="content"></div>
 
     </mat-tab>
 
