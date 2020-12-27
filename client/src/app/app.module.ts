@@ -23,6 +23,8 @@ import {CommonModule} from '@angular/common';
 import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/manufacturer-sidebar.component';
 import {QuillEditorComponent, QuillModule} from 'ngx-quill';
 import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatTabsModule} from '@angular/material/tabs';
 
 
 @NgModule({
@@ -52,6 +54,8 @@ import { RichTextInputComponent } from './components/rich-text-input/rich-text-i
     QuillModule.forRoot({
       suppressGlobalRegisterWarning: true
     }),
+    BrowserAnimationsModule,
+    MatTabsModule,
   ],
   providers: [RestService, QuillEditorComponent],
   bootstrap: [AppComponent]

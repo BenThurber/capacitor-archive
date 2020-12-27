@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
@@ -24,7 +24,7 @@ require('aws-sdk/dist/aws-sdk');
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor, OnChanges, OnInit {
+export class RichTextInputComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
 
   // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'webp'];
@@ -37,6 +37,7 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
    * The name of the directory on the server to store media.  This should be unique like manufacturer.companyName
    */
   @Input() dirName: string;
+  selectedTabIndex = 1;
 
 
   quillConfig = {
@@ -73,6 +74,12 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
     // dirName isn't initialized because its value is from an async function
     this.dirName = changes.dirName.currentValue;
     this.ngOnInit();
+  }
+
+
+  async ngAfterViewInit(): Promise<void> {
+    // this.selectedTabIndex = 1;
+    setTimeout(() => this.selectedTabIndex = 0, 500);
   }
 
 
