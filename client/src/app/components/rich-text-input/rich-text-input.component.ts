@@ -37,7 +37,8 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
    * The name of the directory on the server to store media.  This should be unique like manufacturer.companyName
    */
   @Input() dirName: string;
-  selectedTabIndex = 1;
+
+  showBlankTab = true;
 
 
   quillConfig = {
@@ -76,10 +77,15 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
     this.ngOnInit();
   }
 
-
+  /**
+   * This function is used as a hacky work around to overcome a bug with angular where the <mat-tab>
+   * with index 0 isn't always selected on component render even if it is selected with selectedIndex prop.
+   * This workaround adds a blank 3rd tab, waits 800ms after the component renders, then deletes that tab.
+   */
   async ngAfterViewInit(): Promise<void> {
-    // this.selectedTabIndex = 1;
-    setTimeout(() => this.selectedTabIndex = 0, 500);
+    setTimeout(() => {
+      this.showBlankTab = false;
+    }, 800);
   }
 
 

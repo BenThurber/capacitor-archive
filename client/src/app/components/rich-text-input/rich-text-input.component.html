@@ -1,7 +1,7 @@
-<button (click)="selectedTabIndex = 0">Inc</button>
+
 <div style="min-height: 550px"> <!--This min-height should be the same as Quill's height + 100px-->
 
-  <mat-tab-group [(selectedIndex)]="selectedTabIndex" dynamicHeight>
+  <mat-tab-group [selectedIndex]="0" dynamicHeight>
 
     <mat-tab>
       <ng-template mat-tab-label>
@@ -15,7 +15,7 @@
 
     </mat-tab>
 
-    <mat-tab label="Preview">
+    <mat-tab>
       <ng-template mat-tab-label>
         <label>Preview</label>
       </ng-template>
@@ -23,6 +23,9 @@
       <div class="ql-editor" [innerHTML]="editorElementRef.content"></div>
 
     </mat-tab>
+
+    <!--This tab is used as a hacky work around so the first tab can be selected.-->
+    <mat-tab *ngIf="showBlankTab"></mat-tab>
 
   </mat-tab-group>
 
