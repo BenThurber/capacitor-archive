@@ -1,46 +1,54 @@
 
 <div style="min-height: 550px"> <!--This min-height should be the same as Quill's height + 100px-->
 
-  <mat-tab-group [selectedIndex]="0" dynamicHeight>
+  <form [formGroup]="richTextForm">
 
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <label>Edit</label>
-      </ng-template>
+    <mat-tab-group [selectedIndex]="0" dynamicHeight>
 
-      <quill-editor #editorElem
-                    [styles]="quillStyles"
-                    [modules]="quillConfig"
-                    (onEditorChanged)="editorChanged($event)"
-      >
-      </quill-editor>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <label>Edit</label>
+        </ng-template>
 
-    </mat-tab>
+        <!--Should be (onContentChanged)-->
+        <quill-editor #editorElem
+                      formControlName="editor"
+                      [styles]="quillStyles"
+                      [modules]="quillConfig"
+                      (onEditorCreated)="quill = $event"
+                      (onBlur)="editorChanged($event)"
+                      (onContentChanged)="editorContent = $event.html"
+        >
+        </quill-editor>
 
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <label>Preview</label>
-      </ng-template>
+      </mat-tab>
 
-
-      <div class="ql-editor" [innerHTML]="content"></div>
-
-    </mat-tab>
-
-    <mat-tab>
-      <ng-template mat-tab-label>
-        <label>HTML</label>
-      </ng-template>
-
-      <textarea style="flex: border-box" [(ngModel)]="content"></textarea>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <label>Preview</label>
+        </ng-template>
 
 
-    </mat-tab>
+        <div class="ql-editor" [innerHTML]="previewContent"></div>
 
-    <!--This tab is used as a hacky work around so the first tab can be selected.-->
-    <mat-tab *ngIf="showBlankTab"></mat-tab>
+      </mat-tab>
 
-  </mat-tab-group>
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <label>HTML</label>
+        </ng-template>
+
+        <textarea formControlName="htmlEditor" [(ngModel)]="htmlContent" (blur)="htmlEditorChanged($event)"></textarea>
+
+
+      </mat-tab>
+
+      <!--This tab is used as a hacky work around so the first tab can be selected.-->
+      <mat-tab *ngIf="showBlankTab"></mat-tab>
+
+    </mat-tab-group>
+
+  </form>
 
 </div>
 

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
-import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
+import {ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, Validators} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
@@ -38,7 +38,11 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
    */
   @Input() dirName: string;
 
-  content = '';
+  quill: any;
+  editorContent = '';
+  htmlContent = '';
+  previewContent = '';
+  richTextForm: FormGroup;
 
 
   showBlankTab = true;
@@ -67,8 +71,13 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
     backgroundColor: '#ffff'
   };
 
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit(): void {
+    this.richTextForm = this.formBuilder.group({
+      editor: ['', []],
+      htmlEditor: ['', []]
+    });
     // Set an attribute on the function uploadImage so it can be modified after passing the function to the imageUploader
     (uploadImage as any).dirName = this.dirName;
   }
@@ -77,7 +86,7 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
   ngOnChanges(changes): void {
     // dirName isn't initialized because its value is from an async function
     this.dirName = changes.dirName.currentValue;
-    this.ngOnInit();
+    (uploadImage as any).dirName = this.dirName;
   }
 
   /**
@@ -94,11 +103,37 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
 
 
   editorChanged(event): void {
-    if (event.event === 'text-change') {
-      this.content = event.html;
+    console.log(event);
+    let html = this.editorContent;
+    if (html === '<p><br/></p>') {
+      html = '';
+    } else {
+      html = html.replace(new RegExp('<p><br/>', 'g'), '<p>');
     }
+    this.htmlContent = html;
+
+    // this.richTextForm.setValue({
+    //   editor: this.editorContent,
+    //   htmlEditor: this.editorContent
+    // });
+    // if (event.event === 'text-change') {
+    //   this.editorContent = event.html;
+    // }
   }
 
+  htmlEditorChanged(event): void {
+    console.log(this.htmlContent);
+    // this.richTextForm.setValue({
+    //   editor: this.htmlContent,
+    //   htmlEditor: this.htmlContent
+    // });
+    console.log(this.quill);
+    const quillHtmlContent = this.htmlContent
+      .replace(new RegExp('<p><br></p>', 'g'), '<br/>')
+      .replace(new RegExp('<p>', 'g'), '<p><br/>')
+      .replace('<p><br/>', '<p>');
+    this.quill.pasteHTML(quillHtmlContent);
+  }
 
 
   // ------ControlValueAccessor implementations------
