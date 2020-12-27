@@ -1,28 +1,80 @@
 version: '3.3'
 services:
     
-    prodDatabase:
+    prodMySQL:
         image: 'mysql:8.0.22'
         container_name: prod-mysql
         restart: always
         ports:
             - '3306:3306'
+        volumes:
+            - 'prod-mysql-data:/var/lib/mysql'
         environment:
                 MYSQL_DATABASE: capacitor_prod
         env_file:
-                - mysql-variables.env
+            - mysql.env
+
+
+    prodDatabaseBackup:
+        image: 'capacitor-mysql-backup:latest-prod'
+        build:
+            context: ./dockerfiles/custom-mysql-backup-container/
+            args:
+                 - FILENAME_SCRIPT=ch-name_prod.sh
+
+        container_name: prod-mysql-backup
+        restart: always
+        environment:
+            - DB_SERVER=172.17.0.1
+            - DB_USER=root
+            - DB_PORT=3306
+            # Once a day 60*24=1440
+            - DB_DUMP_FREQ=1440
+            # Start each backup at 9:05 PM NZST
+            - DB_DUMP_BEGIN=0805
+            - DB_DUMP_SAFECHARS
+        env_file:
+            - mysql-backup.env
+        depends_on:
+            - prodMySQL
     
 
-    testDatabase:
+    testMySQL:
         image: 'mysql:8.0.22'
         container_name: test-mysql
         restart: always
         ports:
             - '3307:3306'
+        volumes:
+            - 'test-mysql-data:/var/lib/mysql'
         environment:
                 MYSQL_DATABASE: capacitor_test
         env_file:
-                - mysql-variables.env
+            - mysql.env
+    
+
+    testDatabaseBackup:
+        image: 'capacitor-mysql-backup:latest-test'
+        build:
+            context: ./dockerfiles/custom-mysql-backup-container/
+            args:
+                 - FILENAME_SCRIPT=ch-name_test.sh
+
+        container_name: test-mysql-backup
+        restart: always
+        environment:
+            - DB_SERVER=172.17.0.1
+            - DB_USER=root
+            - DB_PORT=3307
+            # Once a day 60*24=1440
+            - DB_DUMP_FREQ=1440
+            # Start each backup at 9:35 PM NZST
+            - DB_DUMP_BEGIN=0835
+            - DB_DUMP_SAFECHARS
+        env_file:
+            - mysql-backup.env
+        depends_on:
+            - testMySQL
 
 
     phpmyadmin:
@@ -64,7 +116,8 @@ services:
 
     testClient:
         container_name: test-client
-        image: 'httpd:alpine'
+        image: 'httpd-custom-config:latest'
+        build: ./dockerfiles/custom-httpd-container/
         restart: always
         ports:
             - '35506:80'
@@ -79,7 +132,7 @@ services:
         ports:
             - '35505:8080'
         depends_on:
-            - testDatabase
+            - testMySQL
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=dev
         volumes:
@@ -88,7 +141,8 @@ services:
 
     prodClient:
         container_name: prod-client
-        image: 'httpd:alpine'
+        image: 'httpd-custom-config:latest'
+        build: ./dockerfiles/custom-httpd-container/
         restart: always
         ports:
             - '35504:80'
@@ -103,7 +157,7 @@ services:
         ports:
             - '35503:8080'
         depends_on:
-            - prodDatabase
+            - prodMySQL
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=prod
         volumes:
@@ -111,10 +165,15 @@ services:
 
 
 
-
 volumes:
     gitlab-runner-config:
         external: false
+
+    test-mysql-data:
+        external: false
+    prod-mysql-data:
+        external: false
+
     test-client-build:
         external: false
     test-server-build:

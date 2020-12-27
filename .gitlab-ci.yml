@@ -18,6 +18,10 @@ setup:
   artifacts:
     paths:
       - client/node_modules/
+  only:
+    refs:
+      - master
+      - development
 
 variables:
   GIT_DEPTH: 0
@@ -27,12 +31,6 @@ junit:
   script:
     - cd server
     - ./gradlew test
-
-jasmine:
-  stage: test
-  script:
-    - cd client
-    - ng test --browsers ChromeHeadlessNoSandbox --watch=false
 
 
 deploy-test-server:
@@ -84,7 +82,7 @@ deploy-test-client:
   script:
     # Create artifact
     - cd client
-    - ng --prod --aot build
+    - ng --aot --configuration=dev build
     # Move artifact to volume shared by apache
     - rm -rf /home/gitlab-runner/test-client/* || true
     - cp -r ./dist/client/* /home/gitlab-runner/test-client/
@@ -99,7 +97,7 @@ deploy-prod-client:
   script:
     # Create artifact
     - cd client
-    - ng --prod --aot build
+    - ng --aot --configuration=prod build
     # Move artifact to volume shared by apache
     - rm -rf /home/gitlab-runner/prod-client/* || true
     - cp -r ./dist/client/* /home/gitlab-runner/prod-client/

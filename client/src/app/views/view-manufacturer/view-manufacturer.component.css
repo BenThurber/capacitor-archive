@@ -1,0 +1,12 @@
+
+.center__box {
+  text-align: left;
+  margin-left: 15%;
+  margin-right: 25%;
+  margin-top: 50px;
+}
+
+.edit__button {
+  float: right;
+  margin-top: 5px;
+}

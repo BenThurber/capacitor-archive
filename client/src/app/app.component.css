@@ -1,9 +1,12 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
 
+.wrapper {
+  min-height: calc(100vh - 50px);
+}
 
-
-
-.logo {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+.views {
+  overflow: hidden;
 }

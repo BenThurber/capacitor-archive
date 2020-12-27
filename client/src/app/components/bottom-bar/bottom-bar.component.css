@@ -1,0 +1,32 @@
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #b3b7ba;
+}
+
+li, a {
+  font-family: "Lilita One", serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: darkgoldenrod;
+  text-decoration: none;
+}
+
+footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 6px 2%;
+}
+
+.nav__links li {
+  display: inline-block;
+  padding: 0px 20px;
+}
+
+.nav__links li a {
+  transition: all 0.3s ease 0s;
+}

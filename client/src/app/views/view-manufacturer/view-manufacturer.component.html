@@ -1,0 +1,30 @@
+<div class="content">
+  <div *ngIf="manufacturer$; else loading" class="center__box">
+
+    <div class="edit__button">
+      <a href [routerLink]="'/manufacturer/edit/' + manufacturer$.companyName.toLowerCase()">[Edit Page]</a>
+    </div>
+
+    <div *ngIf="manufacturer$.companyName">
+      <h2>{{manufacturer$.companyName}}</h2>
+    </div>
+
+    <div *ngIf="manufacturer$.openYear">
+      <strong>Opened: </strong>{{manufacturer$.openYear}}
+    </div>
+
+    <div *ngIf="manufacturer$.closeYear">
+      <strong>Closed: </strong>{{manufacturer$.closeYear}}
+    </div>
+
+    <div *ngIf="manufacturer$.summary">
+      <div class="ql-editor" [innerHTML]="manufacturer$.summary | safeHtml"></div>
+    </div>
+
+  </div>
+
+  <ng-template #loading>
+    <h3>Loading Page...</h3>
+  </ng-template>
+
+</div>
