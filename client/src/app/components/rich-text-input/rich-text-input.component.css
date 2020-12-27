@@ -4,3 +4,8 @@ label {
   font-size: 15px;
 }
 
+textarea {
+  resize: none;
+  width: 99%;
+  height: 450px;
+}
