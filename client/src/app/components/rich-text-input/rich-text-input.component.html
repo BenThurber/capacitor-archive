@@ -24,6 +24,15 @@
 
     </mat-tab>
 
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <label>HTML</label>
+      </ng-template>
+
+      <textarea [(ngModel)]="editorElementRef.content"></textarea>
+
+    </mat-tab>
+
     <!--This tab is used as a hacky work around so the first tab can be selected.-->
     <mat-tab *ngIf="showBlankTab"></mat-tab>
 
