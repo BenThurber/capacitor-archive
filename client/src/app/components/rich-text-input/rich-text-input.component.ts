@@ -47,10 +47,11 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
     toolbar: [
       ['bold', 'italic', 'underline'],
       [{ color: [] }],
+      [{ align: [false, 'center', 'right'] }],
       [{ size: ['small', false, 'large', 'huge'] }],
       [{ font: [] }],
       [{ header: 1 }],   // This may be confusing to users
-      [{ align: [false, 'center', 'right'] }],
+      [{ script: 'super' }],
       ['link', 'image'],
     ],
     imageUploader: {
