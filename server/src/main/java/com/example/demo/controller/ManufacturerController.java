@@ -54,23 +54,6 @@ public class ManufacturerController {
 
 
     /**
-     * Get a manufacturer by id
-     * @param id id of the manufacturer to get
-     */
-    @GetMapping("id/{id}")
-    public ManufacturerResponse getManufacturerById(@PathVariable Long id, HttpServletResponse response) {
-        Manufacturer manufacturer = manufacturerRepository.findById(id);
-
-        if (manufacturer == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid manufacturer id, manufacturer not found");
-        }
-
-        response.setStatus(HttpServletResponse.SC_OK);
-        return new ManufacturerResponse(manufacturer);
-    }
-
-
-    /**
      * Get a manufacturer by companyName case insensitive.  Because company_name is unique in the database, there is
      * only ever one Manufacturer returned.
      * @param companyName name of the manufacturer to get

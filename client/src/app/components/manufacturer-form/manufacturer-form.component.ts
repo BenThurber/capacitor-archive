@@ -16,7 +16,7 @@ import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 })
 export class ManufacturerFormComponent implements OnInit, OnChanges {
 
-  @Input() manufacturer: Manufacturer;
+  @Input('manufacturer') existingManufacturer: Manufacturer;
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
   submitting = false;
@@ -51,12 +51,12 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     }, {validator: checkIfCloseYearAfterOpenYear});
 
     // Populate form values
-    if (this.manufacturer) {
+    if (this.existingManufacturer) {
       this.manufacturerForm.setValue({
-        companyName: this.manufacturer.companyName,
-        openYear: this.manufacturer.openYear,
-        closeYear: this.manufacturer.closeYear,
-        summary: this.manufacturer.summary,
+        companyName: this.existingManufacturer.companyName,
+        openYear: this.existingManufacturer.openYear,
+        closeYear: this.existingManufacturer.closeYear,
+        summary: this.existingManufacturer.summary,
         captcha: null,
       });
     }
@@ -65,39 +65,37 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
 
 
   /**
-   * Initialize manufacturer when its value is returned from back end
+   * Initialize existingManufacturer when its value is returned from back end
    */
   ngOnChanges(changes): void {
-    // manufacturer isn't initialized because its value is from an async function
-    this.manufacturer = changes.manufacturer.currentValue;
+    // existingManufacturer isn't initialized because its value is from an async function
+    this.existingManufacturer = changes.existingManufacturer.currentValue;
     this.ngOnInit();
   }
 
 
-  onSubmit(manufacturerData): void {
+  onSubmit(manufacturer: Manufacturer): void {
     this.submitting = true;
 
-    if (this.manufacturer === undefined) {
+    if (this.existingManufacturer === undefined) {
 
-      this.submitCreate(manufacturerData);
+      this.submitCreate(manufacturer);
 
     } else {
 
-      if (!(this.manufacturer instanceof Object && this.manufacturer.id >= 1)) {
-        console.error('Can\'t determine type of manufacturer to edit');
+      if (!(this.existingManufacturer instanceof Object && this.existingManufacturer.companyName)) {
+        console.error('Can\'t edit manufacturer.  Bad data from backend');
         return;
       }
 
-      this.submitEdit(manufacturerData);
+      this.submitEdit(manufacturer);
 
     }
 
   }
 
 
-  submitCreate(manufacturerData): void {
-    const manufacturer = new Manufacturer();
-    manufacturer.insertData(manufacturerData);
+  submitCreate(manufacturer): void {
 
     return this.restService.createManufacturer(manufacturer).subscribe({
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
@@ -108,12 +106,9 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   }
 
 
-  submitEdit(manufacturerData): void {
-    const manufacturer = new Manufacturer();
-    manufacturer.id = this.manufacturer.id;
-    manufacturer.insertData(manufacturerData);
+  submitEdit(manufacturer): void {
 
-    return this.restService.editManufacturer(this.manufacturer.companyName, manufacturer).subscribe({
+    return this.restService.editManufacturer(this.existingManufacturer.companyName, manufacturer).subscribe({
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
         () => this.refreshManufacturers.refresh()
       ),

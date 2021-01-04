@@ -77,10 +77,6 @@ class ManufacturerControllerTest {
             return manufacturer;
         });
 
-        when(manufacturerRepository.findById(Mockito.any(Long.class))).thenAnswer(i -> {
-            Long id = i.getArgument(0);
-            return manufacturerMockTable.stream().filter(m -> id.equals(m.getId())).findFirst().orElse(null);
-        });
 
         when(manufacturerRepository.findByCompanyNameLowerIgnoreCase(Mockito.any(String.class))).thenAnswer(i -> {
             String companyName = i.getArgument(0);
@@ -230,7 +226,7 @@ class ManufacturerControllerTest {
     void newManufacturer_datesWrongOrder_fail() throws Exception {
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
-                .content(manufacturerDatesToHighJson)
+                .content(manufacturerDatesInWrongOrder)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -290,45 +286,6 @@ class ManufacturerControllerTest {
 
 
     /**
-     * Test get manufacturer by id success.
-     */
-    @Test
-    void getManufacturerById_success() throws Exception {
-        manufacturerRepository.save(manufacturer1);
-
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/id/1")
-                .content(newManufacturer1Json)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
-
-        MvcResult result = mvc.perform(httpReq)
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String jsonResponseStr = result.getResponse().getContentAsString();
-        ManufacturerResponse manufacturerReceived = objectMapper.readValue(jsonResponseStr, ManufacturerResponse.class);
-        assertEquals(new ManufacturerResponse(manufacturer1), manufacturerReceived);
-    }
-
-
-    /**
-     * Test no manufacturer with id fail.
-     */
-    @Test
-    void getManufacturerById_doesNotExist_fail() throws Exception {
-        manufacturerRepository.save(manufacturer1);
-
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/id/3")
-                .content(newManufacturer1Json)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
-
-        mvc.perform(httpReq).andExpect(status().isNotFound());
-    }
-
-
-
-    /**
      * Test get manufacturer by name success.
      */
     @Test
@@ -346,6 +303,8 @@ class ManufacturerControllerTest {
 
         String jsonResponseStr = result.getResponse().getContentAsString();
         ManufacturerResponse manufacturerReceived = objectMapper.readValue(jsonResponseStr, ManufacturerResponse.class);
+        System.out.println(manufacturer1);
+        System.out.println(manufacturerReceived);
         assertEquals(new ManufacturerResponse(manufacturer1), manufacturerReceived);
     }
 

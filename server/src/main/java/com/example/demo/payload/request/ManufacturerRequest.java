@@ -7,7 +7,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
+import java.util.Objects;
 
 
 @NumbersInOrder(
@@ -20,7 +20,7 @@ public class ManufacturerRequest {
     @NotNull(message = "Manufacturer is missing a name")
     @Size(min=1, message="Manufacturer is missing a name")
     @JsonProperty("companyName")
-        private String companyName;
+    private String companyName;
 
     @Max(value = 2025, message = "openYear is greater than 2025")
     @Min(value = 1000, message = "openYear is less than 1000")
@@ -69,5 +69,21 @@ public class ManufacturerRequest {
 
     public void setBio(String bio) {
         this.summary = bio;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ManufacturerRequest that = (ManufacturerRequest) o;
+        return Objects.equals(companyName, that.companyName) &&
+                Objects.equals(openYear, that.openYear) &&
+                Objects.equals(closeYear, that.closeYear) &&
+                Objects.equals(summary, that.summary);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(companyName, openYear, closeYear, summary);
     }
 }
