@@ -4,6 +4,7 @@ import com.example.demo.payload.request.ManufacturerRequest;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Manufacturer {
@@ -96,18 +97,21 @@ public class Manufacturer {
         this.summary = summary;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Manufacturer that = (Manufacturer) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(companyName, that.companyName) &&
+                Objects.equals(companyNameLower, that.companyNameLower) &&
+                Objects.equals(openYear, that.openYear) &&
+                Objects.equals(closeYear, that.closeYear) &&
+                Objects.equals(summary, that.summary);
+    }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Manufacturer) {
-            final Manufacturer other = (Manufacturer) obj;
-            return other.getId().equals(this.getId()) || (
-                    other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
-                    other.getOpenYear().equals(this.getOpenYear()) &&
-                    other.getCloseYear().equals(this.getCloseYear()) &&
-                    other.getSummary().equals(this.getSummary()));
-
-        }
-        return false;
+    public int hashCode() {
+        return Objects.hash(id, companyName, companyNameLower, openYear, closeYear, summary);
     }
 }

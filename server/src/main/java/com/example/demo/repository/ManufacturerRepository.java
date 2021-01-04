@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface ManufacturerRepository  extends JpaRepository<Manufacturer, Integer> {
 
-    Manufacturer findById(Long id);
     Manufacturer findByCompanyNameLowerIgnoreCase(String companyName);
 
     @Query(value = "SELECT company_name FROM manufacturer", nativeQuery = true)

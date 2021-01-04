@@ -3,10 +3,9 @@ package com.example.demo.payload.response;
 import com.example.demo.model.Manufacturer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ManufacturerResponse {
+import java.util.Objects;
 
-    @JsonProperty("id")
-    private Long id;
+public class ManufacturerResponse {
 
     @JsonProperty("companyName")
     private String companyName;
@@ -24,7 +23,6 @@ public class ManufacturerResponse {
     public ManufacturerResponse(Manufacturer manufacturer) {
         Manufacturer m = manufacturer;
 
-        setId(m.getId());
         setCompanyName(m.getCompanyName());
         setOpenYear(m.getOpenYear());
         setCloseYear(m.getCloseYear());
@@ -33,13 +31,6 @@ public class ManufacturerResponse {
 
     public ManufacturerResponse() { }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getCompanyName() {
         return companyName;
@@ -73,18 +64,19 @@ public class ManufacturerResponse {
         this.summary = summary;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ManufacturerResponse that = (ManufacturerResponse) o;
+        return Objects.equals(companyName, that.companyName) &&
+                Objects.equals(openYear, that.openYear) &&
+                Objects.equals(closeYear, that.closeYear) &&
+                Objects.equals(summary, that.summary);
+    }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof ManufacturerResponse) {
-            final ManufacturerResponse other = (ManufacturerResponse) obj;
-            return other.getId().equals(this.getId()) || (
-                    other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
-                            other.getOpenYear().equals(this.getOpenYear()) &&
-                            other.getCloseYear().equals(this.getCloseYear()) &&
-                            other.getSummary().equals(this.getSummary()));
-
-        }
-        return false;
+    public int hashCode() {
+        return Objects.hash(companyName, openYear, closeYear, summary);
     }
 }
