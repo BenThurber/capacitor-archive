@@ -95,7 +95,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   }
 
 
-  submitCreate(manufacturer): void {
+  submitCreate(manufacturer: Manufacturer): void {
 
     return this.restService.createManufacturer(manufacturer).subscribe({
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
@@ -106,7 +106,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   }
 
 
-  submitEdit(manufacturer): void {
+  submitEdit(manufacturer: Manufacturer): void {
 
     return this.restService.editManufacturer(this.existingManufacturer.companyName, manufacturer).subscribe({
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
