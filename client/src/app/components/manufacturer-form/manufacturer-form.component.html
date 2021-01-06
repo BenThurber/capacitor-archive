@@ -5,6 +5,10 @@
     (ngSubmit)="!manufacturerForm.invalid && onSubmit(manufacturerForm.value)"
   >
 
+    <div *ngIf="errorsBackend.length > 0" class="error__submit">
+      <div *ngFor="let error of errorsBackend"><strong>Error: </strong>{{error.message}}</div>
+    </div>
+
 
     <div class="input">
       <label for="company-name">

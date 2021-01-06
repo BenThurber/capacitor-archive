@@ -29,6 +29,13 @@ public class ManufacturerController {
      */
     @PostMapping(value = "create")
     public void createManufacturer(@Validated @RequestBody ManufacturerRequest manufacturerRequest, HttpServletResponse response) {
+
+        if (manufacturerRepository.findByCompanyNameLowerIgnoreCase(manufacturerRequest.getCompanyName()) != null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format("The name \"%s\" already exists.", manufacturerRequest.getCompanyName())
+            );
+        }
         manufacturerRepository.save(new Manufacturer(manufacturerRequest));
         response.setStatus(HttpServletResponse.SC_CREATED);
     }

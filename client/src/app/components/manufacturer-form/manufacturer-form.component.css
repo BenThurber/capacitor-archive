@@ -7,6 +7,13 @@
   font-size: 15px;
 }
 
+.error__submit {
+  padding: 10px;
+  background-color: #ff7c6e;
+  color: #383838;
+  /*font-family: "Courier New", monospace;*/
+}
+
 .captcha__error__msg {
   margin-top: 8px;
   font-weight: bold;
