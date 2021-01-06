@@ -2,7 +2,7 @@
  * Unit tests in the controller class require a lot of JSON string literals which are not represented well.
  * This class builds JSON strings from lists of arguments, arrays, and Maps in a way that is easier to read.
  */
-package utilities;
+package testUtilities;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
