@@ -7,7 +7,7 @@ import {Location} from '@angular/common';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
-import {ErrorResponse} from '../../models/error-response.model';
+import {SpringErrorResponse} from '../../models/spring-error-response.model';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
   submitting = false;
-  errorsBackend: Array<ErrorResponse> = [];
+  errorsBackend: Array<SpringErrorResponse> = [];
 
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
@@ -104,7 +104,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
         () => this.refreshManufacturers.refresh()
       ),
-      error: error => this.handleBackendError(error.error),  // This should be improved
+      error: error => this.handleBackendError(error.error),
     });
   }
 
@@ -115,12 +115,12 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
         () => this.refreshManufacturers.refresh()
       ),
-      error: error => this.handleBackendError(error.error),  // This should be improved
+      error: error => this.handleBackendError(error.error),
     });
   }
 
 
-  handleBackendError(error: ErrorResponse): void {
+  handleBackendError(error: SpringErrorResponse): void {
     this.submitting = false;
     this.errorsBackend.push(error);
   }
