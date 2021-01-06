@@ -10,7 +10,7 @@ import java.util.Set;
 public class TextUtil {
 
 
-    static String title(String str) {
+    public static String title(String str) {
         return title(str, new Character[]{' '});
     }
 
@@ -21,7 +21,7 @@ public class TextUtil {
      *                     spaces and dashes.
      * @return capitalized string
      */
-    static String title(String str, Character[] deliminators) {
+    public static String title(String str, Character[] deliminators) {
         Set<Character> deliminatorSet = new HashSet<>(Arrays.asList(deliminators));
         char[] chars = str.toLowerCase().toCharArray();
         boolean previousCharIsLetter = false;

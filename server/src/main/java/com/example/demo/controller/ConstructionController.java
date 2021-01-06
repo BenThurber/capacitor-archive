@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Construction;
 import com.example.demo.repository.ConstructionRepository;
+import com.example.demo.service.TextUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -20,16 +21,21 @@ public class ConstructionController {
 
 
     /**
-     * Create a new Construction
+     * Create a new Construction.  Capitalizes the name so that the letter of each first word is capitalized.  This is
+     * to reduce naming convention differences between construction types.
      * @param constructionName the name of the new construction type
+     * @return the capitalized construction name
      */
     @PostMapping(value = "/create")
-    public void addNewConstruction(@RequestBody String constructionName, HttpServletResponse response) {
+    public String addNewConstruction(@RequestBody String constructionName, HttpServletResponse response) {
 
-        Construction newConstruction = new Construction(constructionName);
+        String capitalizedConstructionName = TextUtil.title(constructionName, new Character[]{' ', '-', '_'});
+        Construction newConstruction = new Construction(capitalizedConstructionName);
+
         constructionRepository.save(newConstruction);
         response.setStatus(HttpServletResponse.SC_CREATED);
 
+        return capitalizedConstructionName;
     }
 
 
