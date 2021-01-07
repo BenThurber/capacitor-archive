@@ -1,3 +1,11 @@
+# Overview
+
+**View the site at [capacitor-archive.com](http://www.capacitor-archive.com)**  
+(And the test site [here](http://www.capacitor-archive.com:35506) from the development branch)  
+
+
+This app uses an [Angular](https://angular.io/) front end and [Spring Boot](https://spring.io/projects/spring-boot) backend.  A DevOps methodology has been employed through gitlab-runner's [CI/CD pipeline](https://docs.gitlab.com/ee/ci/) that performs automatic testing and deployment.
+
 # The Capacitor Archive setup
 <sup>**If visiting from github please come to [gitlab.com](https://gitlab.com/capacitor-archive/capacitor-archive)**</sup>
 

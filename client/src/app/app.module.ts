@@ -26,6 +26,10 @@ import { RichTextInputComponent } from './components/rich-text-input/rich-text-i
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
+import { CreateCapacitorComponent } from './views/create-capacitor/create-capacitor.component';
+import { CapacitorFormComponent } from './components/capacitor-form/capacitor-form.component';
+import { InputCapacitanceComponent } from './components/input-capacitance/input-capacitance.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 @NgModule({
@@ -44,6 +48,9 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     ManufacturerSidebarComponent,
     RichTextInputComponent,
     SafeHtmlPipe,
+    CreateCapacitorComponent,
+    CapacitorFormComponent,
+    InputCapacitanceComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -58,8 +65,9 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
     }),
     BrowserAnimationsModule,
     MatTabsModule,
+    MatExpansionModule,
   ],
   providers: [RestService, QuillEditorComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
