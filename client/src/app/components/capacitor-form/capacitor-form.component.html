@@ -1,0 +1,114 @@
+<div style="margin: 35px 15px;">
+
+
+  <!--Manufacturer Section-->
+  <div id="manufacturer-section" class="input__section">
+
+    <div class="info__blurb">
+      Don't see the manufacturer in the list?
+      <br>
+      <strong><a routerLink="/manufacturer/create">Add a new manufacturer</a></strong>
+
+    </div>
+
+    <label class="input__label__major" for="manufacturer">Select manufacturer:</label>
+    <select id="manufacturer" class="input"></select>
+
+    <hr>
+  </div>
+
+
+  <!--Type Section-->
+  <div id="type-section" class="input__section">
+
+    <div style="margin-bottom: 20px">
+      <img src="../../../assets/aerovox-type.png" height="100px" style="margin-right: 20px; margin-bottom: 9px">
+      <img src="../../../assets/dublier-type.png" height="120px">
+    </div>
+
+    <div class="info__blurb">
+      Don't see the type in the list?
+      <br>
+      <strong><a routerLink="/not-implemented">Add a new type</a></strong>
+
+      <div class="type__info">
+        <h3>What is a "type"?</h3>
+        A type (sometimes called series) is a group of capacitors with the
+        same construction but different capcitance/voltage ratings.
+        <img src="../../../assets/solar-type-cropped.jpg" width="230px" style="margin-top: 8px">
+      </div>
+
+    </div>
+
+    <label class="input__label__major" for="type">Select Type/Series:</label>
+    <select id="type" class="input"></select>
+    <br>
+
+    <label class="input__label__minor" for="type-name">Type Name*</label>
+    <select id="type-name" class="input"></select>
+    <br>
+
+    <label class="input__label__minor" for="construction">Construction*</label>
+    <select id="construction" class="input"></select>
+    <br>
+
+    <div id="expansion-panel-container">
+      <mat-expansion-panel class="input">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Include Years Produced
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div style="all: initial">
+          <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
+          <input id="start-year" type="text" class="start__end__input" size="10" placeholder="optional">
+          <br>
+
+          <label class="input__label__minor start__end__label" for="end-year">End Year</label>
+          <input id="end-year" type="text" class="start__end__input" size="10" placeholder="optional">
+        </div>
+
+      </mat-expansion-panel>
+    </div>
+
+
+    <label class="input__label__minor" for="description">Description</label>
+    <br>
+    <textarea id="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
+    <br>
+
+    <hr>
+  </div>
+
+
+  <!--Capacitor Section-->
+  <div id="capacitor-section" class="input__section">
+
+    <label class="input__label__major">Add Capacitor:</label>
+    <br>
+    <br>
+
+    <div class="input">
+      <label class="input__label__minor" for="capacitance">Capacitance*</label>
+      <app-input-capacitance id="capacitance"></app-input-capacitance>
+    </div>
+
+    <label class="input__label__minor" for="voltage">Voltage*</label>
+    <input id="voltage" type="number" class="input" size="8">
+    <br>
+
+    <label class="input__label__minor" for="identifier">Identifiers</label>
+    <input id="identifier" type="text" class="input" placeholder="optional">
+    <br>
+
+    <label class="input__label__minor" for="notes">Notes</label>
+    <br>
+    <textarea id="notes" class="input" rows="4" cols="35" placeholder="optional"></textarea>
+    <br>
+
+    <hr>
+  </div>
+
+
+</div>
