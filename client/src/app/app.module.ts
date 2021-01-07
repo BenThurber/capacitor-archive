@@ -29,6 +29,7 @@ import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { CreateCapacitorComponent } from './views/create-capacitor/create-capacitor.component';
 import { CapacitorFormComponent } from './components/capacitor-form/capacitor-form.component';
 import { InputCapacitanceComponent } from './components/input-capacitance/input-capacitance.component';
+import {MatExpansionModule} from '@angular/material/expansion';
 
 
 @NgModule({
@@ -64,8 +65,9 @@ import { InputCapacitanceComponent } from './components/input-capacitance/input-
     }),
     BrowserAnimationsModule,
     MatTabsModule,
+    MatExpansionModule,
   ],
   providers: [RestService, QuillEditorComponent],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }

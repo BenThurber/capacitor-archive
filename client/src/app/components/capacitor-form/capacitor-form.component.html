@@ -1,6 +1,7 @@
 <div style="margin: 35px 15px;">
 
 
+  <!--Manufacturer Section-->
   <div id="manufacturer-section" class="input__section">
 
     <div class="info__blurb">
@@ -16,6 +17,7 @@
   </div>
 
 
+  <!--Type Section-->
   <div id="type-section" class="input__section">
 
     <div class="info__blurb">
@@ -37,7 +39,14 @@
     <select id="construction" class="input"></select>
     <br>
 
-    <label class="input__label__minor">Include years produced?</label>
+    <mat-expansion-panel hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Include Years Produced
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>This is the primary content of the panel.</p>
+    </mat-expansion-panel>
     <br>
     <br>
 
@@ -50,6 +59,7 @@
   </div>
 
 
+  <!--Capacitor Section-->
   <div id="capacitor-section" class="input__section">
 
     <label class="input__label__major">Add Capacitor:</label>

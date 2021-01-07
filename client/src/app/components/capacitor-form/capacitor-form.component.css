@@ -27,3 +27,13 @@
   font-size: 16px;
   margin-right: 18px;
 }
+
+mat-expansion-panel {
+  width: 280px;
+  background-color: transparent;
+}
+
+mat-panel-title {
+  font-family: 'Times New Roman', serif;
+}
+
