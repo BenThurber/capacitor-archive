@@ -14,6 +14,7 @@
     <label class="input__label__major" for="manufacturer">Select manufacturer:</label>
     <select id="manufacturer" class="input"></select>
 
+    <hr>
   </div>
 
 
@@ -39,23 +40,33 @@
     <select id="construction" class="input"></select>
     <br>
 
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Include Years Produced
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <p>This is the primary content of the panel.</p>
-    </mat-expansion-panel>
-    <br>
-    <br>
+    <div id="expansion-panel-container">
+      <mat-expansion-panel class="input">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Include Years Produced
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div style="all: initial">
+          <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
+          <input id="start-year" type="text" class="start__end__input" size="10" placeholder="optional">
+          <br>
+
+          <label class="input__label__minor start__end__label" for="end-year">End Year</label>
+          <input id="end-year" type="text" class="start__end__input" size="10" placeholder="optional">
+        </div>
+
+      </mat-expansion-panel>
+    </div>
+
 
     <label class="input__label__minor" for="description">Description</label>
     <br>
     <textarea id="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
     <br>
 
-
+    <hr>
   </div>
 
 
@@ -84,7 +95,7 @@
     <textarea id="notes" class="input" rows="4" cols="35" placeholder="optional"></textarea>
     <br>
 
-
+    <hr>
   </div>
 
 

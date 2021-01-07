@@ -9,7 +9,6 @@
 .input__section {
   float: left;
   width: 100%;
-  margin-bottom: 60px;
 }
 
 .input {
@@ -28,12 +27,44 @@
   margin-right: 18px;
 }
 
+#expansion-panel-container {
+  background-color: rgba(193, 227, 242, 0.65);
+  margin-left: -25px;
+  margin-top: -2px;
+  width: 280px;
+  border-radius: 10px;
+}
+
 mat-expansion-panel {
   width: 280px;
   background-color: transparent;
+  box-shadow: none !important;
+  border-radius: 10px !important;
 }
 
 mat-panel-title {
+  all: initial;
+  font-size: 16px;
   font-family: 'Times New Roman', serif;
+  cursor: pointer;
 }
 
+.start__end__input {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.start__end__label {
+  margin-left: 15px;
+  margin-right: 10px;
+}
+
+hr {
+  border: 0;
+  clear:both;
+  display:block;
+  background-color: #5a5a5a;
+  height: 1.5px;
+  margin-top: 15px;
+  margin-bottom: 45px;
+}
