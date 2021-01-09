@@ -7,6 +7,9 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class ImageComponent implements OnInit {
 
+  public static readonly webpIsSupported: boolean = ImageComponent.supportsWebp();
+  webpIsSupported = ImageComponent.webpIsSupported;
+
   @Input() src: string;
   @Input('webp-src') webpSrc: string;
   @Input('fallback-src') fallbackSrc: string;
@@ -21,13 +24,12 @@ export class ImageComponent implements OnInit {
 
   @Input('fallback-extension') fallbackExtension: string;
 
-  webpIsSupported: boolean = null;
 
   /**
    * checks if the browser supports webp images
    * @return boolean true if supported
    */
-  static supportsWebp(): boolean {
+  private static supportsWebp(): boolean {
     let supported;
     const loadsWebpOnCanvas = document.createElement('canvas').toDataURL('image/webp').indexOf('data:image/webp') === 0;
     const browser = ImageComponent.getBrowser();
@@ -53,7 +55,7 @@ export class ImageComponent implements OnInit {
    * Gets the browser name and version.
    * @return BrowserData the browser name and version number as a string and a number.
    */
-  static getBrowser(): BrowserData {
+  private static getBrowser(): BrowserData {
     const ua = navigator.userAgent;
     let tem;
     let M = ua.match(/(opera|chrome|safari|firefox|msie|trident(?=\/))\/?\s*(\d+)/i) || [];
@@ -107,7 +109,6 @@ export class ImageComponent implements OnInit {
       this.fallbackSrc = this.webpSrc;
     }
 
-    this.webpIsSupported = ImageComponent.supportsWebp();
   }
 
 }
