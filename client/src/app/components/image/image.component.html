@@ -3,4 +3,24 @@ A wrapper for <img> tags that uses webp or a fallback if not supported.
 Only the image format this is supported is loaded.
 -->
 
-<p>Webp is supported? {{webpIsSupported}}</p>
+<img *ngIf="webpIsSupported === true"
+     [attr.src]="webpSrc"
+     [attr.sizes]="sizes"
+     [attr.width]="width"
+     [attr.height]="height"
+     [attr.useMap]="useMap"
+     [attr.isMap]="isMap"
+     [attr.alt]="alt"
+>
+
+
+<img *ngIf="webpIsSupported === false"
+     [attr.src]="fallbackSrc"
+     [attr.srcset]="fallbackSrcSet"
+     [attr.sizes]="sizes"
+     [attr.width]="width"
+     [attr.height]="height"
+     [attr.useMap]="useMap"
+     [attr.isMap]="isMap"
+     [attr.alt]="alt"
+>
