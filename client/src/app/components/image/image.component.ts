@@ -1,5 +1,4 @@
 import {Component, Input, OnInit} from '@angular/core';
-const fs = require('fs');
 
 @Component({
   selector: 'app-image',
@@ -19,6 +18,8 @@ export class ImageComponent implements OnInit {
   @Input('usemap') useMap: string;
   @Input('ismap') isMap: string;
   @Input() alt: string;
+
+  @Input('fallback-extension') fallbackExtension: string;
 
   webpIsSupported: boolean = null;
 
@@ -89,17 +90,12 @@ export class ImageComponent implements OnInit {
 
     if (baseSrc) {
 
-      if (!this.webpSrc && fs.existsSync(baseSrc + '.webp')) {
+      if (!this.webpSrc) {
         this.webpSrc = baseSrc + '.webp';
       }
 
       if (!this.fallbackSrc) {
-        for (const extension of ['png', 'jpg', 'jpeg', 'gif', 'jfif']) {
-          if (fs.existsSync(baseSrc + '.' + extension)) {
-            this.fallbackSrc = baseSrc + '.' + extension;
-            break;
-          }
-        }
+        this.fallbackSrc = baseSrc + '.' + this.fallbackExtension.trim().replace('.', '');
       }
 
     }
@@ -107,11 +103,11 @@ export class ImageComponent implements OnInit {
     if (!this.webpSrc) {
       this.webpSrc = this.fallbackSrc;
     }
+    if (!this.fallbackSrc) {
+      this.fallbackSrc = this.webpSrc;
+    }
 
     this.webpIsSupported = ImageComponent.supportsWebp();
-
-    console.log(this.webpSrc);
-    console.log(this.fallbackSrc);
   }
 
 }
