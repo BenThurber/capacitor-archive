@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, Input, OnInit} from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-image',
@@ -13,7 +14,7 @@ export class ImageComponent implements OnInit {
   @Input() src: string;
   @Input('webp-src') webpSrc: string;
   @Input('fallback-src') fallbackSrc: string;
-  @Input('webp-srcset') webSrcSet: string;
+  @Input('webp-srcset') webpSrcSet: string;
   @Input('fallback-srcset') fallbackSrcSet: string;
   @Input() sizes: string;
   @Input() width: string;
@@ -21,8 +22,14 @@ export class ImageComponent implements OnInit {
   @Input('usemap') useMap: string;
   @Input('ismap') isMap: string;
   @Input() alt: string;
+  @Input() style: string;
+  @Input() align: string;
 
   @Input('fallback-extension') fallbackExtension: string;
+  @Input() link: any;
+
+  supportedSrc: string;
+  supportedSrcSet: string;
 
 
   /**
@@ -85,19 +92,25 @@ export class ImageComponent implements OnInit {
   }
 
 
-  constructor() {}
+  constructor(@Inject(DOCUMENT) private document: Document) {}
 
   ngOnInit(): void {
-    const baseSrc = this.src && this.src.replace(/\.[^/.]+$/, '');
 
-    if (baseSrc) {
+    const srcExtension = this.src && this.src.split('.').pop();
+    const srcBaseName = this.src && this.src.replace(/\.[^/.]+$/, '');
+
+    if (!this.fallbackExtension && srcExtension !== 'webp') {
+      this.fallbackExtension = srcExtension;
+    }
+
+    if (srcBaseName) {
 
       if (!this.webpSrc) {
-        this.webpSrc = baseSrc + '.webp';
+        this.webpSrc = srcBaseName + '.webp';
       }
 
       if (!this.fallbackSrc) {
-        this.fallbackSrc = baseSrc + '.' + this.fallbackExtension.trim().replace('.', '');
+        this.fallbackSrc = srcBaseName + '.' + this.fallbackExtension.trim().replace('.', '');
       }
 
     }
@@ -109,6 +122,22 @@ export class ImageComponent implements OnInit {
       this.fallbackSrc = this.webpSrc;
     }
 
+    this.link = this.link === true || this.link === 'true' ? true : null;
+
+    if (this.webpIsSupported === true) {
+      this.supportedSrc = this.webpSrc || this.fallbackSrc;
+      this.supportedSrcSet = this.webpSrcSet;
+    }
+    if (this.webpIsSupported === false) {
+      this.supportedSrc = this.fallbackSrc || this.webpSrc;
+      this.supportedSrcSet = this.fallbackSrcSet;
+    }
+
+  }
+
+
+  navigateToUrl(url: string): void {
+    document.location.href = url;
   }
 
 }
