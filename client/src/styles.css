@@ -16,18 +16,51 @@ h2 {
 }
 
 a:link {
-  color: blue;
+  color: green;
+  font-weight: bold;
 }
 
 a:visited {
-  color: purple;
+  color: green;
+  font-weight: bold;
 }
 
 a:hover {
-  color: green;
+  color: darkgoldenrod;
 }
 
 .content {
   margin-left: 4%;
   margin-right: 20%;
+}
+
+.nav__links li {
+  display: inline-block;
+  padding: 0px 20px;
+}
+
+.nav__links li a {
+  font-family: "Lilita One", serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: darkgoldenrod;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+}
+
+.nav__links li a:hover {
+  color: #0088a9
+}
+
+.nav__link:link {
+  font-family: "Lilita One", serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: green;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+}
+
+.nav__link:hover {
+  color: darkgoldenrod;
 }
