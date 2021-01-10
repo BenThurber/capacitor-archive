@@ -3,6 +3,8 @@ package com.example.demo.model;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -47,6 +49,12 @@ public class CapacitorType {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_name", nullable = false)
     private Manufacturer manufacturer;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitor_type", cascade = CascadeType.ALL)
+    private List<CapacitorType> capacitorUnits = new ArrayList<>();
+
+
+    CapacitorType() {}
 
 
     public Long getId() {
