@@ -102,6 +102,14 @@ public class Manufacturer {
         this.summary = summary;
     }
 
+    public List<CapacitorType> getCapacitorTypes() {
+        return capacitorTypes;
+    }
+
+    public void setCapacitorTypes(List<CapacitorType> capacitorTypes) {
+        this.capacitorTypes = capacitorTypes;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
