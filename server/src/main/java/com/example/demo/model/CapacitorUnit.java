@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.demo.payload.request.CapacitorUnitRequest;
+
 import javax.persistence.*;
 
 @Table(
@@ -35,6 +37,16 @@ public class CapacitorUnit {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_name", nullable = false)
     private CapacitorType capacitorType;
+
+
+    CapacitorUnit(CapacitorUnitRequest capacitorTypeRequest) {
+        CapacitorUnitRequest r = capacitorTypeRequest;
+
+        setCapacitance(r.getCapacitance());
+        setVoltage(r.getVoltage());
+        setIdentifier(r.getIdentifier());
+        setNotes(r.getNotes());
+    }
 
 
     CapacitorUnit() { }
