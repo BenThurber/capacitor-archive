@@ -9,6 +9,7 @@ import java.util.Objects;
 public class CapacitorType {
 
     private final static int FIELD_LEN = 60;
+    private static final int DESCRIPTION_LEN = 5000;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,7 @@ public class CapacitorType {
     @Type(type = "org.hibernate.type.ShortType")
     private Short endYear;
 
-    @Column(name = "description", columnDefinition="MEDIUMTEXT")
+    @Column(name = "description", length = DESCRIPTION_LEN)
     private String description;
 
     @ManyToOne(fetch = FetchType.EAGER)
