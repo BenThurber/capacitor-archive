@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface ManufacturerRepository  extends JpaRepository<Manufacturer, Integer> {
+public interface ManufacturerRepository  extends JpaRepository<Manufacturer, Long> {
 
     Manufacturer findByCompanyNameLowerIgnoreCase(String companyName);
 
