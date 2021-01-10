@@ -30,6 +30,7 @@ import { CreateCapacitorComponent } from './views/create-capacitor/create-capaci
 import { CapacitorFormComponent } from './components/capacitor-form/capacitor-form.component';
 import { InputCapacitanceComponent } from './components/input-capacitance/input-capacitance.component';
 import {MatExpansionModule} from '@angular/material/expansion';
+import { ImageComponent } from './components/image/image.component';
 
 
 @NgModule({
@@ -51,6 +52,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
     CreateCapacitorComponent,
     CapacitorFormComponent,
     InputCapacitanceComponent,
+    ImageComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
