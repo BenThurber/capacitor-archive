@@ -20,6 +20,7 @@ public class CapacitorTypeRequest {
     @JsonProperty("typeName")
     private String typeName;
 
+    @NotNull(message = "CapacitorType is missing a construction")
     @JsonProperty("construction")
     private String constructionName;
 
@@ -36,6 +37,7 @@ public class CapacitorTypeRequest {
     @JsonProperty("description")
     private String description;
 
+    @NotNull(message = "CapacitorType must be associated with a Manufacturer.  No companyName is given.")
     @JsonProperty("companyName")
     private String companyName;
 

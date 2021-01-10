@@ -2,16 +2,17 @@ package com.example.demo.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 public class CapacitorUnitRequest {
     
-    @NotNull(message = "CapacitorUnit is missing a name")
-    @Size(min=1, message="CapacitorUnit is missing a name")
+    @NotNull(message = "CapacitorUnit is missing a capacitance value")
+    @Min(value = 0, message = "CapacitorUnit capacitance must be non-negative")
     @JsonProperty("capacitance")
     private Long capacitance;
 
+    @Min(value = 0, message = "CapacitorUnit voltage must be non-negative")
     @JsonProperty("voltage")
     private Integer voltage;
 
@@ -21,6 +22,7 @@ public class CapacitorUnitRequest {
     @JsonProperty("notes")
     private String notes;
 
+    @NotNull(message = "CapacitorUnit must be associated with a CapacitorType.  No typeName is given.")
     @JsonProperty("typeName")
     private String typeName;
 
