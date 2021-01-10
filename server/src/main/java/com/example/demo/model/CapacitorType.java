@@ -50,8 +50,8 @@ public class CapacitorType {
     @JoinColumn(name = "company_name", nullable = false)
     private Manufacturer manufacturer;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitor_type", cascade = CascadeType.ALL)
-    private List<CapacitorType> capacitorUnits = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorType", cascade = CascadeType.ALL)
+    private List<CapacitorUnit> capacitorUnits = new ArrayList<>();
 
 
     CapacitorType() {}
