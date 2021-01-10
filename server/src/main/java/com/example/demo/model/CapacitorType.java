@@ -1,13 +1,19 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.CapacitorTypeRequest;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 public class CapacitorType {
 
@@ -15,6 +21,7 @@ public class CapacitorType {
     private static final int DESCRIPTION_LEN = 5000;
 
     @Id
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
@@ -68,83 +75,5 @@ public class CapacitorType {
     CapacitorType() {}
 
 
-    public Long getId() {
-        return id;
-    }
 
-    public String getTypeName() {
-        return typeName;
-    }
-
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
-    public Short getStartYear() {
-        return startYear;
-    }
-
-    public void setStartYear(Short startYear) {
-        this.startYear = startYear;
-    }
-
-    public Short getEndYear() {
-        return endYear;
-    }
-
-    public void setEndYear(Short endYear) {
-        this.endYear = endYear;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Construction getConstruction() {
-        return construction;
-    }
-
-    public void setConstruction(Construction construction) {
-        this.construction = construction;
-    }
-
-    public Manufacturer getManufacturer() {
-        return manufacturer;
-    }
-
-    public void setManufacturer(Manufacturer manufacturer) {
-        this.manufacturer = manufacturer;
-    }
-
-    public List<CapacitorUnit> getCapacitorUnits() {
-        return capacitorUnits;
-    }
-
-    public void setCapacitorUnits(List<CapacitorUnit> capacitorUnits) {
-        this.capacitorUnits = capacitorUnits;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        CapacitorType that = (CapacitorType) o;
-        return id.equals(that.id) &&
-                typeName.equals(that.typeName) &&
-                typeNameLower.equals(that.typeNameLower) &&
-                Objects.equals(startYear, that.startYear) &&
-                Objects.equals(endYear, that.endYear) &&
-                Objects.equals(description, that.description) &&
-                construction.equals(that.construction) &&
-                manufacturer.equals(that.manufacturer);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, typeName, typeNameLower, startYear, endYear, description, construction, manufacturer);
-    }
 }

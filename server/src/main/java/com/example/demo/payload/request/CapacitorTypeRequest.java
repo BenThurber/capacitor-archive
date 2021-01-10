@@ -2,6 +2,9 @@ package com.example.demo.payload.request;
 
 import com.example.demo.annotation.NumbersInOrder;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -13,6 +16,9 @@ import javax.validation.constraints.Size;
         secondNumber = "closeYear",
         message = "endYear is before startYear"
 )
+@Getter
+@Setter
+@EqualsAndHashCode
 public class CapacitorTypeRequest {
 
     @NotNull(message = "CapacitorType is missing a name")
@@ -45,51 +51,5 @@ public class CapacitorTypeRequest {
     CapacitorTypeRequest() {}
 
 
-    public String getTypeName() {
-        return typeName;
-    }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
-    }
-
-    public String getConstructionName() {
-        return constructionName;
-    }
-
-    public void setConstructionName(String constructionName) {
-        this.constructionName = constructionName;
-    }
-
-    public Short getStartYear() {
-        return startYear;
-    }
-
-    public void setStartYear(Short startYear) {
-        this.startYear = startYear;
-    }
-
-    public Short getEndYear() {
-        return endYear;
-    }
-
-    public void setEndYear(Short endYear) {
-        this.endYear = endYear;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
 }

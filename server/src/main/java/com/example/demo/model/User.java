@@ -1,11 +1,18 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.UserRegisterRequest;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 public class User {
 
@@ -14,6 +21,7 @@ public class User {
     private static PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Id
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
@@ -27,6 +35,8 @@ public class User {
     @Column(name = "email", length = FIELD_LEN, nullable = false)
     private String email;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @Column(name = "password_hash", columnDefinition="CHAR(60)", nullable = false)
     private String passwordHash;
 
@@ -56,34 +66,6 @@ public class User {
     private User() {}
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     /**
      * Hashes password and compares it to the password hash of the user
      * @param password plaintext password
@@ -101,27 +83,5 @@ public class User {
         this.passwordHash = password != null ? encoder.encode(password) : null;
     }
 
-    public Boolean getEmailVisible() {
-        return emailVisible;
-    }
 
-    public void setEmailVisible(Boolean emailVisible) {
-        this.emailVisible = emailVisible;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
 }

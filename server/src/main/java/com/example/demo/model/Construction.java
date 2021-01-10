@@ -1,10 +1,16 @@
 package com.example.demo.model;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 public class Construction {
 
@@ -34,27 +40,5 @@ public class Construction {
     public Construction() { }
 
 
-    public String getConstructionName() {
-        return constructionName;
-    }
 
-    public void setConstructionName(String constructionName) {
-        this.constructionName = constructionName;
-    }
-
-
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Construction that = (Construction) o;
-        return constructionName.equals(that.constructionName) &&
-                constructionNameLower.equals(that.constructionNameLower);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(constructionName, constructionNameLower);
-    }
 }
