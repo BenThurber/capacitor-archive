@@ -32,6 +32,10 @@ public class CapacitorUnitRequest {
     @JsonProperty("typeName")
     private String typeName;
 
+    @NotNull(message = "CapacitorUnit must be associated with a Manufacturer.  No companyName is given.")
+    @JsonProperty("companyName")
+    private String companyName;
+
 
     CapacitorUnitRequest() {}
 
