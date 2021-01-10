@@ -130,6 +130,23 @@ class ManufacturerControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    /**
+     * Test conflicting names in creation of new manufacturer.
+     */
+    @Test
+    void newManufacturer_conflictingNames_fail() throws Exception {
+        manufacturer2.setCompanyName("Hunts");
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(newManufacturer1Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isConflict());
+    }
+
 
     private final String newManufacturerOnlyNameJson = JsonConverter.toJson(true,
             "companyName", "Hunts"
@@ -267,6 +284,27 @@ class ManufacturerControllerTest {
         assertEquals(originalId, manufacturerMockTable.get(0).getId());
 
     }
+
+
+    /**
+     * Test editing of companyName to an existing companyName.
+     */
+    @Test
+    void editManufacturer_conflictingNames_fail() throws Exception {
+
+        manufacturer2.setCompanyName("Hunts");  // Create conflicting name
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/solar")
+                .content(editedManufacturer2Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isConflict());
+
+    }
+
 
 
     /**
