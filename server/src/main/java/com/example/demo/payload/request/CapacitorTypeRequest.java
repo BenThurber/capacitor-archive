@@ -40,6 +40,9 @@ public class CapacitorTypeRequest {
     private String companyName;
 
 
+    CapacitorTypeRequest() {}
+
+
     public String getTypeName() {
         return typeName;
     }
