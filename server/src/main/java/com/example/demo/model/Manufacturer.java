@@ -4,6 +4,8 @@ import com.example.demo.payload.request.ManufacturerRequest;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -40,6 +42,9 @@ public class Manufacturer {
 
     @Column(name = "summary", columnDefinition="MEDIUMTEXT")
     private String summary;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "manufacturer", cascade = CascadeType.ALL)
+    private List<CapacitorType> capacitorTypes = new ArrayList<>();
 
 
     public Manufacturer(ManufacturerRequest manufacturerRequest) {
