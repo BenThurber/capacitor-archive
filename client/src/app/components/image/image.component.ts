@@ -1,6 +1,19 @@
 import {Component, Inject, Input, OnInit} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 
+/**
+ * This is a component that can be used in the same way as an <img> tag, but displays webp images only if
+ * they're supported by the browser, and a fallback format if they're not.  The following are use cases.
+ *
+ * Explicitly provide paths to both files
+ * <app-image webp-src=".../image.webp" fallback-src=".../image.png"></app-image>
+ *
+ * Provide path to webp and extension of fallback file of same name
+ * <app-image src=".../image.webp" fallbackExtension="png"></app-image>
+ *
+ * Provide path to fallback file.  Implicitly assumes there is a webp file of the same name.
+ * <app-image src=".../image.png"></app-image>
+ */
 @Component({
   selector: 'app-image',
   templateUrl: './image.component.html',
