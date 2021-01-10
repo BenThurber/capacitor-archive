@@ -1,6 +1,8 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -8,10 +10,10 @@ public class Construction {
 
 
     @Id
-    @Column(name = "construction_type", length = 50, nullable = false)
+    @Column(name = "construction_name", length = 50, nullable = false)
     private String constructionName;
 
-    @Column(name = "construction_type_lower", length = 50, nullable = false, unique = true)
+    @Column(name = "construction_name_lower", length = 50, nullable = false, unique = true)
     private String constructionNameLower;
 
     /**This allows company_name to be case insensitive unique*/
@@ -20,6 +22,9 @@ public class Construction {
     private void prepare() {
         this.constructionNameLower = constructionName == null ? null : constructionName.toLowerCase();
     }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "construction", cascade = CascadeType.ALL)
+    private List<CapacitorType> capacitorTypes = new ArrayList<>();
 
 
     public Construction(String constructionName) {
