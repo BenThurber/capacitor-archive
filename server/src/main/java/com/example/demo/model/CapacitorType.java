@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.payload.request.CapacitorTypeRequest;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -52,6 +53,16 @@ public class CapacitorType {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorType", cascade = CascadeType.ALL)
     private List<CapacitorUnit> capacitorUnits = new ArrayList<>();
+
+
+    CapacitorType(CapacitorTypeRequest capacitorTypeRequest) {
+        CapacitorTypeRequest r = capacitorTypeRequest;
+
+        setTypeName(r.getTypeName());
+        setStartYear(r.getStartYear());
+        setEndYear(r.getEndYear());
+        setDescription(r.getDescription());
+    }
 
 
     CapacitorType() {}
