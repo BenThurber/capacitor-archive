@@ -16,6 +16,8 @@ import java.util.List;
 @RequestMapping(value = "/manufacturer")
 public class ManufacturerController {
 
+    private final static String COMPANY_NAME_EXISTS_ERROR = "The name \"%s\" is taken by an existing manufacturer.";
+
     private final ManufacturerRepository manufacturerRepository;
 
     public ManufacturerController(ManufacturerRepository manufacturerRepository) {
@@ -28,12 +30,13 @@ public class ManufacturerController {
      * @param manufacturerRequest the new manufacturer to create
      */
     @PostMapping(value = "create")
-    public void createManufacturer(@Validated @RequestBody ManufacturerRequest manufacturerRequest, HttpServletResponse response) {
+    public void createManufacturer(@Validated @RequestBody ManufacturerRequest manufacturerRequest,
+                                   HttpServletResponse response) {
 
         if (manufacturerRepository.findByCompanyNameLowerIgnoreCase(manufacturerRequest.getCompanyName()) != null) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
-                    String.format("The name \"%s\" already exists.", manufacturerRequest.getCompanyName())
+                    String.format(COMPANY_NAME_EXISTS_ERROR, manufacturerRequest.getCompanyName())
             );
         }
         manufacturerRepository.save(new Manufacturer(manufacturerRequest));
@@ -46,8 +49,19 @@ public class ManufacturerController {
      * @param manufacturerRequest the new manufacturer to create
      */
     @PutMapping(value = "edit/{companyName}")
-    public void editManufacturer(@PathVariable String companyName, @Validated @RequestBody ManufacturerRequest manufacturerRequest, HttpServletResponse response) {
+    public void editManufacturer(@PathVariable String companyName,
+                                 @Validated @RequestBody ManufacturerRequest manufacturerRequest,
+                                 HttpServletResponse response) {
         Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
+
+        // Check if changed companyName conflicts
+        if (!companyName.equals(manufacturerRequest.getCompanyName()) &&
+                manufacturerRepository.findByCompanyNameLowerIgnoreCase(manufacturerRequest.getCompanyName()) != null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format(COMPANY_NAME_EXISTS_ERROR, manufacturerRequest.getCompanyName())
+            );
+        }
 
         if (manufacturer == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The manufacturer to edit can not be found");
