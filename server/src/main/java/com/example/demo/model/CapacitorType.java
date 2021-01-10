@@ -49,6 +49,58 @@ public class CapacitorType {
     private Manufacturer manufacturer;
 
 
+    public Long getId() {
+        return id;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+
+    public Short getStartYear() {
+        return startYear;
+    }
+
+    public void setStartYear(Short startYear) {
+        this.startYear = startYear;
+    }
+
+    public Short getEndYear() {
+        return endYear;
+    }
+
+    public void setEndYear(Short endYear) {
+        this.endYear = endYear;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Construction getConstruction() {
+        return construction;
+    }
+
+    public void setConstruction(Construction construction) {
+        this.construction = construction;
+    }
+
+    public Manufacturer getManufacturer() {
+        return manufacturer;
+    }
+
+    public void setManufacturer(Manufacturer manufacturer) {
+        this.manufacturer = manufacturer;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
