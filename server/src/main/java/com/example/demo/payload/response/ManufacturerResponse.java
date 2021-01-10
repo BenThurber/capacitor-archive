@@ -1,9 +1,12 @@
 package com.example.demo.payload.response;
 
+import com.example.demo.model.CapacitorType;
 import com.example.demo.model.Manufacturer;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class ManufacturerResponse {
 
@@ -19,6 +22,9 @@ public class ManufacturerResponse {
     @JsonProperty("summary")
     private String summary;
 
+    @JsonProperty("typeNames")
+    private List<String> typeNames;
+
 
     public ManufacturerResponse(Manufacturer manufacturer) {
         Manufacturer m = manufacturer;
@@ -27,6 +33,7 @@ public class ManufacturerResponse {
         setOpenYear(m.getOpenYear());
         setCloseYear(m.getCloseYear());
         setSummary(m.getSummary());
+        setTypeNames(m.getCapacitorTypes().stream().map(CapacitorType::getTypeName).collect(Collectors.toList()));
     }
 
     public ManufacturerResponse() { }
@@ -62,6 +69,14 @@ public class ManufacturerResponse {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public List<String> getTypeNames() {
+        return typeNames;
+    }
+
+    public void setTypeNames(List<String> typeNames) {
+        this.typeNames = typeNames;
     }
 
     @Override

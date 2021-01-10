@@ -120,6 +120,14 @@ public class CapacitorType {
         this.manufacturer = manufacturer;
     }
 
+    public List<CapacitorUnit> getCapacitorUnits() {
+        return capacitorUnits;
+    }
+
+    public void setCapacitorUnits(List<CapacitorUnit> capacitorUnits) {
+        this.capacitorUnits = capacitorUnits;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
