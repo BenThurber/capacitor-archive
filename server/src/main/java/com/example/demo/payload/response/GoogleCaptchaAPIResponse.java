@@ -2,6 +2,9 @@ package com.example.demo.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.List;
@@ -11,6 +14,9 @@ import java.util.List;
  * A response object in the format that is received from https://www.google.com/recaptcha/api/siteverify
  * This response is received for forwarded on to the front end.
  */
+@Getter
+@Setter
+@EqualsAndHashCode
 public class GoogleCaptchaAPIResponse {
 
 
@@ -32,7 +38,7 @@ public class GoogleCaptchaAPIResponse {
 
 
     /**
-     * The user's IP address.
+     * Collection of any errors
      */
     @JsonProperty(value = "error-codes")
     private List<String> errorCodes;
@@ -43,35 +49,4 @@ public class GoogleCaptchaAPIResponse {
     public GoogleCaptchaAPIResponse() {}
 
 
-    public Boolean getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(Boolean success) {
-        this.success = success;
-    }
-
-    public Date getChallengeTimeStamp() {
-        return challengeTimeStamp;
-    }
-
-    public void setChallengeTimeStamp(Date challengeTimeStamp) {
-        this.challengeTimeStamp = challengeTimeStamp;
-    }
-
-    public String getHostname() {
-        return hostname;
-    }
-
-    public void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
-
-    public List<String> getErrorCodes() {
-        return errorCodes;
-    }
-
-    public void setErrorCodes(List<String> errorCodes) {
-        this.errorCodes = errorCodes;
-    }
 }

@@ -239,10 +239,11 @@ class ManufacturerControllerTest {
             "companyName", "Hunts",
             "openYear", 1920,
             "closeYear", 1939,
-            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers",
+            "typeNames", new String[]{}
     );
     /**
-     * Test successful creation of new manufacturer.
+     * Test editing of manufacturer.
      */
     @Test
     void editManufacturer_success() throws Exception {
@@ -268,6 +269,9 @@ class ManufacturerControllerTest {
     }
 
 
+    /**
+     * Test editing a manufacturer that doesn't exist.
+     */
     @Test
     void editManufacturer_doesNotExist_fail() throws Exception {
 

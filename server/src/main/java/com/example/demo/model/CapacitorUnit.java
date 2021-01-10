@@ -1,6 +1,10 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.CapacitorUnitRequest;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -8,6 +12,9 @@ import javax.persistence.*;
         uniqueConstraints=
         @UniqueConstraint(columnNames={"capacitance", "voltage", "identifier"})
 )
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 public class CapacitorUnit {
 
@@ -15,6 +22,7 @@ public class CapacitorUnit {
     private static final int NOTES_LEN = 5000;
 
     @Id
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
@@ -52,47 +60,5 @@ public class CapacitorUnit {
     CapacitorUnit() { }
 
 
-    public Long getId() {
-        return id;
-    }
 
-    public Long getCapacitance() {
-        return capacitance;
-    }
-
-    public void setCapacitance(Long capacitance) {
-        this.capacitance = capacitance;
-    }
-
-    public Integer getVoltage() {
-        return voltage;
-    }
-
-    public void setVoltage(Integer voltage) {
-        this.voltage = voltage;
-    }
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-
-    public CapacitorType getCapacitorType() {
-        return capacitorType;
-    }
-
-    public void setCapacitorType(CapacitorType capacitorType) {
-        this.capacitorType = capacitorType;
-    }
 }

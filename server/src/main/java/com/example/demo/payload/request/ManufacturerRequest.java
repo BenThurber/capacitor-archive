@@ -2,12 +2,14 @@ package com.example.demo.payload.request;
 
 import com.example.demo.annotation.NumbersInOrder;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Objects;
 
 
 @NumbersInOrder(
@@ -15,6 +17,9 @@ import java.util.Objects;
         secondNumber = "closeYear",
         message = "closeYear is before openYear"
 )
+@Getter
+@Setter
+@EqualsAndHashCode
 public class ManufacturerRequest {
 
     @NotNull(message = "Manufacturer is missing a name")
@@ -39,51 +44,6 @@ public class ManufacturerRequest {
     public ManufacturerRequest() { }
 
 
-    public String getCompanyName() {
-        return companyName;
-    }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
 
-    public Short getOpenYear() {
-        return openYear;
-    }
-
-    public void setOpenYear(Short openYear) {
-        this.openYear = openYear;
-    }
-
-    public Short getCloseYear() {
-        return closeYear;
-    }
-
-    public void setCloseYear(Short closeYear) {
-        this.closeYear = closeYear;
-    }
-
-    public String getBio() {
-        return summary;
-    }
-
-    public void setBio(String bio) {
-        this.summary = bio;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ManufacturerRequest that = (ManufacturerRequest) o;
-        return Objects.equals(companyName, that.companyName) &&
-                Objects.equals(openYear, that.openYear) &&
-                Objects.equals(closeYear, that.closeYear) &&
-                Objects.equals(summary, that.summary);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(companyName, openYear, closeYear, summary);
-    }
 }
