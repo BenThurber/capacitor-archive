@@ -46,9 +46,6 @@ public class CapacitorUnitController {
     public void createCapacitorUnit(@Validated @RequestBody CapacitorUnitRequest capacitorUnitRequest,
                                    HttpServletResponse response) {
 
-        if (capacitorUnitRequest.getVoltage() <= 0) {capacitorUnitRequest.setVoltage(null);}
-        if (capacitorUnitRequest.getIdentifier().trim().equals("")) {capacitorUnitRequest.setIdentifier(null);}
-
         Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(capacitorUnitRequest.getCompanyName());
 
         if (parentManufacturer == null) {

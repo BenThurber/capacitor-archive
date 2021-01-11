@@ -329,5 +329,4 @@ class CapacitorUnitControllerTest {
         assertTrue(result.getResolvedException().toString().contains("already exists for the CapacitorType"));
     }
 
-
 }
