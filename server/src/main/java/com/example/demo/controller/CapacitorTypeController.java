@@ -46,7 +46,7 @@ public class CapacitorTypeController {
      * @param capacitorTypeRequest the new CapacitorType to create
      */
     @PostMapping(value = "create")
-    public void createManufacturer(@Validated @RequestBody CapacitorTypeRequest capacitorTypeRequest,
+    public void createCapacitorType(@Validated @RequestBody CapacitorTypeRequest capacitorTypeRequest,
                                    HttpServletResponse response) {
 
         Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(capacitorTypeRequest.getCompanyName());
@@ -86,7 +86,7 @@ public class CapacitorTypeController {
 
 
     @GetMapping("name/{companyName}/{typeName}")
-    public CapacitorTypeResponse getManufacturerByNameIgnoreCase(@PathVariable String companyName,
+    public CapacitorTypeResponse getCapacitorTypeByNameIgnoreCase(@PathVariable String companyName,
                                                                  @PathVariable String typeName,
                                                                  HttpServletResponse response) {
 
