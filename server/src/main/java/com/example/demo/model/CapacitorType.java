@@ -57,7 +57,7 @@ public class CapacitorType {
     private Construction construction;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "company_name", nullable = false)
+    @JoinColumn(name = "manufacturer_id", nullable = false)
     private Manufacturer manufacturer;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorType", cascade = CascadeType.ALL)
