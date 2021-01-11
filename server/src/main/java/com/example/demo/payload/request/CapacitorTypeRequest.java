@@ -12,8 +12,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @NumbersInOrder(
-        firstNumber = "openYear",
-        secondNumber = "closeYear",
+        firstNumber = "startYear",
+        secondNumber = "endYear",
         message = "endYear is before startYear"
 )
 @Getter
@@ -26,16 +26,16 @@ public class CapacitorTypeRequest {
     @JsonProperty("typeName")
     private String typeName;
 
-    @NotNull(message = "CapacitorType is missing a construction")
-    @JsonProperty("construction")
+    @NotNull(message = "CapacitorType is missing a constructionName")
+    @JsonProperty("constructionName")
     private String constructionName;
 
-    @Max(value = 2025, message = "startYear is greater than 2025")
+    @Max(value = 2050, message = "startYear is greater than 2050")
     @Min(value = 1000, message = "startYear is less than 1000")
     @JsonProperty("startYear")
     private Short startYear;
 
-    @Max(value = 2025, message = "endYear is greater than 2025")
+    @Max(value = 2050, message = "endYear is greater than 2050")
     @Min(value = 1000, message = "endYear is less than 1000")
     @JsonProperty("endYear")
     private Short endYear;

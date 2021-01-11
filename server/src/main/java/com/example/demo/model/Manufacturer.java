@@ -29,6 +29,8 @@ public class Manufacturer {
     @Column(name = "company_name", length = FIELD_LEN, nullable = false)
     private String companyName;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @Column(name = "company_name_lower", length = FIELD_LEN, nullable = false, unique = true)
     private String companyNameLower;
 

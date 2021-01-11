@@ -2,7 +2,6 @@ package com.example.demo.controller;
 
 import com.example.demo.model.Construction;
 import com.example.demo.repository.ConstructionRepository;
-import com.example.demo.service.TextUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -29,13 +28,12 @@ public class ConstructionController {
     @PostMapping(value = "/create")
     public String addNewConstruction(@RequestBody String constructionName, HttpServletResponse response) {
 
-        String capitalizedConstructionName = TextUtil.title(constructionName, new Character[]{' ', '-', '_'});
-        Construction newConstruction = new Construction(capitalizedConstructionName);
+        Construction newConstruction = new Construction(constructionName);
 
         constructionRepository.save(newConstruction);
         response.setStatus(HttpServletResponse.SC_CREATED);
 
-        return capitalizedConstructionName;
+        return newConstruction.getConstructionName();
     }
 
 
