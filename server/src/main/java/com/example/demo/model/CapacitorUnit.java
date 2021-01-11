@@ -12,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Table(
-        uniqueConstraints=
-        @UniqueConstraint(columnNames={"capacitance", "voltage", "identifier"})
+        uniqueConstraints = @UniqueConstraint(columnNames={"capacitance", "voltage", "identifier"})
 )
 @Getter
 @Setter

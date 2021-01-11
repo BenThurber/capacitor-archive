@@ -63,10 +63,14 @@ public class CapacitorUnitController {
                             capacitorUnitRequest.getTypeName()));
         }
 
+        // Create and attach to CapacitorType
+        CapacitorUnit newCapacitorUnit = new CapacitorUnit(capacitorUnitRequest);
+        newCapacitorUnit.setCapacitorType(parentType);
+
         if (capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
-                capacitorUnitRequest.getCapacitance(),
-                capacitorUnitRequest.getVoltage(),
-                capacitorUnitRequest.getIdentifier()) != null) {
+                newCapacitorUnit.getCapacitance(),
+                newCapacitorUnit.getVoltage(),
+                newCapacitorUnit.getIdentifier()) != null) {
 
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
@@ -74,10 +78,6 @@ public class CapacitorUnitController {
                             capacitorUnitRequest.getTypeName())
             );
         }
-
-        // Create and attach to CapacitorType
-        CapacitorUnit newCapacitorUnit = new CapacitorUnit(capacitorUnitRequest);
-        newCapacitorUnit.setCapacitorType(parentType);
 
         capacitorUnitRepository.save(newCapacitorUnit);
         response.setStatus(HttpServletResponse.SC_CREATED);
