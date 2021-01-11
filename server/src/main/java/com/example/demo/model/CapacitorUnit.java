@@ -47,7 +47,7 @@ public class CapacitorUnit {
     private CapacitorType capacitorType;
 
 
-    CapacitorUnit(CapacitorUnitRequest capacitorTypeRequest) {
+    public CapacitorUnit(CapacitorUnitRequest capacitorTypeRequest) {
         CapacitorUnitRequest r = capacitorTypeRequest;
 
         setCapacitance(r.getCapacitance());
@@ -57,7 +57,7 @@ public class CapacitorUnit {
     }
 
 
-    CapacitorUnit() { }
+    public CapacitorUnit() { }
 
 
 

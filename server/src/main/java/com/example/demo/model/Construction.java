@@ -1,5 +1,7 @@
 package com.example.demo.model;
 
+import com.example.demo.service.TextUtil;
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,9 +18,12 @@ public class Construction {
 
 
     @Id
+    @Setter(AccessLevel.NONE)
     @Column(name = "construction_name", length = 50, nullable = false)
     private String constructionName;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @Column(name = "construction_name_lower", length = 50, nullable = false, unique = true)
     private String constructionNameLower;
 
@@ -34,11 +39,14 @@ public class Construction {
 
 
     public Construction(String constructionName) {
-        this.constructionName = constructionName;
+        setConstructionName(constructionName);
     }
 
     public Construction() { }
 
 
+    public void setConstructionName(String constructionName) {
+        this.constructionName = TextUtil.title(constructionName, new Character[]{' ', '-', '_'});
+    }
 
 }

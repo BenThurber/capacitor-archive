@@ -29,6 +29,8 @@ public class CapacitorType {
     @Column(name = "type_name", length = FIELD_LEN, nullable = false)
     private String typeName;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @Column(name = "type_name_lower", length = FIELD_LEN, nullable = false, unique = true)
     private String typeNameLower;
 
@@ -62,7 +64,7 @@ public class CapacitorType {
     private List<CapacitorUnit> capacitorUnits = new ArrayList<>();
 
 
-    CapacitorType(CapacitorTypeRequest capacitorTypeRequest) {
+    public CapacitorType(CapacitorTypeRequest capacitorTypeRequest) {
         CapacitorTypeRequest r = capacitorTypeRequest;
 
         setTypeName(r.getTypeName());
@@ -72,7 +74,7 @@ public class CapacitorType {
     }
 
 
-    CapacitorType() {}
+    public CapacitorType() {}
 
 
 
