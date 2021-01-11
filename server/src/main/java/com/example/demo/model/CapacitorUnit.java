@@ -43,7 +43,7 @@ public class CapacitorUnit {
     private String notes;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "type_name", nullable = false)
+    @JoinColumn(name = "capacitor_type_id", nullable = false)
     private CapacitorType capacitorType;
 
 
