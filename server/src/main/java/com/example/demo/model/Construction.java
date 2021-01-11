@@ -45,6 +45,10 @@ public class Construction {
     public Construction() { }
 
 
+    /**
+     * Always capitalize constructionName.
+     * @param constructionName a construction name of any case.
+     */
     public void setConstructionName(String constructionName) {
         this.constructionName = TextUtil.title(constructionName, new Character[]{' ', '-', '_'});
     }

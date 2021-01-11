@@ -216,7 +216,7 @@ class ManufacturerControllerTest {
             "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
     );
     /**
-     * Test creation of new manufacturer with years after 2025.
+     * Test creation of new manufacturer with years after 2050.
      */
     @Test
     void newManufacturer_datesTooHigh_fail() throws Exception {
@@ -237,7 +237,7 @@ class ManufacturerControllerTest {
             "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
     );
     /**
-     * Test creation of new manufacturer with years after 2025.
+     * Test creation of new manufacturer with years after 2050.
      */
     @Test
     void newManufacturer_datesWrongOrder_fail() throws Exception {

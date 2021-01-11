@@ -30,12 +30,12 @@ public class CapacitorTypeRequest {
     @JsonProperty("constructionName")
     private String constructionName;
 
-    @Max(value = 2025, message = "startYear is greater than 2025")
+    @Max(value = 2050, message = "startYear is greater than 2050")
     @Min(value = 1000, message = "startYear is less than 1000")
     @JsonProperty("startYear")
     private Short startYear;
 
-    @Max(value = 2025, message = "endYear is greater than 2025")
+    @Max(value = 2050, message = "endYear is greater than 2050")
     @Min(value = 1000, message = "endYear is less than 1000")
     @JsonProperty("endYear")
     private Short endYear;
