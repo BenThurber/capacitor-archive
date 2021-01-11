@@ -308,7 +308,7 @@ class ManufacturerControllerTest {
 
 
     /**
-     * Test editing a manufacturer that doesn't exist.
+     * Test editing a manufacturer that does not exist.
      */
     @Test
     void editManufacturer_doesNotExist_fail() throws Exception {

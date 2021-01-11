@@ -230,7 +230,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references doesn't exist.
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
      */
     @Test
     void newCapacitorType_noExistingManufacturer_fail() throws Exception {
@@ -369,7 +369,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references doesn't exist.
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
      */
     @Test
     void newCapacitorType_typeNameConflict_fail() throws Exception {
@@ -390,7 +390,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references doesn't exist.
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
      */
     @Test
     void getCapacitorType_success() throws Exception {
@@ -406,6 +406,25 @@ class CapacitorTypeControllerTest {
 
         CapacitorTypeResponse receivedType = objectMapper.readValue(result.getResponse().getContentAsString(), CapacitorTypeResponse.class);
         assertEquals(new CapacitorTypeResponse(capacitorType1), receivedType);
+    }
+
+
+    /**
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
+     */
+    @Test
+    void getCapacitorType_cantFindManufacturer_fail() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name/solar/sealdtite")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isBadRequest()).andReturn();
+
+        
+        assertTrue(result.getResolvedException().toString().contains("does not exist"));
     }
 
 

@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 public class CapacitorTypeController {
 
     private final static String TYPE_NAME_EXISTS_ERROR = "The name \"%s\" already exists within the \"%s\" manufacturer.";
-    private final static String PARENT_MANUFACTURER_NOT_FOUND_ERROR = "The CapacitorType references a manufacturer \"%s\" that doesn't exist.";
+    private final static String PARENT_MANUFACTURER_NOT_FOUND_ERROR = "The CapacitorType references a manufacturer \"%s\" that does not exist.";
 
     private static Log logger = LogFactory.getLog(CapacitorTypeController.class);
 
