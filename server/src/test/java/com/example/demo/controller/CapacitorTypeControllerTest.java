@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.model.CapacitorType;
 import com.example.demo.model.Construction;
 import com.example.demo.model.Manufacturer;
+import com.example.demo.payload.response.CapacitorTypeResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.ConstructionRepository;
 import com.example.demo.repository.ManufacturerRepository;
@@ -58,6 +59,7 @@ class CapacitorTypeControllerTest {
 
     private Manufacturer manufacturer1;
     private Manufacturer manufacturer2;
+    private CapacitorType capacitorType1;
 
     @BeforeEach
     void initializeTestEntities() {
@@ -71,6 +73,11 @@ class CapacitorTypeControllerTest {
         manufacturer2.setOpenYear((short)1917);
         manufacturer2.setCloseYear((short)1948);
         manufacturer2.setSummary("A company that made high quality wax paper capacitors");
+
+        capacitorType1 = new CapacitorType();
+        capacitorType1.setTypeName("Sealdtite");
+        capacitorType1.setManufacturer(manufacturer2);
+        capacitorType1.setConstruction(new Construction("Wax-Paper"));
 
     }
 
@@ -223,7 +230,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references doesn't exist.
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
      */
     @Test
     void newCapacitorType_noExistingManufacturer_fail() throws Exception {
@@ -362,17 +369,12 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references doesn't exist.
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
      */
     @Test
     void newCapacitorType_typeNameConflict_fail() throws Exception {
         manufacturerRepository.save(manufacturer2);
-
-        CapacitorType capacitorType = new CapacitorType();
-        capacitorType.setTypeName("Sealdtite");
-        capacitorType.setManufacturer(manufacturer2);
-        capacitorType.setConstruction(new Construction("Wax-Paper"));
-        capacitorTypeRepository.save(capacitorType);
+        capacitorTypeRepository.save(capacitorType1);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/type/create")
                 .content(newCapacitorType1Json)
@@ -384,6 +386,45 @@ class CapacitorTypeControllerTest {
 
         assertTrue(result.getResolvedException().toString().contains("already exists"));
 
+    }
+
+
+    /**
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
+     */
+    @Test
+    void getCapacitorType_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name/solar/sealdtite")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        CapacitorTypeResponse receivedType = objectMapper.readValue(result.getResponse().getContentAsString(), CapacitorTypeResponse.class);
+        assertEquals(new CapacitorTypeResponse(capacitorType1), receivedType);
+    }
+
+
+    /**
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
+     */
+    @Test
+    void getCapacitorType_cantFindManufacturer_fail() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name/solar/sealdtite")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isBadRequest()).andReturn();
+
+        
+        assertTrue(result.getResolvedException().toString().contains("does not exist"));
     }
 
 

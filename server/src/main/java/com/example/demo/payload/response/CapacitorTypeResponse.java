@@ -37,7 +37,7 @@ public class CapacitorTypeResponse {
     private List<Long> capacitorUnitIds;
 
 
-    CapacitorTypeResponse(CapacitorType capacitorType) {
+    public CapacitorTypeResponse(CapacitorType capacitorType) {
         CapacitorType ct = capacitorType;
         setTypeName(ct.getTypeName());
         setConstructionName(ct.getConstruction().getConstructionName());
@@ -48,7 +48,7 @@ public class CapacitorTypeResponse {
         setCapacitorUnitIds(ct.getCapacitorUnits().stream().map(CapacitorUnit::getId).collect(Collectors.toList()));
     }
 
-    CapacitorTypeResponse() {}
+    public CapacitorTypeResponse() {}
 
 
 
