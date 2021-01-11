@@ -11,16 +11,16 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-@Table(
-        uniqueConstraints = @UniqueConstraint(columnNames={"capacitance", "voltage", "identifier"})
-)
 @Getter
 @Setter
 @EqualsAndHashCode
 @Entity
 public class CapacitorUnit {
 
-    private final static int FIELD_LEN = 60;
+    private final static int IDENTIFIER_LEN = 60;
+
+//                                        Long  'C' Int  'V'  VARCHAR
+    private final static int VALUE_LENGTH = 20 + 1 + 10 + 1 + IDENTIFIER_LEN;
     private static final int NOTES_LEN = 5000;
 
     @Id
@@ -40,8 +40,22 @@ public class CapacitorUnit {
     private Integer voltage;
 
     @Setter(AccessLevel.NONE)
-    @Column(name = "identifier", length = FIELD_LEN)
+    @Column(name = "identifier", length = IDENTIFIER_LEN)
     private String identifier;
+
+    @Setter(AccessLevel.NONE)
+    @Column(name = "value", length = VALUE_LENGTH, nullable = false, unique = true)
+    private String value;
+
+    /**This allows type_name to be case insensitive unique*/
+    @PrePersist
+    @PreUpdate
+    private void prepare() {
+        Long capacitanceNonNull = capacitance != null ? capacitance : 0L;
+        Integer voltageNonNull = voltage != null ? voltage : 0;
+        String identifierNonNull = identifier != null ? identifier : "";
+        this.value = String.format("%dC%dV%s", capacitanceNonNull, voltageNonNull, identifierNonNull);
+    }
 
     @Column(name = "notes", length = NOTES_LEN)
     private String notes;
@@ -88,7 +102,7 @@ public class CapacitorUnit {
             strList.add(getVoltage() + "V");
         }
         if (getIdentifier() != null && !getIdentifier().equals("")) {
-            strList.add(getIdentifier());
+            strList.add("'" + getIdentifier() + "'");
         }
         return String.join(" ", strList);
     }

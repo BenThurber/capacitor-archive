@@ -23,7 +23,7 @@ public class CapacitorUnitController {
 
     private final static String PARENT_MANUFACTURER_NOT_FOUND_ERROR = "The CapacitorUnit references a manufacturer \"%s\" that does not exist.";
     private final static String PARENT_TYPE_NOT_FOUND_ERROR = "The CapacitorUnit references a CapacitorType \"%s\" that does not exist.";
-    private final static String UNIT_NAME_EXISTS_ERROR = "The CapacitorUnit with the given Capacitance, Voltage and Identifier already exists for the CapacitorType \"%s\"";
+    private final static String UNIT_NAME_EXISTS_ERROR = "The CapacitorUnit with the value (%s) already exists for the CapacitorType \"%s\"";
 
     private final ManufacturerRepository manufacturerRepository;
     private final CapacitorTypeRepository capacitorTypeRepository;
@@ -67,19 +67,19 @@ public class CapacitorUnitController {
         CapacitorUnit newCapacitorUnit = new CapacitorUnit(capacitorUnitRequest);
         newCapacitorUnit.setCapacitorType(parentType);
 
-        if (capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
-                newCapacitorUnit.getCapacitance(),
-                newCapacitorUnit.getVoltage(),
-                newCapacitorUnit.getIdentifier()) != null) {
+        try {
+            capacitorUnitRepository.save(newCapacitorUnit);
 
+        // Catch Duplicate Entry
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
             throw new ResponseStatusException(
                     HttpStatus.CONFLICT,
                     String.format(UNIT_NAME_EXISTS_ERROR,
-                            capacitorUnitRequest.getTypeName())
+                            newCapacitorUnit,
+                            newCapacitorUnit.getCapacitorType().getTypeName())
             );
         }
 
-        capacitorUnitRepository.save(newCapacitorUnit);
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
