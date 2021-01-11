@@ -39,11 +39,11 @@ public class CapacitorUnitController {
 
 
     /**
-     * Create a CapacitorType
-     * @param capacitorUnitRequest the new CapacitorType to create
+     * Create a CapacitorUnit
+     * @param capacitorUnitRequest the new CapacitorUnit to create
      */
     @PostMapping(value = "create")
-    public void createManufacturer(@Validated @RequestBody CapacitorUnitRequest capacitorUnitRequest,
+    public void createCapacitorUnit(@Validated @RequestBody CapacitorUnitRequest capacitorUnitRequest,
                                    HttpServletResponse response) {
 
         if (capacitorUnitRequest.getVoltage() <= 0) {capacitorUnitRequest.setVoltage(null);}
