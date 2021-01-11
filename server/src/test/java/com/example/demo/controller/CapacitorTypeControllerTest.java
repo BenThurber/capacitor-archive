@@ -18,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import testUtilities.JsonConverter;
@@ -151,7 +152,7 @@ class CapacitorTypeControllerTest {
                     ).collect(Collectors.toList());
 
                     return capacitorTypesInManufacturer.stream().filter(
-                            ct -> ct.getTypeName().toLowerCase().equals(typeName)
+                            ct -> ct.getTypeName().toLowerCase().equals(typeName.toLowerCase())
                     ).findFirst().orElse(null);
         });
 
@@ -232,8 +233,10 @@ class CapacitorTypeControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
-        mvc.perform(httpReq)
-                .andExpect(status().isBadRequest());
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isBadRequest()).andReturn();
+
+        assertTrue(result.getResolvedException().toString().contains("The CapacitorType references a manufacturer"));
 
     }
 
@@ -355,6 +358,32 @@ class CapacitorTypeControllerTest {
 
         mvc.perform(httpReq)
                 .andExpect(status().isBadRequest());
+    }
+
+
+    /**
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references doesn't exist.
+     */
+    @Test
+    void newCapacitorType_typeNameConflict_fail() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+
+        CapacitorType capacitorType = new CapacitorType();
+        capacitorType.setTypeName("Sealdtite");
+        capacitorType.setManufacturer(manufacturer2);
+        capacitorType.setConstruction(new Construction("Wax-Paper"));
+        capacitorTypeRepository.save(capacitorType);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/type/create")
+                .content(newCapacitorType1Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isConflict()).andReturn();
+
+        assertTrue(result.getResolvedException().toString().contains("already exists"));
+
     }
 
 
