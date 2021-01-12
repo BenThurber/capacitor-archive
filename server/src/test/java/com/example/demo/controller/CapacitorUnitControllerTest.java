@@ -4,6 +4,7 @@ import com.example.demo.model.CapacitorType;
 import com.example.demo.model.CapacitorUnit;
 import com.example.demo.model.Construction;
 import com.example.demo.model.Manufacturer;
+import com.example.demo.payload.response.CapacitorUnitResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
 import com.example.demo.repository.ManufacturerRepository;
@@ -22,7 +23,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.dao.DataIntegrityViolationException;
 import testUtilities.JsonConverter;
 
 import java.util.ArrayList;
@@ -33,6 +33,8 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.CoreMatchers.containsString;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @WebMvcTest(CapacitorUnitController.class)
@@ -165,6 +167,26 @@ class CapacitorUnitControllerTest {
             ).findFirst().orElse(null);
         });
 
+        when(capacitorTypeRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
+                Mockito.any(String.class), Mockito.any(String.class))).thenAnswer(i -> {
+            String typeName = i.getArgument(0);
+            String companyName = i.getArgument(1);
+
+            Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
+
+            if (manufacturer == null) {
+                return null;
+            }
+
+            List<CapacitorType> capacitorTypesInManufacturer = capacitorTypeMockTable.stream().filter(
+                    ct -> ct.getManufacturer().getCompanyName().equals(manufacturer.getCompanyName())
+            ).collect(Collectors.toList());
+
+            return capacitorTypesInManufacturer.stream().filter(
+                    ct -> ct.getTypeName().toLowerCase().equals(typeName.toLowerCase())
+            ).findFirst().orElse(null);
+        });
+
         //---- CapacitorUnit ----
 
         when(capacitorUnitRepository.save(Mockito.any(CapacitorUnit.class))).thenAnswer(i -> {
@@ -181,6 +203,8 @@ class CapacitorUnitControllerTest {
             if (capacitorUnit.getId() == null) {
                 ReflectionTestUtils.setField(capacitorUnit, "id", (DEFAULT_CAPACITOR_UNIT_ID + capacitorUnitCount++));
             }
+
+            ReflectionTestUtils.invokeMethod(capacitorUnit, "prepare");
 
             // Remove and replace existing entity
             Long id = capacitorUnit.getId();
@@ -203,6 +227,21 @@ class CapacitorUnitControllerTest {
                     cu -> Objects.equals(cu.getCapacitance(), capacitance) &&
                             Objects.equals(cu.getVoltage(), voltage) &&
                             Objects.equals(cu.getIdentifier(), identifier)
+            ).findFirst().orElse(null);
+        });
+
+        when(capacitorUnitRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCaseAndValue(
+                Mockito.any(String.class),
+                Mockito.any(String.class),
+                Mockito.any(String.class))).thenAnswer(i -> {
+            String companyName = i.getArgument(0);
+            String typeName = i.getArgument(1);
+            String value = i.getArgument(2);
+
+            return capacitorUnitMockTable.stream().filter(
+                    cu -> Objects.equals(cu.getCapacitorType().getManufacturer().getCompanyName().toLowerCase(), companyName.toLowerCase()) &&
+                            Objects.equals(cu.getCapacitorType().getTypeName().toLowerCase(), typeName.toLowerCase()) &&
+                            Objects.equals(cu.getValue(), value)
             ).findFirst().orElse(null);
         });
 
@@ -294,7 +333,7 @@ class CapacitorUnitControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isBadRequest()).andReturn();
 
-        assertTrue(result.getResolvedException().toString().contains("The CapacitorUnit references a manufacturer"));
+        assertThat(result.getResolvedException().toString(), containsString("The CapacitorUnit references a CapacitorType"));
 
     }
 
@@ -314,13 +353,13 @@ class CapacitorUnitControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isBadRequest()).andReturn();
 
-        assertTrue(result.getResolvedException().toString().contains("The CapacitorUnit references a CapacitorType"));
+        assertThat(result.getResolvedException().toString(), containsString("The CapacitorUnit references a CapacitorType"));
 
     }
 
 
     /**
-     * Test successful creation of new CapacitorType that creates a new construction.
+     * Test that a capacitor unit with the same value returns 409 Conflict.
      */
     @Test
     void newCapacitorUnit_unitAlreadyExists_fail() throws Exception {
@@ -336,7 +375,74 @@ class CapacitorUnitControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isConflict()).andReturn();
 
-        assertTrue(result.getResolvedException().toString().contains("already exists for the CapacitorType"));
+        assertThat(result.getResolvedException().toString(), containsString("already exists for the CapacitorType"));
+    }
+
+
+    /**
+     * Test successful creation of new CapacitorUnit.
+     */
+    @Test
+    void getCapacitorUnit_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorType1.setManufacturer(manufacturer2);
+        capacitorUnit1.setCapacitorType(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/name/solar/sealdtite/50000C400V35b")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        CapacitorUnitResponse cu = objectMapper.readValue(result.getResponse().getContentAsString(), CapacitorUnitResponse.class);
+        assertEquals(cu, new CapacitorUnitResponse(capacitorUnit1));
+    }
+
+
+    /**
+     * Test successful creation of new CapacitorUnit with mixed case companyName and typeName (which are case insensitive).
+     */
+    @Test
+    void getCapacitorUnit_mixedCaseTypeCompany_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorType1.setManufacturer(manufacturer2);
+        capacitorUnit1.setCapacitorType(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/name/soLAR/SeaLdtite/50000C400V35b")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        CapacitorUnitResponse cu = objectMapper.readValue(result.getResponse().getContentAsString(), CapacitorUnitResponse.class);
+        assertEquals(cu, new CapacitorUnitResponse(capacitorUnit1));
+    }
+
+
+    /**
+     * Test unsuccessful creation of new CapacitorUnit with mixed value (which is case sensitive).
+     */
+    @Test
+    void getCapacitorUnit_mixedCaseValue_fail() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorType1.setManufacturer(manufacturer2);
+        capacitorUnit1.setCapacitorType(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/name/solar/sealdtite/50000c400v35b")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isNotFound());
+
     }
 
 }
