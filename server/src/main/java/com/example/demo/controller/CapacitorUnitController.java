@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.model.CapacitorType;
 import com.example.demo.model.CapacitorUnit;
 import com.example.demo.payload.request.CapacitorUnitRequest;
-import com.example.demo.payload.response.CapacitorTypeResponse;
 import com.example.demo.payload.response.CapacitorUnitResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
