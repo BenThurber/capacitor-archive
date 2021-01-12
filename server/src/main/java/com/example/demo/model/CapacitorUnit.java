@@ -47,7 +47,6 @@ public class CapacitorUnit {
     @Column(name = "value", length = VALUE_LENGTH, nullable = false, unique = true)
     private String value;
 
-    /**This allows type_name to be case insensitive unique*/
     @PrePersist
     @PreUpdate
     private void prepare() {
