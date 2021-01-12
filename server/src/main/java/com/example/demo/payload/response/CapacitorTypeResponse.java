@@ -34,7 +34,7 @@ public class CapacitorTypeResponse {
     private String companyName;
 
     @JsonProperty("capacitorUnitIds")
-    private List<Long> capacitorUnitIds;
+    private List<String> capacitorUnitValues;
 
 
     public CapacitorTypeResponse(CapacitorType capacitorType) {
@@ -45,7 +45,7 @@ public class CapacitorTypeResponse {
         setEndYear(ct.getEndYear());
         setDescription(ct.getDescription());
         setCompanyName(ct.getManufacturer().getCompanyName());
-        setCapacitorUnitIds(ct.getCapacitorUnits().stream().map(CapacitorUnit::getId).collect(Collectors.toList()));
+        setCapacitorUnitValues(ct.getCapacitorUnits().stream().map(CapacitorUnit::getValue).collect(Collectors.toList()));
     }
 
     public CapacitorTypeResponse() {}

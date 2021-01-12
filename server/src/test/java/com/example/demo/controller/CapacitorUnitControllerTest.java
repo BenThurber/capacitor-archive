@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.dao.DataIntegrityViolationException;
 import testUtilities.JsonConverter;
 
 import java.util.ArrayList;
@@ -168,13 +169,22 @@ class CapacitorUnitControllerTest {
 
         when(capacitorUnitRepository.save(Mockito.any(CapacitorUnit.class))).thenAnswer(i -> {
             CapacitorUnit capacitorUnit = i.getArgument(0);
+
+            // Check if unique
+            if (capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
+                    capacitorUnit.getCapacitance(),
+                    capacitorUnit.getVoltage(),
+                    capacitorUnit.getIdentifier()) != null) {
+                throw new org.springframework.dao.DataIntegrityViolationException("");
+            }
+
             if (capacitorUnit.getId() == null) {
                 ReflectionTestUtils.setField(capacitorUnit, "id", (DEFAULT_CAPACITOR_UNIT_ID + capacitorUnitCount++));
             }
 
             // Remove and replace existing entity
             Long id = capacitorUnit.getId();
-            capacitorUnitMockTable.stream().filter(ct -> id != null && id.equals(ct.getId())).findFirst().ifPresent(capacitorUnitMockTable::remove);
+            capacitorUnitMockTable.stream().filter(cu -> id != null && id.equals(cu.getId())).findFirst().ifPresent(capacitorUnitMockTable::remove);
 
             capacitorUnitMockTable.add(capacitorUnit);
 
