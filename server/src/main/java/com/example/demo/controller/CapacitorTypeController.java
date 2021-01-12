@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/type")
@@ -115,6 +117,34 @@ public class CapacitorTypeController {
         response.setStatus(HttpServletResponse.SC_OK);
         return new CapacitorTypeResponse(capacitorType);
 
+    }
+
+
+    /**
+     * Get CapacitorType from the name of the owning Manufacturer and the Unique typeName.  Both are case insensitive.
+     * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned
+     * @return the found type.  If none is found a 404 error is returned.
+     */
+    @GetMapping("all-types/{companyName}")
+    public List<CapacitorTypeResponse> getAllCapacitorTypeFromManufacturer(@PathVariable String companyName,
+                                                                                      HttpServletResponse response) {
+
+        Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
+
+        if (parentManufacturer == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format(PARENT_MANUFACTURER_NOT_FOUND_ERROR,
+                            companyName));
+        }
+
+        List<CapacitorTypeResponse> capacitorTypeResponses = parentManufacturer.getCapacitorTypes()
+                .stream()
+                .map(CapacitorTypeResponse::new)
+                .collect(Collectors.toList());
+
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        return capacitorTypeResponses;
     }
 
 }
