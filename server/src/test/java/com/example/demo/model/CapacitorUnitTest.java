@@ -13,7 +13,7 @@ class CapacitorUnitTest {
         c.setVoltage(600);
         c.setIdentifier("2b");
 
-        assertEquals("100uf 600V 2b", c.toString());
+        assertEquals("100uf 600V '2b'", c.toString());
     }
 
     @Test
@@ -33,7 +33,7 @@ class CapacitorUnitTest {
         c.setVoltage(0);
         c.setIdentifier("2b");
 
-        assertEquals("100uf 2b", c.toString());
+        assertEquals("100uf '2b'", c.toString());
     }
 
     @Test

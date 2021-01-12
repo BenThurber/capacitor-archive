@@ -23,7 +23,7 @@ public class CapacitorUnitController {
 
     private final static String PARENT_MANUFACTURER_NOT_FOUND_ERROR = "The CapacitorUnit references a manufacturer \"%s\" that does not exist.";
     private final static String PARENT_TYPE_NOT_FOUND_ERROR = "The CapacitorUnit references a CapacitorType \"%s\" that does not exist.";
-    private final static String UNIT_NAME_EXISTS_ERROR = "The CapacitorUnit with the given Capacitance, Voltage and Identifier already exists for the CapacitorType \"%s\"";
+    private final static String UNIT_NAME_EXISTS_ERROR = "The CapacitorUnit with the value (%s) already exists for the CapacitorType \"%s\"";
 
     private final ManufacturerRepository manufacturerRepository;
     private final CapacitorTypeRepository capacitorTypeRepository;
@@ -63,23 +63,23 @@ public class CapacitorUnitController {
                             capacitorUnitRequest.getTypeName()));
         }
 
-        if (capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
-                capacitorUnitRequest.getCapacitance(),
-                capacitorUnitRequest.getVoltage(),
-                capacitorUnitRequest.getIdentifier()) != null) {
-
-            throw new ResponseStatusException(
-                    HttpStatus.CONFLICT,
-                    String.format(UNIT_NAME_EXISTS_ERROR,
-                            capacitorUnitRequest.getTypeName())
-            );
-        }
-
         // Create and attach to CapacitorType
         CapacitorUnit newCapacitorUnit = new CapacitorUnit(capacitorUnitRequest);
         newCapacitorUnit.setCapacitorType(parentType);
 
-        capacitorUnitRepository.save(newCapacitorUnit);
+        try {
+            capacitorUnitRepository.save(newCapacitorUnit);
+
+        // Catch Duplicate Entry
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format(UNIT_NAME_EXISTS_ERROR,
+                            newCapacitorUnit,
+                            newCapacitorUnit.getCapacitorType().getTypeName())
+            );
+        }
+
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
 
