@@ -5,8 +5,6 @@ import com.example.demo.model.Construction;
 import com.example.demo.model.Manufacturer;
 import com.example.demo.payload.request.CapacitorTypeRequest;
 import com.example.demo.payload.response.CapacitorTypeResponse;
-import com.example.demo.payload.response.CapacitorUnitResponse;
-import com.example.demo.payload.response.ManufacturerResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.ConstructionRepository;
 import com.example.demo.repository.ManufacturerRepository;
@@ -25,6 +23,7 @@ public class CapacitorTypeController {
 
     private final static String TYPE_NAME_EXISTS_ERROR = "The name \"%s\" already exists within the \"%s\" manufacturer.";
     private final static String PARENT_MANUFACTURER_NOT_FOUND_ERROR = "The CapacitorType references a manufacturer \"%s\" that does not exist.";
+    private final static String TYPE_NOT_FOUND_ERROR = "The CapacitorType with companyName %s and typeName %s could not be found.";
 
     private static Log logger = LogFactory.getLog(CapacitorTypeController.class);
 
@@ -85,6 +84,12 @@ public class CapacitorTypeController {
     }
 
 
+    /**
+     * Get CapacitorType from the name of the owning Manufacturer and the Unique typeName.  Both are case insensitive.
+     * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned
+     * @param typeName unique key of CapacitorType
+     * @return the found type.  If none is found a 404 error is returned.
+     */
     @GetMapping("name/{companyName}/{typeName}")
     public CapacitorTypeResponse getCapacitorTypeByNameIgnoreCase(@PathVariable String companyName,
                                                                  @PathVariable String typeName,
@@ -99,6 +104,13 @@ public class CapacitorTypeController {
         }
 
         CapacitorType capacitorType = capacitorTypeRepository.findByTypeNameLowerIgnoreCaseAndManufacturer(typeName, parentManufacturer);
+
+        if (capacitorType == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    String.format(TYPE_NOT_FOUND_ERROR, companyName, typeName)
+            );
+        }
 
         response.setStatus(HttpServletResponse.SC_OK);
         return new CapacitorTypeResponse(capacitorType);

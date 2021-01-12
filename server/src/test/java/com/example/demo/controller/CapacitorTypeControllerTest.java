@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.junit.jupiter.api.Assertions.*;
@@ -243,7 +245,7 @@ class CapacitorTypeControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isBadRequest()).andReturn();
 
-        assertTrue(result.getResolvedException().toString().contains("The CapacitorType references a manufacturer"));
+        assertThat(result.getResolvedException().toString(), containsString("The CapacitorType references a manufacturer"));
 
     }
 
@@ -369,7 +371,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
+     * Test unsuccessful creation of new CapacitorType when the typeName used already exists for the Manufacturer.
      */
     @Test
     void newCapacitorType_typeNameConflict_fail() throws Exception {
@@ -384,13 +386,13 @@ class CapacitorTypeControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isConflict()).andReturn();
 
-        assertTrue(result.getResolvedException().toString().contains("already exists"));
 
+        assertThat(result.getResolvedException().toString(), containsString("already exists"));
     }
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
+     * Test successful retrieval of CapacitorType.
      */
     @Test
     void getCapacitorType_success() throws Exception {
@@ -410,7 +412,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
+     * Test unsuccessful retrieval of CapacitorType when the Manufacturer it references does not exist.
      */
     @Test
     void getCapacitorType_cantFindManufacturer_fail() throws Exception {
@@ -423,8 +425,28 @@ class CapacitorTypeControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isBadRequest()).andReturn();
 
-        
-        assertTrue(result.getResolvedException().toString().contains("does not exist"));
+
+        assertThat(result.getResolvedException().toString(), containsString("does not exist"));
+    }
+
+
+    /**
+     * Test unsuccessful creation of new CapacitorType when the Manufacturer it references does not exist.
+     */
+    @Test
+    void getCapacitorType_notFound_fail() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name/solar/wrong-name")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isNotFound()).andReturn();
+
+
+        assertThat(result.getResolvedException().toString(), containsString("could not be found"));
     }
 
 
