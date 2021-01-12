@@ -20,6 +20,9 @@ public class CapacitorUnitResponse {
     @JsonProperty("identifier")
     private String identifier;
 
+    @JsonProperty("value")
+    private String value;
+
     @JsonProperty("notes")
     private String notes;
 
@@ -30,16 +33,17 @@ public class CapacitorUnitResponse {
     private String companyName;
 
 
-    CapacitorUnitResponse(CapacitorUnit capacitorUnit) {
+    public CapacitorUnitResponse(CapacitorUnit capacitorUnit) {
         CapacitorUnit cu = capacitorUnit;
 
         setCapacitance(cu.getCapacitance());
         setVoltage(cu.getVoltage());
         setIdentifier(cu.getIdentifier());
+        setValue(cu.getValue());
         setNotes(cu.getNotes());
         setTypeName(cu.getCapacitorType().getTypeName());
         setCompanyName(cu.getCapacitorType().getManufacturer().getCompanyName());
     }
 
-    CapacitorUnitResponse() {}
+    public CapacitorUnitResponse() {}
 }
