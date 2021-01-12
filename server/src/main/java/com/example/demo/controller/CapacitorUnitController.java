@@ -2,11 +2,9 @@ package com.example.demo.controller;
 
 import com.example.demo.model.CapacitorType;
 import com.example.demo.model.CapacitorUnit;
-import com.example.demo.model.Manufacturer;
 import com.example.demo.payload.request.CapacitorUnitRequest;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
-import com.example.demo.repository.ManufacturerRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,18 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 @RequestMapping(value = "/unit")
 public class CapacitorUnitController {
 
-    private final static String PARENT_MANUFACTURER_NOT_FOUND_ERROR = "The CapacitorUnit references a manufacturer \"%s\" that does not exist.";
     private final static String PARENT_TYPE_NOT_FOUND_ERROR = "The CapacitorUnit references a CapacitorType \"%s\" that does not exist.";
     private final static String UNIT_NAME_EXISTS_ERROR = "The CapacitorUnit with the value (%s) already exists for the CapacitorType \"%s\"";
 
-    private final ManufacturerRepository manufacturerRepository;
     private final CapacitorTypeRepository capacitorTypeRepository;
     private final CapacitorUnitRepository capacitorUnitRepository;
 
-    CapacitorUnitController(ManufacturerRepository manufacturerRepository,
-                            CapacitorTypeRepository capacitorTypeRepository,
+    CapacitorUnitController(CapacitorTypeRepository capacitorTypeRepository,
                             CapacitorUnitRepository capacitorUnitRepository) {
-        this.manufacturerRepository = manufacturerRepository;
         this.capacitorTypeRepository = capacitorTypeRepository;
         this.capacitorUnitRepository = capacitorUnitRepository;
     }
@@ -46,16 +40,8 @@ public class CapacitorUnitController {
     public void createCapacitorUnit(@Validated @RequestBody CapacitorUnitRequest capacitorUnitRequest,
                                    HttpServletResponse response) {
 
-        Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(capacitorUnitRequest.getCompanyName());
-
-        if (parentManufacturer == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format(PARENT_MANUFACTURER_NOT_FOUND_ERROR,
-                            capacitorUnitRequest.getCompanyName()));
-        }
-
-        CapacitorType parentType = capacitorTypeRepository.findByTypeNameLowerIgnoreCaseAndManufacturer(
-                capacitorUnitRequest.getTypeName(), parentManufacturer);
+        CapacitorType parentType = capacitorTypeRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
+                capacitorUnitRequest.getTypeName(), capacitorUnitRequest.getCompanyName());
 
         if (parentType == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
