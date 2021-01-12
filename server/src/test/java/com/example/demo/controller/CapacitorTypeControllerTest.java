@@ -8,6 +8,7 @@ import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.ConstructionRepository;
 import com.example.demo.repository.ManufacturerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +26,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import testUtilities.JsonConverter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -62,6 +64,7 @@ class CapacitorTypeControllerTest {
     private Manufacturer manufacturer1;
     private Manufacturer manufacturer2;
     private CapacitorType capacitorType1;
+    private CapacitorType capacitorType2;
 
     @BeforeEach
     void initializeTestEntities() {
@@ -80,6 +83,11 @@ class CapacitorTypeControllerTest {
         capacitorType1.setTypeName("Sealdtite");
         capacitorType1.setManufacturer(manufacturer2);
         capacitorType1.setConstruction(new Construction("Wax-Paper"));
+
+        capacitorType2 = new CapacitorType();
+        capacitorType2.setTypeName("Moulded Plastic Mica");
+        capacitorType2.setManufacturer(manufacturer2);
+        capacitorType2.setConstruction(new Construction("Mica"));
 
     }
 
@@ -447,6 +455,53 @@ class CapacitorTypeControllerTest {
 
 
         assertThat(result.getResolvedException().toString(), containsString("could not be found"));
+    }
+
+
+    /**
+     * Test successful retrieval of CapacitorTypeResponse List.
+     */
+    @Test
+    void getCapacitorTypes_success() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-types/solar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        List<CapacitorTypeResponse> receivedTypes = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeResponse.class));
+
+        List<CapacitorTypeResponse> expectedTypes = Arrays.asList(new CapacitorTypeResponse(capacitorType1), new CapacitorTypeResponse(capacitorType2));
+
+        assertEquals(expectedTypes, receivedTypes);
+    }
+
+
+    /**
+     * Test unsuccessful retrieval of CapacitorTypeResponse List from Manufacturer that doesn't exist.
+     */
+    @Test
+    void getCapacitorTypes_noExistingManufacturer_fail() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-types/solarus")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isBadRequest());
+
     }
 
 
