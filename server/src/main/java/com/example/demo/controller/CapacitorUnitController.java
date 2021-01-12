@@ -3,14 +3,13 @@ package com.example.demo.controller;
 import com.example.demo.model.CapacitorType;
 import com.example.demo.model.CapacitorUnit;
 import com.example.demo.payload.request.CapacitorUnitRequest;
+import com.example.demo.payload.response.CapacitorTypeResponse;
+import com.example.demo.payload.response.CapacitorUnitResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
@@ -21,6 +20,7 @@ public class CapacitorUnitController {
 
     private final static String PARENT_TYPE_NOT_FOUND_ERROR = "The CapacitorUnit references a CapacitorType \"%s\" that does not exist.";
     private final static String UNIT_NAME_EXISTS_ERROR = "The CapacitorUnit with the value (%s) already exists for the CapacitorType \"%s\"";
+    private final static String UNIT_NOT_FOUND_ERROR = "The CapacitorUnit with companyName %s, typeName %s and value %s could not be found.";
 
     private final CapacitorTypeRepository capacitorTypeRepository;
     private final CapacitorUnitRepository capacitorUnitRepository;
@@ -67,6 +67,29 @@ public class CapacitorUnitController {
         }
 
         response.setStatus(HttpServletResponse.SC_CREATED);
+    }
+
+
+    @GetMapping("name/{companyName}/{typeName}/{unitValue}")
+    public CapacitorUnitResponse getCapacitorUnitByValue(@PathVariable String companyName,
+                                                                  @PathVariable String typeName,
+                                                                  @PathVariable String unitValue,
+                                                                  HttpServletResponse response) {
+
+        CapacitorUnit capacitorUnit = capacitorUnitRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCaseAndValue(
+                companyName, typeName, unitValue
+        );
+
+        if (capacitorUnit == null) {
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND,
+                    String.format(UNIT_NOT_FOUND_ERROR, companyName, typeName, unitValue)
+            );
+        }
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        return new CapacitorUnitResponse(capacitorUnit);
+
     }
 
 }
