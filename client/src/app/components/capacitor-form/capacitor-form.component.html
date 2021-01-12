@@ -11,7 +11,18 @@
     </div>
 
     <label class="input__label__major" for="manufacturer">Select manufacturer:</label>
-    <select id="manufacturer" class="input"></select>
+    <select id="manufacturer" class="input"
+            [disabled]="isNavigatingToCreateManufacturer"
+            (change)="manufacturerDropdownChanged($event)">
+
+      <option disabled selected value>Choose...</option>
+      <option>{{newManufacturerOption}}</option>
+      <option *ngFor="let companyName of manufacturers$; let i = index" [value]="i">
+        {{companyName}}
+      </option>
+
+    </select>
+    <span [style.visibility]="isNavigatingToCreateManufacturer ? 'visible' : 'hidden'" class="spinner manufacturer__spinner"></span>
 
     <hr>
   </div>
