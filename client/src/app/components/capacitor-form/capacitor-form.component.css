@@ -89,3 +89,7 @@ hr {
   margin-bottom: -8px;
   display: inline-block;
 }
+
+.special__menu__item {
+  font-weight: bold;
+}

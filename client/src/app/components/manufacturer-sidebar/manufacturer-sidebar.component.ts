@@ -13,8 +13,7 @@ import {caseInsensitiveCompare} from '../../utilities/text-utils';
 })
 export class ManufacturerSidebarComponent implements OnInit {
 
-  companyName: string;
-  manufacturers$: Array<string>;
+  companyNames$: Array<string>;
 
   restService: RestService;
   dynamicRouter: DynamicRouterService;
@@ -24,7 +23,6 @@ export class ManufacturerSidebarComponent implements OnInit {
   constructor(restService: RestService, activatedRoute: ActivatedRoute, dynamicRouter: DynamicRouterService,
               refreshManufacturers: RefreshManufacturersService) {
     this.restService = restService;
-    this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.dynamicRouter = dynamicRouter;
     this.refreshManufacturers = refreshManufacturers;
 
@@ -36,7 +34,7 @@ export class ManufacturerSidebarComponent implements OnInit {
     return this.restService.getAllCompanyNames().subscribe({
       next: manufacturers => {
         manufacturers.sort(caseInsensitiveCompare);
-        this.manufacturers$ = manufacturers;
+        this.companyNames$ = manufacturers;
       },
 
       error: () => console.error('Couldn\'t get company names')
