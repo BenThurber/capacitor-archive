@@ -1,4 +1,4 @@
-<div style="margin: 35px 15px;">
+<div style="margin: 35px 15px;" [formGroup]="capacitorForm">
 
   <!--Manufacturer Section-->
   <div id="manufacturer-section" class="input__section">
@@ -11,13 +11,13 @@
     </div>
 
     <label class="input__label__major" for="manufacturer">Select manufacturer:</label>
-    <select id="manufacturer" class="input"
+    <select id="manufacturer" class="input" formControlName="companyName"
             [disabled]="isNavigatingToCreateManufacturer"
             (change)="manufacturerDropdownChanged($event)">
 
-      <option disabled selected value>Choose...</option>
+      <option selected value>Choose...</option>
       <option>{{newManufacturerOption}}</option>
-      <option *ngFor="let companyName of manufacturers$; let i = index" [value]="i">
+      <option *ngFor="let companyName of manufacturers$" [value]="companyName">
         {{companyName}}
       </option>
 
@@ -29,7 +29,7 @@
 
 
   <!--Type Section-->
-  <div id="type-section" class="input__section">
+  <div id="type-section" class="input__section" *ngIf="manufacturerIsSelected">
 
     <div style="margin-bottom: 20px">
       <app-image src="../../../assets/aerovox-type.png" link="true" height="100px" style="margin-right: 20px; margin-bottom: 9px">
@@ -98,7 +98,7 @@
 
 
   <!--Capacitor Section-->
-  <div id="capacitor-section" class="input__section">
+  <div id="capacitor-section" class="input__section" *ngIf="manufacturerIsSelected">
 
     <label class="input__label__major">Add Capacitor:</label>
     <br>

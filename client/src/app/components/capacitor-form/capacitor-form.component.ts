@@ -3,6 +3,7 @@ import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
 import {Router} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-capacitor-form',
@@ -11,17 +12,23 @@ import {Router} from '@angular/router';
 })
 export class CapacitorFormComponent implements OnInit {
 
+  capacitorForm: FormGroup;
+
   // Manufacturer Section
   readonly newManufacturerOption = '+ Add Manufacturer';
   isNavigatingToCreateManufacturer = false;
   manufacturers$: Array<string>;
-  selectedManufacturer: {index: number, value: string};
 
 
-  constructor(private restService: RestService, private router: Router) { }
+  constructor(private restService: RestService, private router: Router, private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.getManufacturerList();
+
+    const integerPattern: RegExp = /^\d+$/;
+    this.capacitorForm = this.formBuilder.group({
+      companyName: ['', Validators.required],
+    });
   }
 
   getManufacturerList(): Subscription {
@@ -48,9 +55,17 @@ export class CapacitorFormComponent implements OnInit {
 
       }, 800);
 
-      this.selectedManufacturer.index = Number.isInteger(event.target.value) ? event.target.value : null;
     }
 
+  }
+
+  get formFields(): any {
+    return this.capacitorForm.controls;
+  }
+
+  get manufacturerIsSelected(): any {
+    // Inefficient O(n)
+    return this.manufacturers$.includes(this.formFields.companyName.value);
   }
 
 }
