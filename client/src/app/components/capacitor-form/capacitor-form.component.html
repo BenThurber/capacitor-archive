@@ -1,4 +1,4 @@
-<div style="margin: 35px 15px;" [formGroup]="capacitorForm">
+<form style="margin: 35px 15px;" [formGroup]="capacitorForm">
 
   <!--Manufacturer Section-->
   <div id="manufacturer-section" class="input__section">
@@ -6,18 +6,17 @@
     <div class="info__blurb">
       Don't see the <strong>manufacturer</strong> in the list?
       <br>
-      <strong><a class="nav__link" routerLink="/manufacturer/create">Add a New Manufacturer</a></strong>
+      <strong><a class="nav__link" [routerLink]="" (click)="selectAddNewManufacturer()">Add a New Manufacturer</a></strong>
 
     </div>
 
     <label class="input__label__major" for="manufacturer">Select manufacturer:</label>
     <select id="manufacturer" class="input" formControlName="companyName"
-            [disabled]="isNavigatingToCreateManufacturer"
-            (change)="manufacturerDropdownChanged($event)">
+            (change)="manufacturerMenuChanged($event)">
 
-      <option selected value>Choose...</option>
-      <option>{{newManufacturerOption}}</option>
-      <option *ngFor="let companyName of manufacturers$" [value]="companyName">
+      <option class="special__menu__item" selected value>Choose...</option>
+      <option class="special__menu__item">{{newManufacturerOption}}</option>
+      <option *ngFor="let companyName of companyNames$" [value]="companyName">
         {{companyName}}
       </option>
 
@@ -29,7 +28,7 @@
 
 
   <!--Type Section-->
-  <div id="type-section" class="input__section" *ngIf="manufacturerIsSelected">
+  <div id="type-section" class="input__section" formGroupName="type" *ngIf="manufacturerIsSelected">
 
     <div style="margin-bottom: 20px">
       <app-image src="../../../assets/aerovox-type.png" link="true" height="100px" style="margin-right: 20px; margin-bottom: 9px">
@@ -41,7 +40,7 @@
     <div class="info__blurb">
       Don't see the <strong>type</strong> in the list?
       <br>
-      <strong><a class="nav__link" routerLink="/not-implemented">Add a new type</a></strong>
+      <strong><a [routerLink]="" class="nav__link" (click)="selectAddNewType()">Add a new type</a></strong>
 
       <div class="type__info">
         <h3>What is a "Type"?</h3>
@@ -56,15 +55,25 @@
     </div>
 
     <label class="input__label__major" for="type">Select Type/Series:</label>
-    <select id="type" class="input"></select>
+    <select id="type" class="input" formControlName="typeNameSelect" (change)="typeMenuChanged($event)">
+
+      <option class="special__menu__item" selected value>Choose...</option>
+      <option class="special__menu__item">{{newCapacitorTypeOption}}</option>
+      <option *ngFor="let capacitorType of capacitorTypes$" [value]="capacitorType.typeName">
+        {{capacitorType.typeName}}
+      </option>
+
+    </select>
     <br>
 
-    <label class="input__label__minor" for="type-name">Type Name*</label>
-    <select id="type-name" class="input"></select>
-    <br>
+    <ng-container *ngIf="formFields.type.value.typeNameSelect === newCapacitorTypeOption">
+      <label class="input__label__minor" for="type-name">Type Name*</label>
+      <input id="type-name" class="input" formControlName="typeNameInput">
+      <br>
+    </ng-container>
 
     <label class="input__label__minor" for="construction">Construction*</label>
-    <select id="construction" class="input"></select>
+    <select id="construction" class="input" formControlName="construction"></select>
     <br>
 
     <div id="expansion-panel-container">
@@ -77,11 +86,11 @@
 
         <div style="all: initial">
           <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
-          <input id="start-year" type="text" class="start__end__input" size="10" placeholder="optional">
+          <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10" placeholder="optional">
           <br>
 
           <label class="input__label__minor start__end__label" for="end-year">End Year</label>
-          <input id="end-year" type="text" class="start__end__input" size="10" placeholder="optional">
+          <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10" placeholder="optional">
         </div>
 
       </mat-expansion-panel>
@@ -90,7 +99,7 @@
 
     <label class="input__label__minor" for="description">Description</label>
     <br>
-    <textarea id="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
+    <textarea id="description" formControlName="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
     <br>
 
     <hr>
@@ -126,4 +135,4 @@
   </div>
 
 
-</div>
+</form>
