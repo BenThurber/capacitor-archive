@@ -4,6 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
+import {caseInsensitiveCompare} from '../../utilities/text-utils';
 
 @Component({
   selector: 'app-manufacturer-sidebar',
@@ -19,18 +20,6 @@ export class ManufacturerSidebarComponent implements OnInit {
   dynamicRouter: DynamicRouterService;
   refreshManufacturers: RefreshManufacturersService;
 
-  static caseInsensitiveCompare(a, b): number {
-    const nameA = a.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    // names must be equal
-    return 0;
-  }
 
   constructor(restService: RestService, activatedRoute: ActivatedRoute, dynamicRouter: DynamicRouterService,
               refreshManufacturers: RefreshManufacturersService) {
@@ -46,7 +35,7 @@ export class ManufacturerSidebarComponent implements OnInit {
   ngOnInit(): Subscription {
     return this.restService.getAllCompanyNames().subscribe({
       next: manufacturers => {
-        manufacturers.sort(ManufacturerSidebarComponent.caseInsensitiveCompare);
+        manufacturers.sort(caseInsensitiveCompare);
         this.manufacturers$ = manufacturers;
       },
 
