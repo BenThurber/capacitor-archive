@@ -15,25 +15,29 @@ export class CapacitorFormComponent implements OnInit {
 
   capacitorForm: FormGroup;
 
+  readonly noneSelected = 'Choose...';
+
   // Manufacturer Section
   readonly newManufacturerOption = '+ Add Manufacturer';
   selectedCompanyName: string;
   companyNames$: Array<string> = [];
-  capacitorTypes$: Array<CapacitorType> = [];
   isNavigatingToCreateManufacturer = false;
 
   // Type Section
   readonly newCapacitorTypeOption = '+ Add New Type';
   selectedCapacitorType: CapacitorType;
+  capacitorTypes$: Array<CapacitorType> = [];
+  constructionNames$: Array<string> = [];
+  yearsAreExpanded = false;
 
 
   constructor(private restService: RestService,
               private router: Router,
-              private formBuilder: FormBuilder,
-              private changeDetectorRef: ChangeDetectorRef) { }
+              private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.getManufacturerList();
+    this.getConstructionList();
 
     const integerPattern: RegExp = /^\d+$/;
     this.capacitorForm = this.formBuilder.group({
@@ -41,7 +45,7 @@ export class CapacitorFormComponent implements OnInit {
       type: this.formBuilder.group({
         typeNameSelect: ['', Validators.required],
         typeNameInput: ['', Validators.required],
-        construction: ['', Validators.required],
+        construction: [this.noneSelected, Validators.required],
         startYear: ['', Validators.required],
         endYear: ['', Validators.required],
         description: ['', Validators.required],
@@ -65,11 +69,23 @@ export class CapacitorFormComponent implements OnInit {
   getTypeList(companyName: string): Subscription {
     return this.restService.getAllTypeNames(companyName).subscribe({
       next: types => {
-        types.sort(caseInsensitiveCompare);
+        types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
       },
 
       error: e => console.error('Couldn\'t get capacitor types', e)
+    });
+  }
+
+  /** Update this.capacitorTypes$ */
+  getConstructionList(): Subscription {
+    return this.restService.getAllConstructions().subscribe({
+      next: constructionNames => {
+        constructionNames.sort(caseInsensitiveCompare);
+        this.constructionNames$ = constructionNames;
+      },
+
+      error: () => console.error('Couldn\'t get construction names')
     });
   }
 
@@ -94,12 +110,13 @@ export class CapacitorFormComponent implements OnInit {
     this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === event.target.value).pop();
     this.capacitorForm.patchValue({
       type: {
-        construction: this.selectedCapacitorType && this.selectedCapacitorType.constructionName,
+        construction: this.selectedCapacitorType ? this.selectedCapacitorType.constructionName : this.noneSelected,
         startYear: this.selectedCapacitorType && this.selectedCapacitorType.startYear,
         endYear: this.selectedCapacitorType && this.selectedCapacitorType.endYear,
         description: this.selectedCapacitorType && this.selectedCapacitorType.description,
       }
     });
+    this.yearsAreExpanded = Boolean(this.formFields.type.value.startYear || this.formFields.type.value.endYear);
   }
 
   /** Called when the button "Add a new manufacturer" is pressed */

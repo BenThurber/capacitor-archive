@@ -125,7 +125,7 @@ public class CapacitorTypeController {
      * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned.
      * @return the list of found type, empty list if none.
      */
-    @GetMapping("all-types/{companyName}")
+    @GetMapping("all/{companyName}")
     public List<CapacitorTypeResponse> getAllCapacitorTypeFromManufacturer(@PathVariable String companyName,
                                                                                       HttpServletResponse response) {
 
