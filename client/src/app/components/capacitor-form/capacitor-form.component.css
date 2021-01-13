@@ -89,3 +89,7 @@ hr {
   margin-bottom: -8px;
   display: inline-block;
 }
+
+.non__menu__item {
+  font-weight: bolder;
+}

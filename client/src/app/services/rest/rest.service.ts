@@ -6,6 +6,7 @@ import {Observable} from 'rxjs';
 import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 import {FormGroup} from '@angular/forms';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
+import {CapacitorType} from '../../models/capacitor-type';
 
 @Injectable({
   providedIn: 'root'
@@ -36,6 +37,10 @@ export class RestService {
 
   getAllCompanyNames(): Observable<Array<string>> {
     return this.httpClient.get<Array<string>>(this.baseUrl + '/manufacturer/all-names', this.options);
+  }
+
+  getAllTypeNames(companyName): Observable<Array<CapacitorType>> {
+    return this.httpClient.get<Array<CapacitorType>>(this.baseUrl + '/type/all-types/' + companyName, this.options);
   }
 
   createManufacturer(manufacturer: Manufacturer): any {
