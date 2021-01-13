@@ -14,8 +14,8 @@
     <select id="manufacturer" class="input" formControlName="companyName"
             (change)="manufacturerMenuChanged($event)">
 
-      <option class="non__menu__item" selected value>Choose...</option>
-      <option class="non__menu__item">{{newManufacturerOption}}</option>
+      <option class="special__menu__item" selected value>Choose...</option>
+      <option class="special__menu__item">{{newManufacturerOption}}</option>
       <option *ngFor="let companyName of companyNames$" [value]="companyName">
         {{companyName}}
       </option>
@@ -57,8 +57,8 @@
     <label class="input__label__major" for="type">Select Type/Series:</label>
     <select id="type" class="input" formControlName="typeNameSelect" (change)="typeMenuChanged($event)">
 
-      <option class="non__menu__item" selected value>Choose...</option>
-      <option class="non__menu__item">{{newCapacitorTypeOption}}</option>
+      <option class="special__menu__item" selected value>Choose...</option>
+      <option class="special__menu__item">{{newCapacitorTypeOption}}</option>
       <option *ngFor="let capacitorType of capacitorTypes$" [value]="capacitorType.typeName">
         {{capacitorType.typeName}}
       </option>

@@ -47,7 +47,6 @@ export class CapacitorFormComponent implements OnInit {
         description: ['', Validators.required],
       })
     });
-    console.log(this.capacitorForm.controls.type.value.typeNameSelect);
   }
 
   /** Update this.companyNames$ */

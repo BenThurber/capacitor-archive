@@ -90,6 +90,6 @@ hr {
   display: inline-block;
 }
 
-.non__menu__item {
-  font-weight: bolder;
+.special__menu__item {
+  font-weight: bold;
 }
