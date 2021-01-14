@@ -111,7 +111,7 @@ export class CapacitorFormComponent implements OnInit {
     const selectedTypeName = event.target.value;
 
     // Inefficient O(n)
-    this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === event.target.value).pop();
+    this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === selectedTypeName).pop();
 
     selectedTypeName === this.newCapacitorTypeOption ?
       this.formFields.type.controls.typeContent.enable() :
