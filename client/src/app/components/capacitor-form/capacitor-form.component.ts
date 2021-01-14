@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
@@ -15,37 +15,43 @@ export class CapacitorFormComponent implements OnInit {
 
   capacitorForm: FormGroup;
 
+  readonly noneSelected = 'Choose...';
+
   // Manufacturer Section
   readonly newManufacturerOption = '+ Add Manufacturer';
   selectedCompanyName: string;
   companyNames$: Array<string> = [];
-  capacitorTypes$: Array<CapacitorType> = [];
   isNavigatingToCreateManufacturer = false;
 
   // Type Section
   readonly newCapacitorTypeOption = '+ Add New Type';
   selectedCapacitorType: CapacitorType;
+  capacitorTypes$: Array<CapacitorType> = [];
+  constructionNames$: Array<string> = [];
+  yearsAreExpanded = false;
 
 
   constructor(private restService: RestService,
               private router: Router,
-              private formBuilder: FormBuilder,
-              private changeDetectorRef: ChangeDetectorRef) { }
+              private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
     this.getManufacturerList();
+    this.getConstructionList();
 
     const integerPattern: RegExp = /^\d+$/;
     this.capacitorForm = this.formBuilder.group({
       companyName: ['', Validators.required],
       type: this.formBuilder.group({
         typeNameSelect: ['', Validators.required],
-        typeNameInput: ['', Validators.required],
-        construction: ['', Validators.required],
-        startYear: ['', Validators.required],
-        endYear: ['', Validators.required],
-        description: ['', Validators.required],
-      })
+        typeContent: this.formBuilder.group({
+          typeNameInput: [{value: '', disabled: true}, Validators.required],
+          construction: [{value: this.noneSelected, disabled: true}, Validators.required],
+          startYear: [{value: '', disabled: true}, Validators.required],
+          endYear: [{value: '', disabled: true}, Validators.required],
+          description: [{value: '', disabled: true}, Validators.required],
+        }),
+      }),
     });
   }
 
@@ -65,11 +71,23 @@ export class CapacitorFormComponent implements OnInit {
   getTypeList(companyName: string): Subscription {
     return this.restService.getAllTypeNames(companyName).subscribe({
       next: types => {
-        types.sort(caseInsensitiveCompare);
+        types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
       },
 
       error: e => console.error('Couldn\'t get capacitor types', e)
+    });
+  }
+
+  /** Update this.capacitorTypes$ */
+  getConstructionList(): Subscription {
+    return this.restService.getAllConstructions().subscribe({
+      next: constructionNames => {
+        constructionNames.sort(caseInsensitiveCompare);
+        this.constructionNames$ = constructionNames;
+      },
+
+      error: () => console.error('Couldn\'t get construction names')
     });
   }
 
@@ -90,16 +108,27 @@ export class CapacitorFormComponent implements OnInit {
 
   /** Handle the event when a typeName is selected */
   typeMenuChanged(event): void {
+    const selectedTypeName = event.target.value;
+
     // Inefficient O(n)
-    this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === event.target.value).pop();
+    this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === selectedTypeName).pop();
+
+    selectedTypeName === this.newCapacitorTypeOption ?
+      this.formFields.type.controls.typeContent.enable() :
+      this.formFields.type.controls.typeContent.disable();
+
     this.capacitorForm.patchValue({
       type: {
-        construction: this.selectedCapacitorType && this.selectedCapacitorType.constructionName,
-        startYear: this.selectedCapacitorType && this.selectedCapacitorType.startYear,
-        endYear: this.selectedCapacitorType && this.selectedCapacitorType.endYear,
-        description: this.selectedCapacitorType && this.selectedCapacitorType.description,
+        typeContent: {
+          typeNameInput: this.selectedCapacitorType && this.selectedCapacitorType.typeName,
+          construction: this.selectedCapacitorType ? this.selectedCapacitorType.constructionName : this.noneSelected,
+          startYear: this.selectedCapacitorType && this.selectedCapacitorType.startYear,
+          endYear: this.selectedCapacitorType && this.selectedCapacitorType.endYear,
+          description: this.selectedCapacitorType && this.selectedCapacitorType.description,
+        }
       }
     });
+    this.yearsAreExpanded = Boolean(this.formFields.type.value.startYear || this.formFields.type.value.endYear);
   }
 
   /** Called when the button "Add a new manufacturer" is pressed */
@@ -124,7 +153,7 @@ export class CapacitorFormComponent implements OnInit {
         typeNameSelect: this.newCapacitorTypeOption
       }
     });
-    this.typeMenuChanged({target: {value: null}});
+    this.typeMenuChanged({target: {value: this.newCapacitorTypeOption}});
   }
 
   get formFields(): any {

@@ -1,5 +1,5 @@
 
-export function caseInsensitiveCompare(a, b): number {
+export function caseInsensitiveCompare(a: string, b: string): number {
   const nameA = a.toUpperCase(); // ignore upper and lowercase
   const nameB = b.toUpperCase(); // ignore upper and lowercase
   if (nameA < nameB) {

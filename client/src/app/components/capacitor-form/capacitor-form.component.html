@@ -14,7 +14,7 @@
     <select id="manufacturer" class="input" formControlName="companyName"
             (change)="manufacturerMenuChanged($event)">
 
-      <option class="special__menu__item" selected value>Choose...</option>
+      <option class="special__menu__item" selected value>{{noneSelected}}</option>
       <option class="special__menu__item">{{newManufacturerOption}}</option>
       <option *ngFor="let companyName of companyNames$" [value]="companyName">
         {{companyName}}
@@ -57,7 +57,7 @@
     <label class="input__label__major" for="type">Select Type/Series:</label>
     <select id="type" class="input" formControlName="typeNameSelect" (change)="typeMenuChanged($event)">
 
-      <option class="special__menu__item" selected value>Choose...</option>
+      <option class="special__menu__item" selected value>{{noneSelected}}</option>
       <option class="special__menu__item">{{newCapacitorTypeOption}}</option>
       <option *ngFor="let capacitorType of capacitorTypes$" [value]="capacitorType.typeName">
         {{capacitorType.typeName}}
@@ -66,41 +66,48 @@
     </select>
     <br>
 
-    <ng-container *ngIf="formFields.type.value.typeNameSelect === newCapacitorTypeOption">
+    <ng-container formGroupName="typeContent">
       <label class="input__label__minor" for="type-name">Type Name*</label>
-      <input id="type-name" class="input" formControlName="typeNameInput">
+      <input id="type-name" class="input" size="30" formControlName="typeNameInput">
+      <br>
+
+      <label class="input__label__minor" for="construction">Construction*</label>
+      <select id="construction" class="input" formControlName="construction">
+
+        <option class="special__menu__item" selected [value]="noneSelected">{{noneSelected}}</option>
+        <option *ngFor="let construction of constructionNames$" [value]="construction">
+          {{construction}}
+        </option>
+
+      </select>
+      <br>
+
+      <div id="expansion-panel-container">
+        <mat-expansion-panel [(expanded)]="yearsAreExpanded" class="input">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Include Years Produced
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <div style="all: initial">
+            <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
+            <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10" placeholder="optional">
+            <br>
+
+            <label class="input__label__minor start__end__label" for="end-year">End Year</label>
+            <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10" placeholder="optional">
+          </div>
+
+        </mat-expansion-panel>
+      </div>
+
+
+      <label class="input__label__minor" for="description">Description</label>
+      <br>
+      <textarea id="description" formControlName="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
       <br>
     </ng-container>
-
-    <label class="input__label__minor" for="construction">Construction*</label>
-    <select id="construction" class="input" formControlName="construction"></select>
-    <br>
-
-    <div id="expansion-panel-container">
-      <mat-expansion-panel class="input">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Include Years Produced
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div style="all: initial">
-          <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
-          <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10" placeholder="optional">
-          <br>
-
-          <label class="input__label__minor start__end__label" for="end-year">End Year</label>
-          <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10" placeholder="optional">
-        </div>
-
-      </mat-expansion-panel>
-    </div>
-
-
-    <label class="input__label__minor" for="description">Description</label>
-    <br>
-    <textarea id="description" formControlName="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
-    <br>
 
     <hr>
   </div>
