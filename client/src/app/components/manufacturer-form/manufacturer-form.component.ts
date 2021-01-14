@@ -50,7 +50,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
       captcha: ['', Validators.required],
-    }, {validator: checkIfCloseYearAfterOpenYear});
+    }, {validator: checkIfCloseYearBeforeOpenYear});
 
     // Populate form values
     if (this.existingManufacturer) {
@@ -130,21 +130,21 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     return this.manufacturerForm.controls;
   }
 
-  get closeYearAfterOpenYearError(): any {
-    return this.manufacturerForm.errors && this.manufacturerForm.errors.closeYearAfterOpenYear;
+  get closeYearBeforeOpenYearError(): any {
+    return this.manufacturerForm.errors && this.manufacturerForm.errors.closeYearBeforeOpenYear;
   }
 
 }
 
 
-function checkIfCloseYearAfterOpenYear(c: AbstractControl): any {
-  // Safety Check
-  const openDate: number = parseInt(c.value.openYear, 10);
-  const closedDate: number = parseInt(c.value.closeYear, 10);
+function checkIfCloseYearBeforeOpenYear(c: AbstractControl): any {
 
-  if (!openDate || !closedDate) { return null; }
+  const openYear: number = parseInt(c.value.openYear, 10);
+  const closeYear: number = parseInt(c.value.closeYear, 10);
 
-  return (openDate <= closedDate) ? null : { closeYearAfterOpenYear: true };
+  if (!openYear || !closeYear) { return null; }
+
+  return (openYear <= closeYear) ? null : { closeYearBeforeOpenYear: true };
   // carry out the actual date checks here for is-endDate-after-startDate
   // if valid, return null,
   // if invalid, return an error object (any arbitrary name), like, return { invalidEndDate: true }

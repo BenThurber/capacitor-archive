@@ -26,7 +26,7 @@ public class ConstructionController {
      * @return the capitalized construction name
      */
     @PostMapping(value = "/create")
-    public String addNewConstruction(@RequestBody String constructionName, HttpServletResponse response) {
+    public String createConstruction(@RequestBody String constructionName, HttpServletResponse response) {
 
         Construction newConstruction = new Construction(constructionName);
 
