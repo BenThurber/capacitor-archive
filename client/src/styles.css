@@ -64,3 +64,23 @@ a:hover {
 .nav__link:hover {
   color: darkgoldenrod;
 }
+
+.is-invalid {
+  color: red;
+}
+
+.error__msg {
+  color: red;
+  font-size: 15px;
+}
+
+.error__submit {
+  padding: 10px;
+  background-color: #ff7c6e;
+  color: #383838;
+}
+
+.captcha__error__msg {
+  margin-top: 8px;
+  font-weight: bold;
+}
