@@ -13,6 +13,8 @@ import {CapacitorType} from '../../models/capacitor-type';
 })
 export class CapacitorFormComponent implements OnInit {
 
+  static newConstructionOption = '+ Add Construction';
+
   capacitorForm: FormGroup;
 
   readonly noneSelected = 'Choose...';
@@ -27,6 +29,7 @@ export class CapacitorFormComponent implements OnInit {
   readonly newCapacitorTypeOption = '+ Add New Type';
   selectedCapacitorType: CapacitorType;
   capacitorTypes$: Array<CapacitorType> = [];
+  readonly newConstructionOption = CapacitorFormComponent.newConstructionOption;
   constructionNames$: Array<string> = [];
   yearsAreExpanded = false;
 
@@ -49,6 +52,7 @@ export class CapacitorFormComponent implements OnInit {
         typeContent: this.formBuilder.group({
           typeNameInput: [{value: '', disabled: true}, Validators.required],
           construction: [{value: this.noneSelected, disabled: true}, Validators.pattern(noneSelectedPattern)],
+          constructionInput: [{value: '', disabled: true}, []],
           startYear: [{value: '', disabled: true}, [
             Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
           ],
@@ -56,7 +60,7 @@ export class CapacitorFormComponent implements OnInit {
             Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
           ],
           description: [{value: '', disabled: true}, []],
-        }, {validator: checkIfEndYearBeforeStartYear}),
+        }, {validator: [checkIfEndYearBeforeStartYear, checkNewConstruction]}),
       }),
     });
   }
@@ -94,6 +98,12 @@ export class CapacitorFormComponent implements OnInit {
       },
 
       error: () => console.error('Couldn\'t get construction names')
+    });
+  }
+
+  createConstruction(construction: string): Subscription {
+    return this.restService.createConstruction(construction).subscribe({
+      // ToDo
     });
   }
 
@@ -179,8 +189,25 @@ export class CapacitorFormComponent implements OnInit {
     return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.endYearBeforeStartYear;
   }
 
+  get noNewConstructionEnteredError(): any {
+    return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.noNewConstructionEntered;
+  }
+
 }
 
+/**
+ * If a + Add a Construction has been selected, nothing has been entered, return an error.
+ * @param c form control for typeContent
+ * @return error object { noNewConstructionEntered: true } or null
+ */
+function checkNewConstruction(c: AbstractControl): any {
+
+  if (c.value.construction === CapacitorFormComponent.newConstructionOption && !c.value.constructionInput) {
+    return { noNewConstructionEntered: true };
+  } else {
+    return null;
+  }
+}
 
 function checkIfEndYearBeforeStartYear(c: AbstractControl): any {
 

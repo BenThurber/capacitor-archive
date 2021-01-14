@@ -79,12 +79,19 @@
       <select id="construction" class="input" formControlName="construction">
 
         <option class="special__menu__item" selected [value]="noneSelected">{{noneSelected}}</option>
+        <option class="special__menu__item" [value]="newConstructionOption">{{newConstructionOption}}</option>
         <option *ngFor="let construction of constructionNames$" [value]="construction">
           {{construction}}
         </option>
 
       </select>
-      <div style="margin-top: -20px" class="error__msg" *ngIf="typeFields.construction.errors">
+      <ng-container *ngIf="typeFields.construction.value === newConstructionOption">
+        <input style="margin-left: 15px;" id="construction-name" class="" size="15" formControlName="constructionInput"
+               placeholder="e.g. wax-paper"
+               [ngClass]="{ 'is-invalid': noNewConstructionEnteredError }">
+      </ng-container>
+      <div style="margin-top: -20px" class="error__msg"
+           *ngIf="typeFields.construction.errors || noNewConstructionEnteredError">
         Please select what kind of capacitor it is
       </div>
       <br>
