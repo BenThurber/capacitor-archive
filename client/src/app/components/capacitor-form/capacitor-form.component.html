@@ -6,7 +6,7 @@
     <div class="info__blurb">
       Don't see the <strong>manufacturer</strong> in the list?
       <br>
-      <strong><a class="nav__link" [routerLink]="" (click)="selectAddNewManufacturer()">Add a New Manufacturer</a></strong>
+      <strong><a class="nav__link" [routerLink]="" (click)="gotoAddNewManufacturer()">Add a New Manufacturer</a></strong>
 
     </div>
 
@@ -40,7 +40,7 @@
     <div class="info__blurb">
       Don't see the <strong>type</strong> in the list?
       <br>
-      <strong><a [routerLink]="" class="nav__link" (click)="selectAddNewType()">Add a new type</a></strong>
+      <strong><a [routerLink]="" class="nav__link" (click)="gotoAddNewType()">Add a new type</a></strong>
 
       <div class="type__info">
         <h3>What is a "Type"?</h3>
@@ -68,7 +68,11 @@
 
     <ng-container formGroupName="typeContent">
       <label class="input__label__minor" for="type-name">Type Name*</label>
-      <input id="type-name" class="input" size="30" formControlName="typeNameInput">
+      <input id="type-name" class="input" size="30" formControlName="typeNameInput" placeholder="e.g. Sealdtite, 4424/E"
+             [ngClass]="{ 'is-invalid': typeFields.typeNameInput.errors }">
+      <div style="margin-top: -20px" class="error__msg" *ngIf="typeFields.typeNameInput.errors">
+        Please provide the name of the Type
+      </div>
       <br>
 
       <label class="input__label__minor" for="construction">Construction*</label>
@@ -80,6 +84,9 @@
         </option>
 
       </select>
+      <div style="margin-top: -20px" class="error__msg" *ngIf="typeFields.construction.errors">
+        Please select what kind of capacitor it is
+      </div>
       <br>
 
       <div id="expansion-panel-container">
@@ -92,14 +99,17 @@
 
           <div style="all: initial">
             <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
-            <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10" placeholder="optional">
+            <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10"
+                   placeholder="optional"
+                   [ngClass]="{ 'is-invalid': typeFields.startYear.errors }">
             <div class="start__end__label error__msg" *ngIf="typeFields.startYear.errors">
               Year is not valid (YYYY)
             </div>
             <br>
 
             <label class="input__label__minor start__end__label" for="end-year">End Year</label>
-            <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10" placeholder="optional">
+            <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10"
+                   placeholder="optional" [ngClass]="{ 'is-invalid': typeFields.endYear.errors }">
             <div>
               <div class="start__end__label error__msg" *ngIf="typeFields.endYear.errors">
                 Year is not valid (YYYY)

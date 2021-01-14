@@ -40,20 +40,22 @@ export class CapacitorFormComponent implements OnInit {
     this.getConstructionList();
 
     const integerPattern: RegExp = /^\d+$/;
+    // True when !== this.noneSelected
+    const noneSelectedPattern: RegExp = new RegExp('^(?!.*^' + this.noneSelected + '$)');
     this.capacitorForm = this.formBuilder.group({
       companyName: ['', Validators.required],
       type: this.formBuilder.group({
         typeNameSelect: ['', Validators.required],
         typeContent: this.formBuilder.group({
           typeNameInput: [{value: '', disabled: true}, Validators.required],
-          construction: [{value: this.noneSelected, disabled: true}, Validators.required],
+          construction: [{value: this.noneSelected, disabled: true}, Validators.pattern(noneSelectedPattern)],
           startYear: [{value: '', disabled: true}, [
             Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
           ],
           endYear: [{value: '', disabled: true}, [
             Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
           ],
-          description: [{value: '', disabled: true}, Validators.required],
+          description: [{value: '', disabled: true}, []],
         }, {validator: checkIfEndYearBeforeStartYear}),
       }),
     });
@@ -100,7 +102,7 @@ export class CapacitorFormComponent implements OnInit {
     this.selectedCompanyName = event.target.value;
     if (this.selectedCompanyName === this.newManufacturerOption) {
 
-      this.selectAddNewManufacturer();
+      this.gotoAddNewManufacturer();
 
     }
 
@@ -132,11 +134,11 @@ export class CapacitorFormComponent implements OnInit {
         }
       }
     });
-    this.yearsAreExpanded = Boolean(this.formFields.type.value.startYear || this.formFields.type.value.endYear);
+    this.yearsAreExpanded = Boolean(this.typeFields.startYear.value || this.typeFields.endYear.value);
   }
 
   /** Called when the button "Add a new manufacturer" is pressed */
-  selectAddNewManufacturer(): void {
+  gotoAddNewManufacturer(): void {
     this.isNavigatingToCreateManufacturer = true;
     this.formFields.companyName.disable();
 
@@ -151,7 +153,7 @@ export class CapacitorFormComponent implements OnInit {
   }
 
   /** Called when the button "Add a new type" is pressed */
-  selectAddNewType(): void {
+  gotoAddNewType(): void {
     this.capacitorForm.patchValue({
       type: {
         typeNameSelect: this.newCapacitorTypeOption
