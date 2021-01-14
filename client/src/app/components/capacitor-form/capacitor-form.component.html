@@ -66,11 +66,10 @@
     </select>
     <br>
 
-    <ng-container *ngIf="formFields.type.value.typeNameSelect === newCapacitorTypeOption">
-      <label class="input__label__minor" for="type-name">Type Name*</label>
-      <input id="type-name" class="input" formControlName="typeNameInput">
-      <br>
-    </ng-container>
+
+    <label class="input__label__minor" for="type-name">Type Name*</label>
+    <input id="type-name" class="input" size="30" formControlName="typeNameInput">
+    <br>
 
     <label class="input__label__minor" for="construction">Construction*</label>
     <select id="construction" class="input" formControlName="construction">

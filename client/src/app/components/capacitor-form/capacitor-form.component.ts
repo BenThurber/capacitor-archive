@@ -110,6 +110,7 @@ export class CapacitorFormComponent implements OnInit {
     this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === event.target.value).pop();
     this.capacitorForm.patchValue({
       type: {
+        typeNameInput: this.selectedCapacitorType && this.selectedCapacitorType.typeName,
         construction: this.selectedCapacitorType ? this.selectedCapacitorType.constructionName : this.noneSelected,
         startYear: this.selectedCapacitorType && this.selectedCapacitorType.startYear,
         endYear: this.selectedCapacitorType && this.selectedCapacitorType.endYear,
