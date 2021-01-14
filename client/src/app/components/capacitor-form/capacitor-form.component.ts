@@ -62,6 +62,12 @@ export class CapacitorFormComponent implements OnInit {
           description: [{value: '', disabled: true}, []],
         }, {validator: [checkIfEndYearBeforeStartYear, checkNewConstruction]}),
       }),
+      unit: this.formBuilder.group({
+        capacitance: ['', Validators.required],
+        voltage: ['', [Validators.pattern(integerPattern)]],
+        identifier: ['', []],
+        notes: ['', []],
+      }),
     });
   }
 
@@ -83,6 +89,7 @@ export class CapacitorFormComponent implements OnInit {
       next: types => {
         types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
+        this.typeMenuChanged({target: {value: this.noneSelected}});
       },
 
       error: e => console.error('Couldn\'t get capacitor types', e)
@@ -181,8 +188,11 @@ export class CapacitorFormComponent implements OnInit {
   }
 
   get manufacturerIsSelected(): any {
-    // Inefficient O(n)
-    return this.companyNames$.includes(this.formFields.companyName.value);
+    return !this.formFields.companyName.invalid;
+  }
+
+  get capacitorTypeIsSelected(): any {
+    return !this.formFields.type.controls.typeNameSelect.invalid;
   }
 
   get endYearBeforeStartYearError(): any {

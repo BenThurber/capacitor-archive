@@ -66,7 +66,7 @@
     </select>
     <br>
 
-    <ng-container formGroupName="typeContent">
+    <div *ngIf="capacitorTypeIsSelected" formGroupName="typeContent">
       <label class="input__label__minor" for="type-name">Type Name*</label>
       <input id="type-name" class="input" size="30" formControlName="typeNameInput" placeholder="e.g. Sealdtite, 4424/E"
              [ngClass]="{ 'is-invalid': typeFields.typeNameInput.errors }">
@@ -135,14 +135,15 @@
       <br>
       <textarea id="description" formControlName="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
       <br>
-    </ng-container>
+    </div>
 
     <hr>
   </div>
 
 
   <!--Capacitor Section-->
-  <div id="capacitor-section" class="input__section" *ngIf="manufacturerIsSelected">
+  <div id="capacitor-section" class="input__section" formGroupName="unit"
+       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected">
 
     <label class="input__label__major">Add Capacitor:</label>
     <br>
@@ -154,7 +155,7 @@
     </div>
 
     <label class="input__label__minor" for="voltage">Voltage*</label>
-    <input id="voltage" type="number" class="input" size="8">
+    <input id="voltage" type="number" formControlName="voltage" class="input" size="8">
     <br>
 
     <label class="input__label__minor" for="identifier">Identifiers</label>
