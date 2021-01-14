@@ -47,6 +47,10 @@ export class RestService {
     return this.httpClient.get<Array<string>>(this.baseUrl + '/construction/all', this.options);
   }
 
+  createConstruction(construction: string): any {
+    return this.httpClient.post<any>(this.baseUrl + '/construction/create', construction, this.options);
+  }
+
   createManufacturer(manufacturer: Manufacturer): any {
     return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer, this.options);
   }
