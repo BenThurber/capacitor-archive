@@ -468,7 +468,7 @@ class CapacitorTypeControllerTest {
         manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-types/solar")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all/solar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -495,7 +495,7 @@ class CapacitorTypeControllerTest {
         manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-types/solarus")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all/solarus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 

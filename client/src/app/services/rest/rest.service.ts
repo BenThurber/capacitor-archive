@@ -40,7 +40,11 @@ export class RestService {
   }
 
   getAllTypeNames(companyName): Observable<Array<CapacitorType>> {
-    return this.httpClient.get<Array<CapacitorType>>(this.baseUrl + '/type/all-types/' + companyName, this.options);
+    return this.httpClient.get<Array<CapacitorType>>(this.baseUrl + '/type/all/' + companyName, this.options);
+  }
+
+  getAllConstructions(): Observable<Array<string>> {
+    return this.httpClient.get<Array<string>>(this.baseUrl + '/construction/all', this.options);
   }
 
   createManufacturer(manufacturer: Manufacturer): any {
