@@ -3,7 +3,7 @@ import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
 import {Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CapacitorType} from '../../models/capacitor-type';
 
 @Component({
@@ -12,6 +12,8 @@ import {CapacitorType} from '../../models/capacitor-type';
   styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css']
 })
 export class CapacitorFormComponent implements OnInit {
+
+  static newConstructionOption = '+ Add Construction';
 
   capacitorForm: FormGroup;
 
@@ -27,6 +29,7 @@ export class CapacitorFormComponent implements OnInit {
   readonly newCapacitorTypeOption = '+ Add New Type';
   selectedCapacitorType: CapacitorType;
   capacitorTypes$: Array<CapacitorType> = [];
+  readonly newConstructionOption = CapacitorFormComponent.newConstructionOption;
   constructionNames$: Array<string> = [];
   yearsAreExpanded = false;
 
@@ -40,17 +43,24 @@ export class CapacitorFormComponent implements OnInit {
     this.getConstructionList();
 
     const integerPattern: RegExp = /^\d+$/;
+    // True when !== this.noneSelected
+    const noneSelectedPattern: RegExp = new RegExp('^(?!.*^' + this.noneSelected + '$)');
     this.capacitorForm = this.formBuilder.group({
       companyName: ['', Validators.required],
       type: this.formBuilder.group({
         typeNameSelect: ['', Validators.required],
         typeContent: this.formBuilder.group({
           typeNameInput: [{value: '', disabled: true}, Validators.required],
-          construction: [{value: this.noneSelected, disabled: true}, Validators.required],
-          startYear: [{value: '', disabled: true}, Validators.required],
-          endYear: [{value: '', disabled: true}, Validators.required],
-          description: [{value: '', disabled: true}, Validators.required],
-        }),
+          construction: [{value: this.noneSelected, disabled: true}, Validators.pattern(noneSelectedPattern)],
+          constructionInput: [{value: '', disabled: true}, []],
+          startYear: [{value: '', disabled: true}, [
+            Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
+          ],
+          endYear: [{value: '', disabled: true}, [
+            Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
+          ],
+          description: [{value: '', disabled: true}, []],
+        }, {validator: [checkIfEndYearBeforeStartYear, checkNewConstruction]}),
       }),
     });
   }
@@ -91,12 +101,18 @@ export class CapacitorFormComponent implements OnInit {
     });
   }
 
+  createConstruction(construction: string): Subscription {
+    return this.restService.createConstruction(construction).subscribe({
+      // ToDo
+    });
+  }
+
   /** Handle the event when a companyName is selected */
   manufacturerMenuChanged(event): void {
     this.selectedCompanyName = event.target.value;
     if (this.selectedCompanyName === this.newManufacturerOption) {
 
-      this.selectAddNewManufacturer();
+      this.gotoAddNewManufacturer();
 
     }
 
@@ -128,11 +144,11 @@ export class CapacitorFormComponent implements OnInit {
         }
       }
     });
-    this.yearsAreExpanded = Boolean(this.formFields.type.value.startYear || this.formFields.type.value.endYear);
+    this.yearsAreExpanded = Boolean(this.typeFields.startYear.value || this.typeFields.endYear.value);
   }
 
   /** Called when the button "Add a new manufacturer" is pressed */
-  selectAddNewManufacturer(): void {
+  gotoAddNewManufacturer(): void {
     this.isNavigatingToCreateManufacturer = true;
     this.formFields.companyName.disable();
 
@@ -147,7 +163,7 @@ export class CapacitorFormComponent implements OnInit {
   }
 
   /** Called when the button "Add a new type" is pressed */
-  selectAddNewType(): void {
+  gotoAddNewType(): void {
     this.capacitorForm.patchValue({
       type: {
         typeNameSelect: this.newCapacitorTypeOption
@@ -160,9 +176,50 @@ export class CapacitorFormComponent implements OnInit {
     return this.capacitorForm.controls;
   }
 
+  get typeFields(): any {
+    return this.formFields.type.controls.typeContent.controls;
+  }
+
   get manufacturerIsSelected(): any {
     // Inefficient O(n)
     return this.companyNames$.includes(this.formFields.companyName.value);
   }
 
+  get endYearBeforeStartYearError(): any {
+    return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.endYearBeforeStartYear;
+  }
+
+  get noNewConstructionEnteredError(): any {
+    return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.noNewConstructionEntered;
+  }
+
+}
+
+/**
+ * If a + Add a Construction has been selected, nothing has been entered, return an error.
+ * @param c form control for typeContent
+ * @return error object { noNewConstructionEntered: true } or null
+ */
+function checkNewConstruction(c: AbstractControl): any {
+
+  if (c.value.construction === CapacitorFormComponent.newConstructionOption && !c.value.constructionInput) {
+    return { noNewConstructionEntered: true };
+  } else {
+    return null;
+  }
+}
+
+function checkIfEndYearBeforeStartYear(c: AbstractControl): any {
+
+  const startYear: number = parseInt(c.value.startYear, 10);
+  const endYear: number = parseInt(c.value.endYear, 10);
+
+  if (!startYear || !endYear) { return null; }
+
+  return (startYear <= endYear) ? null : { endYearBeforeStartYear: true };
+  // carry out the actual date checks here for is-endDate-after-startDate
+  // if valid, return null,
+  // if invalid, return an error object (any arbitrary name), like, return { invalidEndDate: true }
+  // make sure it always returns a 'null' for valid or non-relevant cases, and a 'non-null' object for when an error should be raised on
+  // the formGroup
 }
