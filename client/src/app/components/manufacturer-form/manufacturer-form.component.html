@@ -26,7 +26,7 @@
         Year Opened
       </label>
       <input id="open-year" type="text" formControlName="openYear" placeholder="optional"
-             [ngClass]="{ 'is-invalid': formFields.openYear.errors || closeYearAfterOpenYearError }">
+             [ngClass]="{ 'is-invalid': formFields.openYear.errors || closeYearBeforeOpenYearError }">
       <div class="error__msg" *ngIf="formFields.openYear.errors">
         Year is not valid (YYY)
       </div>
@@ -37,11 +37,11 @@
         Year Closed
       </label>
       <input id="close-year" type="text" formControlName="closeYear" placeholder="optional"
-             [ngClass]="{ 'is-invalid': formFields.closeYear.errors || closeYearAfterOpenYearError }">
+             [ngClass]="{ 'is-invalid': formFields.closeYear.errors || closeYearBeforeOpenYearError }">
       <div class="error__msg" *ngIf="formFields.closeYear.errors">
         Year is not valid (YYYY)
       </div>
-      <div class="error__msg" *ngIf="closeYearAfterOpenYearError">
+      <div class="error__msg" *ngIf="closeYearBeforeOpenYearError">
         {{formFields.closeYear.value}} is before {{formFields.openYear.value}}
       </div>
     </div>

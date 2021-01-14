@@ -93,10 +93,19 @@
           <div style="all: initial">
             <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
             <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10" placeholder="optional">
+            <div class="error__msg" *ngIf="typeFields.startYear.errors">
+              Year is not valid (YYYY)
+            </div>
             <br>
 
             <label class="input__label__minor start__end__label" for="end-year">End Year</label>
             <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10" placeholder="optional">
+            <div class="error__msg" *ngIf="typeFields.endYear.errors">
+              Year is not valid (YYYY)
+            </div>
+            <div class="error__msg" *ngIf="endYearBeforeStartYearError">
+              {{typeFields.endYear.value}} is before {{typeFields.startYear.value}}
+            </div>
           </div>
 
         </mat-expansion-panel>

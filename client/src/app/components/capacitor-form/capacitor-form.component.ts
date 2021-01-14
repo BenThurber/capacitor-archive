@@ -3,7 +3,7 @@ import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
 import {Router} from '@angular/router';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CapacitorType} from '../../models/capacitor-type';
 
 @Component({
@@ -47,10 +47,14 @@ export class CapacitorFormComponent implements OnInit {
         typeContent: this.formBuilder.group({
           typeNameInput: [{value: '', disabled: true}, Validators.required],
           construction: [{value: this.noneSelected, disabled: true}, Validators.required],
-          startYear: [{value: '', disabled: true}, Validators.required],
-          endYear: [{value: '', disabled: true}, Validators.required],
+          startYear: [{value: '', disabled: true}, [
+            Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
+          ],
+          endYear: [{value: '', disabled: true}, [
+            Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]
+          ],
           description: [{value: '', disabled: true}, Validators.required],
-        }),
+        }, {validator: checkIfEndYearBeforeStartYear}),
       }),
     });
   }
@@ -160,9 +164,33 @@ export class CapacitorFormComponent implements OnInit {
     return this.capacitorForm.controls;
   }
 
+  get typeFields(): any {
+    return this.formFields.type.controls.typeContent.controls;
+  }
+
   get manufacturerIsSelected(): any {
     // Inefficient O(n)
     return this.companyNames$.includes(this.formFields.companyName.value);
   }
 
+  get endYearBeforeStartYearError(): any {
+    return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.endYearBeforeStartYear;
+  }
+
+}
+
+
+function checkIfEndYearBeforeStartYear(c: AbstractControl): any {
+
+  const startYear: number = parseInt(c.value.startYear, 10);
+  const endYear: number = parseInt(c.value.endYear, 10);
+
+  if (!startYear || !endYear) { return null; }
+
+  return (startYear <= endYear) ? null : { endYearBeforeStartYear: true };
+  // carry out the actual date checks here for is-endDate-after-startDate
+  // if valid, return null,
+  // if invalid, return an error object (any arbitrary name), like, return { invalidEndDate: true }
+  // make sure it always returns a 'null' for valid or non-relevant cases, and a 'non-null' object for when an error should be raised on
+  // the formGroup
 }
