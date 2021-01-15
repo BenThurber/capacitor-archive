@@ -151,11 +151,18 @@
 
     <div class="input">
       <label class="input__label__minor" for="capacitance">Capacitance*</label>
-      <app-input-capacitance id="capacitance"></app-input-capacitance>
+      <app-input-capacitance formControlName="capacitance" id="capacitance"></app-input-capacitance>
+      <div class="error__msg" *ngIf="formFields.unit.controls.capacitance.errors">
+        Please enter a capacitance
+      </div>
     </div>
 
     <label class="input__label__minor" for="voltage">Voltage*</label>
-    <input id="voltage" type="number" formControlName="voltage" class="input" size="8">
+    <input id="voltage" type="text" formControlName="voltage" class="input" size="8"
+           [ngClass]="{ 'is-invalid': formFields.unit.controls.voltage.errors }">
+    <div class="start__end__label error__msg" *ngIf="formFields.unit.controls.voltage.errors">
+      Voltage must be a whole number
+    </div>
     <br>
 
     <label class="input__label__minor" for="identifier">Identifiers</label>

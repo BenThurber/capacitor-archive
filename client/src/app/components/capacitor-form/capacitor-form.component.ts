@@ -13,7 +13,7 @@ import {CapacitorType} from '../../models/capacitor-type';
 })
 export class CapacitorFormComponent implements OnInit {
 
-  static newConstructionOption = '+ Add Construction';
+  static readonly newConstructionOption = '+ Add Construction';
 
   capacitorForm: FormGroup;
 
