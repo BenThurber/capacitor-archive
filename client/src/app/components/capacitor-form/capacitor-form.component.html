@@ -54,45 +54,51 @@
 
     </div>
 
-    <label class="input__label__major" for="type">Select Type/Series:</label>
-    <select id="type" class="input" formControlName="typeNameSelect" (change)="typeMenuChanged($event)">
+    <div class="input">
+      <label class="input__label__major" for="type">Select Type/Series:</label>
+      <select id="type" formControlName="typeNameSelect" (change)="typeMenuChanged($event)">
 
-      <option class="special__menu__item" selected value>{{noneSelected}}</option>
-      <option class="special__menu__item">{{newCapacitorTypeOption}}</option>
-      <option *ngFor="let capacitorType of capacitorTypes$" [value]="capacitorType.typeName">
-        {{capacitorType.typeName}}
-      </option>
-
-    </select>
-    <br>
-
-    <ng-container formGroupName="typeContent">
-      <label class="input__label__minor" for="type-name">Type Name*</label>
-      <input id="type-name" class="input" size="30" formControlName="typeNameInput" placeholder="e.g. Sealdtite, 4424/E"
-             [ngClass]="{ 'is-invalid': typeFields.typeNameInput.errors }">
-      <div style="margin-top: -20px" class="error__msg" *ngIf="typeFields.typeNameInput.errors">
-        Please provide the name of the Type
-      </div>
-      <br>
-
-      <label class="input__label__minor" for="construction">Construction*</label>
-      <select id="construction" class="input" formControlName="construction">
-
-        <option class="special__menu__item" selected [value]="noneSelected">{{noneSelected}}</option>
-        <option class="special__menu__item" [value]="newConstructionOption">{{newConstructionOption}}</option>
-        <option *ngFor="let construction of constructionNames$" [value]="construction">
-          {{construction}}
+        <option class="special__menu__item" selected value>{{noneSelected}}</option>
+        <option class="special__menu__item">{{newCapacitorTypeOption}}</option>
+        <option *ngFor="let capacitorType of capacitorTypes$" [value]="capacitorType.typeName">
+          {{capacitorType.typeName}}
         </option>
 
       </select>
-      <ng-container *ngIf="typeFields.construction.value === newConstructionOption">
-        <input style="margin-left: 15px;" id="construction-name" class="" size="15" formControlName="constructionInput"
-               placeholder="e.g. wax-paper"
-               [ngClass]="{ 'is-invalid': noNewConstructionEnteredError }">
-      </ng-container>
-      <div style="margin-top: -20px" class="error__msg"
-           *ngIf="typeFields.construction.errors || noNewConstructionEnteredError">
-        Please select what kind of capacitor it is
+    </div>
+    <br>
+
+    <div *ngIf="capacitorTypeIsSelected" formGroupName="typeContent">
+      <div class="input">
+        <label class="input__label__minor" for="type-name">Type Name*</label>
+        <input id="type-name" size="30" formControlName="typeNameInput" placeholder="e.g. Sealdtite, 4424/E"
+               [ngClass]="{ 'is-invalid': typeFields.typeNameInput.errors }">
+        <div class="error__msg" *ngIf="typeFields.typeNameInput.errors">
+          Please provide the name of the Type
+        </div>
+      </div>
+      <br>
+
+      <div class="input">
+        <label class="input__label__minor" for="construction">Construction*</label>
+        <select id="construction" formControlName="construction">
+
+          <option class="special__menu__item" selected [value]="noneSelected">{{noneSelected}}</option>
+          <option class="special__menu__item" [value]="newConstructionOption">{{newConstructionOption}}</option>
+          <option *ngFor="let construction of constructionNames$" [value]="construction">
+            {{construction}}
+          </option>
+
+        </select>
+        <ng-container *ngIf="typeFields.construction.value === newConstructionOption">
+          <input style="margin-left: 15px;" id="construction-name" class="" size="15" formControlName="constructionInput"
+                 placeholder="e.g. wax-paper"
+                 [ngClass]="{ 'is-invalid': noNewConstructionEnteredError }">
+        </ng-container>
+        <div class="error__msg"
+             *ngIf="typeFields.construction.errors || noNewConstructionEnteredError">
+          Please select what kind of capacitor it is
+        </div>
       </div>
       <br>
 
@@ -109,7 +115,7 @@
             <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10"
                    placeholder="optional"
                    [ngClass]="{ 'is-invalid': typeFields.startYear.errors }">
-            <div class="start__end__label error__msg" *ngIf="typeFields.startYear.errors">
+            <div class="start__end__label error__msg" *ngIf="typeFields.startYear.errors" style="margin-top: 0">
               Year is not valid (YYYY)
             </div>
             <br>
@@ -118,10 +124,10 @@
             <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10"
                    placeholder="optional" [ngClass]="{ 'is-invalid': typeFields.endYear.errors }">
             <div>
-              <div class="start__end__label error__msg" *ngIf="typeFields.endYear.errors">
+              <div class="start__end__label error__msg" *ngIf="typeFields.endYear.errors" style="margin-top: 0">
                 Year is not valid (YYYY)
               </div>
-              <div class="start__end__label error__msg" *ngIf="endYearBeforeStartYearError">
+              <div class="start__end__label error__msg" *ngIf="endYearBeforeStartYearError" style="margin-top: 0">
                 {{typeFields.endYear.value}} is before {{typeFields.startYear.value}}
               </div>
             </div>
@@ -135,14 +141,15 @@
       <br>
       <textarea id="description" formControlName="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
       <br>
-    </ng-container>
+    </div>
 
     <hr>
   </div>
 
 
   <!--Capacitor Section-->
-  <div id="capacitor-section" class="input__section" *ngIf="manufacturerIsSelected">
+  <div id="capacitor-section" class="input__section" formGroupName="unit"
+       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected">
 
     <label class="input__label__major">Add Capacitor:</label>
     <br>
@@ -150,21 +157,33 @@
 
     <div class="input">
       <label class="input__label__minor" for="capacitance">Capacitance*</label>
-      <app-input-capacitance id="capacitance"></app-input-capacitance>
+      <app-input-capacitance formControlName="capacitance" id="capacitance"
+                             [ngClass]="{ 'is-invalid': formFields.unit.controls.capacitance.errors }"
+      ></app-input-capacitance>
+      <div class="error__msg" *ngIf="formFields.unit.controls.capacitance.errors">
+        Please enter a capacitance
+      </div>
     </div>
 
-    <label class="input__label__minor" for="voltage">Voltage*</label>
-    <input id="voltage" type="number" class="input" size="8">
-    <br>
+    <div class="input">
+      <label class="input__label__minor" for="voltage">Voltage*</label>
+      <input id="voltage" type="text" formControlName="voltage" size="8"
+             [ngClass]="{ 'is-invalid': formFields.unit.controls.voltage.errors }">
+      <div class="error__msg" *ngIf="formFields.unit.controls.voltage.errors">
+        Voltage must be a whole number
+      </div>
+    </div>
 
-    <label class="input__label__minor" for="identifier">Identifiers</label>
-    <input id="identifier" type="text" class="input" placeholder="optional">
-    <br>
+    <div class="input">
+      <label class="input__label__minor" for="identifier">Identifiers</label>
+      <input id="identifier" type="text" placeholder="optional">
+    </div>
 
-    <label class="input__label__minor" for="notes">Notes</label>
-    <br>
-    <textarea id="notes" class="input" rows="4" cols="35" placeholder="optional"></textarea>
-    <br>
+    <div class="input">
+      <label class="input__label__minor" for="notes">Notes</label>
+      <br>
+      <textarea id="notes" rows="4" cols="35" placeholder="optional"></textarea>
+    </div>
 
     <hr>
   </div>
