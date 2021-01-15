@@ -1,6 +1,7 @@
-<input size="6" type="text" style="margin-right: 10px">
-<select>
-  <option value="micro-farad">micro-farad</option>
-  <option value="nano-farad">nano-farad</option>
-  <option value="pico-farad">pico-farad</option>
+
+
+<input size="6" [ngClass]="ngClass" [(ngModel)]="capacitance" (ngModelChange)="changeMade($event)" type="text" style="margin-right: 10px">
+<select [(ngModel)]="selectedUnit" (ngModelChange)="changeMade(capacitance)">
+  <option *ngFor="let unit of unitArray" [value]="unit">{{unit}}</option>
 </select>
+
