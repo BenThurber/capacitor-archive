@@ -70,6 +70,7 @@ a:hover {
 }
 
 .error__msg {
+  margin-top: 7px;
   color: red;
   font-size: 15px;
 }

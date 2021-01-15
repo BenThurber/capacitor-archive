@@ -1,6 +1,6 @@
 
 
-<input size="6" [(ngModel)]="capacitance" (ngModelChange)="changeMade($event)" type="text" style="margin-right: 10px">
+<input size="6" [ngClass]="ngClass" [(ngModel)]="capacitance" (ngModelChange)="changeMade($event)" type="text" style="margin-right: 10px">
 <select [(ngModel)]="selectedUnit" (ngModelChange)="changeMade(capacitance)">
   <option *ngFor="let unit of unitArray" [value]="unit">{{unit}}</option>
 </select>

@@ -17,6 +17,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 export class InputCapacitanceComponent implements ControlValueAccessor, OnInit {
 
   @Input('capacitance') inputCapacitance: string;
+  @Input('ngClass') ngClass: string;
   capacitance: number;
 
   readonly unitOptions = {microFarad: 'micro-farad', nanoFarad: 'nano-farad', picoFarad: 'pico-farad'};
