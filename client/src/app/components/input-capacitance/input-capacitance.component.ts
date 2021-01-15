@@ -47,6 +47,9 @@ export class InputCapacitanceComponent implements ControlValueAccessor, OnInit {
         capacitance *= 1000000;
         break;
     }
+    capacitance = Math.max(capacitance, 1);
+    capacitance = isNaN(capacitance) ? null : capacitance;
+    console.log(capacitance);
     this.onChange(capacitance);
   }
 
@@ -56,8 +59,12 @@ export class InputCapacitanceComponent implements ControlValueAccessor, OnInit {
   writeValue(capacitance: any): void {
 
     capacitance = parseInt(capacitance, 10);
+    capacitance = isNaN(capacitance) ? null : capacitance;
 
-    if (capacitance < 1000) {
+    if (capacitance == null) {
+      this.selectedUnit = this.unitOptions.microFarad;
+      this.capacitance = null;
+    } else if (capacitance < 1000) {
       this.selectedUnit = this.unitOptions.picoFarad;
       this.capacitance = capacitance;
     } else if (capacitance < 1000000) {
@@ -66,8 +73,6 @@ export class InputCapacitanceComponent implements ControlValueAccessor, OnInit {
     } else if (capacitance < 1000000000000) {
       this.selectedUnit = this.unitOptions.microFarad;
       this.capacitance = capacitance / 1000000;
-    } else {
-      return;
     }
 
     this.onChange(this.capacitance);
