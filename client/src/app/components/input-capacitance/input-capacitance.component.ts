@@ -50,7 +50,6 @@ export class InputCapacitanceComponent implements ControlValueAccessor, OnInit {
     }
     capacitance = Math.max(capacitance, 1);
     capacitance = isNaN(capacitance) ? null : capacitance;
-    console.log(capacitance);
     this.onChange(capacitance);
   }
 
