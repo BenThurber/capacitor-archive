@@ -4,7 +4,31 @@ import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
 import {Router} from '@angular/router';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CapacitorType} from '../../models/capacitor-type';
+import {CapacitorType} from '../../models/capacitor-type.model';
+import {SpringErrorResponse} from '../../models/spring-error-response.model';
+import {Location} from '@angular/common';
+import {CapacitorUnit} from '../../models/capacitor-unit.model';
+
+class CapacitorForm {
+  companyName: string;
+  type: {
+    typeNameSelect: string;
+    typeContent: {
+      typeNameInput: string;
+      construction: string;
+      constructionInput: string;
+      startYear: number;
+      endYear: number;
+      description: string;
+    }
+  };
+  unit: {
+    capacitance: number
+    voltage: number;
+    identifier: string;
+    notes: string;
+  };
+}
 
 @Component({
   selector: 'app-capacitor-form',
@@ -16,6 +40,9 @@ export class CapacitorFormComponent implements OnInit {
   static readonly newConstructionOption = '+ Add Construction';
 
   capacitorForm: FormGroup;
+  existingCapacitorForm: CapacitorForm;
+  submitting = false;
+  errorsBackend: Array<SpringErrorResponse> = [];
 
   readonly noneSelected = 'Choose...';
 
@@ -36,7 +63,8 @@ export class CapacitorFormComponent implements OnInit {
 
   constructor(private restService: RestService,
               private router: Router,
-              private formBuilder: FormBuilder) { }
+              private formBuilder: FormBuilder,
+              private location: Location) { }
 
   ngOnInit(): void {
     this.getManufacturerList();
@@ -92,7 +120,7 @@ export class CapacitorFormComponent implements OnInit {
         this.typeMenuChanged({target: {value: this.noneSelected}});
       },
 
-      error: e => console.error('Couldn\'t get capacitor types', e)
+      error: () => console.error('Couldn\'t get capacitor types')
     });
   }
 
@@ -105,12 +133,6 @@ export class CapacitorFormComponent implements OnInit {
       },
 
       error: () => console.error('Couldn\'t get construction names')
-    });
-  }
-
-  createConstruction(construction: string): Subscription {
-    return this.restService.createConstruction(construction).subscribe({
-      // ToDo
     });
   }
 
@@ -177,6 +199,84 @@ export class CapacitorFormComponent implements OnInit {
       }
     });
     this.typeMenuChanged({target: {value: this.newCapacitorTypeOption}});
+  }
+
+
+
+  onSubmit(capacitorForm: CapacitorForm): void {
+    this.submitting = true;
+    this.errorsBackend = [];
+
+    if (this.existingCapacitorForm === undefined) {
+
+      this.submitCreate(capacitorForm);
+
+    } else {
+
+      // ToDo implement submitEdit
+
+    }
+
+  }
+
+
+  submitCreate(capacitorForm: CapacitorForm): void {
+
+    // Create new type
+    if (capacitorForm.type.typeNameSelect === this.newCapacitorTypeOption) {
+      const capacitorTypeFields = capacitorForm.type.typeContent;
+
+      // Create new Construction
+      if (capacitorTypeFields.construction === this.newConstructionOption) {
+        return this.restService.createConstruction(capacitorTypeFields.constructionInput).subscribe({
+          next: () => {
+            capacitorForm.type.typeContent.construction = capacitorForm.type.typeContent.constructionInput;
+            this.submitCreate(capacitorForm);
+          },
+          error: error => this.handleBackendError(error.error),
+        });
+      }
+
+      const capacitorType: CapacitorType = new CapacitorType();
+      capacitorType.typeName = capacitorTypeFields.typeNameInput;
+      capacitorType.startYear = capacitorTypeFields.startYear;
+      capacitorType.endYear = capacitorTypeFields.endYear;
+      capacitorType.description = capacitorTypeFields.description;
+      capacitorType.companyName = capacitorForm.companyName;
+      capacitorType.constructionName = capacitorTypeFields.construction === this.newConstructionOption ?
+        capacitorTypeFields.constructionInput : capacitorTypeFields.construction;
+
+      return this.restService.createCapacitorType(capacitorType).subscribe({
+        next: () => {
+          capacitorForm.type.typeNameSelect = capacitorForm.type.typeContent.typeNameInput;
+          this.submitCreate(capacitorForm);
+        },
+        error: error => this.handleBackendError(error.error),
+      });
+
+    }
+
+    // Create Unit
+    const capacitorUnit: CapacitorUnit = new CapacitorUnit();
+    capacitorUnit.capacitance = capacitorForm.unit.capacitance;
+    capacitorUnit.voltage = capacitorForm.unit.voltage;
+    capacitorUnit.identifier = capacitorForm.unit.identifier;
+    capacitorUnit.notes = capacitorForm.unit.notes;
+    capacitorUnit.typeName = capacitorForm.type.typeNameSelect;
+    capacitorUnit.companyName = capacitorForm.companyName;
+
+    return this.restService.createCapacitorUnit(capacitorUnit).subscribe({
+      next: () => {
+        console.log('Successfully submitted');
+      },
+      error: error => this.handleBackendError(error.error),
+    });
+
+  }
+
+  handleBackendError(error: SpringErrorResponse): void {
+    this.submitting = false;
+    this.errorsBackend.push(error);
   }
 
   get formFields(): any {

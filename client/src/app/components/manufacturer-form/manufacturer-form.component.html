@@ -6,7 +6,7 @@
   >
 
     <div *ngIf="errorsBackend.length > 0" class="error__submit">
-      <div *ngFor="let error of errorsBackend"><strong>Error: </strong>{{error.message}}</div>
+      <div *ngFor="let error of errorsBackend"><strong>Error: </strong>{{error.message || error.error.message}}</div>
     </div>
 
 
@@ -82,7 +82,7 @@
 
     <div style="display: inline-flex">
       <button class="button" (click)="location.back()">Back</button>
-      <button class="button" [disabled]="manufacturerForm.invalid" type="submit">Submit</button>
+      <button class="button" [disabled]="manufacturerForm.invalid || submitting" type="submit">Submit</button>
       <!--Spinner-->
       <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>
     </div>

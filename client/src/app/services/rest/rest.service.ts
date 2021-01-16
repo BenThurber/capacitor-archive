@@ -6,7 +6,8 @@ import {Observable} from 'rxjs';
 import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 import {FormGroup} from '@angular/forms';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
-import {CapacitorType} from '../../models/capacitor-type';
+import {CapacitorType} from '../../models/capacitor-type.model';
+import {CapacitorUnit} from '../../models/capacitor-unit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,12 +48,26 @@ export class RestService {
     return this.httpClient.get<Array<string>>(this.baseUrl + '/construction/all', this.options);
   }
 
-  createConstruction(construction: string): any {
-    return this.httpClient.post<any>(this.baseUrl + '/construction/create', construction, this.options);
-  }
-
   createManufacturer(manufacturer: Manufacturer): any {
     return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer, this.options);
+  }
+
+  createCapacitorType(capacitorType: CapacitorType): any {
+    return this.httpClient.post<any>(this.baseUrl + '/type/create', capacitorType, this.options);
+  }
+
+  createConstruction(construction: string): any {
+    return this.httpClient.post<any>(this.baseUrl + '/construction/create', construction, {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': this.baseUrl,
+        Accept: 'text/plain',
+        'Content-Type': 'text/plain'}),
+      responseType: 'text' as 'json'     // (This "as json" is just to suppress TS warnings)
+    });
+  }
+
+  createCapacitorUnit(capacitorUnit: CapacitorUnit): any {
+    return this.httpClient.post<any>(this.baseUrl + '/unit/create', capacitorUnit, this.options);
   }
 
   editManufacturer(name: string, manufacturer: Manufacturer): any {

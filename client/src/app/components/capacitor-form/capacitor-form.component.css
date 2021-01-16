@@ -94,3 +94,7 @@ hr {
   font-weight: bold;
 }
 
+#volt-unit {
+  margin-left: 5px;
+  font-size: 14px;
+}
