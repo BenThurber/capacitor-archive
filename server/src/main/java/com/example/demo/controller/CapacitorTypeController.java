@@ -126,7 +126,7 @@ public class CapacitorTypeController {
      * @return the list of found type, empty list if none.
      */
     @GetMapping("all/{companyName}")
-    public List<CapacitorTypeResponse> getAllCapacitorTypeFromManufacturer(@PathVariable String companyName,
+    public List<CapacitorTypeResponse> getAllCapacitorTypesFromManufacturer(@PathVariable String companyName,
                                                                                       HttpServletResponse response) {
 
         Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/unit")
@@ -89,6 +91,29 @@ public class CapacitorUnitController {
         response.setStatus(HttpServletResponse.SC_OK);
         return new CapacitorUnitResponse(capacitorUnit);
 
+    }
+
+    /**
+     * Get List of all CapacitorTypeResponses from a Manufacturer, given companyName.
+     * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned.
+     * @return the list of found type, empty list if none.
+     */
+    @GetMapping("all/{companyName}/{typeName}")
+    public List<CapacitorUnitResponse> getAllCapacitorUnitsFromCapacitorType(@PathVariable String companyName,
+                                                                            @PathVariable String typeName,
+                                                                            HttpServletResponse response) {
+
+        List<CapacitorUnit> capacitorUnits = this.capacitorUnitRepository.findAllByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
+                companyName, typeName
+        );
+
+        List<CapacitorUnitResponse> capacitorTypeResponses = capacitorUnits
+                .stream()
+                .map(CapacitorUnitResponse::new)
+                .collect(Collectors.toList());
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        return capacitorTypeResponses;
     }
 
 }
