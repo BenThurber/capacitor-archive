@@ -9,6 +9,7 @@ import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
 import com.example.demo.repository.ManufacturerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import testUtilities.JsonConverter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -68,6 +70,7 @@ class CapacitorUnitControllerTest {
     private CapacitorType capacitorType1;
     private CapacitorUnit capacitorUnitNullVoltageAndId;
     private CapacitorUnit capacitorUnit1;
+    private CapacitorUnit capacitorUnit2;
 
     @BeforeEach
     void initializeTestEntities() {
@@ -100,6 +103,13 @@ class CapacitorUnitControllerTest {
         capacitorUnit1.setIdentifier("35b");
         capacitorUnit1.setNotes("A popular capacitor");
         capacitorUnit1.setCapacitorType(capacitorType1);
+
+        capacitorUnit2 = new CapacitorUnit();
+        capacitorUnit2.setCapacitance(20000L);
+        capacitorUnit2.setVoltage(600);
+        capacitorUnit2.setIdentifier(null);
+        capacitorUnit2.setNotes("Just another capacitor");
+        capacitorUnit2.setCapacitorType(capacitorType1);
 
     }
 
@@ -243,6 +253,18 @@ class CapacitorUnitControllerTest {
                             Objects.equals(cu.getCapacitorType().getTypeName().toLowerCase(), typeName.toLowerCase()) &&
                             Objects.equals(cu.getValue(), value)
             ).findFirst().orElse(null);
+        });
+
+        when(capacitorUnitRepository.findAllByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
+                Mockito.any(String.class),
+                Mockito.any(String.class))).thenAnswer(i -> {
+            String companyName = i.getArgument(0);
+            String typeName = i.getArgument(1);
+
+            return capacitorUnitMockTable.stream().filter(
+                    cu -> Objects.equals(cu.getCapacitorType().getManufacturer().getCompanyName().toLowerCase(), companyName.toLowerCase()) &&
+                            Objects.equals(cu.getCapacitorType().getTypeName().toLowerCase(), typeName.toLowerCase())
+            ).collect(Collectors.toList());
         });
 
     }
@@ -443,6 +465,35 @@ class CapacitorUnitControllerTest {
         mvc.perform(httpReq)
                 .andExpect(status().isNotFound());
 
+    }
+
+
+    /**
+     * Test successful creation of new CapacitorUnit.
+     */
+    @Test
+    void getAllCapacitorUnits_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorType1.setManufacturer(manufacturer2);
+        capacitorUnit1.setCapacitorType(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+        capacitorUnitRepository.save(capacitorUnit2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/all/solar/sealdtite")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        List<CapacitorUnitResponse> receivedUnits = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorUnitResponse.class));
+
+        List<CapacitorUnitResponse> expectedUnits = Arrays.asList(new CapacitorUnitResponse(capacitorUnit1), new CapacitorUnitResponse(capacitorUnit2));
+
+        assertEquals(expectedUnits, receivedUnits);
     }
 
 }
