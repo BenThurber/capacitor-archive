@@ -1,4 +1,11 @@
-<form style="margin: 35px 15px;" [formGroup]="capacitorForm">
+<form style="margin: 35px 15px;" [formGroup]="capacitorForm"
+      (ngSubmit)="!capacitorForm.invalid && onSubmit(capacitorForm.value)">
+
+  <!--Errors-->
+  <div *ngIf="errorsBackend.length > 0" class="error__submit input">
+    <div *ngFor="let error of errorsBackend"><strong>Error: </strong>{{error.message || error.error.message}}</div>
+  </div>
+
 
   <!--Manufacturer Section-->
   <div id="manufacturer-section" class="input__section">
@@ -167,8 +174,8 @@
 
     <div class="input">
       <label class="input__label__minor" for="voltage">Voltage*</label>
-      <input id="voltage" type="text" formControlName="voltage" size="8"
-             [ngClass]="{ 'is-invalid': formFields.unit.controls.voltage.errors }">
+      <input id="voltage" type="text" formControlName="voltage" size="4"
+             [ngClass]="{ 'is-invalid': formFields.unit.controls.voltage.errors }"><span id="volt-unit">V</span>
       <div class="error__msg" *ngIf="formFields.unit.controls.voltage.errors">
         Voltage must be a whole number
       </div>
@@ -186,6 +193,13 @@
     </div>
 
     <hr>
+  </div>
+
+  <div style="display: inline-flex">
+    <button class="button" (click)="location.back()">Back</button>
+    <button class="button" [disabled]="capacitorForm.invalid || submitting" type="submit">Submit</button>
+    <!--Spinner-->
+    <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>
   </div>
 
 

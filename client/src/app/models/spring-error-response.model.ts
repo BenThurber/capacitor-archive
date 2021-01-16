@@ -1,6 +1,6 @@
 
 export interface SpringErrorResponse {
-  error: string;
+  error: any;
   message: string;
   path: string;
   status: number;
