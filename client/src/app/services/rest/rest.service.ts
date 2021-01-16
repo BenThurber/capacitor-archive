@@ -7,6 +7,7 @@ import {GoogleCaptchaAPIResponse} from '../../models/recaptcha.model';
 import {FormGroup} from '@angular/forms';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {CapacitorType} from '../../models/capacitor-type.model';
+import {CapacitorUnit} from '../../models/capacitor-unit.model';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,10 @@ export class RestService {
     return this.httpClient.get<Array<string>>(this.baseUrl + '/construction/all', this.options);
   }
 
+  createManufacturer(manufacturer: Manufacturer): any {
+    return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer, this.options);
+  }
+
   createCapacitorType(capacitorType: CapacitorType): any {
     return this.httpClient.post<any>(this.baseUrl + '/type/create', capacitorType, this.options);
   }
@@ -61,9 +66,8 @@ export class RestService {
     });
   }
 
-
-  createManufacturer(manufacturer: Manufacturer): any {
-    return this.httpClient.post<any>(this.baseUrl + '/manufacturer/create', manufacturer, this.options);
+  createCapacitorUnit(capacitorUnit: CapacitorUnit): any {
+    return this.httpClient.post<any>(this.baseUrl + '/unit/create', capacitorUnit, this.options);
   }
 
   editManufacturer(name: string, manufacturer: Manufacturer): any {

@@ -7,6 +7,7 @@ import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/form
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
 import {Location} from '@angular/common';
+import {CapacitorUnit} from '../../models/capacitor-unit.model';
 
 class CapacitorForm {
   companyName: string;
@@ -261,7 +262,22 @@ export class CapacitorFormComponent implements OnInit {
 
     }
 
-    // Do unit here
+    // Create Unit
+    const capacitorUnit: CapacitorUnit = new CapacitorUnit();
+    capacitorUnit.capacitance = capacitorForm.unit.capacitance;
+    capacitorUnit.voltage = capacitorForm.unit.voltage;
+    capacitorUnit.identifier = capacitorForm.unit.identifier;
+    capacitorUnit.notes = capacitorForm.unit.notes;
+    capacitorUnit.typeName = capacitorForm.type.typeNameSelect;
+    capacitorUnit.companyName = capacitorForm.companyName;
+
+    return this.restService.createCapacitorUnit(capacitorUnit).subscribe({
+      next: () => {
+        console.log('Successfully submitted');
+      },
+      error: error => this.handleBackendError(error.error),
+    });
+
   }
 
   handleBackendError(error: SpringErrorResponse): void {
