@@ -213,13 +213,7 @@ export class CapacitorFormComponent implements OnInit {
 
     } else {
 
-      // ToDo
-      // if (!(this.existingManufacturer instanceof Object && this.existingManufacturer.companyName)) {
-      //   console.error('Can\'t edit manufacturer.  Bad data from backend');
-      //   return;
-      // }
-
-      // this.submitEdit(manufacturer);
+      // ToDo implement submitEdit
 
     }
 
