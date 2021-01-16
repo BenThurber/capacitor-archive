@@ -64,7 +64,7 @@ export class CapacitorFormComponent implements OnInit {
   constructor(private restService: RestService,
               private router: Router,
               private formBuilder: FormBuilder,
-              private location: Location) { }
+              public location: Location) { }
 
   ngOnInit(): void {
     this.getManufacturerList();
