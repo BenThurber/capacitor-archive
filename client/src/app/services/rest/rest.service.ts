@@ -90,7 +90,7 @@ export class RestService {
    * on the result of the verification request to the back-end.  Assumes that there is formControlName="captcha" set in the ngx-recaptcha2
    * component.
    * @param captchaToken set to $event to capture event from component
-   * @param formGroup FormGroup containing the ngx-recaptcha2 component
+   * @param formGroup FormGroup containing the ngx-recaptcha2 component.  Must have formControlName captcha.
    * @param captchaElem the html element retrieved with @ViewChild
    */
   handleCaptchaSuccess(captchaToken: string, formGroup: FormGroup, captchaElem: ReCaptcha2Component): void {

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
@@ -8,6 +8,8 @@ import {CapacitorType} from '../../models/capacitor-type.model';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
 import {Location} from '@angular/common';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
+import {environment} from '../../../environments/environment';
+import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 
 class CapacitorForm {
   companyName: string;
@@ -60,8 +62,12 @@ export class CapacitorFormComponent implements OnInit {
   constructionNames$: Array<string> = [];
   yearsAreExpanded = false;
 
+  // Captcha and Submit
+  @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
+  readonly reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
-  constructor(private restService: RestService,
+
+  constructor(public restService: RestService,
               private router: Router,
               private formBuilder: FormBuilder,
               public location: Location) { }
@@ -96,6 +102,7 @@ export class CapacitorFormComponent implements OnInit {
         identifier: ['', []],
         notes: ['', []],
       }),
+      captcha: ['', Validators.required],
     });
   }
 

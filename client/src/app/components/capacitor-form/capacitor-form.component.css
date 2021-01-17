@@ -94,6 +94,14 @@ hr {
   font-weight: bold;
 }
 
+.captcha {
+}
+
+.submit {
+  display: inline-flex;
+  margin-top: 100px;
+}
+
 #volt-unit {
   margin-left: 5px;
   font-size: 14px;
