@@ -197,7 +197,7 @@
 
 
   <!--ReCaptcha Component and Submit Section-->
-  <div class="captcha">
+  <span class="captcha">
     <ngx-recaptcha2
       #captchaElem
       [siteKey]="reCaptchaSiteKey"
@@ -208,16 +208,7 @@
       formControlName="captcha"
     >
     </ngx-recaptcha2>
-
-    <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('rejectedCaptcha')">
-      CAPTCHA check did not pass
-    </div>
-
-    <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('noResponse')">
-      Error in CAPTCHA check verification
-    </div>
-
-  </div>
+  </span>
 
   <div class="submit">
     <button class="button" (click)="location.back()">Back</button>
@@ -225,6 +216,14 @@
     <!--Spinner-->
     <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>
   </div>
+
+  <span class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('rejectedCaptcha')">
+      CAPTCHA check did not pass
+  </span>
+
+  <span class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('noResponse')">
+      Error in CAPTCHA check verification
+  </span>
 
 
 </form>
