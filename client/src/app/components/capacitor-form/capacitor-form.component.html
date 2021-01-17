@@ -195,7 +195,31 @@
     <hr>
   </div>
 
-  <div style="display: inline-flex">
+
+  <!--ReCaptcha Component and Submit Section-->
+  <div class="captcha">
+    <ngx-recaptcha2
+      #captchaElem
+      [siteKey]="reCaptchaSiteKey"
+      [useGlobalDomain]="false"
+      (success)="restService.handleCaptchaSuccess($event, capacitorForm, captchaElem)"
+      size="normal"
+      hl="en"
+      formControlName="captcha"
+    >
+    </ngx-recaptcha2>
+
+    <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('rejectedCaptcha')">
+      CAPTCHA check did not pass
+    </div>
+
+    <div class="captcha__error__msg error__msg" *ngIf="formFields.captcha.hasError('noResponse')">
+      Error in CAPTCHA check verification
+    </div>
+
+  </div>
+
+  <div class="submit">
     <button class="button" (click)="location.back()">Back</button>
     <button class="button" [disabled]="capacitorForm.invalid || submitting" type="submit">Submit</button>
     <!--Spinner-->
