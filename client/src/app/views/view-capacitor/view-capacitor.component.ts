@@ -43,16 +43,4 @@ export class ViewCapacitorComponent implements OnInit {
 
 }
 
-//
-// export function capacitorUnitCompare(u1: CapacitorUnit, u2: CapacitorUnit): number {
-//
-//
-//   if (nameA < nameB) {
-//     return -1;
-//   }
-//   if (nameA > nameB) {
-//     return 1;
-//   }
-//   // names must be equal
-//   return 0;
 
