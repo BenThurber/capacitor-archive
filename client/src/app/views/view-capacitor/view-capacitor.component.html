@@ -1,13 +1,53 @@
 <div class="content">
 
-  <div id="image-box">
-    <app-image id="image" src="../../../assets/images-coming-soon" width="100%" alt="Images Coming Soon"></app-image>
-  </div>
 
-  <div id="type-box">
-    <strong id="type-name">Sealdtite</strong><br>
-    Made by: <strong>Solar</strong><br>
-    
-  </div>
+  <ng-container *ngIf="capacitorUnit; else loading" class="center__box">
+
+
+
+    <div id="image-box">
+      <app-image id="image" src="../../../assets/images-coming-soon" width="100%" alt="Images Coming Soon"></app-image>
+    </div>
+
+
+    <div id="type-box">
+      <span id="construction">{{capacitorType && capacitorType.constructionName}}</span>
+      <strong id="type-name">{{capacitorType && capacitorType.typeName}}</strong><br>
+      Made by: <strong>{{capacitorType && capacitorType.companyName}}</strong><br>
+
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
+        Produced: <strong>{{capacitorType.startYear}}-{{capacitorType.endYear}}</strong><br>
+      </ng-container>
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && !capacitorType.endYear">
+        Started production: <strong>{{capacitorType.startYear}}</strong>
+      </ng-container>
+      <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
+        Ended production: <strong>{{capacitorType.endYear}}</strong>
+      </ng-container>
+
+      <ng-container *ngIf="capacitorType && capacitorType.description">
+        Description:
+        <div id="description">{{capacitorType.description}}</div>
+      </ng-container>
+
+    </div>
+
+
+    <div id="unit-box">
+      <!--ToDo-->
+    </div>
+
+
+    <div id="similar-units-box">
+      <!--ToDo-->
+    </div>
+
+
+
+  </ng-container>
+
+  <ng-template #loading>
+    <h3 class="loading">Loading Page...</h3>
+  </ng-template>
 
 </div>

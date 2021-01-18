@@ -89,3 +89,7 @@ a:hover {
   margin-top: 8px;
   font-weight: bold;
 }
+
+.loading {
+  font-family: "TELETYPE 1945", "Courier", serif;
+}

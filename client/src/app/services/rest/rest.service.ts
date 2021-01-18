@@ -70,6 +70,18 @@ export class RestService {
     return this.httpClient.post<any>(this.baseUrl + '/unit/create', capacitorUnit, this.options);
   }
 
+  getCapacitorTypeByName(companyName: string, typeName: string): Observable<CapacitorType> {
+    return this.httpClient.get<any>(this.baseUrl + `/type/name/${companyName}/${typeName}`, this.options);
+  }
+
+  getCapacitorUnitByValue(companyName: string, typeName: string, value: string): Observable<CapacitorUnit> {
+    return this.httpClient.get<any>(this.baseUrl + `/unit/name/${companyName}/${typeName}/${value}`, this.options);
+  }
+
+  getAllCapacitorUnitsFromCapacitorType(companyName: string, typeName: string): Observable<Array<CapacitorUnit>> {
+    return this.httpClient.get<any>(this.baseUrl + `/unit/all/${companyName}/${typeName}`, this.options);
+  }
+
   editManufacturer(name: string, manufacturer: Manufacturer): any {
     return this.httpClient.put<any>(this.baseUrl + '/manufacturer/edit/' + name, manufacturer, this.options);
   }

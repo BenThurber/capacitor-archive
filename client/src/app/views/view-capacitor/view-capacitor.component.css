@@ -1,13 +1,13 @@
 
 * {
-  font-family: "TELETYPE 1945", "Courier", serif;
+  /*font-family: "TELETYPE 1945", "Courier", serif;*/
 }
 
 .content {
   min-width: 95%;
   display: inline-grid;
   grid-template-columns: 60% 5% 35% 0%;
-  grid-template-rows: 5% 15% auto 5%;
+  grid-template-rows: 5% auto auto auto auto auto 5%;
   margin-top: 10px
 }
 
@@ -15,16 +15,15 @@
   grid-column-start: 1;
   grid-column-end: 1;
   grid-row-start: 2;
-  grid-row-end: 3;
+  grid-row-end: 6;
 
-  background-color: goldenrod;
-  overflow: hidden;
+  background-color: #bebebe;
   padding: 10% 10%;
   border-radius: 10px;
 }
 
- #image {
- }
+#image {
+}
 
 #type-box {
   grid-column-start: 3;
@@ -38,9 +37,54 @@
 
   padding: 21px 23px;
 
+  font-family: "TELETYPE 1945", "Courier", serif;
+  font-size: 15px;
   line-height: 30px;
+}
+
+#type-box strong {
+  font-weight: bolder;
+  text-decoration: underline;
 }
 
 #type-name {
   font-size: larger;
 }
+
+#description {
+  margin-left: 10px;
+  overflow-wrap: break-word;
+  font-family: "Courier New", serif;
+  font-weight: bold;
+  font-size: small;
+  letter-spacing: 0.06em;
+  line-height: 18px;
+}
+
+#construction {
+  float: right;
+}
+
+
+#unit-box {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 3;
+}
+
+#similar-units-box {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 4;
+  grid-row-end: 4;
+}
+
+
+.loading {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 2;
+  grid-row-end: 2;
+}
+
