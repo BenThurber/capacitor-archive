@@ -9,6 +9,7 @@ import {PageNotFoundComponent} from './views/page-not-found/page-not-found.compo
 import {ViewManufacturerComponent} from './views/view-manufacturer/view-manufacturer.component';
 import {EditManufacturerComponent} from './views/edit-manufacturer/edit-manufacturer.component';
 import {CreateCapacitorComponent} from './views/create-capacitor/create-capacitor.component';
+import {ViewCapacitorComponent} from './views/view-capacitor/view-capacitor.component';
 
 const routes: Routes = [
   {path: 'not-implemented', component: NotImplementedComponent},
@@ -19,6 +20,8 @@ const routes: Routes = [
   {path: 'manufacturer/edit/:companyName', component: EditManufacturerComponent},
   {path: 'manufacturer/view/:companyName', component: ViewManufacturerComponent},
   {path: 'capacitor/create', component: CreateCapacitorComponent},
+  {path: 'capacitor/view/:companyName/:typeName', component: ViewCapacitorComponent},
+  {path: 'capacitor/view/:companyName/:typeName/:value', component: ViewCapacitorComponent},
   {path: '**', component: PageNotFoundComponent },  // This must be the last element of the Routes array
 ];
 
