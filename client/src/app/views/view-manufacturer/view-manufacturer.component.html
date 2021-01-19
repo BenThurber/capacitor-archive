@@ -1,12 +1,14 @@
 <div class="content">
 
 
-  <div id="all-types-box" class="info__box">
-    <!--<span style="float: right">{{capacitorType && capacitorType.constructionName}}</span>-->
+  <div id="all-types-box">
     <h3>Capacitor Types</h3>
 
-    <div *ngFor="let typeName of ['Sealdtite', 'H.264', 'Foobar'];">
-      <a class="grey__link" (click)="dynamicRouter.redirectTo(['/capacitor', 'view', typeName.toLowerCase()])">{{typeName}}</a>
+    <div *ngFor="let type of types;">
+      <a class="grey__link"
+         (click)="dynamicRouter.redirectTo(['/capacitor', 'view', type.companyName.toLowerCase(), type.typeName.toLowerCase()])">
+        {{type.typeName}}
+      </a>
     </div>
     <div>
       <a id="add-capacitor" class="grey__link" (click)="dynamicRouter.redirectTo(['/capacitor', 'create'])">+ Add Capacitor</a>

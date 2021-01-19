@@ -40,7 +40,7 @@ export class RestService {
     return this.httpClient.get<Array<string>>(this.baseUrl + '/manufacturer/all-names', this.options);
   }
 
-  getAllTypeNames(companyName): Observable<Array<CapacitorType>> {
+  getAllTypes(companyName): Observable<Array<CapacitorType>> {
     return this.httpClient.get<Array<CapacitorType>>(this.baseUrl + '/type/all/' + companyName, this.options);
   }
 

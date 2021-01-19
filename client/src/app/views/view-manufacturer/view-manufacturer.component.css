@@ -2,7 +2,7 @@
 .content {
   min-width: 96%;
   display: inline-grid;
-  grid-template-columns: 70% 5% 25% 0%;
+  grid-template-columns: auto 5% 220px 0%;
   grid-template-rows: 5% auto auto auto 5%;
   margin-top: 10px
 }
@@ -27,7 +27,7 @@ h3 {
   text-align: center;
   text-decoration: underline;
   color: #007200;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   margin-top: 5px;
 }
 
@@ -40,14 +40,21 @@ h3 {
   background-color: #c1e3f2;
 
   font-family: serif;
+
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  padding: 20px 7px;
 }
 
 #all-types-box a {
   line-height: 18px;
   text-align: center;
+  /*text-overflow: initial;*/
+  overflow-wrap: normal;
+  word-wrap: break-word;
 }
 
 #add-capacitor {
-  padding-top: 18px;
+  padding-top: 30px;
   text-decoration: underline;
 }
