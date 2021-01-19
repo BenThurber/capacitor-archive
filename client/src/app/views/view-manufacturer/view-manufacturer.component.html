@@ -1,5 +1,23 @@
 <div class="content">
-  <div *ngIf="manufacturer$; else loading" class="center__box">
+
+
+  <div id="all-types-box">
+    <h3>Capacitor Types</h3>
+
+    <div *ngFor="let type of types;">
+      <a class="grey__link"
+         (click)="dynamicRouter.redirectTo(['/capacitor', 'view', type.companyName.toLowerCase(), type.typeName.toLowerCase()])">
+        {{type.typeName}}
+      </a>
+    </div>
+    <div>
+      <a id="add-capacitor" class="grey__link" (click)="dynamicRouter.redirectTo(['/capacitor', 'create'])">+ Add Capacitor</a>
+    </div>
+
+  </div>
+
+
+  <div id="manufacturer-box" *ngIf="manufacturer$; else loading">
 
     <div class="edit__button">
       <a href [routerLink]="'/manufacturer/edit/' + manufacturer$.companyName.toLowerCase()">[Edit Page]</a>
@@ -18,7 +36,7 @@
     </div>
 
     <div *ngIf="manufacturer$.summary">
-      <div class="ql-editor" [innerHTML]="manufacturer$.summary | safeHtml"></div>
+      <div class="ql-editor quill__output" [innerHTML]="manufacturer$.summary | safeHtml"></div>
     </div>
 
   </div>
@@ -26,5 +44,6 @@
   <ng-template #loading>
     <h3 class="loading">Loading Page...</h3>
   </ng-template>
+
 
 </div>

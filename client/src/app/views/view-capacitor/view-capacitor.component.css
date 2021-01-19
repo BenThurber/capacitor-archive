@@ -1,6 +1,6 @@
 
 .content {
-  min-width: 95%;
+  min-width: 96%;
   display: inline-grid;
   grid-template-columns: 60% 5% 35% 0%;
   grid-template-rows: 5% auto auto auto auto auto 5%;
@@ -16,17 +16,6 @@
   background-color: #bebebe;
   padding: 10% 10%;
   border-radius: 10px;
-}
-
-.info__box {
-  border-top-left-radius: 30px;
-  border-bottom-left-radius: 30px;
-  padding: 14px 23px;
-  margin-bottom: 10px;
-
-  font-family: "TELETYPE 1945", "Courier", serif;
-  font-size: 15px;
-  line-height: 30px;
 }
 
 #type-box {
@@ -92,12 +81,6 @@
   font-weight: bolder;
   font-size: 15px;
 }
-
-#capacitance {
-  font-family: 'Teletype Regular', 'Courier New', serif;
-  font-weight: bolder;
-}
-
 
 .loading {
   grid-column-start: 1;

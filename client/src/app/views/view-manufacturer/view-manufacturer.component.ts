@@ -3,6 +3,8 @@ import {Subscription} from 'rxjs';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {RestService} from '../../services/rest/rest.service';
 import {ActivatedRoute} from '@angular/router';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
+import {CapacitorType} from '../../models/capacitor-type.model';
 
 @Component({
   selector: 'app-view-manufacturer',
@@ -13,16 +15,17 @@ export class ViewManufacturerComponent implements OnInit {
 
   companyName: string;
   manufacturer$: Manufacturer;
+  types: Array<CapacitorType>;
 
-  restService: RestService;
-
-  constructor(restService: RestService, activatedRoute: ActivatedRoute) {
-    this.restService = restService;
+  constructor(private restService: RestService, public dynamicRouter: DynamicRouterService, activatedRoute: ActivatedRoute) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
   }
 
   ngOnInit(): Subscription {
-    return this.restService.getManufacturerByName(this.companyName).subscribe(manufacturer => this.manufacturer$ = manufacturer);
+    this.restService.getAllTypes(this.companyName).subscribe((types: Array<CapacitorType>) => this.types = types);
+
+    return this.restService.getManufacturerByName(this.companyName)
+      .subscribe((manufacturer: Manufacturer) => this.manufacturer$ = manufacturer);
   }
 
 }
