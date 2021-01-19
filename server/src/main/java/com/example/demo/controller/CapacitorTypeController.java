@@ -87,7 +87,7 @@ public class CapacitorTypeController {
 
 
     /**
-     * Create a CapacitorType
+     * Edit a CapacitorType
      * @param capacitorTypeRequest the new CapacitorType to create
      */
     @PutMapping(value = "edit/{companyName}/{typeName}")

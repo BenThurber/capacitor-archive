@@ -637,7 +637,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test successful edit of CapacitorType when changing construction to a new construction not in the database.
+     * Test unsuccessful edit of CapacitorType where the type does not exist.
      */
     @Test
     void editCapacitorType_noCapacitorTypeFound_fail() throws Exception {
