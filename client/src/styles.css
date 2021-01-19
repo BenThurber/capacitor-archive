@@ -6,6 +6,10 @@
   font-family: "TELETYPE 1945";
   src: url("assets/TELETYPE1945-1985.ttf");
 }
+@font-face {
+  font-family: "Teletype Regular";
+  src: url("assets/teletype.ttf");
+}
 
 body {
   background-color: #e3e3e3;

@@ -10,8 +10,8 @@
     </div>
 
 
-    <div id="type-box">
-      <span id="construction">{{capacitorType && capacitorType.constructionName}}</span>
+    <div id="type-box" class="info__box">
+      <span style="float: right">{{capacitorType && capacitorType.constructionName}}</span>
       <strong id="type-name">{{capacitorType && capacitorType.typeName}}</strong><br>
       Made by: <strong>{{capacitorType && capacitorType.companyName}}</strong><br>
 
@@ -27,19 +27,41 @@
 
       <ng-container *ngIf="capacitorType && capacitorType.description">
         Description:
-        <div id="description">{{capacitorType.description}}</div>
+        <div class="block__description">{{capacitorType.description}}</div>
       </ng-container>
 
     </div>
 
 
-    <div id="unit-box">
-      <!--ToDo-->
+    <div id="unit-box" class="info__box">
+      <span id="identifier" *ngIf="capacitorUnit && capacitorUnit.identifier">{{capacitorUnit.identifier}}</span>
+      <!--This code could be improved.-->
+      Capacitance: <strong>
+      {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true).split(' ')[0]}}</strong>
+      <strong style="font-family: 'Courier New', serif; font-size: 16px; margin-left: -4px">
+        {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true).split(' ')[1]}}</strong><br>
+      <ng-container *ngIf="capacitorUnit && capacitorUnit.voltage">
+        Voltage: <strong>{{capacitorUnit.voltage}}V</strong><br>
+      </ng-container>
+      <ng-container *ngIf="capacitorUnit && capacitorUnit.notes">
+        Notes:
+        <span class="block__description">{{capacitorUnit.notes}}</span>
+      </ng-container>
+
+      
     </div>
 
 
-    <div id="similar-units-box">
-      <!--ToDo-->
+    <div id="similar-units-box" class="info__box">
+      <strong><label for="similar-menu">Similar Capacitors</label></strong><br>
+      <select id="similar-menu" size="8" (change)="similarMenuChanged($event.target.value)" #similarMenu>
+
+        <option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
+                [selected]="capacitorUnit.value === similarUnit.value">
+          {{formatSimilarCapacitor(similarUnit)}}
+        </option>
+
+      </select>
     </div>
 
 
