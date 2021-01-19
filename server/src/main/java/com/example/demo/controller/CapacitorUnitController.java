@@ -71,6 +71,33 @@ public class CapacitorUnitController {
     }
 
 
+    /**
+     * Edit a CapacitorUnit
+     * @param capacitorUnitRequest the new CapacitorUnit to create
+     */
+    @PutMapping(value = "edit/{companyName}/{typeName}/{unitValue}")
+    public void editCapacitorUnit(@Validated
+                                    @RequestBody CapacitorUnitRequest capacitorUnitRequest,
+                                    @PathVariable String companyName,
+                                    @PathVariable String typeName,
+                                    @PathVariable String unitValue,
+                                    HttpServletResponse response) {
+
+        CapacitorUnit capacitorUnit = capacitorUnitRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCaseAndValue(
+                companyName, typeName, unitValue
+        );
+
+        if (capacitorUnit == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The capacitor unit to edit can not be found");
+        }
+
+        capacitorUnit.edit(capacitorUnitRequest);
+
+        capacitorUnitRepository.save(capacitorUnit);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+
     @GetMapping("name/{companyName}/{typeName}/{unitValue}")
     public CapacitorUnitResponse getCapacitorUnitByValue(@PathVariable String companyName,
                                                                   @PathVariable String typeName,
