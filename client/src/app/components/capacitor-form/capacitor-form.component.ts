@@ -120,7 +120,7 @@ export class CapacitorFormComponent implements OnInit {
 
   /** Update this.capacitorTypes$ */
   getTypeList(companyName: string): Subscription {
-    return this.restService.getAllTypeNames(companyName).subscribe({
+    return this.restService.getAllTypes(companyName).subscribe({
       next: types => {
         types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
