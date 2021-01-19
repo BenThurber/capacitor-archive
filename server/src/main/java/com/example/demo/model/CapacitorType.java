@@ -73,6 +73,23 @@ public class CapacitorType {
         setDescription(r.getDescription());
     }
 
+    public void edit(CapacitorTypeRequest capacitorTypeRequest) {
+        edit(capacitorTypeRequest, null);
+    }
+
+    public void edit(CapacitorTypeRequest capacitorTypeRequest, Construction construction) {
+        CapacitorTypeRequest r = capacitorTypeRequest;
+
+        setTypeName(r.getTypeName());
+        setStartYear(r.getStartYear());
+        setEndYear(r.getEndYear());
+        setDescription(r.getDescription());
+
+        if (construction != null) {
+            setConstruction(construction);
+        }
+    }
+
 
     public CapacitorType() {}
 
