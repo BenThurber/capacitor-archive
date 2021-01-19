@@ -17,6 +17,7 @@
   font-family: "Courier", serif;
   text-decoration: none;
   font-size: 14px;
+  font-weight: bold;
   letter-spacing: -0.01em;
   overflow-x: hidden;
   white-space: nowrap;
@@ -28,6 +29,7 @@
 
 .sidenav a:hover {
   color: #c6b51b;
+  text-decoration-color: #c6b51b
 }
 
 .link__padding {
@@ -40,4 +42,11 @@ h3 {
   text-align: center;
   text-decoration: underline;
   color: #007200;
+  margin-bottom: 25px;
+}
+
+#add-manufacturer {
+  padding-top: 18px;
+  text-decoration: underline;
+
 }
