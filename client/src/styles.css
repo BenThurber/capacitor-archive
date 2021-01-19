@@ -97,3 +97,33 @@ a:hover {
 .loading {
   font-family: "TELETYPE 1945", "Courier", serif;
 }
+
+.info__box {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  padding: 14px 23px;
+  margin-bottom: 10px;
+
+  font-family: "TELETYPE 1945", "Courier", serif;
+  font-size: 15px;
+  line-height: 30px;
+}
+
+.grey__link {
+  font-family: "Courier", serif;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #565959;
+  display: block;
+  cursor: pointer;
+}
+
+.grey__link:hover {
+  color: #c6b51b;
+  text-decoration-color: #c6b51b
+}

@@ -1,12 +1,53 @@
 
-.center__box {
-  text-align: left;
-  margin-left: 15%;
-  margin-right: 25%;
-  margin-top: 50px;
+.content {
+  min-width: 96%;
+  display: inline-grid;
+  grid-template-columns: 70% 5% 25% 0%;
+  grid-template-rows: 5% auto auto auto 5%;
+  margin-top: 10px
 }
 
 .edit__button {
   float: right;
   margin-top: 5px;
+}
+
+.quill__output {
+  overflow: hidden;
+}
+
+#manufacturer-box {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 5;
+}
+
+h3 {
+  text-align: center;
+  text-decoration: underline;
+  color: #007200;
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
+
+#all-types-box {
+  grid-column-start: 3;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 1;
+
+  background-color: #c1e3f2;
+
+  font-family: serif;
+}
+
+#all-types-box a {
+  line-height: 18px;
+  text-align: center;
+}
+
+#add-capacitor {
+  padding-top: 18px;
+  text-decoration: underline;
 }
