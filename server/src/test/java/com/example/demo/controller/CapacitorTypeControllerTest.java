@@ -163,14 +163,22 @@ class CapacitorTypeControllerTest {
                 Mockito.any(String.class), Mockito.any(Manufacturer.class))).thenAnswer(i -> {
                     String typeName = i.getArgument(0);
                     Manufacturer manufacturer = i.getArgument(1);
+                    return capacitorTypeRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
+                            typeName, manufacturer.getCompanyName());
+        });
 
-                    List<CapacitorType> capacitorTypesInManufacturer = capacitorTypeMockTable.stream().filter(
-                            ct -> ct.getManufacturer().getCompanyName().equals(manufacturer.getCompanyName())
-                    ).collect(Collectors.toList());
+        when(capacitorTypeRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
+                Mockito.any(String.class), Mockito.any(String.class))).thenAnswer(i -> {
+            String typeName = i.getArgument(0);
+            String companyName = i.getArgument(1);
 
-                    return capacitorTypesInManufacturer.stream().filter(
-                            ct -> ct.getTypeName().toLowerCase().equals(typeName.toLowerCase())
-                    ).findFirst().orElse(null);
+            List<CapacitorType> capacitorTypesInManufacturer = capacitorTypeMockTable.stream().filter(
+                    ct -> ct.getManufacturer().getCompanyName().toLowerCase().equals(companyName.toLowerCase())
+            ).collect(Collectors.toList());
+
+            return capacitorTypesInManufacturer.stream().filter(
+                    ct -> ct.getTypeName().toLowerCase().equals(typeName.toLowerCase())
+            ).findFirst().orElse(null);
         });
 
     }
@@ -502,6 +510,149 @@ class CapacitorTypeControllerTest {
         mvc.perform(httpReq)
                 .andExpect(status().isBadRequest());
 
+    }
+
+
+    private final String editCapacitorType1Json = JsonConverter.toJson(true,
+            "typeName", "Sealdtite",
+            "constructionName", "wax-paper",
+            "startYear", 1936,
+            "endYear", 1948,
+            "description", "A new edited description",
+            "companyName", "Solar"
+    );
+    /**
+     * Test successful edit of CapacitorType.
+     */
+    @Test
+    void editCapacitorType_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        constructionRepository.save(new Construction("Wax-Paper"));
+        constructionRepository.save(new Construction("Mica"));
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+                .content(editCapacitorType1Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+        assertEquals((short)1936, capacitorTypeMockTable.get(0).getStartYear());
+        assertEquals((short)1948, capacitorTypeMockTable.get(0).getEndYear());
+        assertEquals("A new edited description", capacitorTypeMockTable.get(0).getDescription());
+    }
+
+    private final String editCapacitorTypeNewTypeNameJson = JsonConverter.toJson(true,
+            "typeName", "New-Type-Name",
+            "constructionName", "wax-paper",
+            "startYear", 1936,
+            "endYear", 1948,
+            "description", "A new edited description",
+            "companyName", "Solar"
+    );
+    /**
+     * Test successful edit of CapacitorType when changing typeName
+     */
+    @Test
+    void editCapacitorType_newTypeName_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        constructionRepository.save(new Construction("Wax-Paper"));
+        constructionRepository.save(new Construction("Mica"));
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+                .content(editCapacitorTypeNewTypeNameJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+        assertEquals("New-Type-Name", capacitorTypeMockTable.get(0).getTypeName());
+    }
+
+
+    private final String editCapacitorTypeChangedConstructionJson = JsonConverter.toJson(true,
+            "typeName", "Sealdtite",
+            "constructionName", "mica",
+            "startYear", 1936,
+            "endYear", 1948,
+            "description", "A new edited description",
+            "companyName", "Solar"
+    );
+    /**
+     * Test successful edit of CapacitorType when changing construction to an existing construction in the database.
+     */
+    @Test
+    void editCapacitorType_changedConstruction_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        constructionRepository.save(new Construction("Wax-Paper"));
+        constructionRepository.save(new Construction("Mica"));
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+                .content(editCapacitorTypeChangedConstructionJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+        assertEquals("Mica", capacitorTypeMockTable.get(0).getConstruction().getConstructionName());
+    }
+
+
+    private final String editCapacitorTypeNewConstructionJson = JsonConverter.toJson(true,
+            "typeName", "Sealdtite",
+            "constructionName", "electrolytic",
+            "startYear", 1936,
+            "endYear", 1948,
+            "description", "A new edited description",
+            "companyName", "Solar"
+    );
+    /**
+     * Test successful edit of CapacitorType when changing construction to a new construction not in the database.
+     */
+    @Test
+    void editCapacitorType_newConstruction_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        constructionRepository.save(new Construction("Wax-Paper"));
+        constructionRepository.save(new Construction("Mica"));
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+                .content(editCapacitorTypeNewConstructionJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+        assertEquals("Electrolytic", capacitorTypeMockTable.get(0).getConstruction().getConstructionName());
+        assertEquals(3, constructionMockTable.size());
+        assertEquals("Electrolytic", constructionMockTable.get(2).getConstructionName());
+    }
+
+
+    /**
+     * Test unsuccessful edit of CapacitorType where the type does not exist.
+     */
+    @Test
+    void editCapacitorType_noCapacitorTypeFound_fail() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        constructionRepository.save(new Construction("Wax-Paper"));
+        constructionRepository.save(new Construction("Mica"));
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/non-existing")
+                .content(editCapacitorTypeNewConstructionJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isNotFound());
     }
 
 
