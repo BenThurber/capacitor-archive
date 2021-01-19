@@ -36,17 +36,16 @@ export class CapacitorUnit {
     }
     return num + ' ' + unit;
   }
-}
 
+  static compare(u1: CapacitorUnit, u2: CapacitorUnit): number {
 
-export function capacitorUnitCompare(u1: CapacitorUnit, u2: CapacitorUnit): number {
-
-  if (u1.value > u2.value) {
-    return -1;
+    if (u1.value > u2.value) {
+      return -1;
+    }
+    if (u1.value < u2.value) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
   }
-  if (u1.value < u2.value) {
-    return 1;
-  }
-  // names must be equal
-  return 0;
 }

@@ -1,7 +1,7 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {RestService} from '../../services/rest/rest.service';
-import {CapacitorUnit, capacitorUnitCompare} from '../../models/capacitor-unit.model';
+import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml} from '../../utilities/text-utils';
 
@@ -47,12 +47,13 @@ export class ViewCapacitorComponent implements OnInit {
 
     return this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
       .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
-        this.capacitorUnits = capacitorUnits.sort(capacitorUnitCompare);
+        this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
         if (!this.value && this.capacitorUnits.length > 0) {
           this.capacitorUnit = this.capacitorUnits[0];
         } else if (this.capacitorUnits.length === 0) {
           this.capacitorUnit = new CapacitorUnit();
         }
+        // Set focus on the similar menu
         setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
       });
   }
