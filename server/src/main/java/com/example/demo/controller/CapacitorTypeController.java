@@ -87,6 +87,43 @@ public class CapacitorTypeController {
 
 
     /**
+     * Create a CapacitorType
+     * @param capacitorTypeRequest the new CapacitorType to create
+     */
+    @PutMapping(value = "edit/{companyName}/{typeName}")
+    public void editCapacitorType(@Validated
+                                    @PathVariable String companyName,
+                                    @PathVariable String typeName,
+                                    @RequestBody CapacitorTypeRequest capacitorTypeRequest,
+                                    HttpServletResponse response) {
+
+        CapacitorType capacitorType = capacitorTypeRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(typeName, companyName);
+        Construction editedConstruction = null;
+
+        if (capacitorType == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The capacitor type to edit can not be found");
+        }
+
+        // Has construction changed?
+        if (!capacitorTypeRequest.getConstructionName().equals(capacitorType.getConstruction().getConstructionName())) {
+            editedConstruction = constructionRepository.findByConstructionName(capacitorTypeRequest.getConstructionName());
+
+            // Create new construction?
+            if (editedConstruction == null) {
+                editedConstruction = new Construction(capacitorTypeRequest.getConstructionName());
+                constructionRepository.save(editedConstruction);
+                logger.info("Created new construction " + editedConstruction.getConstructionName());
+            }
+        }
+
+        capacitorType.edit(capacitorTypeRequest, editedConstruction);
+
+        capacitorTypeRepository.save(capacitorType);
+        response.setStatus(HttpServletResponse.SC_OK);
+    }
+
+
+    /**
      * Get CapacitorTypeResponse from the name of the owning Manufacturer and the Unique typeName.  Both are case insensitive.
      * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned
      * @param typeName unique key of CapacitorType
