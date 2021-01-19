@@ -5,5 +5,6 @@ export class Manufacturer {
   openYear: number;
   closeYear: number;
   summary: string;
+  typeNames: Array<string>;
 
 }
