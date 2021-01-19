@@ -4,10 +4,10 @@
   <div id="all-types-box">
     <h3>Capacitor Types</h3>
 
-    <div *ngFor="let type of types;">
+    <div *ngFor="let typeName of manufacturer$.typeNames;">
       <a class="grey__link"
-         (click)="dynamicRouter.redirectTo(['/capacitor', 'view', type.companyName.toLowerCase(), type.typeName.toLowerCase()])">
-        {{type.typeName}}
+         (click)="dynamicRouter.redirectTo(['/capacitor', 'view', companyName.toLowerCase(), typeName.toLowerCase()])">
+        {{typeName}}
       </a>
     </div>
     <div>

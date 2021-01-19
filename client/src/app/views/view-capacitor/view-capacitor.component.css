@@ -32,7 +32,7 @@
   text-decoration: underline;
 }
 
-#type-name {
+.type-name {
   font-size: larger;
 }
 
@@ -87,5 +87,11 @@
   grid-column-end: 1;
   grid-row-start: 2;
   grid-row-end: 2;
+}
+
+#type-dropdown {
+  max-width: 150px;
+  font-weight: bold;
+  text-decoration: underline;
 }
 

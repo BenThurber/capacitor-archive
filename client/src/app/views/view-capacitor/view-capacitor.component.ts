@@ -4,6 +4,8 @@ import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml} from '../../utilities/text-utils';
+import {Manufacturer} from '../../models/manufacturer.model';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 @Component({
   selector: 'app-view-capacitor',
@@ -21,11 +23,12 @@ export class ViewCapacitorComponent implements OnInit {
   capacitorType: CapacitorType;
   capacitorUnit: CapacitorUnit;
   capacitorUnits: Array<CapacitorUnit>;
+  manufacturer: Manufacturer;
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
 
 
-  constructor(private activatedRoute: ActivatedRoute, private restService: RestService) {
+  constructor(private activatedRoute: ActivatedRoute, private restService: RestService,  public dynamicRouter: DynamicRouterService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
     this.value = this.activatedRoute.snapshot.paramMap.get('value');
@@ -44,6 +47,9 @@ export class ViewCapacitorComponent implements OnInit {
 
     this.restService.getCapacitorTypeByName(this.companyName, this.typeName)
       .subscribe((capacitorType: CapacitorType) => this.capacitorType = capacitorType);
+
+    this.restService.getManufacturerByName(this.companyName).subscribe(
+      (manufacturer: Manufacturer) => this.manufacturer = manufacturer);
 
     return this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
       .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
@@ -69,7 +75,6 @@ export class ViewCapacitorComponent implements OnInit {
       .replace(' ', ''), 9);
     str += padEndHtml(String(capacitorUnit.voltage > 0 ? capacitorUnit.voltage + 'V' : ''), 8);
     str += capacitorUnit.identifier ? capacitorUnit.identifier : '';
-    // str = 'Hi  &ensp; there'
 
     return str;
   }

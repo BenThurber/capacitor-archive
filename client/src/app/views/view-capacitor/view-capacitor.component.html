@@ -12,7 +12,19 @@
 
     <div id="type-box" class="info__box">
       <span style="float: right">{{capacitorType && capacitorType.constructionName}}</span>
-      <strong id="type-name">{{capacitorType && capacitorType.typeName}}</strong><br>
+
+      <select id="type-dropdown" (change)="dynamicRouter.redirectTo(
+      ['/capacitor', 'view', companyName.toLowerCase(), $event.target.value.toLowerCase()])">
+
+        <option *ngFor="let typeNameDropdown of manufacturer.typeNames"
+                [value]="typeNameDropdown" [selected]="typeNameDropdown === typeName">
+
+          <strong class="type-name">{{typeNameDropdown}}</strong>
+
+        </option>
+
+      </select><br>
+
       Made by: <strong>{{capacitorType && capacitorType.companyName}}</strong><br>
 
       <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
