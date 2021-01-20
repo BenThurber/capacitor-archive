@@ -38,7 +38,7 @@ public class CapacitorUnitController {
      * @param capacitorUnitRequest the new CapacitorUnit to create
      */
     @PostMapping(value = "create")
-    public void createCapacitorUnit(@Validated @RequestBody CapacitorUnitRequest capacitorUnitRequest,
+    public CapacitorUnitResponse createCapacitorUnit(@Validated @RequestBody CapacitorUnitRequest capacitorUnitRequest,
                                    HttpServletResponse response) {
 
         CapacitorType parentType = capacitorTypeRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
@@ -68,6 +68,7 @@ public class CapacitorUnitController {
         }
 
         response.setStatus(HttpServletResponse.SC_CREATED);
+        return new CapacitorUnitResponse(newCapacitorUnit);
     }
 
 

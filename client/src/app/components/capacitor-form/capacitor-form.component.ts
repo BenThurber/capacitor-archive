@@ -10,6 +10,7 @@ import {Location} from '@angular/common';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 class CapacitorForm {
   companyName: string;
@@ -74,6 +75,7 @@ export class CapacitorFormComponent implements OnInit {
 
   constructor(public restService: RestService,
               private router: Router,
+              private dynamicRouter: DynamicRouterService,
               private formBuilder: FormBuilder,
               public location: Location) { }
 
@@ -298,13 +300,21 @@ export class CapacitorFormComponent implements OnInit {
     capacitorUnit.companyName = capacitorForm.companyName;
 
     return this.restService.createCapacitorUnit(capacitorUnit).subscribe({
-      next: () => {
-        console.log('Successfully submitted');
+      next: (createdCapacitorUnit: CapacitorUnit) => {
+        this.dynamicRouter.redirectTo([
+          '/capacitor',
+          'view',
+          createdCapacitorUnit.companyName.toLowerCase(),
+          createdCapacitorUnit.typeName.toLowerCase(),
+          createdCapacitorUnit.value
+        ]);
       },
       error: error => this.handleBackendError(error.error),
     });
 
   }
+
+
 
   handleBackendError(error: SpringErrorResponse): void {
     this.submitting = false;
