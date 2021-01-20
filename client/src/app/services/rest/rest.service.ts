@@ -8,6 +8,7 @@ import {FormGroup} from '@angular/forms';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
+import {calcProjectFileAndBasePath} from '@angular/compiler-cli';
 
 @Injectable({
   providedIn: 'root'
@@ -54,6 +55,15 @@ export class RestService {
 
   createCapacitorType(capacitorType: CapacitorType): any {
     return this.httpClient.post<any>(this.baseUrl + '/type/create', capacitorType, this.options);
+  }
+
+  editCapacitorType(companyName: string, typeName: string, capacitorType: CapacitorType): any {
+    return this.httpClient.put<any>(
+      this.baseUrl + `/type/edit/${companyName}/${typeName}`, capacitorType, this.options);
+  }
+
+  editCapacitorUnit(companyName: string, typeName: string, value: string, capacitorUnit: CapacitorUnit): any {
+    return this.httpClient.put<any>(this.baseUrl + `/unit/edit/${companyName}/${typeName}/${value}`, capacitorUnit, this.options);
   }
 
   createConstruction(construction: string): any {

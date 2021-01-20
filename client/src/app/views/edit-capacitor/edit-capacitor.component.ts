@@ -35,7 +35,7 @@ export class EditCapacitorComponent implements OnInit {
           this.capacitorUnit = capacitorUnit;
           this.formattedCapacitance = CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true);
         },
-      e => console.error(e, 'Could not get CapacitorUnit to edit')
+      () => console.error('Could not get CapacitorUnit to edit')
     );
   }
 
