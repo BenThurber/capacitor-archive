@@ -3,16 +3,18 @@ import {ActivatedRoute} from '@angular/router';
 import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
-import {padEndHtml} from '../../utilities/text-utils';
+import {padEndHtml, caseInsensitiveCompare} from '../../utilities/text-utils';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 @Component({
   selector: 'app-view-capacitor',
   templateUrl: './view-capacitor.component.html',
-  styleUrls: ['./view-capacitor.component.css']
+  styleUrls: ['./view-capacitor.component.css', '../../styles/animations.css']
 })
 export class ViewCapacitorComponent implements OnInit {
+
+  readonly caseInsensitiveCompare = caseInsensitiveCompare;
 
   @ViewChild('similarMenu') similarMenu: ElementRef;
 
