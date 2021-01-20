@@ -309,31 +309,46 @@ export class CapacitorFormComponent implements OnInit {
     }
 
     // Create Unit
-    const capacitorUnit: CapacitorUnit = new CapacitorUnit();
-    capacitorUnit.capacitance = capacitorForm.unit.capacitance;
-    capacitorUnit.voltage = capacitorForm.unit.voltage;
-    capacitorUnit.identifier = capacitorForm.unit.identifier;
-    capacitorUnit.notes = capacitorForm.unit.notes;
-    capacitorUnit.typeName = capacitorForm.type.typeContent.typeNameInput;
-    capacitorUnit.companyName = capacitorForm.companyName;
+    if (!this.formFields.unit.pristine) {
 
-    httpRequestObservable = this.editing ?
-      this.restService.editCapacitorUnit(this.editCompanyName, this.editCapacitorType.typeName, this.editCapacitorUnit.value,
-        capacitorUnit) :
-      this.restService.createCapacitorUnit(capacitorUnit);
+      const capacitorUnit: CapacitorUnit = new CapacitorUnit();
+      capacitorUnit.capacitance = capacitorForm.unit.capacitance;
+      capacitorUnit.voltage = capacitorForm.unit.voltage;
+      capacitorUnit.identifier = capacitorForm.unit.identifier;
+      capacitorUnit.notes = capacitorForm.unit.notes;
+      capacitorUnit.typeName = capacitorForm.type.typeContent ?
+        capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect;
+      capacitorUnit.companyName = capacitorForm.companyName;
 
-    return httpRequestObservable.subscribe({
-      next: (createdCapacitorUnit: CapacitorUnit) => {
-        this.dynamicRouter.redirectTo([
-          '/capacitor',
-          'view',
-          createdCapacitorUnit.companyName.toLowerCase(),
-          createdCapacitorUnit.typeName.toLowerCase(),
-          createdCapacitorUnit.value
-        ]);
-      },
-      error: error => this.handleBackendError(error.error),
-    });
+      httpRequestObservable = this.editing ?
+        this.restService.editCapacitorUnit(this.editCompanyName, this.editCapacitorType.typeName, this.editCapacitorUnit.value,
+          capacitorUnit) :
+        this.restService.createCapacitorUnit(capacitorUnit);
+
+      return httpRequestObservable.subscribe({
+        next: (createdCapacitorUnit: CapacitorUnit) => {
+          this.dynamicRouter.redirectTo([
+            '/capacitor',
+            'view',
+            createdCapacitorUnit.companyName.toLowerCase(),
+            createdCapacitorUnit.typeName.toLowerCase(),
+            createdCapacitorUnit.value
+          ]);
+          return;
+        },
+        error: error => this.handleBackendError(error.error),
+      });
+
+    }
+    // Only executed if unit is pristine
+    this.dynamicRouter.redirectTo([
+      '/capacitor',
+      'view',
+      (this.editCompanyName || capacitorForm.companyName).toLowerCase(),
+      (this.editCapacitorType.typeName ||
+        (capacitorForm.type.typeContent ? capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect)).toLowerCase(),
+      this.editCapacitorUnit && this.editCapacitorUnit.value
+    ]);
 
   }
 

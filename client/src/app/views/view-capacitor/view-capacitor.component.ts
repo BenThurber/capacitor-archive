@@ -3,7 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
-import {padEndHtml} from '../../utilities/text-utils';
+import {padEndHtml, caseInsensitiveCompare} from '../../utilities/text-utils';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
@@ -13,6 +13,8 @@ import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router
   styleUrls: ['./view-capacitor.component.css', '../../styles/animations.css']
 })
 export class ViewCapacitorComponent implements OnInit {
+
+  readonly caseInsensitiveCompare = caseInsensitiveCompare;
 
   @ViewChild('similarMenu') similarMenu: ElementRef;
 

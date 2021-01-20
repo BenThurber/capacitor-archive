@@ -18,11 +18,11 @@
       <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
-      <select id="type-dropdown" (change)="dynamicRouter.redirectTo(
+      <select *ngIf="manufacturer" id="type-dropdown" (change)="dynamicRouter.redirectTo(
       ['/capacitor', 'view', companyName.toLowerCase(), $event.target.value.toLowerCase()])">
 
-        <option *ngFor="let typeNameDropdown of manufacturer.typeNames"
-                [value]="typeNameDropdown" [selected]="typeNameDropdown === typeName">
+        <option *ngFor="let typeNameDropdown of manufacturer.typeNames.sort(caseInsensitiveCompare)"
+                [value]="typeNameDropdown" [selected]="typeNameDropdown.toLowerCase() === typeName.toLowerCase()">
 
           <strong class="type-name">{{typeNameDropdown}}</strong>
 
