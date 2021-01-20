@@ -203,7 +203,7 @@ class CapacitorUnitControllerTest {
             CapacitorUnit capacitorUnit = i.getArgument(0);
 
             // Check if unique
-            if (capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
+            if (capacitorUnit.getId() == null && capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
                     capacitorUnit.getCapacitance(),
                     capacitorUnit.getVoltage(),
                     capacitorUnit.getIdentifier()) != null) {
@@ -494,6 +494,116 @@ class CapacitorUnitControllerTest {
         List<CapacitorUnitResponse> expectedUnits = Arrays.asList(new CapacitorUnitResponse(capacitorUnit1), new CapacitorUnitResponse(capacitorUnit2));
 
         assertEquals(expectedUnits, receivedUnits);
+    }
+
+
+    private final String editCapacitorUnitOnlyNotesJson = JsonConverter.toJson(true,
+            "capacitance", 50000,
+            "voltage", 400,
+            "identifier", "35b",
+            "notes", "A new edited note",
+            "typeName", "sealdtite",
+            "companyName", "Solar"
+    );
+    /**
+     * Test successful creation of new CapacitorType that creates a new construction.
+     */
+    @Test
+    void editCapacitorUnit_onlyEditNotes_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/50000C400V35b")
+                .content(editCapacitorUnitOnlyNotesJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+        assertEquals("A new edited note", capacitorUnitMockTable.get(0).getNotes());
+    }
+
+
+    private final String editCapacitorUnitCapacitanceOnlyJson = JsonConverter.toJson(true,
+            "capacitance", 50001,
+            "voltage", 400,
+            "identifier", "35b",
+            "notes", "A popular capacitor",
+            "typeName", "sealdtite",
+            "companyName", "Solar"
+    );
+    /**
+     * Test successful creation of new CapacitorType that creates a new construction.
+     */
+    @Test
+    void editCapacitorUnit_capacitanceOnly_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/50000C400V35b")
+                .content(editCapacitorUnitCapacitanceOnlyJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+        assertEquals(50001, capacitorUnitMockTable.get(0).getCapacitance());
+        assertEquals("50001C400V35b", capacitorUnitMockTable.get(0).getValue());
+    }
+
+
+    private final String editCapacitorUnitCapacitanceVoltageIdJson = JsonConverter.toJson(true,
+            "capacitance", 50001,
+            "voltage", 401,
+            "identifier", "35c",
+            "notes", "A popular capacitor",
+            "typeName", "sealdtite",
+            "companyName", "Solar"
+    );
+    /**
+     * Test successful creation of new CapacitorType that creates a new construction.
+     */
+    @Test
+    void editCapacitorUnit_capacitanceVoltageId_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/50000C400V35b")
+                .content(editCapacitorUnitCapacitanceVoltageIdJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isOk());
+
+        assertEquals(50001, capacitorUnitMockTable.get(0).getCapacitance());
+        assertEquals(401, capacitorUnitMockTable.get(0).getVoltage());
+        assertEquals("35c", capacitorUnitMockTable.get(0).getIdentifier());
+        assertEquals("50001C401V35c", capacitorUnitMockTable.get(0).getValue());
+    }
+
+
+    /**
+     * Test successful creation of new CapacitorType that creates a new construction.
+     */
+    @Test
+    void editCapacitorUnit_notFound_unsuccessful() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorUnitRepository.save(capacitorUnit1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/bad-value")
+                .content(editCapacitorUnitOnlyNotesJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isNotFound());
     }
 
 }

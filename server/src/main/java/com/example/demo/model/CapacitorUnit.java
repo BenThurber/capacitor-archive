@@ -64,17 +64,22 @@ public class CapacitorUnit {
     private CapacitorType capacitorType;
 
 
-    public CapacitorUnit(CapacitorUnitRequest capacitorTypeRequest) {
-        CapacitorUnitRequest r = capacitorTypeRequest;
+    public CapacitorUnit(CapacitorUnitRequest capacitorUnitRequest) {
+        edit(capacitorUnitRequest);
+    }
+
+
+    public CapacitorUnit() { }
+
+
+    public void edit(CapacitorUnitRequest capacitorUnitRequest) {
+        CapacitorUnitRequest r = capacitorUnitRequest;
 
         setCapacitance(r.getCapacitance());
         setVoltage(r.getVoltage());
         setIdentifier(r.getIdentifier());
         setNotes(r.getNotes());
     }
-
-
-    public CapacitorUnit() { }
 
 
     public void setVoltage(Integer voltage) {
