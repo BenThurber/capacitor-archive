@@ -10,7 +10,7 @@ import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router
 @Component({
   selector: 'app-view-capacitor',
   templateUrl: './view-capacitor.component.html',
-  styleUrls: ['./view-capacitor.component.css']
+  styleUrls: ['./view-capacitor.component.css', '../../styles/animations.css']
 })
 export class ViewCapacitorComponent implements OnInit {
 

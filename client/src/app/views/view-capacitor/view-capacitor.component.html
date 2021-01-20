@@ -11,7 +11,8 @@
 
 
     <div id="type-box" class="info__box">
-      <span style="float: right">{{capacitorType && capacitorType.constructionName}}</span>
+      <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
+      <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
       <select id="type-dropdown" (change)="dynamicRouter.redirectTo(
       ['/capacitor', 'view', companyName.toLowerCase(), $event.target.value.toLowerCase()])">
@@ -47,6 +48,8 @@
 
     <div id="unit-box" class="info__box">
       <span id="identifier" *ngIf="capacitorUnit && capacitorUnit.identifier">{{capacitorUnit.identifier}}</span>
+      <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
+
       <!--This code could be improved.-->
       Capacitance: <strong>
       {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true).split(' ')[0]}}</strong>
