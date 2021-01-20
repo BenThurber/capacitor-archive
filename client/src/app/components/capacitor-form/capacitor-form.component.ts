@@ -117,6 +117,11 @@ export class CapacitorFormComponent implements OnInit {
       this.editing = true;
       this.manufacturerMenuChanged(this.selectedCompanyName);
       this.capacitorTypes$ = [this.selectedCapacitorType];
+      this.capacitorForm.patchValue({
+        type: {
+          typeNameSelect: this.selectedCapacitorType.typeName
+        }
+      });
       this.typeMenuChanged(this.selectedCapacitorType.typeName);
       this.capacitorForm.patchValue({
         unit: {
@@ -197,7 +202,6 @@ export class CapacitorFormComponent implements OnInit {
 
     this.capacitorForm.patchValue({
       type: {
-        typeNameSelect: selectedTypeName,
         typeContent: {
           typeNameInput: this.selectedCapacitorType && this.selectedCapacitorType.typeName,
           construction: this.selectedCapacitorType ? this.selectedCapacitorType.constructionName : this.noneSelected,

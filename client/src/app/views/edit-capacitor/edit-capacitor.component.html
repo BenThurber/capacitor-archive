@@ -3,7 +3,7 @@
   <div *ngIf="companyName && capacitorType && capacitorUnit; else loading">
     <h2>You Are Editing a Type <span class="highlight">{{capacitorUnit.typeName}}</span> Size
       <span class="highlight">{{formattedCapacitance}}</span> capacitor
-      from <span class="highlight">{{capacitorUnit && capacitorUnit.companyName}}</span></h2>
+      made by <span class="highlight">{{capacitorUnit && capacitorUnit.companyName}}</span></h2>
 
     <app-capacitor-form [companyName]="companyName" [capacitorType]="capacitorType" [capacitorUnit]="capacitorUnit">
     </app-capacitor-form>
