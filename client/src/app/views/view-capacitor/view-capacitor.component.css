@@ -13,7 +13,7 @@
   grid-row-start: 2;
   grid-row-end: 6;
 
-  background-color: #bebebe;
+  background-color: #d0d0d0;
   padding: 10% 10%;
   border-radius: 10px;
 }
@@ -93,5 +93,13 @@
   max-width: 150px;
   font-weight: bold;
   text-decoration: underline;
+}
+
+#edit-capacitor {
+  /*all: initial;*/
+  float: right;
+  margin-top: -8%;
+  margin-right: -5%;
+
 }
 
