@@ -112,26 +112,35 @@ export class CapacitorFormComponent implements OnInit {
       captcha: ['', Validators.required],
     });
 
-    // Setup editing
+    // Setup for editing
     if (this.selectedCompanyName && this.selectedCapacitorType && this.selectedCapacitorUnit) {
       this.editing = true;
-      this.manufacturerMenuChanged(this.selectedCompanyName);
-      this.capacitorTypes$ = [this.selectedCapacitorType];
-      this.capacitorForm.patchValue({
-        type: {
-          typeNameSelect: this.selectedCapacitorType.typeName
-        }
-      });
-      this.typeMenuChanged(this.selectedCapacitorType.typeName);
-      this.capacitorForm.patchValue({
-        unit: {
-          capacitance: this.selectedCapacitorUnit.capacitance,
-          voltage: this.selectedCapacitorUnit.voltage,
-          identifier: this.selectedCapacitorUnit.identifier,
-          notes: this.selectedCapacitorUnit.notes
-        }
-      });
+      this.populateFormFields(this.selectedCompanyName, this.selectedCapacitorType, this.selectedCapacitorUnit);
+      this.formFields.type.controls.typeContent.enable();
     }
+  }
+
+  private populateFormFields(companyName: string, capacitorType: CapacitorType, capacitorUnit: CapacitorUnit): void {
+    this.capacitorForm.patchValue({
+      companyName,
+      type: {
+        typeNameSelect: capacitorType.typeName,
+        typeContent: {
+          typeNameInput: capacitorType.typeName,
+          construction: capacitorType.constructionName,
+          constructionInput: '',
+          startYear: capacitorType.startYear,
+          endYear: capacitorType.endYear,
+          description: capacitorType.description
+        }
+      },
+      unit: {
+        capacitance: capacitorUnit.capacitance,
+        voltage: capacitorUnit.voltage,
+        identifier: capacitorUnit.identifier,
+        notes: capacitorUnit.notes
+      }
+    });
   }
 
   /** Update this.companyNames$ */
@@ -196,7 +205,7 @@ export class CapacitorFormComponent implements OnInit {
     // Inefficient O(n)
     this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === selectedTypeName).pop();
 
-    selectedTypeName === this.newCapacitorTypeOption || this.editing ?
+    selectedTypeName === this.newCapacitorTypeOption ?
       this.formFields.type.controls.typeContent.enable() :
       this.formFields.type.controls.typeContent.disable();
 
