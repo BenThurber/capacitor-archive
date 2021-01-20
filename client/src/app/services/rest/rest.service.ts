@@ -56,6 +56,15 @@ export class RestService {
     return this.httpClient.post<any>(this.baseUrl + '/type/create', capacitorType, this.options);
   }
 
+  editCapacitorType(companyName: string, typeName: string, capacitorType: CapacitorType): any {
+    return this.httpClient.put<any>(
+      this.baseUrl + `/type/edit/${companyName}/${typeName}`, capacitorType, this.options);
+  }
+
+  editCapacitorUnit(companyName: string, typeName: string, value: string, capacitorUnit: CapacitorUnit): any {
+    return this.httpClient.put<any>(this.baseUrl + `/unit/edit/${companyName}/${typeName}/${value}`, capacitorUnit, this.options);
+  }
+
   createConstruction(construction: string): any {
     return this.httpClient.post<any>(this.baseUrl + '/construction/create', construction, {
       headers: new HttpHeaders({

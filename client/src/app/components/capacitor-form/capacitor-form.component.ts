@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
@@ -10,6 +10,7 @@ import {Location} from '@angular/common';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 class CapacitorForm {
   companyName: string;
@@ -41,8 +42,12 @@ export class CapacitorFormComponent implements OnInit {
 
   static readonly newConstructionOption = '+ Add Construction';
 
+  editing = false;
+  @Input('companyName') editCompanyName: string;
+  @Input('capacitorType') editCapacitorType: CapacitorType;
+  @Input('capacitorUnit') editCapacitorUnit: CapacitorUnit;
+
   capacitorForm: FormGroup;
-  existingCapacitorForm: CapacitorForm;
   submitting = false;
   errorsBackend: Array<SpringErrorResponse> = [];
 
@@ -50,7 +55,6 @@ export class CapacitorFormComponent implements OnInit {
 
   // Manufacturer Section
   readonly newManufacturerOption = '+ Add Manufacturer';
-  selectedCompanyName: string;
   companyNames$: Array<string> = [];
   isNavigatingToCreateManufacturer = false;
 
@@ -69,6 +73,7 @@ export class CapacitorFormComponent implements OnInit {
 
   constructor(public restService: RestService,
               private router: Router,
+              private dynamicRouter: DynamicRouterService,
               private formBuilder: FormBuilder,
               public location: Location) { }
 
@@ -103,6 +108,39 @@ export class CapacitorFormComponent implements OnInit {
         notes: ['', []],
       }),
       captcha: ['', Validators.required],
+    });
+
+    // Setup for editing
+    if (this.editCompanyName && this.editCapacitorType && this.editCapacitorUnit) {
+      this.editing = true;
+      this.populateFormFields(this.editCompanyName, this.editCapacitorType, this.editCapacitorUnit);
+      this.formFields.type.controls.typeContent.enable();
+    }
+  }
+
+  /**
+   * Populates the fields of the FormGroup when editing.  Uses the values from @Input
+   */
+  private populateFormFields(companyName: string, capacitorType: CapacitorType, capacitorUnit: CapacitorUnit): void {
+    this.capacitorForm.patchValue({
+      companyName,
+      type: {
+        typeNameSelect: capacitorType.typeName,
+        typeContent: {
+          typeNameInput: capacitorType.typeName,
+          construction: capacitorType.constructionName,
+          constructionInput: '',
+          startYear: capacitorType.startYear,
+          endYear: capacitorType.endYear,
+          description: capacitorType.description
+        }
+      },
+      unit: {
+        capacitance: capacitorUnit.capacitance,
+        voltage: capacitorUnit.voltage,
+        identifier: capacitorUnit.identifier,
+        notes: capacitorUnit.notes
+      }
     });
   }
 
@@ -144,23 +182,25 @@ export class CapacitorFormComponent implements OnInit {
   }
 
   /** Handle the event when a companyName is selected */
-  manufacturerMenuChanged(event): void {
-    this.selectedCompanyName = event.target.value;
-    if (this.selectedCompanyName === this.newManufacturerOption) {
+  manufacturerMenuChanged(value): void {
+    if (value === this.newManufacturerOption) {
 
       this.gotoAddNewManufacturer();
 
     }
 
     if (this.manufacturerIsSelected) {
-      this.getTypeList(this.selectedCompanyName);
+      this.getTypeList(value);
     }
+
+    this.capacitorForm.patchValue({
+      companyName: value
+    });
 
   }
 
   /** Handle the event when a typeName is selected */
-  typeMenuChanged(event): void {
-    const selectedTypeName = event.target.value;
+  typeMenuChanged(selectedTypeName): void {
 
     // Inefficient O(n)
     this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === selectedTypeName).pop();
@@ -205,32 +245,33 @@ export class CapacitorFormComponent implements OnInit {
         typeNameSelect: this.newCapacitorTypeOption
       }
     });
-    this.typeMenuChanged({target: {value: this.newCapacitorTypeOption}});
+    this.typeMenuChanged(this.newCapacitorTypeOption);
   }
 
 
-
+  /**
+   * Function called when submitting the form.  Calls submitCreateEditRecursive.
+   * @param capacitorForm form data
+   */
   onSubmit(capacitorForm: CapacitorForm): void {
     this.submitting = true;
     this.errorsBackend = [];
 
-    if (this.existingCapacitorForm === undefined) {
-
-      this.submitCreate(capacitorForm);
-
-    } else {
-
-      // ToDo implement submitEdit
-
-    }
-
+    this.submitCreateEditRecursive(capacitorForm);
   }
 
 
-  submitCreate(capacitorForm: CapacitorForm): void {
+  /**
+   * Used when creating and editing.  Sends one or more http requests to create/edit CapacitorType, Construction, and CapacitorUnit
+   * depending on what form controls have been entered.  If multiple need to be created/edited, then this method is called recursively
+   * after each successful http request is completed.
+   * @param capacitorForm form data
+   */
+  submitCreateEditRecursive(capacitorForm: CapacitorForm): void {
+    let httpRequestObservable;
 
     // Create new type
-    if (capacitorForm.type.typeNameSelect === this.newCapacitorTypeOption) {
+    if (!this.formFields.type.controls.typeContent.pristine) {
       const capacitorTypeFields = capacitorForm.type.typeContent;
 
       // Create new Construction
@@ -238,7 +279,7 @@ export class CapacitorFormComponent implements OnInit {
         return this.restService.createConstruction(capacitorTypeFields.constructionInput).subscribe({
           next: () => {
             capacitorForm.type.typeContent.construction = capacitorForm.type.typeContent.constructionInput;
-            this.submitCreate(capacitorForm);
+            this.submitCreateEditRecursive(capacitorForm);
           },
           error: error => this.handleBackendError(error.error),
         });
@@ -253,10 +294,14 @@ export class CapacitorFormComponent implements OnInit {
       capacitorType.constructionName = capacitorTypeFields.construction === this.newConstructionOption ?
         capacitorTypeFields.constructionInput : capacitorTypeFields.construction;
 
-      return this.restService.createCapacitorType(capacitorType).subscribe({
+      httpRequestObservable = this.editing ?
+        this.restService.editCapacitorType(this.editCompanyName, this.editCapacitorType.typeName, capacitorType) :
+        this.restService.createCapacitorType(capacitorType);
+
+      return httpRequestObservable.subscribe({
         next: () => {
-          capacitorForm.type.typeNameSelect = capacitorForm.type.typeContent.typeNameInput;
-          this.submitCreate(capacitorForm);
+          this.formFields.type.controls.typeContent.markAsPristine();
+          this.submitCreateEditRecursive(capacitorForm);
         },
         error: error => this.handleBackendError(error.error),
       });
@@ -264,22 +309,50 @@ export class CapacitorFormComponent implements OnInit {
     }
 
     // Create Unit
-    const capacitorUnit: CapacitorUnit = new CapacitorUnit();
-    capacitorUnit.capacitance = capacitorForm.unit.capacitance;
-    capacitorUnit.voltage = capacitorForm.unit.voltage;
-    capacitorUnit.identifier = capacitorForm.unit.identifier;
-    capacitorUnit.notes = capacitorForm.unit.notes;
-    capacitorUnit.typeName = capacitorForm.type.typeNameSelect;
-    capacitorUnit.companyName = capacitorForm.companyName;
+    if (!this.formFields.unit.pristine) {
 
-    return this.restService.createCapacitorUnit(capacitorUnit).subscribe({
-      next: () => {
-        console.log('Successfully submitted');
-      },
-      error: error => this.handleBackendError(error.error),
-    });
+      const capacitorUnit: CapacitorUnit = new CapacitorUnit();
+      capacitorUnit.capacitance = capacitorForm.unit.capacitance;
+      capacitorUnit.voltage = capacitorForm.unit.voltage;
+      capacitorUnit.identifier = capacitorForm.unit.identifier;
+      capacitorUnit.notes = capacitorForm.unit.notes;
+      capacitorUnit.typeName = capacitorForm.type.typeContent ?
+        capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect;
+      capacitorUnit.companyName = capacitorForm.companyName;
+
+      httpRequestObservable = this.editing ?
+        this.restService.editCapacitorUnit(this.editCompanyName, this.editCapacitorType.typeName, this.editCapacitorUnit.value,
+          capacitorUnit) :
+        this.restService.createCapacitorUnit(capacitorUnit);
+
+      return httpRequestObservable.subscribe({
+        next: (createdCapacitorUnit: CapacitorUnit) => {
+          this.dynamicRouter.redirectTo([
+            '/capacitor',
+            'view',
+            createdCapacitorUnit.companyName.toLowerCase(),
+            createdCapacitorUnit.typeName.toLowerCase(),
+            createdCapacitorUnit.value
+          ]);
+          return;
+        },
+        error: error => this.handleBackendError(error.error),
+      });
+
+    }
+    // Only executed if unit is pristine
+    this.dynamicRouter.redirectTo([
+      '/capacitor',
+      'view',
+      (this.editCompanyName || capacitorForm.companyName).toLowerCase(),
+      (this.editCapacitorType.typeName ||
+        (capacitorForm.type.typeContent ? capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect)).toLowerCase(),
+      this.editCapacitorUnit && this.editCapacitorUnit.value
+    ]);
 
   }
+
+
 
   handleBackendError(error: SpringErrorResponse): void {
     this.submitting = false;
