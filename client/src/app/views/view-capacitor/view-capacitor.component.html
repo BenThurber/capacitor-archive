@@ -7,7 +7,7 @@
 
     <div id="image-box">
       <a id="edit-capacitor" [routerLink]=""
-         (click)="dynamicRouter.redirectTo(['/capacitor', 'edit', companyName.toLowerCase(), typeName.toLowerCase(), capacitorUnit.value.toLowerCase()])">
+         (click)="dynamicRouter.redirectTo(['/capacitor', 'edit', companyName.toLowerCase(), typeName.toLowerCase(), capacitorUnit.value])">
         [Edit Capacitor]
       </a>
       <app-image id="image" src="../../../assets/images-coming-soon" width="100%" alt="Images Coming Soon"></app-image>

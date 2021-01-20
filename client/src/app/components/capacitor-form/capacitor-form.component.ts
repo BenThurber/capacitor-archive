@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
@@ -41,6 +41,8 @@ export class CapacitorFormComponent implements OnInit {
 
   static readonly newConstructionOption = '+ Add Construction';
 
+  editing = false;
+
   capacitorForm: FormGroup;
   existingCapacitorForm: CapacitorForm;
   submitting = false;
@@ -50,17 +52,20 @@ export class CapacitorFormComponent implements OnInit {
 
   // Manufacturer Section
   readonly newManufacturerOption = '+ Add Manufacturer';
-  selectedCompanyName: string;
+  @Input('companyName') selectedCompanyName: string;
   companyNames$: Array<string> = [];
   isNavigatingToCreateManufacturer = false;
 
   // Type Section
   readonly newCapacitorTypeOption = '+ Add New Type';
-  selectedCapacitorType: CapacitorType;
+  @Input('capacitorType') selectedCapacitorType: CapacitorType;
   capacitorTypes$: Array<CapacitorType> = [];
   readonly newConstructionOption = CapacitorFormComponent.newConstructionOption;
   constructionNames$: Array<string> = [];
   yearsAreExpanded = false;
+
+  // Unit section
+  @Input('capacitorUnit') selectedCapacitorUnit: CapacitorUnit;
 
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
@@ -104,6 +109,22 @@ export class CapacitorFormComponent implements OnInit {
       }),
       captcha: ['', Validators.required],
     });
+
+    // Setup editing
+    if (this.selectedCompanyName && this.selectedCapacitorType && this.selectedCapacitorUnit) {
+      this.editing = true;
+      this.manufacturerMenuChanged(this.selectedCompanyName);
+      this.capacitorTypes$ = [this.selectedCapacitorType];
+      this.typeMenuChanged(this.selectedCapacitorType.typeName);
+      this.capacitorForm.patchValue({
+        unit: {
+          capacitance: this.selectedCapacitorUnit.capacitance,
+          voltage: this.selectedCapacitorUnit.voltage,
+          identifier: this.selectedCapacitorUnit.identifier,
+          notes: this.selectedCapacitorUnit.notes
+        }
+      });
+    }
   }
 
   /** Update this.companyNames$ */
@@ -144,8 +165,8 @@ export class CapacitorFormComponent implements OnInit {
   }
 
   /** Handle the event when a companyName is selected */
-  manufacturerMenuChanged(event): void {
-    this.selectedCompanyName = event.target.value;
+  manufacturerMenuChanged(value): void {
+    this.selectedCompanyName = value;
     if (this.selectedCompanyName === this.newManufacturerOption) {
 
       this.gotoAddNewManufacturer();
@@ -156,21 +177,25 @@ export class CapacitorFormComponent implements OnInit {
       this.getTypeList(this.selectedCompanyName);
     }
 
+    this.capacitorForm.patchValue({
+      companyName: value
+    });
+
   }
 
   /** Handle the event when a typeName is selected */
-  typeMenuChanged(event): void {
-    const selectedTypeName = event.target.value;
+  typeMenuChanged(selectedTypeName): void {
 
     // Inefficient O(n)
     this.selectedCapacitorType = this.capacitorTypes$.filter(ct => ct.typeName === selectedTypeName).pop();
 
-    selectedTypeName === this.newCapacitorTypeOption ?
+    selectedTypeName === this.newCapacitorTypeOption || this.editing ?
       this.formFields.type.controls.typeContent.enable() :
       this.formFields.type.controls.typeContent.disable();
 
     this.capacitorForm.patchValue({
       type: {
+        typeNameSelect: selectedTypeName,
         typeContent: {
           typeNameInput: this.selectedCapacitorType && this.selectedCapacitorType.typeName,
           construction: this.selectedCapacitorType ? this.selectedCapacitorType.constructionName : this.noneSelected,
@@ -205,7 +230,7 @@ export class CapacitorFormComponent implements OnInit {
         typeNameSelect: this.newCapacitorTypeOption
       }
     });
-    this.typeMenuChanged({target: {value: this.newCapacitorTypeOption}});
+    this.typeMenuChanged(this.newCapacitorTypeOption);
   }
 
 

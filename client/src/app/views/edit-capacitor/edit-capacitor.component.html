@@ -1,0 +1,16 @@
+<div class="content">
+
+  <div *ngIf="companyName && capacitorType && capacitorUnit; else loading">
+    <h2>You Are Editing a Type <span class="highlight">{{capacitorUnit.typeName}}</span> Size
+      <span class="highlight">{{formattedCapacitance}}</span> capacitor
+      from <span class="highlight">{{capacitorUnit && capacitorUnit.companyName}}</span></h2>
+
+    <app-capacitor-form [companyName]="companyName" [capacitorType]="capacitorType" [capacitorUnit]="capacitorUnit">
+    </app-capacitor-form>
+  </div>
+
+  <ng-template #loading>
+    <h3 class="loading">Loading Data...</h3>
+  </ng-template>
+
+</div>
