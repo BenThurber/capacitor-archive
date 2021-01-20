@@ -8,7 +8,6 @@ import {FormGroup} from '@angular/forms';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
-import {calcProjectFileAndBasePath} from '@angular/compiler-cli';
 
 @Injectable({
   providedIn: 'root'
