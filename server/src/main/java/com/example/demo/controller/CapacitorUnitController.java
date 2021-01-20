@@ -77,7 +77,7 @@ public class CapacitorUnitController {
      * @param capacitorUnitRequest the new CapacitorUnit to create
      */
     @PutMapping(value = "edit/{companyName}/{typeName}/{unitValue}")
-    public void editCapacitorUnit(@Validated
+    public CapacitorUnitResponse editCapacitorUnit(@Validated
                                     @RequestBody CapacitorUnitRequest capacitorUnitRequest,
                                     @PathVariable String companyName,
                                     @PathVariable String typeName,
@@ -96,6 +96,7 @@ public class CapacitorUnitController {
 
         capacitorUnitRepository.save(capacitorUnit);
         response.setStatus(HttpServletResponse.SC_OK);
+        return new CapacitorUnitResponse(capacitorUnit);
     }
 
 
