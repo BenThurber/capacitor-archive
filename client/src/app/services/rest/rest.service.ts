@@ -8,6 +8,8 @@ import {FormGroup} from '@angular/forms';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
+import urlcat from 'urlcat';
+
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +18,7 @@ export class RestService {
 
 
   baseUrl: string = environment.serverBaseUrl;
+  url: string;
   options: object;
 
 
@@ -33,7 +36,8 @@ export class RestService {
   }
 
   getManufacturerByName(name: string): Observable<Manufacturer> {
-    return this.httpClient.get<Manufacturer>(this.baseUrl + '/manufacturer/name/' + name, this.options);
+    const url = urlcat(this.baseUrl, '/manufacturer/name/:name', {name});
+    return this.httpClient.get<Manufacturer>(url, this.options);
   }
 
   getAllCompanyNames(): Observable<Array<string>> {
@@ -41,7 +45,8 @@ export class RestService {
   }
 
   getAllTypes(companyName): Observable<Array<CapacitorType>> {
-    return this.httpClient.get<Array<CapacitorType>>(this.baseUrl + '/type/all/' + companyName, this.options);
+    const url = urlcat(this.baseUrl, '/type/all/:companyName', {companyName});
+    return this.httpClient.get<Array<CapacitorType>>(url, this.options);
   }
 
   getAllConstructions(): Observable<Array<string>> {
@@ -57,12 +62,13 @@ export class RestService {
   }
 
   editCapacitorType(companyName: string, typeName: string, capacitorType: CapacitorType): any {
-    return this.httpClient.put<any>(
-      this.baseUrl + `/type/edit/${companyName}/${typeName}`, capacitorType, this.options);
+    const url = urlcat(this.baseUrl, '/type/edit/:companyName/:typeName', {companyName, typeName});
+    return this.httpClient.put<any>(url, capacitorType, this.options);
   }
 
   editCapacitorUnit(companyName: string, typeName: string, value: string, capacitorUnit: CapacitorUnit): any {
-    return this.httpClient.put<any>(this.baseUrl + `/unit/edit/${companyName}/${typeName}/${value}`, capacitorUnit, this.options);
+    const url = urlcat(this.baseUrl, '/unit/edit/:companyName/:typeName/:value', {companyName, typeName, value});
+    return this.httpClient.put<any>(url, capacitorUnit, this.options);
   }
 
   createConstruction(construction: string): any {
@@ -80,18 +86,22 @@ export class RestService {
   }
 
   getCapacitorTypeByName(companyName: string, typeName: string): Observable<CapacitorType> {
-    return this.httpClient.get<any>(this.baseUrl + `/type/name/${companyName}/${typeName}`, this.options);
+    const url = urlcat(this.baseUrl, '/type/name/:companyName/:typeName', {companyName, typeName});
+    return this.httpClient.get<any>(url, this.options);
   }
 
   getCapacitorUnitByValue(companyName: string, typeName: string, value: string): Observable<CapacitorUnit> {
-    return this.httpClient.get<any>(this.baseUrl + `/unit/name/${companyName}/${typeName}/${value}`, this.options);
+    const url = urlcat(this.baseUrl, '/unit/name/:companyName/:typeName/:value', {companyName, typeName, value});
+    return this.httpClient.get<any>(url, this.options);
   }
 
   getAllCapacitorUnitsFromCapacitorType(companyName: string, typeName: string): Observable<Array<CapacitorUnit>> {
-    return this.httpClient.get<any>(this.baseUrl + `/unit/all/${companyName}/${typeName}`, this.options);
+    const url = urlcat(this.baseUrl, '/unit/all/:companyName/:typeName', {companyName, typeName});
+    return this.httpClient.get<any>(url, this.options);
   }
 
   editManufacturer(name: string, manufacturer: Manufacturer): any {
+    const url = urlcat(this.baseUrl, '/manufacturer/edit/:name', {name});
     return this.httpClient.put<any>(this.baseUrl + '/manufacturer/edit/' + name, manufacturer, this.options);
   }
 
