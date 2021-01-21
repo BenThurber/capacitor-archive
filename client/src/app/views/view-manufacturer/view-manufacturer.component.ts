@@ -8,7 +8,7 @@ import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router
 @Component({
   selector: 'app-view-manufacturer',
   templateUrl: './view-manufacturer.component.html',
-  styleUrls: ['./view-manufacturer.component.css']
+  styleUrls: ['./view-manufacturer.component.css', '../../styles/animations.css']
 })
 export class ViewManufacturerComponent implements OnInit {
 
