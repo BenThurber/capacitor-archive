@@ -23,14 +23,6 @@
   grid-row-end: 5;
 }
 
-h3 {
-  text-align: center;
-  text-decoration: underline;
-  color: #007200;
-  margin-bottom: 15px;
-  margin-top: 5px;
-}
-
 #all-types-box {
   grid-column-start: 3;
   grid-column-end: 3;
@@ -46,6 +38,14 @@ h3 {
   padding: 20px 7px;
 }
 
+#all-types-box h3 {
+  text-align: center;
+  text-decoration: underline;
+  color: #007200;
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+
 #all-types-box a {
   line-height: 18px;
   text-align: center;
@@ -56,4 +56,13 @@ h3 {
 #add-capacitor {
   padding-top: 30px;
   text-decoration: underline;
+}
+
+#loading {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+
+  text-align: left;
 }
