@@ -11,6 +11,11 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Table(
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"manufacturer_id", "type_name_lower"})
+)
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -31,7 +36,7 @@ public class CapacitorType {
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    @Column(name = "type_name_lower", length = FIELD_LEN, nullable = false, unique = true)
+    @Column(name = "type_name_lower", length = FIELD_LEN, nullable = false)
     private String typeNameLower;
 
     /**This allows type_name to be case insensitive unique*/

@@ -11,6 +11,10 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"capacitor_type_id", "value"})
+)
 @Getter
 @Setter
 @EqualsAndHashCode
@@ -44,7 +48,7 @@ public class CapacitorUnit {
     private String identifier;
 
     @Setter(AccessLevel.NONE)
-    @Column(name = "value", length = VALUE_LENGTH, nullable = false, unique = true)
+    @Column(name = "value", length = VALUE_LENGTH, nullable = false)
     private String value;
 
     @PrePersist
