@@ -134,10 +134,9 @@ public class CapacitorTypeController {
     @GetMapping(value = "name",
                 params = { "companyName", "typeName" }
     )
-    public CapacitorTypeResponse getCapacitorTypeByNameIgnoreCase(
-                                                                 @RequestParam(value="companyName") String companyName,
-                                                                 @RequestParam(value="typeName") String typeName,
-                                                                 HttpServletResponse response) {
+    public CapacitorTypeResponse getCapacitorTypeByNameIgnoreCase(@RequestParam(value="companyName") String companyName,
+                                                                  @RequestParam(value="typeName") String typeName,
+                                                                  HttpServletResponse response) {
 
         Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
 
