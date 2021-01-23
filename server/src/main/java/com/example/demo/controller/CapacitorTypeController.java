@@ -48,7 +48,7 @@ public class CapacitorTypeController {
      */
     @PostMapping(value = "create")
     public void createCapacitorType(@Validated @RequestBody CapacitorTypeRequest capacitorTypeRequest,
-                                   HttpServletResponse response) {
+                                    HttpServletResponse response) {
 
         Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(capacitorTypeRequest.getCompanyName());
         Construction construction = constructionRepository.findByConstructionName(capacitorTypeRequest.getConstructionName());
@@ -90,12 +90,14 @@ public class CapacitorTypeController {
      * Edit a CapacitorType
      * @param capacitorTypeRequest the new CapacitorType to create
      */
-    @PutMapping(value = "edit/{companyName}/{typeName}")
+    @PutMapping(value = "edit",
+                params = { "companyName", "typeName" }
+    )
     public void editCapacitorType(@Validated
-                                    @PathVariable String companyName,
-                                    @PathVariable String typeName,
-                                    @RequestBody CapacitorTypeRequest capacitorTypeRequest,
-                                    HttpServletResponse response) {
+                                  @RequestParam(value="companyName") String companyName,
+                                  @RequestParam(value="typeName") String typeName,
+                                  @RequestBody CapacitorTypeRequest capacitorTypeRequest,
+                                  HttpServletResponse response) {
 
         CapacitorType capacitorType = capacitorTypeRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(typeName, companyName);
         Construction editedConstruction = null;
@@ -129,10 +131,12 @@ public class CapacitorTypeController {
      * @param typeName unique key of CapacitorType
      * @return the found type.  If none is found a 404 error is returned.
      */
-    @GetMapping("name/{companyName}/{typeName}")
-    public CapacitorTypeResponse getCapacitorTypeByNameIgnoreCase(@PathVariable String companyName,
-                                                                 @PathVariable String typeName,
-                                                                 HttpServletResponse response) {
+    @GetMapping(value = "name",
+                params = { "companyName", "typeName" }
+    )
+    public CapacitorTypeResponse getCapacitorTypeByNameIgnoreCase(@RequestParam(value="companyName") String companyName,
+                                                                  @RequestParam(value="typeName") String typeName,
+                                                                  HttpServletResponse response) {
 
         Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
 
@@ -162,9 +166,12 @@ public class CapacitorTypeController {
      * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned.
      * @return the list of found type, empty list if none.
      */
-    @GetMapping("all/{companyName}")
-    public List<CapacitorTypeResponse> getAllCapacitorTypesFromManufacturer(@PathVariable String companyName,
-                                                                                      HttpServletResponse response) {
+    @GetMapping(value = "all",
+                params = { "companyName" }
+    )
+    public List<CapacitorTypeResponse> getAllCapacitorTypesFromManufacturer(
+                                                  @RequestParam(value="companyName") String companyName,
+                                                  HttpServletResponse response) {
 
         Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
 

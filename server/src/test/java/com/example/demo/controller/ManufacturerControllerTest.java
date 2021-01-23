@@ -268,7 +268,7 @@ class ManufacturerControllerTest {
         manufacturerRepository.save(manufacturer2);
         Long originalId = manufacturerMockTable.get(0).getId();
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/solar")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit?companyName=solar")
                 .content(editedManufacturer2Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -295,7 +295,7 @@ class ManufacturerControllerTest {
         manufacturer2.setCompanyName("Hunts");  // Create conflicting name
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/solar")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit?companyName=solar")
                 .content(editedManufacturer2Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -315,7 +315,7 @@ class ManufacturerControllerTest {
 
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/unknown")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit?companyName=unknown")
                 .content(editedManufacturer2Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -334,7 +334,8 @@ class ManufacturerControllerTest {
     void getManufacturerByName_success() throws Exception {
         manufacturerRepository.save(manufacturer1);
                                                                                     // Testing with mixed case
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/name/corNell dubiLIer")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
+                "/manufacturer/name?companyName=corNell dubiLIer")
                 .content(newManufacturer1Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -356,7 +357,7 @@ class ManufacturerControllerTest {
     void getManufacturerByName_doesNotExist_fail() throws Exception {
         manufacturerRepository.save(manufacturer1);
         // Test with mixed case
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/name/vaught")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/name?companyName=vaught")
                 .content(newManufacturer1Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);

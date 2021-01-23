@@ -415,7 +415,7 @@ class CapacitorTypeControllerTest {
         manufacturerRepository.save(manufacturer2);
         capacitorTypeRepository.save(capacitorType1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name/solar/sealdtite")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name?companyName=solar&typeName=sealdtite")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -434,7 +434,7 @@ class CapacitorTypeControllerTest {
     void getCapacitorType_cantFindManufacturer_fail() throws Exception {
         capacitorTypeRepository.save(capacitorType1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name/solar/sealdtite")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name?companyName=solar&typeName=sealdtite")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -454,7 +454,7 @@ class CapacitorTypeControllerTest {
         manufacturerRepository.save(manufacturer2);
         capacitorTypeRepository.save(capacitorType1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name/solar/wrong-name")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name?companyName=solar&typeName=wrong-name")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -476,7 +476,7 @@ class CapacitorTypeControllerTest {
         manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all/solar")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all?companyName=solar")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -503,7 +503,7 @@ class CapacitorTypeControllerTest {
         manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all/solarus")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name?companyName=solarus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -531,7 +531,7 @@ class CapacitorTypeControllerTest {
         constructionRepository.save(new Construction("Wax-Paper"));
         constructionRepository.save(new Construction("Mica"));
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit?companyName=solar&typeName=sealdtite")
                 .content(editCapacitorType1Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -562,7 +562,7 @@ class CapacitorTypeControllerTest {
         constructionRepository.save(new Construction("Wax-Paper"));
         constructionRepository.save(new Construction("Mica"));
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit?companyName=solar&typeName=sealdtite")
                 .content(editCapacitorTypeNewTypeNameJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -592,7 +592,7 @@ class CapacitorTypeControllerTest {
         constructionRepository.save(new Construction("Wax-Paper"));
         constructionRepository.save(new Construction("Mica"));
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit?companyName=solar&typeName=sealdtite")
                 .content(editCapacitorTypeChangedConstructionJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -622,7 +622,7 @@ class CapacitorTypeControllerTest {
         constructionRepository.save(new Construction("Wax-Paper"));
         constructionRepository.save(new Construction("Mica"));
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/sealdtite")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit?companyName=solar&typeName=sealdtite")
                 .content(editCapacitorTypeNewConstructionJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -646,7 +646,7 @@ class CapacitorTypeControllerTest {
         constructionRepository.save(new Construction("Wax-Paper"));
         constructionRepository.save(new Construction("Mica"));
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit/solar/non-existing")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/type/edit?companyName=solar&typeName=non-existing")
                 .content(editCapacitorTypeNewConstructionJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);

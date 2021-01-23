@@ -23,7 +23,7 @@ public class CapacitorUnit {
 
     private final static int IDENTIFIER_LEN = 60;
 
-//                                        Long  'C' Int  'V'  VARCHAR
+                                       // Long  'C' Int  'V'  VARCHAR
     private final static int VALUE_LENGTH = 20 + 1 + 10 + 1 + IDENTIFIER_LEN;
     private static final int NOTES_LEN = 5000;
 
