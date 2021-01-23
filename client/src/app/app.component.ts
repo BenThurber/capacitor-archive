@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import { Todo } from './todo';
 import {Title} from '@angular/platform-browser';
 
 @Component({
@@ -11,9 +10,6 @@ import {Title} from '@angular/platform-browser';
 export class AppComponent implements OnInit {
   title = 'Capacitor Archive';
 
-  todoValue: string;
-  list: Todo[];
-
   public constructor(private titleService: Title) {
     // Set the title in the browser window
     this.titleService.setTitle(this.title);
@@ -21,8 +17,6 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.list = [];
-    this.todoValue = '';
   }
 
 }

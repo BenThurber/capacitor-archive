@@ -1,10 +1,19 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.ManufacturerRequest;
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
+@Setter
+@EqualsAndHashCode
 @Entity
 public class Manufacturer {
 
@@ -12,6 +21,7 @@ public class Manufacturer {
 
 
     @Id
+    @Setter(AccessLevel.NONE)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
@@ -19,6 +29,8 @@ public class Manufacturer {
     @Column(name = "company_name", length = FIELD_LEN, nullable = false)
     private String companyName;
 
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     @Column(name = "company_name_lower", length = FIELD_LEN, nullable = false, unique = true)
     private String companyNameLower;
 
@@ -40,6 +52,9 @@ public class Manufacturer {
     @Column(name = "summary", columnDefinition="MEDIUMTEXT")
     private String summary;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "manufacturer", cascade = CascadeType.ALL)
+    private List<CapacitorType> capacitorTypes = new ArrayList<>();
+
 
     public Manufacturer(ManufacturerRequest manufacturerRequest) {
         this.edit(manufacturerRequest);
@@ -55,59 +70,10 @@ public class Manufacturer {
         setCompanyName(r.getCompanyName());
         setOpenYear(r.getOpenYear());
         setCloseYear(r.getCloseYear());
-        setSummary(r.getBio());
+        setSummary(r.getSummary());
     }
 
     public Manufacturer() { }
 
-    public Long getId() {
-        return id;
-    }
 
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public Short getOpenYear() {
-        return openYear;
-    }
-
-    public void setOpenYear(Short openYear) {
-        this.openYear = openYear;
-    }
-
-    public Short getCloseYear() {
-        return closeYear;
-    }
-
-    public void setCloseYear(Short closeYear) {
-        this.closeYear = closeYear;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Manufacturer) {
-            final Manufacturer other = (Manufacturer) obj;
-            return other.getId().equals(this.getId()) || (
-                    other.getCompanyName().toLowerCase().equals(this.getCompanyName().toLowerCase()) &&
-                    other.getOpenYear().equals(this.getOpenYear()) &&
-                    other.getCloseYear().equals(this.getCloseYear()) &&
-                    other.getSummary().equals(this.getSummary()));
-
-        }
-        return false;
-    }
 }

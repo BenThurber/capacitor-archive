@@ -7,6 +7,7 @@ import {Location} from '@angular/common';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
+import {SpringErrorResponse} from '../../models/spring-error-response.model';
 
 
 @Component({
@@ -16,10 +17,11 @@ import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 })
 export class ManufacturerFormComponent implements OnInit, OnChanges {
 
-  @Input() manufacturer: Manufacturer;
+  @Input('manufacturer') existingManufacturer: Manufacturer;
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
   submitting = false;
+  errorsBackend: Array<SpringErrorResponse> = [];
 
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
@@ -48,15 +50,15 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
       captcha: ['', Validators.required],
-    }, {validator: checkIfCloseYearAfterOpenYear});
+    }, {validator: checkIfCloseYearBeforeOpenYear});
 
     // Populate form values
-    if (this.manufacturer) {
+    if (this.existingManufacturer) {
       this.manufacturerForm.setValue({
-        companyName: this.manufacturer.companyName,
-        openYear: this.manufacturer.openYear,
-        closeYear: this.manufacturer.closeYear,
-        summary: this.manufacturer.summary,
+        companyName: this.existingManufacturer.companyName,
+        openYear: this.existingManufacturer.openYear,
+        closeYear: this.existingManufacturer.closeYear,
+        summary: this.existingManufacturer.summary,
         captcha: null,
       });
     }
@@ -65,60 +67,62 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
 
 
   /**
-   * Initialize manufacturer when its value is returned from back end
+   * Initialize existingManufacturer when its value is returned from back end
    */
   ngOnChanges(changes): void {
-    // manufacturer isn't initialized because its value is from an async function
-    this.manufacturer = changes.manufacturer.currentValue;
+    // existingManufacturer isn't initialized because its value is from an async function
+    this.existingManufacturer = changes.existingManufacturer.currentValue;
     this.ngOnInit();
   }
 
 
-  onSubmit(manufacturerData): void {
+  onSubmit(manufacturer: Manufacturer): void {
     this.submitting = true;
+    this.errorsBackend = [];
 
-    if (this.manufacturer === undefined) {
+    if (this.existingManufacturer === undefined) {
 
-      this.submitCreate(manufacturerData);
+      this.submitCreate(manufacturer);
 
     } else {
 
-      if (!(this.manufacturer instanceof Object && this.manufacturer.id >= 1)) {
-        console.error('Can\'t determine type of manufacturer to edit');
+      if (!(this.existingManufacturer instanceof Object && this.existingManufacturer.companyName)) {
+        console.error('Can\'t edit manufacturer.  Bad data from backend');
         return;
       }
 
-      this.submitEdit(manufacturerData);
+      this.submitEdit(manufacturer);
 
     }
 
   }
 
 
-  submitCreate(manufacturerData): void {
-    const manufacturer = new Manufacturer();
-    manufacturer.insertData(manufacturerData);
+  submitCreate(manufacturer: Manufacturer): void {
 
     return this.restService.createManufacturer(manufacturer).subscribe({
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
         () => this.refreshManufacturers.refresh()
       ),
-      error: error => console.error(error),  // This should be improved
+      error: error => this.handleBackendError(error.error),
     });
   }
 
 
-  submitEdit(manufacturerData): void {
-    const manufacturer = new Manufacturer();
-    manufacturer.id = this.manufacturer.id;
-    manufacturer.insertData(manufacturerData);
+  submitEdit(manufacturer: Manufacturer): void {
 
-    return this.restService.editManufacturer(this.manufacturer.companyName, manufacturer).subscribe({
+    return this.restService.editManufacturer(this.existingManufacturer.companyName, manufacturer).subscribe({
       next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
         () => this.refreshManufacturers.refresh()
       ),
-      error: error => console.error(error),  // This should be improved
+      error: error => this.handleBackendError(error.error),
     });
+  }
+
+
+  handleBackendError(error: SpringErrorResponse): void {
+    this.submitting = false;
+    this.errorsBackend.push(error);
   }
 
 
@@ -126,21 +130,21 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     return this.manufacturerForm.controls;
   }
 
-  get closeYearAfterOpenYearError(): any {
-    return this.manufacturerForm.errors && this.manufacturerForm.errors.closeYearAfterOpenYear;
+  get closeYearBeforeOpenYearError(): any {
+    return this.manufacturerForm.errors && this.manufacturerForm.errors.closeYearBeforeOpenYear;
   }
 
 }
 
 
-function checkIfCloseYearAfterOpenYear(c: AbstractControl): any {
-  // Safety Check
-  const openDate: number = parseInt(c.value.openYear, 10);
-  const closedDate: number = parseInt(c.value.closeYear, 10);
+function checkIfCloseYearBeforeOpenYear(c: AbstractControl): any {
 
-  if (!openDate || !closedDate) { return null; }
+  const openYear: number = parseInt(c.value.openYear, 10);
+  const closeYear: number = parseInt(c.value.closeYear, 10);
 
-  return (openDate <= closedDate) ? null : { closeYearAfterOpenYear: true };
+  if (!openYear || !closeYear) { return null; }
+
+  return (openYear <= closeYear) ? null : { closeYearBeforeOpenYear: true };
   // carry out the actual date checks here for is-endDate-after-startDate
   // if valid, return null,
   // if invalid, return an error object (any arbitrary name), like, return { invalidEndDate: true }

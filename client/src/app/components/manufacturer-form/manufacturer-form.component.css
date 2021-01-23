@@ -1,19 +1,6 @@
-.is-invalid {
-  color: red;
-}
-
-.error__msg {
-  color: red;
-  font-size: 15px;
-}
-
-.captcha__error__msg {
-  margin-top: 8px;
-  font-weight: bold;
-}
 
 .input {
-  margin: 15px;
+  margin-bottom: 24px;
 }
 
 #summary {

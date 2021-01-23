@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import utilities.JsonConverter;
+import testUtilities.JsonConverter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,10 +77,6 @@ class ManufacturerControllerTest {
             return manufacturer;
         });
 
-        when(manufacturerRepository.findById(Mockito.any(Long.class))).thenAnswer(i -> {
-            Long id = i.getArgument(0);
-            return manufacturerMockTable.stream().filter(m -> id.equals(m.getId())).findFirst().orElse(null);
-        });
 
         when(manufacturerRepository.findByCompanyNameLowerIgnoreCase(Mockito.any(String.class))).thenAnswer(i -> {
             String companyName = i.getArgument(0);
@@ -132,6 +128,23 @@ class ManufacturerControllerTest {
 
         mvc.perform(httpReq)
                 .andExpect(status().isCreated());
+    }
+
+    /**
+     * Test conflicting names in creation of new manufacturer.
+     */
+    @Test
+    void newManufacturer_conflictingNames_fail() throws Exception {
+        manufacturer2.setCompanyName("Hunts");
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
+                .content(newManufacturer1Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isConflict());
     }
 
 
@@ -203,7 +216,7 @@ class ManufacturerControllerTest {
             "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
     );
     /**
-     * Test creation of new manufacturer with years after 2025.
+     * Test creation of new manufacturer with years after 2050.
      */
     @Test
     void newManufacturer_datesTooHigh_fail() throws Exception {
@@ -224,13 +237,13 @@ class ManufacturerControllerTest {
             "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
     );
     /**
-     * Test creation of new manufacturer with years after 2025.
+     * Test creation of new manufacturer with years after 2050.
      */
     @Test
     void newManufacturer_datesWrongOrder_fail() throws Exception {
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/manufacturer/create")
-                .content(manufacturerDatesToHighJson)
+                .content(manufacturerDatesInWrongOrder)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -243,10 +256,11 @@ class ManufacturerControllerTest {
             "companyName", "Hunts",
             "openYear", 1920,
             "closeYear", 1939,
-            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers"
+            "summary", "Hunts wax paper capacitors today have a high failure rate compared to other manufacturers",
+            "typeNames", new String[]{}
     );
     /**
-     * Test successful creation of new manufacturer.
+     * Test editing of manufacturer.
      */
     @Test
     void editManufacturer_success() throws Exception {
@@ -254,7 +268,7 @@ class ManufacturerControllerTest {
         manufacturerRepository.save(manufacturer2);
         Long originalId = manufacturerMockTable.get(0).getId();
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/solar")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit?companyName=solar")
                 .content(editedManufacturer2Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -272,12 +286,36 @@ class ManufacturerControllerTest {
     }
 
 
+    /**
+     * Test editing of companyName to an existing companyName.
+     */
+    @Test
+    void editManufacturer_conflictingNames_fail() throws Exception {
+
+        manufacturer2.setCompanyName("Hunts");  // Create conflicting name
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit?companyName=solar")
+                .content(editedManufacturer2Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isConflict());
+
+    }
+
+
+
+    /**
+     * Test editing a manufacturer that does not exist.
+     */
     @Test
     void editManufacturer_doesNotExist_fail() throws Exception {
 
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit/unknown")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/manufacturer/edit?companyName=unknown")
                 .content(editedManufacturer2Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -290,52 +328,14 @@ class ManufacturerControllerTest {
 
 
     /**
-     * Test get manufacturer by id success.
-     */
-    @Test
-    void getManufacturerById_success() throws Exception {
-        manufacturerRepository.save(manufacturer1);
-
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/id/1")
-                .content(newManufacturer1Json)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
-
-        MvcResult result = mvc.perform(httpReq)
-                .andExpect(status().isOk())
-                .andReturn();
-
-        String jsonResponseStr = result.getResponse().getContentAsString();
-        ManufacturerResponse manufacturerReceived = objectMapper.readValue(jsonResponseStr, ManufacturerResponse.class);
-        assertEquals(new ManufacturerResponse(manufacturer1), manufacturerReceived);
-    }
-
-
-    /**
-     * Test no manufacturer with id fail.
-     */
-    @Test
-    void getManufacturerById_doesNotExist_fail() throws Exception {
-        manufacturerRepository.save(manufacturer1);
-
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/id/3")
-                .content(newManufacturer1Json)
-                .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
-
-        mvc.perform(httpReq).andExpect(status().isNotFound());
-    }
-
-
-
-    /**
      * Test get manufacturer by name success.
      */
     @Test
     void getManufacturerByName_success() throws Exception {
         manufacturerRepository.save(manufacturer1);
                                                                                     // Testing with mixed case
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/name/corNell dubiLIer")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
+                "/manufacturer/name?companyName=corNell dubiLIer")
                 .content(newManufacturer1Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -357,7 +357,7 @@ class ManufacturerControllerTest {
     void getManufacturerByName_doesNotExist_fail() throws Exception {
         manufacturerRepository.save(manufacturer1);
         // Test with mixed case
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/name/vaught")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/name?companyName=vaught")
                 .content(newManufacturer1Json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);

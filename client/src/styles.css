@@ -2,6 +2,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 @import '~quill/dist/quill.core.css';
 @import '~quill/dist/quill.snow.css';
+@font-face {
+  font-family: "TELETYPE 1945";
+  src: url("assets/TELETYPE1945-1985.ttf");
+}
+@font-face {
+  font-family: "Teletype Regular";
+  src: url("assets/teletype.ttf");
+}
 
 body {
   background-color: #e3e3e3;
@@ -16,18 +24,106 @@ h2 {
 }
 
 a:link {
-  color: blue;
+  color: green;
+  font-weight: bold;
 }
 
 a:visited {
-  color: purple;
+  color: green;
+  font-weight: bold;
 }
 
 a:hover {
-  color: green;
+  color: darkgoldenrod;
 }
 
 .content {
-  margin-left: 10%;
+  margin-left: 4%;
   margin-right: 20%;
+}
+
+.nav__links li {
+  display: inline-block;
+  padding: 0px 20px;
+}
+
+.nav__links li a {
+  font-family: "Lilita One", serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: darkgoldenrod;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+}
+
+.nav__links li a:hover {
+  color: #0088a9
+}
+
+.nav__link:link {
+  font-family: "Lilita One", serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: green;
+  text-decoration: none;
+  transition: all 0.3s ease 0s;
+}
+
+.nav__link:hover {
+  color: darkgoldenrod;
+}
+
+.is-invalid {
+  color: red;
+}
+
+.error__msg {
+  margin-top: 7px;
+  color: red;
+  font-size: 15px;
+}
+
+.error__submit {
+  padding: 10px;
+  background-color: #ff7c6e;
+  color: #383838;
+}
+
+.captcha__error__msg {
+  margin-top: 8px;
+  font-weight: bold;
+}
+
+.loading {
+  font-family: "TELETYPE 1945", "Courier", serif;
+}
+
+.info__box {
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  padding: 14px 23px;
+  margin-bottom: 10px;
+
+  font-family: "TELETYPE 1945", "Courier", serif;
+  font-size: 15px;
+  line-height: 30px;
+}
+
+.grey__link {
+  font-family: "Courier", serif;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: -0.01em;
+  overflow-x: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #565959;
+  display: block;
+  cursor: pointer;
+}
+
+.grey__link:hover {
+  color: #c6b51b;
+  text-decoration-color: #c6b51b
 }

@@ -1,0 +1,96 @@
+<div class="content">
+
+
+  <ng-container *ngIf="capacitorUnit; else loading">
+
+
+
+    <div id="image-box">
+      <a id="edit-capacitor" [routerLink]=""
+         (click)="dynamicRouter.redirectTo(['/capacitor', 'edit', companyName.toLowerCase(), typeName.toLowerCase(), capacitorUnit.value])">
+        [Edit Capacitor]
+      </a>
+      <app-image id="image" src="../../../assets/images-coming-soon" width="100%" alt="Images Coming Soon"></app-image>
+    </div>
+
+
+    <div id="type-box" class="info__box">
+      <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
+      <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
+
+      <select *ngIf="manufacturer" id="type-dropdown" (change)="dynamicRouter.redirectTo(
+      ['/capacitor', 'view', companyName.toLowerCase(), $event.target.value.toLowerCase()])">
+
+        <option *ngFor="let typeNameDropdown of manufacturer.typeNames.sort(caseInsensitiveCompare)"
+                [value]="typeNameDropdown" [selected]="typeNameDropdown.toLowerCase() === typeName.toLowerCase()">
+
+          <strong class="type-name">{{typeNameDropdown}}</strong>
+
+        </option>
+
+      </select><br>
+
+      Made by: <strong>{{capacitorType && capacitorType.companyName}}</strong><br>
+
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
+        Produced: <strong>{{capacitorType.startYear}}-{{capacitorType.endYear}}</strong><br>
+      </ng-container>
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && !capacitorType.endYear">
+        Started production: <strong>{{capacitorType.startYear}}</strong>
+      </ng-container>
+      <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
+        Ended production: <strong>{{capacitorType.endYear}}</strong>
+      </ng-container>
+
+      <ng-container *ngIf="capacitorType && capacitorType.description">
+        Description:
+        <div class="block__description">{{capacitorType.description}}</div>
+      </ng-container>
+
+    </div>
+
+
+    <div id="unit-box" class="info__box">
+      <span id="identifier" *ngIf="capacitorUnit && capacitorUnit.identifier">{{capacitorUnit.identifier}}</span>
+      <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
+
+      <!--This code could be improved.-->
+      Capacitance: <strong>
+      {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true).split(' ')[0]}}</strong>
+      <strong style="font-family: 'Courier New', serif; font-size: 16px; margin-left: -4px">
+        {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true).split(' ')[1]}}</strong><br>
+      <ng-container *ngIf="capacitorUnit && capacitorUnit.voltage">
+        Voltage: <strong>{{capacitorUnit.voltage}}V</strong><br>
+      </ng-container>
+      <ng-container *ngIf="capacitorUnit && capacitorUnit.notes">
+        Notes:
+        <span class="block__description">{{capacitorUnit.notes}}</span>
+      </ng-container>
+
+      
+    </div>
+
+
+    <div id="similar-units-box" class="info__box">
+      <strong><label for="similar-menu">Similar Capacitors</label></strong><br>
+      <select id="similar-menu" size="8" (change)="similarMenuChanged($event.target.value)" #similarMenu>
+
+        <option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
+                [selected]="capacitorUnit.value === similarUnit.value"
+                (dblclick)="dynamicRouter.redirectTo(['/capacitor', 'edit', similarUnit.companyName, similarUnit.typeName, similarUnit.value])">
+          {{formatSimilarCapacitor(similarUnit)}}
+        </option>
+
+      </select><br>
+      <strong><a class="nav__link" [routerLink]="" (click)="dynamicRouter.redirectTo(['/capacitor', 'create'])">+ Add a Capacitor</a></strong>
+    </div>
+
+
+
+  </ng-container>
+
+  <ng-template #loading>
+    <h3 class="loading">Loading Page...</h3>
+  </ng-template>
+
+</div>

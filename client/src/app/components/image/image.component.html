@@ -1,0 +1,18 @@
+<!--
+A wrapper for <img> tags that uses webp or a fallback if not supported.
+Only the image format this is supported is loaded.
+-->
+
+<img *ngIf="webpIsSupported !== undefined || webpIsSupported !== null" (click)="link && navigateToUrl(supportedSrc)"
+     [ngStyle]="link ? {cursor: 'pointer'} : {}"
+     [attr.src]="supportedSrc"
+     [attr.srcset]="supportedSrcSet"
+     [attr.sizes]="sizes"
+     [attr.width]="width"
+     [attr.height]="height"
+     [attr.useMap]="useMap"
+     [attr.isMap]="isMap"
+     [attr.alt]="alt"
+     [attr.style]="style"
+     [attr.align]="align"
+>

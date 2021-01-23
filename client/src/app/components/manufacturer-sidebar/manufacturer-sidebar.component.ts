@@ -4,6 +4,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
+import {caseInsensitiveCompare} from '../../utilities/text-utils';
 
 @Component({
   selector: 'app-manufacturer-sidebar',
@@ -12,30 +13,16 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 })
 export class ManufacturerSidebarComponent implements OnInit {
 
-  companyName: string;
-  manufacturers$: Array<string>;
+  companyNames$: Array<string>;
 
   restService: RestService;
   dynamicRouter: DynamicRouterService;
   refreshManufacturers: RefreshManufacturersService;
 
-  static caseInsensitiveCompare(a, b): number {
-    const nameA = a.toUpperCase(); // ignore upper and lowercase
-    const nameB = b.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    // names must be equal
-    return 0;
-  }
 
   constructor(restService: RestService, activatedRoute: ActivatedRoute, dynamicRouter: DynamicRouterService,
               refreshManufacturers: RefreshManufacturersService) {
     this.restService = restService;
-    this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.dynamicRouter = dynamicRouter;
     this.refreshManufacturers = refreshManufacturers;
 
@@ -46,8 +33,8 @@ export class ManufacturerSidebarComponent implements OnInit {
   ngOnInit(): Subscription {
     return this.restService.getAllCompanyNames().subscribe({
       next: manufacturers => {
-        manufacturers.sort(ManufacturerSidebarComponent.caseInsensitiveCompare);
-        this.manufacturers$ = manufacturers;
+        manufacturers.sort(caseInsensitiveCompare);
+        this.companyNames$ = manufacturers;
       },
 
       error: () => console.error('Couldn\'t get company names')

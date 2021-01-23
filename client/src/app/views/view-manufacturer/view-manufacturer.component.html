@@ -1,5 +1,28 @@
 <div class="content">
-  <div *ngIf="manufacturer$; else loading" class="center__box">
+
+
+  <div id="all-types-box">
+    <h3>Capacitor Types</h3>
+
+    <ng-container *ngIf="manufacturer$; else spinner">
+      <div *ngFor="let typeName of manufacturer$.typeNames;">
+        <a class="grey__link"
+           (click)="dynamicRouter.redirectTo(['/capacitor', 'view', companyName.toLowerCase(), typeName.toLowerCase()])">
+          {{typeName}}
+        </a>
+      </div>
+    </ng-container>
+    <ng-template #spinner>
+      <div style="display: flex; justify-content: center; padding-top: 10px"><div class="spinner"></div></div>
+    </ng-template>
+    <div>
+      <a id="add-capacitor" class="grey__link" (click)="dynamicRouter.redirectTo(['/capacitor', 'create'])">+ Add Capacitor</a>
+    </div>
+
+  </div>
+
+
+  <div id="manufacturer-box" *ngIf="manufacturer$; else loading">
 
     <div class="edit__button">
       <a href [routerLink]="'/manufacturer/edit/' + manufacturer$.companyName.toLowerCase()">[Edit Page]</a>
@@ -18,13 +41,14 @@
     </div>
 
     <div *ngIf="manufacturer$.summary">
-      <div class="ql-editor" [innerHTML]="manufacturer$.summary | safeHtml"></div>
+      <div class="ql-editor quill__output" [innerHTML]="manufacturer$.summary | safeHtml"></div>
     </div>
 
   </div>
 
   <ng-template #loading>
-    <h3>Loading Page...</h3>
+    <h3 id="loading" class="loading">Loading Page...</h3>
   </ng-template>
+
 
 </div>

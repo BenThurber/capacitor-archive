@@ -14,7 +14,7 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import utilities.JsonConverter;
+import testUtilities.JsonConverter;
 
 import java.util.ArrayList;
 import java.util.List;

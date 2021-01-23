@@ -16,6 +16,8 @@ import java.util.List;
 @RequestMapping(value = "/manufacturer")
 public class ManufacturerController {
 
+    private final static String COMPANY_NAME_EXISTS_ERROR = "The name \"%s\" is taken by an existing manufacturer.";
+
     private final ManufacturerRepository manufacturerRepository;
 
     public ManufacturerController(ManufacturerRepository manufacturerRepository) {
@@ -28,7 +30,15 @@ public class ManufacturerController {
      * @param manufacturerRequest the new manufacturer to create
      */
     @PostMapping(value = "create")
-    public void createManufacturer(@Validated @RequestBody ManufacturerRequest manufacturerRequest, HttpServletResponse response) {
+    public void createManufacturer(@Validated @RequestBody ManufacturerRequest manufacturerRequest,
+                                   HttpServletResponse response) {
+
+        if (manufacturerRepository.findByCompanyNameLowerIgnoreCase(manufacturerRequest.getCompanyName()) != null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format(COMPANY_NAME_EXISTS_ERROR, manufacturerRequest.getCompanyName())
+            );
+        }
         manufacturerRepository.save(new Manufacturer(manufacturerRequest));
         response.setStatus(HttpServletResponse.SC_CREATED);
     }
@@ -38,9 +48,22 @@ public class ManufacturerController {
      * Edit a manufacturer
      * @param manufacturerRequest the new manufacturer to create
      */
-    @PutMapping(value = "edit/{companyName}")
-    public void editManufacturer(@PathVariable String companyName, @Validated @RequestBody ManufacturerRequest manufacturerRequest, HttpServletResponse response) {
+    @PutMapping(value = "edit",
+                params = { "companyName" }
+    )
+    public void editManufacturer(@RequestParam(value="companyName") String companyName,
+                                 @Validated @RequestBody ManufacturerRequest manufacturerRequest,
+                                 HttpServletResponse response) {
         Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
+
+        // Check if changed companyName conflicts
+        if (!companyName.equals(manufacturerRequest.getCompanyName()) &&
+                manufacturerRepository.findByCompanyNameLowerIgnoreCase(manufacturerRequest.getCompanyName()) != null) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format(COMPANY_NAME_EXISTS_ERROR, manufacturerRequest.getCompanyName())
+            );
+        }
 
         if (manufacturer == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "The manufacturer to edit can not be found");
@@ -54,30 +77,16 @@ public class ManufacturerController {
 
 
     /**
-     * Get a manufacturer by id
-     * @param id id of the manufacturer to get
-     */
-    @GetMapping("id/{id}")
-    public ManufacturerResponse getManufacturerById(@PathVariable Long id, HttpServletResponse response) {
-        Manufacturer manufacturer = manufacturerRepository.findById(id);
-
-        if (manufacturer == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Invalid manufacturer id, manufacturer not found");
-        }
-
-        response.setStatus(HttpServletResponse.SC_OK);
-        return new ManufacturerResponse(manufacturer);
-    }
-
-
-    /**
      * Get a manufacturer by companyName case insensitive.  Because company_name is unique in the database, there is
      * only ever one Manufacturer returned.
      * @param companyName name of the manufacturer to get
      * @return a Manufacturer with matching companyName
      */
-    @GetMapping("name/{companyName}")
-    public ManufacturerResponse getManufacturerByNameIgnoreCase(@PathVariable String companyName, HttpServletResponse response) {
+    @GetMapping(value = "name",
+                params = { "companyName" }
+    )
+    public ManufacturerResponse getManufacturerByNameIgnoreCase(@RequestParam(value="companyName") String companyName,
+                                                                HttpServletResponse response) {
         Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
 
         if (manufacturer == null) {

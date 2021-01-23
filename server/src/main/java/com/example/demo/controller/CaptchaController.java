@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.payload.response.GoogleCaptchaAPIResponse;
-import com.example.demo.service.GoogleReCaptchaAPIKey;
+import com.example.demo.component.GoogleReCaptchaAPIKey;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpHeaders;
