@@ -18,7 +18,6 @@ export class RestService {
 
 
   baseUrl: string = environment.serverBaseUrl;
-  url: string;
   options: object;
 
 
