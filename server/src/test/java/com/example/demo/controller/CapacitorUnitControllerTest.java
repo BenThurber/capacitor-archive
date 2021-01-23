@@ -412,7 +412,8 @@ class CapacitorUnitControllerTest {
         capacitorUnit1.setCapacitorType(capacitorType1);
         capacitorUnitRepository.save(capacitorUnit1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/name/solar/sealdtite/50000C400V35b")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
+                "/unit/name?companyName=solar&typeName=sealdtite&value=50000C400V35b")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -435,7 +436,8 @@ class CapacitorUnitControllerTest {
         capacitorUnit1.setCapacitorType(capacitorType1);
         capacitorUnitRepository.save(capacitorUnit1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/name/soLAR/SeaLdtite/50000C400V35b")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
+                "/unit/name?companyName=soLAR&typeName=SeaLdtite&value=50000C400V35b")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -458,7 +460,8 @@ class CapacitorUnitControllerTest {
         capacitorUnit1.setCapacitorType(capacitorType1);
         capacitorUnitRepository.save(capacitorUnit1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/name/solar/sealdtite/50000c400v35b")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
+                "/unit/name?companyName=solar&typeName=sealdtite&value=50000c400v35b")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -480,7 +483,8 @@ class CapacitorUnitControllerTest {
         capacitorUnitRepository.save(capacitorUnit1);
         capacitorUnitRepository.save(capacitorUnit2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/unit/all/solar/sealdtite")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
+                "/unit/all?companyName=solar&typeName=sealdtite")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -514,7 +518,8 @@ class CapacitorUnitControllerTest {
         capacitorTypeRepository.save(capacitorType1);
         capacitorUnitRepository.save(capacitorUnit1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/50000C400V35b")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put(
+                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
                 .content(editCapacitorUnitOnlyNotesJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -543,7 +548,8 @@ class CapacitorUnitControllerTest {
         capacitorTypeRepository.save(capacitorType1);
         capacitorUnitRepository.save(capacitorUnit1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/50000C400V35b")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put(
+                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
                 .content(editCapacitorUnitCapacitanceOnlyJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -573,7 +579,8 @@ class CapacitorUnitControllerTest {
         capacitorTypeRepository.save(capacitorType1);
         capacitorUnitRepository.save(capacitorUnit1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/50000C400V35b")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put(
+                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
                 .content(editCapacitorUnitCapacitanceVoltageIdJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -597,7 +604,8 @@ class CapacitorUnitControllerTest {
         capacitorTypeRepository.save(capacitorType1);
         capacitorUnitRepository.save(capacitorUnit1);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put("/unit/edit/solar/sealdtite/bad-value")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put(
+                "/unit/edit?companyName=solar&typeName=sealdtite&value=bad-value")
                 .content(editCapacitorUnitOnlyNotesJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
