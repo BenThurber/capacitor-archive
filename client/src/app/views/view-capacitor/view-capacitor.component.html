@@ -76,7 +76,8 @@
       <select id="similar-menu" size="8" (change)="similarMenuChanged($event.target.value)" #similarMenu>
 
         <option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
-                [selected]="capacitorUnit.value === similarUnit.value">
+                [selected]="capacitorUnit.value === similarUnit.value"
+                (dblclick)="dynamicRouter.redirectTo(['/capacitor', 'edit', similarUnit.companyName, similarUnit.typeName, similarUnit.value])">
           {{formatSimilarCapacitor(similarUnit)}}
         </option>
 
