@@ -48,8 +48,10 @@ public class ManufacturerController {
      * Edit a manufacturer
      * @param manufacturerRequest the new manufacturer to create
      */
-    @PutMapping(value = "edit/{companyName}")
-    public void editManufacturer(@PathVariable String companyName,
+    @PutMapping(value = "edit",
+                params = { "companyName" }
+    )
+    public void editManufacturer(@RequestParam(value="companyName") String companyName,
                                  @Validated @RequestBody ManufacturerRequest manufacturerRequest,
                                  HttpServletResponse response) {
         Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
@@ -80,8 +82,11 @@ public class ManufacturerController {
      * @param companyName name of the manufacturer to get
      * @return a Manufacturer with matching companyName
      */
-    @GetMapping("name/{companyName}")
-    public ManufacturerResponse getManufacturerByNameIgnoreCase(@PathVariable String companyName, HttpServletResponse response) {
+    @GetMapping(value = "name",
+                params = { "companyName" }
+    )
+    public ManufacturerResponse getManufacturerByNameIgnoreCase(@RequestParam(value="companyName") String companyName,
+                                                                HttpServletResponse response) {
         Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
 
         if (manufacturer == null) {

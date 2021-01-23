@@ -76,16 +76,18 @@ public class CapacitorUnitController {
      * Edit a CapacitorUnit
      * @param capacitorUnitRequest the new CapacitorUnit to create
      */
-    @PutMapping(value = "edit/{companyName}/{typeName}/{unitValue}")
+    @PutMapping(value = "edit",
+                params = { "companyName", "typeName", "value" }
+    )
     public CapacitorUnitResponse editCapacitorUnit(@Validated
                                     @RequestBody CapacitorUnitRequest capacitorUnitRequest,
-                                    @PathVariable String companyName,
-                                    @PathVariable String typeName,
-                                    @PathVariable String unitValue,
+                                    @RequestParam(value="companyName") String companyName,
+                                    @RequestParam(value="typeName") String typeName,
+                                    @RequestParam(value="value") String value,
                                     HttpServletResponse response) {
 
         CapacitorUnit capacitorUnit = capacitorUnitRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCaseAndValue(
-                companyName, typeName, unitValue
+                companyName, typeName, value
         );
 
         if (capacitorUnit == null) {
@@ -100,20 +102,22 @@ public class CapacitorUnitController {
     }
 
 
-    @GetMapping("name/{companyName}/{typeName}/{unitValue}")
-    public CapacitorUnitResponse getCapacitorUnitByValue(@PathVariable String companyName,
-                                                                  @PathVariable String typeName,
-                                                                  @PathVariable String unitValue,
-                                                                  HttpServletResponse response) {
+    @GetMapping(value = "name",
+                params = { "companyName", "typeName", "value" }
+    )
+    public CapacitorUnitResponse getCapacitorUnitByValue(@RequestParam(value="companyName") String companyName,
+                                                         @RequestParam(value="typeName") String typeName,
+                                                         @RequestParam(value="value") String value,
+                                                         HttpServletResponse response) {
 
         CapacitorUnit capacitorUnit = capacitorUnitRepository.findByTypeNameIgnoreCaseAndCompanyNameIgnoreCaseAndValue(
-                companyName, typeName, unitValue
+                companyName, typeName, value
         );
 
         if (capacitorUnit == null) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND,
-                    String.format(UNIT_NOT_FOUND_ERROR, companyName, typeName, unitValue)
+                    String.format(UNIT_NOT_FOUND_ERROR, companyName, typeName, value)
             );
         }
 
@@ -124,13 +128,15 @@ public class CapacitorUnitController {
 
     /**
      * Get List of all CapacitorTypeResponses from a Manufacturer, given companyName.
-     * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned.
+     * @param companyName name of the owning Manufacturer.
      * @return the list of found type, empty list if none.
      */
-    @GetMapping("all/{companyName}/{typeName}")
-    public List<CapacitorUnitResponse> getAllCapacitorUnitsFromCapacitorType(@PathVariable String companyName,
-                                                                            @PathVariable String typeName,
-                                                                            HttpServletResponse response) {
+    @GetMapping(value = "all",
+                params = { "companyName", "typeName" })
+    public List<CapacitorUnitResponse> getAllCapacitorUnitsFromCapacitorType(
+                                                       @RequestParam(value="companyName") String companyName,
+                                                       @RequestParam(value="typeName") String typeName,
+                                                       HttpServletResponse response) {
 
         List<CapacitorUnit> capacitorUnits = this.capacitorUnitRepository.findAllByTypeNameIgnoreCaseAndCompanyNameIgnoreCase(
                 companyName, typeName

@@ -29,6 +29,7 @@
     "quill-image-uploader": "^1.2.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "urlcat": "^2.0.4",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
