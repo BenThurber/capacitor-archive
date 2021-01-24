@@ -104,7 +104,7 @@ export class CapacitorFormComponent implements OnInit {
       unit: this.formBuilder.group({
         capacitance: ['', Validators.required],
         voltage: ['', [Validators.pattern(integerPattern)]],
-        identifier: ['', []],
+        identifier: ['', [Validators.maxLength(12)]],
         notes: ['', []],
       }),
       captcha: ['', Validators.required],
