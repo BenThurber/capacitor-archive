@@ -185,7 +185,11 @@
 
     <div class="input">
       <label class="input__label__minor" for="identifier">Identifiers</label>
-      <input id="identifier" type="text" formControlName="identifier" placeholder="optional">
+      <input id="identifier" type="text" formControlName="identifier" placeholder="optional"
+             [ngClass]="{ 'is-invalid': formFields.unit.controls.identifier.errors }">
+      <div class="error__msg" *ngIf="formFields.unit.controls.identifier.errors">
+        Identifier is too long
+      </div>
     </div>
 
     <div class="input">
