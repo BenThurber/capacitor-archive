@@ -38,9 +38,11 @@ export class CapacitorUnit {
   }
 
   /**
-   * Sort first by capacitance, then by voltage, then by identifier.
+   * Compares two CapacitorUnits first by capacitance, then by voltage, then by identifier.
+   * Intended to be passed in to array.prototype.sort().
    * @param u1 CapacitorUnit 1
    * @param u2 CapacitorUnit 2
+   * @return a positive number if u1 > u2, negative number if u1 < u2, or 0 if they are equal.
    */
   static compare(u1: CapacitorUnit, u2: CapacitorUnit): number {
     let idOrder;
