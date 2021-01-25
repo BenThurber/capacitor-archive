@@ -1,28 +1,54 @@
 # Overview
+<sup>**If visiting from github please come to [gitlab.com](https://gitlab.com/capacitor-archive/capacitor-archive)**</sup>
 
 **View the site at [capacitor-archive.com](http://www.capacitor-archive.com)**  
 (And the test site [here](http://www.capacitor-archive.com:35506) from the development branch)  
 
-
-This app uses an [Angular](https://angular.io/) front end and [Spring Boot](https://spring.io/projects/spring-boot) backend.  A DevOps methodology has been employed through gitlab-runner's [CI/CD pipeline](https://docs.gitlab.com/ee/ci/) that performs automatic testing and deployment.
-
-# The Capacitor Archive setup
-<sup>**If visiting from github please come to [gitlab.com](https://gitlab.com/capacitor-archive/capacitor-archive)**</sup>
-
-The web application capacitor-archive.com will allow users to upload images and historical information about vintage [electronic capacitors](https://en.wikipedia.org/wiki/Capacitor).  The format will be similar to that of Wikipedia or [radiomuseum.org](https://www.radiomuseum.org/tubes/tube_5z3.html) where each vintage component (capacitor) has a page with links to similar pages.  **It is the hope of the devs that this website will encourage the documentation of vintage electronic components, and aid in the creation of reproductions for radio and guitar restorations.**  
+The web application capacitor-archive.com will allow users to upload images and historical information about vintage [electronic capacitors](https://en.wikipedia.org/wiki/Capacitor).  The format is similar to that of Wikipedia or [radiomuseum.org](https://www.radiomuseum.org/tubes/tube_5z3.html) where each vintage component (capacitor) has a page with links to similar pages.  **The hope is that this website will encourage the documentation of vintage electronic components, and aid in the creation of reproductions for radio and guitar restorations.**  
 
 Please see the [backlog on the Wiki](https://gitlab.com/capacitor-archive/capacitor-archive/-/wikis/home) for a full list of features.  
 
-## Overview
 
-This app uses an [Angular](https://angular.io/) front end and [Spring Boot](https://spring.io/projects/spring-boot) backend.  A DevOps methodology has been employed through gitlab-runner's [CI/CD pipeline](https://docs.gitlab.com/ee/ci/) that performs automatic testing and deployment.
+This app uses an [Angular](https://angular.io/) front end and [Spring Boot](https://spring.io/projects/spring-boot) backend.  A DevOps methodology has been employed through gitlab-runner's [CI/CD pipeline](https://docs.gitlab.com/ee/ci/) that performs automatic testing and deployment.  [Agilefant](https://www.agilefant.com/open-source/) is used to manage Agile practices.
 
-## Setup a server to run  CI/CD and MySQL using docker containers
 
-This project uses gitlab-runner to perform Continuous Integration (automated building and testing) and Continuous Deployment of the capacitor-archive application.  The following steps should be performed on a continuously running machine (VM or bare metal) that can be accessed from the ports 80 and 8081 (phpMyAdmin).
+
+## Running the application
+ For development purposes, the spring boot backend can be run by tunneling into the database and running  
+ `cd server`
+ `./gradlew bootRun`  
+ or on windows  
+ `gradlew bootRun`  
+ To start the Angular front end run  
+ `cd client`  
+ `npm install`  
+ `ng serve`  
+ 
+ Follow the 
+
+## Setup Ubuntu to serve the application, CI/CD and MySQL
+
+This project uses the following docker containers. 
+
+| Image                  |      Name          |
+|------------------------|--------------------|
+| tomcat                 |  test-server       |
+| tomcat                 |  prod-server       |
+| httpd                  |  test-client       |
+| httpd                  |  prod-client       |
+| mysql                  |  test-mysql        |
+| mysql                  |  prod-mysql        |
+| databack/mysql-backup  |  test-mysql-backup |
+| databack/mysql-backup  |  prod-mysql-backup |
+| phpmyadmin             |  phpmyadmin        |
+| gitlab-runner          |  gitlab-runner     |
+
+Gitlab Runner performs Continuous Integration/Deployment (automated building, testing and deployment) of the capacitor-archive application.  
+
+The following steps should be performed on a continuously running machine (VM or bare metal).
 
 ### Install docker and docker-compose
-Inside the machine, (either a VM or bare metal) install docker    
+Inside the machine install docker    
 `sudo apt-get update`  
 `sudo apt install docker.io`  
 
