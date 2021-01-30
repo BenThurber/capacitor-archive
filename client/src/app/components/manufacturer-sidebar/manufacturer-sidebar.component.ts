@@ -9,7 +9,7 @@ import {caseInsensitiveCompare} from '../../utilities/text-utils';
 @Component({
   selector: 'app-manufacturer-sidebar',
   templateUrl: './manufacturer-sidebar.component.html',
-  styleUrls: ['./manufacturer-sidebar.component.css']
+  styleUrls: ['./manufacturer-sidebar.component.css', '../../styles/animations.css']
 })
 export class ManufacturerSidebarComponent implements OnInit {
 
@@ -32,9 +32,9 @@ export class ManufacturerSidebarComponent implements OnInit {
 
   ngOnInit(): Subscription {
     return this.restService.getAllCompanyNames().subscribe({
-      next: manufacturers => {
-        manufacturers.sort(caseInsensitiveCompare);
-        this.companyNames$ = manufacturers;
+      next: companyNames => {
+        companyNames.sort(caseInsensitiveCompare);
+        this.companyNames$ = companyNames;
       },
 
       error: () => console.error('Couldn\'t get company names')
