@@ -7,3 +7,12 @@ p {
   font-size: 20px;
 }
 
+.emphasis__blue {
+  font-weight: bold;
+  color: #3fbbf2;
+}
+
+.not__implemented {
+  font-weight: bold;
+  text-decoration: underline;
+}
