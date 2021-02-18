@@ -14,7 +14,7 @@ This app uses an [Angular](https://angular.io/) front end and [Spring Boot](http
 
 
 ## Running the application
- For development purposes, the spring boot backend can be run by tunneling into the database and running  
+ For development purposes, the spring boot backend can be run by tunnelling into the database and running  
  `cd server`
  `./gradlew bootRun`  
  or on windows  
@@ -23,8 +23,8 @@ This app uses an [Angular](https://angular.io/) front end and [Spring Boot](http
  `cd client`  
  `npm install`  
  `ng serve`  
- 
- Follow the 
+
+
 
 ## Setup Ubuntu to serve the application, CI/CD and MySQL
 
