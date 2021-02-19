@@ -104,7 +104,7 @@ export class CapacitorFormComponent implements OnInit {
       unit: this.formBuilder.group({
         capacitance: ['', Validators.required],
         voltage: ['', [Validators.pattern(integerPattern)]],
-        identifier: ['', []],
+        identifier: ['', [Validators.maxLength(12)]],
         notes: ['', []],
       }),
       captcha: ['', Validators.required],
@@ -321,7 +321,7 @@ export class CapacitorFormComponent implements OnInit {
       capacitorUnit.companyName = capacitorForm.companyName;
 
       httpRequestObservable = this.editing ?
-        this.restService.editCapacitorUnit(this.editCompanyName, this.editCapacitorType.typeName, this.editCapacitorUnit.value,
+        this.restService.editCapacitorUnit(this.editCompanyName, capacitorUnit.typeName, this.editCapacitorUnit.value,
           capacitorUnit) :
         this.restService.createCapacitorUnit(capacitorUnit);
 
@@ -340,13 +340,13 @@ export class CapacitorFormComponent implements OnInit {
       });
 
     }
-    // Only executed if unit is pristine
+    // Only executed if a unit isn't created/edited
     this.dynamicRouter.redirectTo([
       '/capacitor',
       'view',
       (this.editCompanyName || capacitorForm.companyName).toLowerCase(),
-      (this.editCapacitorType.typeName ||
-        (capacitorForm.type.typeContent ? capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect)).toLowerCase(),
+      ((capacitorForm.type.typeContent ? capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect)
+      || this.editCapacitorType.typeName).toLowerCase(),
       this.editCapacitorUnit && this.editCapacitorUnit.value
     ]);
 

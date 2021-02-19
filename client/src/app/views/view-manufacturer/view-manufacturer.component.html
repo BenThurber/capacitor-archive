@@ -6,7 +6,7 @@
 
     <ng-container *ngIf="manufacturer$; else spinner">
       <div *ngFor="let typeName of manufacturer$.typeNames;">
-        <a class="grey__link"
+        <a class="grey__link" [title]="typeName"
            (click)="dynamicRouter.redirectTo(['/capacitor', 'view', companyName.toLowerCase(), typeName.toLowerCase()])">
           {{typeName}}
         </a>

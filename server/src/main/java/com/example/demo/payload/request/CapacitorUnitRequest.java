@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -22,6 +23,7 @@ public class CapacitorUnitRequest {
     @JsonProperty("voltage")
     private Integer voltage;
 
+    @Size(max=12, message="Identifier is too long")
     @JsonProperty("identifier")
     private String identifier;
 
