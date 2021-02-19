@@ -67,6 +67,9 @@ public class CapacitorUnit {
     @JoinColumn(name = "capacitor_type_id", nullable = false)
     private CapacitorType capacitorType;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorUnit", cascade = CascadeType.ALL)
+    private ArrayList<Photo> photos = new ArrayList<>();
+
 
     public CapacitorUnit(CapacitorUnitRequest capacitorUnitRequest) {
         edit(capacitorUnitRequest);
