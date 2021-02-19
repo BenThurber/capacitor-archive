@@ -68,7 +68,7 @@ public class CapacitorUnit {
     private CapacitorType capacitorType;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorUnit", cascade = CascadeType.ALL)
-    private ArrayList<Photo> photos = new ArrayList<>();
+    private List<Photo> photos = new ArrayList<>();
 
 
     public CapacitorUnit(CapacitorUnitRequest capacitorUnitRequest) {

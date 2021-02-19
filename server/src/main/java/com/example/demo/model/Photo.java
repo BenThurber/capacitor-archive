@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,7 +22,7 @@ public class Photo extends File {
     private CapacitorUnit capacitorUnit;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "photo", cascade = CascadeType.ALL)
-    private ArrayList<Thumbnail> thumbnails = new ArrayList<>();
+    private List<Thumbnail> thumbnails = new ArrayList<>();
 
     public Photo() {}
 
