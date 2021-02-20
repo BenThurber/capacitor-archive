@@ -12,8 +12,8 @@ import javax.persistence.*;
 @Entity
 public class Thumbnail extends File {
 
-    @Column(name = "size")
-    Integer size;
+    @Column(name = "size", nullable = false)
+    private Integer size;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "photo_id", nullable = false)

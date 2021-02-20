@@ -15,7 +15,7 @@ import java.util.List;
 public class Photo extends File {
 
     @Column(name = "order")
-    Integer order;
+    private Integer order;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "capacitor_unit_id", nullable = false)

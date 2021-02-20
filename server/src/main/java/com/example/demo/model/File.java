@@ -20,7 +20,7 @@ public abstract class File {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "url", nullable = false)
+    @Column(name = "url", length = 510, nullable = false)
     private String url;
 
     File() {}
