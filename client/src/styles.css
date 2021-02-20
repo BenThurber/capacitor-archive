@@ -51,7 +51,7 @@ a:hover {
   font-family: "Lilita One", serif;
   font-weight: 500;
   font-size: 16px;
-  color: darkgoldenrod;
+  color: #bc8b0b;
   text-decoration: none;
   transition: all 0.3s ease 0s;
 }
@@ -70,7 +70,7 @@ a:hover {
 }
 
 .nav__link:hover {
-  color: darkgoldenrod;
+  color: #bc8b0b;
 }
 
 .is-invalid {

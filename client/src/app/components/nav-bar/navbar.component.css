@@ -11,8 +11,10 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 30px 3%;
-  background-color: #844b13;
   border-bottom-left-radius: 10px;
+
+  background-image: url('../../../assets/navbar-background.jpg');
+  background-size: cover;
 }
 
 .logo {
