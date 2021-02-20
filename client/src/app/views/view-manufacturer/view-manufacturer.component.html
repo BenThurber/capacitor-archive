@@ -25,7 +25,7 @@
   <div id="manufacturer-box" *ngIf="manufacturer$; else loading">
 
     <div class="edit__button">
-      <a href [routerLink]="'/manufacturer/edit/' + manufacturer$.companyName.toLowerCase()">[Edit Page]</a>
+      <a href [routerLink]="" (click)="dynamicRouter.redirectTo(['/manufacturer', 'edit', manufacturer$.companyName.toLowerCase()])">[Edit Page]</a>
     </div>
 
     <div *ngIf="manufacturer$.companyName">
