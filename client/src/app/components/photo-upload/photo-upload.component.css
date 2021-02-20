@@ -1,0 +1,19 @@
+.grid-square {
+  width: 120px;
+  height: 120px;
+  margin: 5px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 15px;
+  background-color: #009688;
+}
+
+.grid > .col {
+  position: relative;
+  width: 600px;
+  display: flex;
+  flex-wrap: wrap;
+}
