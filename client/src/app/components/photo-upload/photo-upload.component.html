@@ -1,0 +1,8 @@
+<h3>Drag photos into the desired order</h3>
+<div class="grid">
+  <div class="col" [sortablejs]="items" [sortablejsOptions]="options">
+    <div *ngFor="let item of items" class="grid-square item">
+      {{ item }}
+    </div>
+  </div>
+</div>

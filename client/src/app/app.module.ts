@@ -33,6 +33,8 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { ImageComponent } from './components/image/image.component';
 import { ViewCapacitorComponent } from './views/view-capacitor/view-capacitor.component';
 import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.component';
+import {SortablejsModule} from 'ngx-sortablejs';
+import { PhotoUploadComponent } from './components/photo-upload/photo-upload.component';
 
 
 @NgModule({
@@ -57,6 +59,7 @@ import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.co
     ImageComponent,
     ViewCapacitorComponent,
     EditCapacitorComponent,
+    PhotoUploadComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -72,6 +75,7 @@ import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.co
     BrowserAnimationsModule,
     MatTabsModule,
     MatExpansionModule,
+    SortablejsModule.forRoot({ animation: 150 }),
   ],
   providers: [RestService, QuillEditorComponent],
   bootstrap: [AppComponent],
