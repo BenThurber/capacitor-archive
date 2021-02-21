@@ -35,7 +35,7 @@
 
 
   <!--Capacitor Type Section-->
-  <div id="type-section" class="input__section" formGroupName="type" *ngIf="manufacturerIsSelected">
+  <div id="type-section" class="input__section" formGroupName="type" *ngIf="manufacturerIsSelected && !isNavigatingToCreateManufacturer">
 
     <div style="margin-bottom: 20px">
       <app-image src="../../../assets/aerovox-type.png" link="true" height="100px" style="margin-right: 20px; margin-bottom: 9px">
