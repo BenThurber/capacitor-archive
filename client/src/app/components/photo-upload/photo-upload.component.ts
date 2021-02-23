@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
+import {Photo} from '../../models/file/photo.model';
 
 @Component({
   selector: 'app-photo-upload',
@@ -21,6 +22,11 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
     }
   };
 
+
+  onChange = event => {};
+  onTouched = () => {};
+
+
   constructor() { }
 
   ngOnInit(): void {
@@ -30,13 +36,16 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
 
   // ------ControlValueAccessor implementations------
 
-  writeValue(photos: any): void {   // ToDo change the passed variable type
+  writeValue(photos: Array<Photo>): void {
+    this.onChange(photos);
   }
 
   registerOnChange(fn: any): void {
+    this.onChange = fn;
   }
 
   registerOnTouched(fn: any): void {
+    this.onTouched = fn;
   }
 
 }

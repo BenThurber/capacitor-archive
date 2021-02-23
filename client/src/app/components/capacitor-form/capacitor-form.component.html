@@ -199,10 +199,12 @@
     </div>
 
 
-    <label class="input__label__major">Add Photos:</label>
+    <label class="input__label__major" for="input-photo">Add Photos:</label>
     <br>
     <br>
-    <app-photo-upload formControlName="photos"></app-photo-upload>
+    <div class="input">
+      <app-photo-upload id="input-photo" ngDefaultControl formControlName="photos"></app-photo-upload>
+    </div>
 
 
     <hr>
