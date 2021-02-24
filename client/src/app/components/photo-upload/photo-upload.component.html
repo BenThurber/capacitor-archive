@@ -1,8 +1,15 @@
 
-<div>
-  <input multiple type="file" (change)="fileChosen($event)"
-         placeholder="Upload file"
-         accept="png,jpg,jpeg,gif,jfif,webp">
+<div class="drop-container">
+  <p>
+    Drag files here or
+    <label class="upload-button">
+
+      <input multiple type="file" (change)="fileChosen($event)" placeholder="Upload file" accept="png,jpg,jpeg,gif,jfif,webp">
+      browse
+
+    </label>
+    to upload.
+  </p>
 </div>
 
 <h4>Drag photos into the desired order</h4>
