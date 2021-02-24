@@ -5,6 +5,7 @@ import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
 import ImageResize from 'quill-image-resize-module';
 import {SystemEnvironment} from '../../models/system-environment';
+import {randomString} from '../../utilities/text-utils';
 
 Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/imageResize', ImageResize);
@@ -116,15 +117,6 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
 
 }
 
-
-function randomString(length: number): string {
-  let result           = '';
-  const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for ( let i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
 
 
 function uploadImage(file: File): Promise<string> {

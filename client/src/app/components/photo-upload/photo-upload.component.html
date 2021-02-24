@@ -1,3 +1,10 @@
+
+<div>
+  <input multiple type="file" (change)="fileChosen($event)"
+         placeholder="Upload file"
+         accept="png,jpg,jpeg,gif,jfif,webp">
+</div>
+
 <h4>Drag photos into the desired order</h4>
 <div class="grid">
   <div class="col" [sortablejs]="items" [sortablejsOptions]="options">
