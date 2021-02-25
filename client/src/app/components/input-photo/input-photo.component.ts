@@ -10,7 +10,7 @@ import {Photo} from '../../models/file/photo.model';
 })
 export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
-  @Input() dirPath: Array<string>;
+  @Input() dirPathArray: Array<string>;
 
   items: Array<number>;
 

@@ -31,7 +31,7 @@ interface UploadProgress {
 })
 export class FileUploaderComponent implements OnInit {
 
-  @Input() dirPath: Array<string>;
+  @Input() dirPathArray: Array<string>;
 
   files: Array<FileUpload> = [];
   currentUpload: any = null;
@@ -48,7 +48,7 @@ export class FileUploaderComponent implements OnInit {
 
     let bucketDir;
     try {
-      bucketDir = environment.s3BucketName + '/' + this.dirPath.filter(s => s).join('/');
+      bucketDir = environment.s3BucketName + '/' + this.dirPathArray.filter(s => s).join('/');
     } catch (e) {
       console.warn('No path specified for uploading files');
       bucketDir = environment.s3BucketName + '/misc-files';
