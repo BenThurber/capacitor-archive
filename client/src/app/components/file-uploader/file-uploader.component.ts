@@ -47,7 +47,7 @@ export class FileUploaderComponent implements OnInit {
 
     let bucketDir;
     try {
-      bucketDir = 'capacitor-archive-media/' + this.dirPath.join('/');
+      bucketDir = 'capacitor-archive-media/' + this.dirPath.filter(s => s).join('/');
     } catch (e) {
       console.warn('No path specified for uploading files');
       bucketDir = 'capacitor-archive-media/misc-files';
