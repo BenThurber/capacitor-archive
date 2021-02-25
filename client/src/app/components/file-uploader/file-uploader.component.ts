@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
 
@@ -30,6 +30,8 @@ interface UploadProgress {
 })
 export class FileUploaderComponent implements OnInit {
 
+  @Input() dirPath: Array<string>;
+
   files: Array<FileUpload> = [];
   currentUpload: any = null;
   bucket: any;
@@ -43,7 +45,16 @@ export class FileUploaderComponent implements OnInit {
       region: 'ap-southeast-2',
     });
 
-    this.bucket = new AWS.S3({params: {Bucket: 'capacitor-archive-media/temp'}});
+    let bucketDir;
+    try {
+      bucketDir = 'capacitor-archive-media/' + this.dirPath.join('/');
+    } catch (e) {
+      console.warn('No path specified for uploading files');
+      bucketDir = 'capacitor-archive-media/misc-files';
+    }
+
+
+    this.bucket = new AWS.S3({params: {Bucket: bucketDir}});
   }
 
 

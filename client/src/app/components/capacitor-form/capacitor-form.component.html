@@ -158,7 +158,7 @@
 
   <!--Capacitor Unit Section-->
   <div id="capacitor-section" class="input__section" formGroupName="unit"
-       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected">
+       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected && !isNavigatingToCreateManufacturer">
 
     <label class="input__label__major">Add Capacitor:</label>
     <br>
@@ -203,7 +203,11 @@
     <br>
     <br>
     <div class="input">
-      <app-input-photo id="input-photo" ngDefaultControl formControlName="photos"></app-input-photo>
+      <app-input-photo id="input-photo"
+                       [dirPath]="['capacitor-photos', capacitorForm.controls.companyName.value]"
+                       ngDefaultControl
+                       formControlName="photos">
+      </app-input-photo>
     </div>
 
 

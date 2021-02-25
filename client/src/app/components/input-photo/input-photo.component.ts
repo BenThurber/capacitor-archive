@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
 import {Photo} from '../../models/file/photo.model';
 
@@ -9,6 +9,8 @@ import {Photo} from '../../models/file/photo.model';
   styleUrls: ['./input-photo.component.css'],
 })
 export class InputPhotoComponent implements OnInit, ControlValueAccessor {
+
+  @Input() dirPath: Array<string>;
 
   items: Array<number>;
 
