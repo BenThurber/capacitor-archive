@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {ControlValueAccessor} from '@angular/forms';
-import {Photo} from '../../models/file/photo.model';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
 
 require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;
-
 
 
 class FileUpload extends File {
@@ -25,41 +22,23 @@ interface UploadProgress {
   };
 }
 
-@Component({
-  selector: 'app-photo-upload',
-  templateUrl: './photo-upload.component.html',
-  styleUrls: ['./ngx-upload.sass', './photo-upload.component.css'],
-})
-export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
 
-  items: Array<number>;
+@Component({
+  selector: 'app-file-uploader',
+  templateUrl: './file-uploader.component.html',
+  styleUrls: ['./ngx-upload.sass']
+})
+export class FileUploaderComponent implements OnInit {
 
   // files: Array<FileUpload> = [new FileUpload([null], ''), new FileUpload([null], '')];
   files: Array<FileUpload> = [];
   currentUpload: any = null;
   bucket: any;
 
-  options: any = {
-    swapThreshold: 1.0,
-    invertSwap: true,
-    animation: 200,
-    ghostClass: 'ghost',
-    direction: 'horizontal',
-    group: {
-      name: 'shared',
-    }
-  };
-
-
-  onChange = event => {};
-  onTouched = () => {};
-
-
   constructor() { }
 
-  ngOnInit(): void {
-    this.items = [1, 2, 3, 4, 5, 6];
 
+  ngOnInit(): void {
     AWS.config.update({accessKeyId: SystemEnvironment.AWS_ACCESS_KEY_ID,
       secretAccessKey: SystemEnvironment.AWS_SECRET_ACCESS_KEY,
       region: 'ap-southeast-2',
@@ -167,22 +146,6 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
     } else {
       this.files.splice(index, 1);
     }
-  }
-
-
-
-  // ------ControlValueAccessor implementations------
-
-  writeValue(photos: Array<Photo>): void {
-    this.onChange(photos);
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
   }
 
 }

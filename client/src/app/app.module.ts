@@ -34,7 +34,8 @@ import { ImageComponent } from './components/image/image.component';
 import { ViewCapacitorComponent } from './views/view-capacitor/view-capacitor.component';
 import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.component';
 import {SortablejsModule} from 'ngx-sortablejs';
-import { PhotoUploadComponent } from './components/photo-upload/photo-upload.component';
+import { InputPhotoComponent } from './components/input-photo/input-photo.component';
+import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 
 
 @NgModule({
@@ -59,7 +60,8 @@ import { PhotoUploadComponent } from './components/photo-upload/photo-upload.com
     ImageComponent,
     ViewCapacitorComponent,
     EditCapacitorComponent,
-    PhotoUploadComponent,
+    InputPhotoComponent,
+    FileUploaderComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
