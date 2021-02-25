@@ -30,7 +30,6 @@ interface UploadProgress {
 })
 export class FileUploaderComponent implements OnInit {
 
-  // files: Array<FileUpload> = [new FileUpload([null], ''), new FileUpload([null], '')];
   files: Array<FileUpload> = [];
   currentUpload: any = null;
   bucket: any;
@@ -79,7 +78,7 @@ export class FileUploaderComponent implements OnInit {
 
     // Prepare the payload
     this.currentUpload = this.bucket.upload(params).on('httpUploadProgress', (evt) => {
-      console.log('Progress:', evt.loaded, '/', evt.total);
+
       // Calculate File Progress
       file.progress.data.percentage = Math.round((evt.loaded / evt.total) * 100);
 
