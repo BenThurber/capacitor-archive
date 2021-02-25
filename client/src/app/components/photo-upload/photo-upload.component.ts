@@ -10,7 +10,7 @@ const AWS = (window as any).AWS;
 
 
 class FileUpload extends File {
-  progress: UploadProgress;
+  progress: UploadProgress = {data: {percentage: 0}};
 }
 
 interface UploadProgress {
@@ -34,7 +34,10 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
 
   items: Array<number>;
 
-  files: Array<FileUpload> = [new FileUpload([null], ''), new FileUpload([null], '')];
+  // files: Array<FileUpload> = [new FileUpload([null], ''), new FileUpload([null], '')];
+  files: Array<FileUpload> = [];
+  currentUpload: any = null;
+  bucket: any;
 
   options: any = {
     swapThreshold: 1.0,
@@ -61,6 +64,8 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
       secretAccessKey: SystemEnvironment.AWS_SECRET_ACCESS_KEY,
       region: 'ap-southeast-2',
     });
+
+    this.bucket = new AWS.S3({params: {Bucket: 'capacitor-archive-media/temp'}});
   }
 
 
@@ -80,7 +85,7 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
 
 
   uploadAllFiles(): void {
-    if (this.files.length === 0) {
+    if (this.files.length === 0 || this.currentUpload) {
       return;
     }
 
@@ -90,18 +95,28 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
     const filename = splitFilename[0];
     const extension = '.' + splitFilename[splitFilename.length - 1];
 
-    const bucket = new AWS.S3({params: {Bucket: 'capacitor-archive-media/temp'}});
+
     const params = {Key: filename + '_' + randomString(10) + extension, Body: file};
 
-    return bucket.upload(params).on('httpUploadProgress', (evt) => {
+    // Prepare the payload
+    this.currentUpload = this.bucket.upload(params).on('httpUploadProgress', (evt) => {
       console.log('Progress:', evt.loaded, '/', evt.total);
       // Calculate File Progress
-      file.progress = {data: {percentage: Math.round((evt.loaded / evt.total) * 100)}};  // Use 100.001 to avoid floating point error
+      file.progress.data.percentage = Math.round((evt.loaded / evt.total) * 100);
 
-    }).send((err, data) => {
-      console.log(err, data);
+    });
+
+    // Send the payload
+    this.currentUpload.send((err, data) => {
+
+      if (err) {
+        console.warn(err.message);
+      }
+
       this.files.shift();
+      this.currentUpload = null;
 
+      // Recursive call
       if (this.files.length > 0) {
         this.uploadAllFiles();
       }
@@ -143,6 +158,17 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
     event.stopPropagation();
     event.preventDefault();
   }
+
+  cancelUpload(index: number): void {
+
+    // Is the file currently uploading or pending?
+    if (index === 0) {
+      setTimeout(this.currentUpload.abort.bind(this.currentUpload), 0);
+    } else {
+      this.files.splice(index, 1);
+    }
+  }
+
 
 
   // ------ControlValueAccessor implementations------
