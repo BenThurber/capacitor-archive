@@ -8,6 +8,23 @@ require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;
 
 
+
+class FileUpload extends File {
+  progress: UploadProgress;
+}
+
+interface UploadProgress {
+  data?: {
+    percentage: number;
+    speed?: number;
+    speedHuman?: string;
+    startTime?: number | null;
+    endTime?: number | null;
+    eta?: number | null;
+    etaHuman?: string | null;
+  };
+}
+
 @Component({
   selector: 'app-photo-upload',
   templateUrl: './photo-upload.component.html',
@@ -16,6 +33,8 @@ const AWS = (window as any).AWS;
 export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
 
   items: Array<number>;
+
+  files: Array<FileUpload> = [new FileUpload([null], ''), new FileUpload([null], '')];
 
   options: any = {
     swapThreshold: 1.0,
@@ -45,27 +64,47 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
   }
 
 
-  uploadFiles(fileList: Array<File> | FileList): void {
+  addFilesToQueue(fileList: Array<File> | FileList): void {
 
+    let file: File;
+    let fileUpload: FileUpload;
     for (let i = 0; i < fileList.length; i++) {
-      console.log(fileList[i]);
-      this.uploadSingleFile(fileList[i]);
+      file = fileList[i];
+
+      fileUpload = new FileUpload([file], file.name);
+      this.files.push(fileUpload);
     }
+
+    this.uploadAllFiles();
   }
 
 
-  uploadSingleFile(file: File): void {
+  uploadAllFiles(): void {
+    if (this.files.length === 0) {
+      return;
+    }
 
-    const filename = file.name.split('.')[0];
-    const extension = file.name.split('.')[file.name.lastIndexOf('.')];
+    const file = this.files[0];  // Get the next file in the queue
 
-    const bucket = new AWS.S3({params: {Bucket: 'capacitor-archive-media'}});
+    const splitFilename = file.name.split('.');
+    const filename = splitFilename[0];
+    const extension = '.' + splitFilename[splitFilename.length - 1];
+
+    const bucket = new AWS.S3({params: {Bucket: 'capacitor-archive-media/temp'}});
     const params = {Key: filename + '_' + randomString(10) + extension, Body: file};
 
     return bucket.upload(params).on('httpUploadProgress', (evt) => {
       console.log('Progress:', evt.loaded, '/', evt.total);
+      // Calculate File Progress
+      file.progress = {data: {percentage: Math.round((evt.loaded / evt.total) * 100)}};  // Use 100.001 to avoid floating point error
+
     }).send((err, data) => {
       console.log(err, data);
+      this.files.shift();
+
+      if (this.files.length > 0) {
+        this.uploadAllFiles();
+      }
     });
 
   }
@@ -89,11 +128,11 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
         }
       }
       dataTransfer.items.clear();
-      this.uploadFiles(files);
+      this.addFilesToQueue(files);
     } else {
       const files = dataTransfer.files;
       dataTransfer.clearData();
-      this.uploadFiles(Array.from(files));
+      this.addFilesToQueue(Array.from(files));
     }
   }
   /**
