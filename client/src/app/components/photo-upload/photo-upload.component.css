@@ -1,38 +1,4 @@
 
-/*Uploader*/
-
-.drop-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background-color: #C1E3F2;
-
-  width: 515px;
-  min-height: 80px;
-  border-radius: 15px;
-}
-
-.drop-container p {
-  font-size: 16px;
-  font-weight: 400;
-  color: #404040
-}
-
-.drop-container p .upload-button {
-  display: inline-block;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  font-weight: 600;
-  padding: 0 2px;
-}
-
-.drop-container p .upload-button input {
-  display: none
-}
-
-
 /*Sorter*/
 
 .grid-square {

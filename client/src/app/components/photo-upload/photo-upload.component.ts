@@ -11,7 +11,7 @@ const AWS = (window as any).AWS;
 @Component({
   selector: 'app-photo-upload',
   templateUrl: './photo-upload.component.html',
-  styleUrls: ['./photo-upload.component.css']
+  styleUrls: ['./ngx-upload.sass', './photo-upload.component.css'],
 })
 export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
 
@@ -45,17 +45,16 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
   }
 
 
-  fileChosen(event): void {
-    const fileList: FileList = event.target.files;
+  uploadFiles(fileList: Array<File> | FileList): void {
 
     for (let i = 0; i < fileList.length; i++) {
       console.log(fileList[i]);
-      this.startFileUpload(fileList[i]);
+      this.uploadSingleFile(fileList[i]);
     }
   }
 
 
-  startFileUpload(file: File): void {
+  uploadSingleFile(file: File): void {
 
     const filename = file.name.split('.')[0];
     const extension = file.name.split('.')[file.name.lastIndexOf('.')];
@@ -69,6 +68,41 @@ export class PhotoUploadComponent implements OnInit, ControlValueAccessor {
       console.log(err, data);
     });
 
+  }
+
+
+  /**
+   * Handle event when item is dragged to drop-container
+   * @param event the DragEvent containing the file(s)
+   */
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+
+    const { dataTransfer } = event;
+
+    if (dataTransfer.items) {
+      const files = [];
+      for (let i = 0; i < dataTransfer.items.length; i++) {
+        // If dropped items aren't files, reject them
+        if (dataTransfer.items[i].kind === 'file') {
+          files.push(dataTransfer.items[i].getAsFile());
+        }
+      }
+      dataTransfer.items.clear();
+      this.uploadFiles(files);
+    } else {
+      const files = dataTransfer.files;
+      dataTransfer.clearData();
+      this.uploadFiles(Array.from(files));
+    }
+  }
+  /**
+   * Needed with onDrop to suppress default browser behavior
+   * @param event the DragEvent containing the file(s)
+   */
+  onDragOver(event: DragEvent): void {
+    event.stopPropagation();
+    event.preventDefault();
   }
 
 
