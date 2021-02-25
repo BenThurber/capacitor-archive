@@ -123,7 +123,7 @@ function uploadImage(file: File): Promise<string> {
 
   let serverFilePath;
   if (this.upload && this.upload.dirName) {
-    serverFilePath = '/manufacturer-editor/' + this.upload.dirName;
+    serverFilePath = '/manufacturer-editor/' + this.upload.dirName.toLowerCase();
   } else {
     serverFilePath = '/misc-editor-files';
   }

@@ -204,7 +204,11 @@
     <br>
     <div class="input">
       <app-input-photo id="input-photo"
-                       [dirPath]="['capacitor-photos', capacitorForm.controls.companyName.value]"
+                       [dirPath]="[
+                          'capacitor-photos',
+                          (formFields.companyName.value || editCompanyName).toLowerCase(),
+                          selectedType.toLowerCase()
+                       ]"
                        ngDefaultControl
                        formControlName="photos">
       </app-input-photo>

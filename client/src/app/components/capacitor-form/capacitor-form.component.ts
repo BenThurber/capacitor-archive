@@ -371,19 +371,23 @@ export class CapacitorFormComponent implements OnInit {
     return this.formFields.type.controls.typeContent.controls;
   }
 
-  get manufacturerIsSelected(): any {
+  get selectedType(): string {
+    return this.capacitorTypeIsSelected ? this.formFields.type.controls.typeNameSelect.value : this.typeFields.typeNameInput.value;
+  }
+
+  get manufacturerIsSelected(): boolean {
     return !this.formFields.companyName.invalid;
   }
 
-  get capacitorTypeIsSelected(): any {
+  get capacitorTypeIsSelected(): boolean {
     return !this.formFields.type.controls.typeNameSelect.invalid;
   }
 
-  get endYearBeforeStartYearError(): any {
+  get endYearBeforeStartYearError(): boolean {
     return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.endYearBeforeStartYear;
   }
 
-  get noNewConstructionEnteredError(): any {
+  get noNewConstructionEnteredError(): boolean {
     return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.noNewConstructionEntered;
   }
 
