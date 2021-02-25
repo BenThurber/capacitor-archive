@@ -14,18 +14,18 @@ require('aws-sdk/dist/aws-sdk');
 
 
 @Component({
-  selector: 'app-rich-text-input',
-  templateUrl: './rich-text-input.component.html',
-  styleUrls: ['./rich-text-input.component.css'],
+  selector: 'app-input-rich-text',
+  templateUrl: './input-rich-text.component.html',
+  styleUrls: ['./input-rich-text.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: RichTextInputComponent,
+      useExisting: InputRichTextComponent,
       multi: true,
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
+export class InputRichTextComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
 
   // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'webp'];
@@ -132,12 +132,12 @@ function uploadImage(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
 
     // Check file attributes
-    if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
-      reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + RichTextInputComponent.supportedImageTypes);
+    if (!InputRichTextComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+      reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + InputRichTextComponent.supportedImageTypes);
       return;
     }
-    if (file.size > RichTextInputComponent.maxImageSize) {
-      reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
+    if (file.size > InputRichTextComponent.maxImageSize) {
+      reject('File is too large.  Must be less than ' + Math.floor(InputRichTextComponent.maxImageSize / 1000000) + 'MB');
       return;
     }
 

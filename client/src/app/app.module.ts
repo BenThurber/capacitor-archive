@@ -22,7 +22,7 @@ import { EditManufacturerComponent } from './views/edit-manufacturer/edit-manufa
 import {CommonModule} from '@angular/common';
 import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/manufacturer-sidebar.component';
 import {QuillEditorComponent, QuillModule} from 'ngx-quill';
-import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
+import { InputRichTextComponent } from './components/input-rich-text/input-rich-text.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
@@ -51,7 +51,7 @@ import { PhotoUploadComponent } from './components/photo-upload/photo-upload.com
     PageNotFoundComponent,
     EditManufacturerComponent,
     ManufacturerSidebarComponent,
-    RichTextInputComponent,
+    InputRichTextComponent,
     SafeHtmlPipe,
     CreateCapacitorComponent,
     CapacitorFormComponent,

@@ -1,24 +1,24 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RichTextInputComponent } from './rich-text-input.component';
+import { InputRichTextComponent } from './input-rich-text.component';
 import Quill from 'quill';
 import ImageResize from 'quill-image-resize-module';
 
 Quill.register('modules/imageResize', ImageResize);
 
-describe('RichTextInputComponent', () => {
-  let component: RichTextInputComponent;
-  let fixture: ComponentFixture<RichTextInputComponent>;
+describe('InputRichTextComponent', () => {
+  let component: InputRichTextComponent;
+  let fixture: ComponentFixture<InputRichTextComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RichTextInputComponent ],
+      declarations: [ InputRichTextComponent ],
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RichTextInputComponent);
+    fixture = TestBed.createComponent(InputRichTextComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
