@@ -6,6 +6,7 @@ import ImageUploader from 'quill-image-uploader';
 import ImageResize from 'quill-image-resize-module';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
+import {environment} from '../../../environments/environment';
 
 Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/imageResize', ImageResize);
@@ -146,7 +147,7 @@ function uploadImage(file: File): Promise<string> {
     const AWSService = (window as any).AWS;
     AWSService.config.accessKeyId = SystemEnvironment.AWS_ACCESS_KEY_ID;
     AWSService.config.secretAccessKey = SystemEnvironment.AWS_SECRET_ACCESS_KEY;
-    const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
+    const bucket = new AWSService.S3({params: {Bucket: environment.s3BucketName + serverFilePath}});
     const params = {Key: uploadName, Body: file};
     return bucket.upload(params, (error, response) => {
 

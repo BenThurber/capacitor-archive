@@ -1,6 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
+import {environment} from '../../../environments/environment';
 
 require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;
@@ -47,10 +48,10 @@ export class FileUploaderComponent implements OnInit {
 
     let bucketDir;
     try {
-      bucketDir = 'capacitor-archive-media/' + this.dirPath.filter(s => s).join('/');
+      bucketDir = environment.s3BucketName + '/' + this.dirPath.filter(s => s).join('/');
     } catch (e) {
       console.warn('No path specified for uploading files');
-      bucketDir = 'capacitor-archive-media/misc-files';
+      bucketDir = environment.s3BucketName + '/misc-files';
     }
 
 

@@ -2,10 +2,13 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+// This environment is used for development on a personal computer
+
 export const environment = {
   production: false,
   serverBaseUrl: 'http://localhost:35503',
-  reCaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',   // Development key
+  s3BucketName: 'capacitor-archive-media-dev',
+  reCaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',   // Development key  (public key, safe to commit)
 };
 
 /*
