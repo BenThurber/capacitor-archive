@@ -1,9 +1,9 @@
 
 /*Sorter*/
 
-.grid-square {
-  width: 120px;
-  height: 120px;
+.grid-square-outer {
+  width: 140px;
+  height: 140px;
   margin: 5px;
 
   display: flex;
@@ -11,13 +11,23 @@
   justify-content: center;
 
   border-radius: 15px;
-  background-color: #009688;
+  background-color: #c1e3f2;
 
   cursor: grab;
 }
 
-.grid-square:active {
+.grid-square-outer:active {
   cursor: grabbing;
+}
+
+.grid-square-inner {
+  width: 85%;
+  height: 85%;
+  border-radius: 13px;
+  background-size: cover;
+  background-position: center;
+  align-items: center;
+  border: 0.15rem solid #262626;
 }
 
 .grid > .col {

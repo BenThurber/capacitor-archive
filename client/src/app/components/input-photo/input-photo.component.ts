@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
+import {File} from '../../models/file/file.model';
 import {Photo} from '../../models/file/photo.model';
 
 
@@ -12,7 +13,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
   @Input() dirPathArray: Array<string>;
 
-  items: Array<number>;
+  photos: Array<Photo> = [];
 
   options: any = {
     swapThreshold: 1.0,
@@ -33,7 +34,10 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   constructor() { }
 
   ngOnInit(): void {
-    this.items = [1, 2, 3, 4, 5, 6];
+  }
+
+  addPhoto(file: File): void {
+    this.photos.push(new Photo(file.url, null));
   }
 
 
