@@ -1,11 +1,11 @@
 
-<app-file-uploader [dirPathArray]="dirPathArray"></app-file-uploader>
+<app-file-uploader [dirPathArray]="dirPathArray" (photoUploaded)="addPhoto($event)"></app-file-uploader>
 
 <h4>Drag photos into the desired order</h4>
 <div class="grid">
-  <div class="col" [sortablejs]="items" [sortablejsOptions]="options">
-    <div *ngFor="let item of items" class="grid-square item">
-      {{ item }}
+  <div class="col" [sortablejs]="photos" [sortablejsOptions]="options" (change)="change()">
+    <div *ngFor="let photo of photos" class="grid-square item">
+      xyz
     </div>
   </div>
 </div>
