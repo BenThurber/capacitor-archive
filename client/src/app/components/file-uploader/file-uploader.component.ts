@@ -151,7 +151,7 @@ export class FileUploaderComponent implements OnInit {
     if (dataTransfer.items) {
       const files = [];
       for (let i = 0; i < dataTransfer.items.length; i++) {
-        // If dropped photos aren't files, reject them
+        // If dropped items aren't files, reject them
         if (dataTransfer.items[i].kind === 'file') {
           files.push(dataTransfer.items[i].getAsFile());
         }

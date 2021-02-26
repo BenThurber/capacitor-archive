@@ -34,11 +34,6 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   constructor() { }
 
   ngOnInit(): void {
-    // this.photos = [];
-  }
-
-  change(): void {
-    setTimeout(() => console.log(this.photos), 500);
   }
 
   addPhoto(file: File): void {
