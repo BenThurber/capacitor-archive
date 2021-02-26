@@ -36,11 +36,11 @@ export function padStartHtml(str: string, targetLength: number): string {
 
 /**
  * Generate a string of random characters in range [a-z][A-Z][0-9]
- * @param length length of the random string
+ * @param length the length of the random string
  */
 export function randomString(length: number): string {
-  let result           = '';
-  const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   for ( let i = 0; i < length; i++ ) {
     result += characters.charAt(Math.floor(Math.random() * characters.length));
   }

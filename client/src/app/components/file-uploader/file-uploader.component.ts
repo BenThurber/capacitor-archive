@@ -50,6 +50,10 @@ export class FileUploaderComponent implements OnInit {
   }
 
 
+  /**
+   * Add files to the this.files queue (Array).  If no upload is currently in progress, begin uploading be calling uploadAllFiles().
+   * @param fileList either an Array<File> or FileList.  An index-able container containing File objects.
+   */
   addFilesToQueue(fileList: Array<File> | FileList): void {
 
     let file: File;
@@ -65,6 +69,18 @@ export class FileUploaderComponent implements OnInit {
   }
 
 
+  /**
+   * Recursively uploads each file contained in this.files.  Starts from index 0.  After the file is finished uploading,
+   * it is removed from the queue (Array).
+   *
+   * Each file is uploaded to the S3 Bucket at the path given by dirPathArray.  The @Input directive dirPathArray
+   * is an Array<string> which is joined by '/' to get the path on the S3 server to upload to.  If dirPathArray is not
+   * specified, files are uploaded to /misc-files and a console warning is issued.
+   *
+   * When a File is read from the queue, it is assigned to this.currentUpload.  As the download progress changes, the
+   * property file.progress.data.percentage is updated.  When the file is finished uploading, this.currentUpload is set
+   * to null.
+   */
   uploadAllFiles(): void {
     if (this.files.length === 0 || this.currentUpload) {
       return;
@@ -151,6 +167,11 @@ export class FileUploaderComponent implements OnInit {
     event.preventDefault();
   }
 
+  /**
+   * If a file is pending, it is removed from this.files.  If the file is currently uploading, an abort request is sent
+   * to the AWS S3 server.
+   * @param index the index of the file in this.files
+   */
   cancelUpload(index: number): void {
 
     // Is the file currently uploading or pending?
