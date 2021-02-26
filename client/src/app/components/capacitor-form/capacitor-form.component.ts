@@ -11,6 +11,7 @@ import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
+import {Photo} from '../../models/file/photo.model';
 
 class CapacitorForm {
   companyName: string;
@@ -30,6 +31,7 @@ class CapacitorForm {
     voltage: number;
     identifier: string;
     notes: string;
+    photos: Array<Photo>;
   };
 }
 
@@ -317,6 +319,7 @@ export class CapacitorFormComponent implements OnInit {
       capacitorUnit.voltage = capacitorForm.unit.voltage;
       capacitorUnit.identifier = capacitorForm.unit.identifier;
       capacitorUnit.notes = capacitorForm.unit.notes;
+      capacitorUnit.photos = capacitorForm.unit.photos;
       capacitorUnit.typeName = capacitorForm.type.typeContent ?
         capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect;
       capacitorUnit.companyName = capacitorForm.companyName;
@@ -368,19 +371,19 @@ export class CapacitorFormComponent implements OnInit {
     return this.formFields.type.controls.typeContent.controls;
   }
 
-  get manufacturerIsSelected(): any {
+  get manufacturerIsSelected(): boolean {
     return !this.formFields.companyName.invalid;
   }
 
-  get capacitorTypeIsSelected(): any {
+  get capacitorTypeIsSelected(): boolean {
     return !this.formFields.type.controls.typeNameSelect.invalid;
   }
 
-  get endYearBeforeStartYearError(): any {
+  get endYearBeforeStartYearError(): boolean {
     return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.endYearBeforeStartYear;
   }
 
-  get noNewConstructionEnteredError(): any {
+  get noNewConstructionEnteredError(): boolean {
     return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.noNewConstructionEntered;
   }
 

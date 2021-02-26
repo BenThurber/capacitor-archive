@@ -1,3 +1,4 @@
+import {Photo} from './file/photo.model';
 
 const unitOptions = {farad: 'F', microFarad: 'uf', nanoFarad: 'nf', picoFarad: 'pf'};
 
@@ -8,6 +9,7 @@ export class CapacitorUnit {
   identifier: string;
   value: string;
   notes: string;
+  photos: Array<Photo>;
   typeName: string;
   companyName: string;
 
