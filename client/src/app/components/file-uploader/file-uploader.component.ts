@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
 import {environment} from '../../../environments/environment';
+import {File as FileMetaData} from '../../models/file/file.model';   // Namespace conflict
 
 require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;
@@ -32,6 +33,8 @@ interface UploadProgress {
 export class FileUploaderComponent implements OnInit {
 
   @Input() dirPathArray: Array<string>;
+
+  @Output() photoUploaded = new EventEmitter<FileMetaData>();
 
   files: Array<FileUpload> = [];
   currentUpload: any = null;
@@ -119,6 +122,9 @@ export class FileUploaderComponent implements OnInit {
 
       if (err) {
         console.warn(err.message);
+      } else {
+        const url = data.Location;
+        this.photoUploaded.emit(new FileMetaData(url));
       }
 
       this.files.shift();
