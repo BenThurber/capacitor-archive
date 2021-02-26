@@ -207,7 +207,7 @@
                        [dirPathArray]="[
                           'capacitor-photos',
                           (formFields.companyName.value || editCompanyName).toLowerCase(),
-                          selectedType.toLowerCase()
+                          (typeFields.typeNameInput.value || '').toLowerCase()
                        ]"
                        ngDefaultControl
                        formControlName="photos">

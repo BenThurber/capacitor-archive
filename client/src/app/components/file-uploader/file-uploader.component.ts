@@ -46,16 +46,7 @@ export class FileUploaderComponent implements OnInit {
       region: 'ap-southeast-2',
     });
 
-    let bucketDir;
-    try {
-      bucketDir = environment.s3BucketName + '/' + this.dirPathArray.filter(s => s).join('/');
-    } catch (e) {
-      console.warn('No path specified for uploading files');
-      bucketDir = environment.s3BucketName + '/misc-files';
-    }
-
-
-    this.bucket = new AWS.S3({params: {Bucket: bucketDir}});
+    this.bucket = new AWS.S3({params: {}});
   }
 
 
@@ -85,8 +76,19 @@ export class FileUploaderComponent implements OnInit {
     const filename = splitFilename[0];
     const extension = '.' + splitFilename[splitFilename.length - 1];
 
+    let bucketDir;
+    try {
+      bucketDir = environment.s3BucketName + '/' + this.dirPathArray.filter(s => s).join('/');
+    } catch (e) {
+      console.warn('No path specified for uploading files');
+      bucketDir = environment.s3BucketName + '/misc-files';
+    }
 
-    const params = {Key: filename + '_' + randomString(10) + extension, Body: file};
+    const params = {
+      Bucket: bucketDir,
+      Key: filename + '_' + randomString(10) + extension,
+      Body: file,
+    };
 
     // Prepare the payload
     this.currentUpload = this.bucket.upload(params).on('httpUploadProgress', (evt) => {
