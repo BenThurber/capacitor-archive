@@ -5,6 +5,8 @@ import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
 import ImageResize from 'quill-image-resize-module';
 import {SystemEnvironment} from '../../models/system-environment';
+import {randomString} from '../../utilities/text-utils';
+import {environment} from '../../../environments/environment';
 
 Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/imageResize', ImageResize);
@@ -13,18 +15,18 @@ require('aws-sdk/dist/aws-sdk');
 
 
 @Component({
-  selector: 'app-rich-text-input',
-  templateUrl: './rich-text-input.component.html',
-  styleUrls: ['./rich-text-input.component.css'],
+  selector: 'app-input-rich-text',
+  templateUrl: './input-rich-text.component.html',
+  styleUrls: ['./input-rich-text.component.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: RichTextInputComponent,
+      useExisting: InputRichTextComponent,
       multi: true,
     },
   ],
 })
-export class RichTextInputComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
+export class InputRichTextComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
 
   // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'webp'];
@@ -117,21 +119,12 @@ export class RichTextInputComponent implements ControlValueAccessor, OnChanges, 
 }
 
 
-function randomString(length: number): string {
-  let result           = '';
-  const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  for ( let i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-  return result;
-}
-
 
 function uploadImage(file: File): Promise<string> {
 
   let serverFilePath;
   if (this.upload && this.upload.dirName) {
-    serverFilePath = '/manufacturer-editor/' + this.upload.dirName;
+    serverFilePath = '/manufacturer-editor/' + this.upload.dirName.toLowerCase();
   } else {
     serverFilePath = '/misc-editor-files';
   }
@@ -140,12 +133,12 @@ function uploadImage(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
 
     // Check file attributes
-    if (!RichTextInputComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
-      reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + RichTextInputComponent.supportedImageTypes);
+    if (!InputRichTextComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+      reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + InputRichTextComponent.supportedImageTypes);
       return;
     }
-    if (file.size > RichTextInputComponent.maxImageSize) {
-      reject('File is too large.  Must be less than ' + Math.floor(RichTextInputComponent.maxImageSize / 1000000) + 'MB');
+    if (file.size > InputRichTextComponent.maxImageSize) {
+      reject('File is too large.  Must be less than ' + Math.floor(InputRichTextComponent.maxImageSize / 1000000) + 'MB');
       return;
     }
 
@@ -154,7 +147,7 @@ function uploadImage(file: File): Promise<string> {
     const AWSService = (window as any).AWS;
     AWSService.config.accessKeyId = SystemEnvironment.AWS_ACCESS_KEY_ID;
     AWSService.config.secretAccessKey = SystemEnvironment.AWS_SECRET_ACCESS_KEY;
-    const bucket = new AWSService.S3({params: {Bucket: 'capacitor-archive-media' + serverFilePath}});
+    const bucket = new AWSService.S3({params: {Bucket: environment.s3BucketName + serverFilePath}});
     const params = {Key: uploadName, Body: file};
     return bucket.upload(params, (error, response) => {
 

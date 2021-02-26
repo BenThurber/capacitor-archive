@@ -1,3 +1,6 @@
+
+/*Sorter*/
+
 .grid-square {
   width: 120px;
   height: 120px;
@@ -9,6 +12,12 @@
 
   border-radius: 15px;
   background-color: #009688;
+
+  cursor: grab;
+}
+
+.grid-square:active {
+  cursor: grabbing;
 }
 
 .grid > .col {
