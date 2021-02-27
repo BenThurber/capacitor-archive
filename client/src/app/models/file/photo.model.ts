@@ -1,7 +1,7 @@
-import {File} from './file.model';
+import {FileReference} from './file-reference.model';
 import {Thumbnail} from './thumbnail.model';
 
-export class Photo extends File {
+export class Photo extends FileReference {
 
   constructor(url: string, order: number) {
     super(url);

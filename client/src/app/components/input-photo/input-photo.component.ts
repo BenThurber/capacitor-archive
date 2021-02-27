@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
-import {File} from '../../models/file/file.model';
+import {FileReference} from '../../models/file/file-reference.model';
 import {Photo} from '../../models/file/photo.model';
 
 
@@ -36,7 +36,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {
   }
 
-  addPhoto(file: File): void {
+  addPhoto(file: FileReference): void {
     this.photos.push(new Photo(file.url, null));
   }
 
