@@ -12,7 +12,7 @@ import javax.persistence.*;
 @EqualsAndHashCode
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class File {
+public abstract class FileReference {
 
     @Id
     @Setter(AccessLevel.NONE)
@@ -23,5 +23,5 @@ public abstract class File {
     @Column(name = "url", length = 510, nullable = false)
     private String url;
 
-    File() {}
+    FileReference() {}
 }
