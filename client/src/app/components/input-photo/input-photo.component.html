@@ -1,5 +1,9 @@
 
-<app-file-uploader [dirPathArray]="dirPathArray" (photoUploaded)="addPhoto($event)"></app-file-uploader>
+<app-file-uploader [dirPathArray]="dirPathArray"
+                   (uploadStarted)="generateThumbnail($event)"
+                   (uploadFinished)="addPhoto($event)">
+
+</app-file-uploader>
 
 <h4 *ngIf="photos.length > 0">Drag photos into the desired order</h4>
 <div class="grid">

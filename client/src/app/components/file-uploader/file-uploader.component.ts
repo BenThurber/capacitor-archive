@@ -2,7 +2,8 @@ import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
 import {environment} from '../../../environments/environment';
-import {FileReference} from '../../models/file/file-reference.model';   // Namespace conflict
+import {StartUploadEvent} from '../../models/start-upload-event.model';
+import {FinishUploadEvent} from '../../models/finish-upload-event.model';
 
 require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;
@@ -34,7 +35,8 @@ export class FileUploaderComponent implements OnInit {
 
   @Input() dirPathArray: Array<string>;
 
-  @Output() photoUploaded = new EventEmitter<FileReference>();
+  @Output() uploadStarted = new EventEmitter<StartUploadEvent>();
+  @Output() uploadFinished = new EventEmitter<FinishUploadEvent>();
 
   files: Array<FileUpload> = [];
   currentUpload: any = null;
@@ -109,6 +111,8 @@ export class FileUploaderComponent implements OnInit {
       Body: file,
     };
 
+    this.uploadStarted.emit({serverPath: params.Bucket + '/' + params.Key, file: params.Body});
+
     // Prepare the payload
     this.currentUpload = this.bucket.upload(params).on('httpUploadProgress', (evt) => {
 
@@ -124,7 +128,7 @@ export class FileUploaderComponent implements OnInit {
         console.warn(err.message);
       } else {
         const url = data.Location;
-        this.photoUploaded.emit(new FileReference(url));
+        this.uploadFinished.emit({url, serverPath: params.Bucket + '/' + params.Key, file: params.Body});
       }
 
       this.files.shift();

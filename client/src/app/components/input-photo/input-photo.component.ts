@@ -1,7 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
-import {FileReference} from '../../models/file/file-reference.model';
 import {Photo} from '../../models/file/photo.model';
+import {Thumbnail} from '../../models/file/thumbnail.model';
+import {FinishUploadEvent} from '../../models/finish-upload-event.model';
+import * as Jimp from 'jimp';
+import {StartUploadEvent} from '../../models/start-upload-event.model';
 
 
 @Component({
@@ -13,7 +16,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
   @Input() dirPathArray: Array<string>;
 
-  photos: Array<Photo> = [];
+  photos: Record<string, Photo> = {};
+  thumbnails: Record<string, Thumbnail> = {};
 
   options: any = {
     swapThreshold: 1.0,
@@ -36,8 +40,33 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   ngOnInit(): void {
   }
 
-  addPhoto(file: FileReference): void {
-    this.photos.push(new Photo(file.url, null));
+  addPhoto(uploadedFile: FinishUploadEvent): void {
+    const photo = new Photo(uploadedFile.url, null);
+
+    const thumbnail = this.thumbnails[uploadedFile.serverPath];
+    if (thumbnail) {
+      photo.thumbnails.push(thumbnail);
+    }
+
+    this.photos[uploadedFile.serverPath] = photo;
+  }
+
+  async generateThumbnail(uploadingFile: StartUploadEvent): Promise<void> {
+
+    const arrayBuffer: ArrayBuffer = await uploadingFile.file.arrayBuffer();
+    const buffer: Buffer = Buffer.from(arrayBuffer);  // Inefficient?
+
+    Jimp.read(buffer).then(
+      fullImage => fullImage
+        .resize(128, 128) // resize
+        .quality(60) // set JPEG quality
+        .getBuffer(Jimp.MIME_JPEG, (error, scaledImage) => {
+          // ToDo Implement
+        })
+    );
+  }
+
+  uploadThumbnail(thumbnail: Blob): void {
   }
 
 
