@@ -3,7 +3,6 @@ import {ControlValueAccessor} from '@angular/forms';
 import {Photo} from '../../models/file/photo.model';
 import {Thumbnail} from '../../models/file/thumbnail.model';
 import {FinishUploadEvent} from '../../models/finish-upload-event.model';
-import * as Jimp from 'jimp';
 import {StartUploadEvent} from '../../models/start-upload-event.model';
 
 
@@ -56,14 +55,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     const arrayBuffer: ArrayBuffer = await uploadingFile.file.arrayBuffer();
     const buffer: Buffer = Buffer.from(arrayBuffer);  // Inefficient?
 
-    Jimp.read(buffer).then(
-      fullImage => fullImage
-        .resize(128, 128) // resize
-        .quality(60) // set JPEG quality
-        .getBuffer(Jimp.MIME_JPEG, (error, scaledImage) => {
-          // ToDo Implement
-        })
-    );
+
   }
 
   uploadThumbnail(thumbnail: Blob): void {
