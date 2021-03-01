@@ -107,7 +107,7 @@ export class FileUploaderComponent implements OnInit {
 
     const params = {
       Bucket: bucketDir,
-      Key: filename + '_' + randomString(10) + extension,
+      Key: filename.substring(0, 255 - (10 + 6 + extension.length)) + '_' + randomString(10) + extension,
       Body: file,
     };
 
@@ -125,7 +125,7 @@ export class FileUploaderComponent implements OnInit {
     this.currentUpload.send((err, data) => {
 
       if (err) {
-        console.warn(err.message);
+        console.warn('Could not upload photo: ' + err.message);
       } else {
         const url = data.Location;
         this.uploadFinished.emit({url, serverPath: params.Bucket + '/' + params.Key, file: params.Body});
