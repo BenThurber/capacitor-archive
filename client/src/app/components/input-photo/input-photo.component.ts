@@ -2,8 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
 import {Photo} from '../../models/file/photo.model';
 import {Thumbnail} from '../../models/file/thumbnail.model';
-import {StartedUploadEvent} from '../../models/upload-event.model';
-import {FinishedUploadEvent} from '../../models/upload-event.model';
+import {FinishedUploadEvent, StartedUploadEvent} from '../../models/upload-event.model';
+import {AwsUploadResponse} from '../../models/aws-upload-response';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
@@ -55,7 +55,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   addPhoto(uploadedFile: FinishedUploadEvent): void {
     const photo = new Photo(uploadedFile.url, null);
 
-    // Attach photo and thumbnail
+    // Attach photo to thumbnail
     const thumbnail = this.thumbnails.find(th => th.referencesPhoto(photo));
     if (thumbnail) {
       thumbnail.photo = photo;
@@ -70,46 +70,61 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
    * Generates a thumbnail, uploads it the AWS S3 server, and pushes it to this.thumbnails array
    * @param uploadingFile event from file-uploader
    */
-  addThumbnail(uploadingFile: StartedUploadEvent): void {
+  async addThumbnail(uploadingFile: StartedUploadEvent): Promise<void> {
+    try {
 
-    canvas.load( uploadingFile.file, (err1) => {
-      if (err1) {
-        console.error('Couldn\'t load file for thumbnail creation');
-        return;
+      const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, this.THUMBNAIL_QUALITY, this.THUMBNAIL_SIZE);
+
+      const thumbnail = await this.uploadThumbnail(thumbnailBlob, uploadingFile.serverPath);
+
+
+      // Attach thumbnail to photo
+      const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
+      if (photo) {
+        thumbnail.photo = photo;
+        photo.thumbnails.add(thumbnail);
       }
 
-      canvas.resize({
-        width: this.THUMBNAIL_SIZE,
-        mode: 'fit',
-      });
+      this.thumbnails.push(thumbnail);
 
-      canvas.write({format: 'jpeg', quality: this.THUMBNAIL_QUALITY}, (err2, buf) => {
-        if (err2) {
-          console.error('Couldn\'t create thumbnail');
-          return;
-        }
-
-        // 'buf' will be a binary buffer containing final image...
-        const blob = new Blob( [ buf ], { type: 'image/jpeg' } );
-
-
-        const bucketDir = uploadingFile.serverPath.slice(0, uploadingFile.serverPath.lastIndexOf('/'));
-        const filename = Thumbnail.toThumbnailUrl(uploadingFile.serverPath).split('/').pop();
-
-        this.uploadThumbnail(blob, bucketDir, filename);
-      });
-
-    });
+    } catch (err) {
+      console.error('Could not add thumbnail.', err.message && 'Message: ' + err.message);
+      return;
+    }
 
   }
+
+
+  /**
+   * Convert a Blob image file to JPG.  Supports JPEG, PNG, GIF, BMP, WebP.
+   * @param file in one of the formats JPEG, PNG, GIF, BMP, WebP
+   * @param jpegQuality a number from 0 to 100
+   * @param width the size of the final image
+   */
+  async scaleImageToSize(file: Blob, jpegQuality: number, width = 256): Promise<Blob> {
+    await canvasLoadFile(file);
+
+    canvas.resize({
+      width,
+      mode: 'fit',
+    });
+
+    const buffer = await canvasWriteFile({format: 'jpeg', quality: jpegQuality});
+
+    return new Blob( [ buffer ], { type: 'image/jpeg' } );
+  }
+
 
   /**
    * Upload thumbnail Blob to AWS S3 server.
    * @param thumbnailData Blob data of thumbnail
-   * @param bucketDir the directory in the bucket where to put the file (not including file name).  i.e. bucketName/folder1/folder2
-   * @param filename name of the file
+   * @param serverPath the directory to the file in the bucket.  i.e. bucketName/folder1/folder2/file.jpg
+   * @return a new Thumbnail object
    */
-  uploadThumbnail(thumbnailData: Blob, bucketDir: string, filename: string): void {
+  async uploadThumbnail(thumbnailData: Blob, serverPath: string): Promise<Thumbnail> {
+
+    const bucketDir = serverPath.slice(0, serverPath.lastIndexOf('/'));
+    const filename = Thumbnail.toThumbnailUrl(serverPath).split('/').pop();
 
     const params = {
       Bucket: bucketDir,
@@ -117,27 +132,11 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
       Body: thumbnailData,
     };
 
-    this.bucket.upload(params).send((err, data) => {
+    const awsUploadResponse = await awsUploadFile(this.bucket, params);
 
-      if (err) {
-        console.error('Could not upload thumbnail: ' + err.message);
-        return;
-      }
-
-      const url = data.Location;
-      const thumbnail = new Thumbnail(url, this.THUMBNAIL_SIZE);
-      this.thumbnails.push(thumbnail);
-
-      // Attach photo and thumbnail
-      const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
-      if (photo) {
-        thumbnail.photo = photo;
-        photo.thumbnails.add(thumbnail);
-      }
-
-    });
-
+    return new Thumbnail(awsUploadResponse.Location, this.THUMBNAIL_SIZE);
   }
+
 
 
   // ------ControlValueAccessor implementations------
@@ -157,4 +156,45 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     this.onTouched = fn;
   }
 
+}
+
+
+/**
+ * Wraps CanvasPlus load function to use async/await
+ * @param file the File or Blob to load into the canvas
+ */
+function canvasLoadFile(file: Blob): Promise<void> {
+  return new Promise((resolve, reject) => {
+    canvas.load( file, (err) => {
+      if (err) {reject(err); }
+      resolve();
+    });
+  });
+}
+
+/**
+ * Wraps CanvasPlus write function to use async/await
+ * @param params an object containing the configuration of the file to be created.  i.e. {format: 'jpeg', quality: 50}
+ */
+function canvasWriteFile(params: object): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    canvas.write(params, (err, buf) => {
+      if (err) {reject(err); }
+      resolve(buf);
+    });
+  });
+}
+
+/**
+ * Wraps AWS-SDK upload function to use async/await
+ * @param params an object containing the configuration of the file to be created.  {Bucket: ..., Key: ..., Body: ...}
+ * @param bucket the bucket object to upload files to.  This must be configured and passed in.
+ */
+function awsUploadFile(bucket: any, params: object): Promise<AwsUploadResponse> {
+  return new Promise((resolve, reject) => {
+    bucket.upload(params).send((err, data) => {
+      if (err) {reject(err); }
+      resolve(data);
+    });
+  });
 }
