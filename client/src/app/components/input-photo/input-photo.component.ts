@@ -20,7 +20,7 @@ const AWS = (window as any).AWS;
 export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
   readonly THUMBNAIL_SIZE = 256;
-  readonly THUMBNAIL_QUALITY = 35;
+  readonly THUMBNAIL_QUALITY = 45;
 
   @Input() dirPathArray: Array<string>;
 
@@ -63,11 +63,14 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     }
 
     this.photos.push(photo);
-    console.log('Photos', this.photos);
   }
 
 
-  generateThumbnail(uploadingFile: StartedUploadEvent): void {
+  /**
+   * Generates a thumbnail, uploads it the AWS S3 server, and pushes it to this.thumbnails array
+   * @param uploadingFile event from file-uploader
+   */
+  addThumbnail(uploadingFile: StartedUploadEvent): void {
 
     canvas.load( uploadingFile.file, (err1) => {
       if (err1) { console.warn('Couldn\'t load file for thumbnail creation'); }
@@ -91,10 +94,10 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
         document.body.appendChild( img );
 
 
-        const bucketDir = this.bucketDir(uploadingFile.serverPath);
-        const fullThumbnailFilename = this.thumbnailFilename(uploadingFile.serverPath);
+        const bucketDir = uploadingFile.serverPath.slice(0, uploadingFile.serverPath.lastIndexOf('/'));
+        const filename = Thumbnail.toThumbnailUrl(uploadingFile.serverPath).split('/').pop();
 
-        this.uploadThumbnail(blob, bucketDir, fullThumbnailFilename);
+        this.uploadThumbnail(blob, bucketDir, filename);
       });
 
     });
@@ -131,33 +134,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
           photo.thumbnails.add(thumbnail);
         }
       }
-      console.log('Thumbs', this.thumbnails);
     });
 
-  }
-
-
-  /**
-   * Splits a file name and its path.
-   * @param serverPath path to a file; directory path and file name
-   * @return the path to the file without the filename
-   */
-  bucketDir(serverPath: string): string {
-    return serverPath.slice(0, serverPath.lastIndexOf('/'));
-  }
-
-  /**
-   * Splits a file name and its path.  Adds a '_thumbnail' string to the filename before the file extension.
-   * @param serverPath path to a file; directory path and file name
-   * @return the filename
-   */
-  thumbnailFilename(serverPath: string): string {
-    // Get bucketDir and thumbnail filename
-    const dirPathArray = serverPath.split('/');
-    const fullPhotoFilename = dirPathArray.pop();
-
-    const dotIndex = fullPhotoFilename.lastIndexOf('.');
-    return fullPhotoFilename.slice(0, dotIndex) + '_thumb' + fullPhotoFilename.slice(dotIndex);
   }
 
 

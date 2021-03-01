@@ -11,15 +11,24 @@ export class Thumbnail extends FileReference {
   size: number;
   photo: Photo;
 
+  /**
+   * Takes a full or partial Photo url and converts it to a Thumbnail url.  Adds a '_thumb' substring and changes
+   * the extension to '.jpg'.
+   * @param url a url to a photo
+   * @return the url of the thumbnail
+   */
+  static toThumbnailUrl(url: string): string {
+    const dotIndex = url.lastIndexOf('.');
+    return url.slice(0, dotIndex) + '_thumb.jpg';
+  }
+
+
   referencesPhoto(photo: Photo): boolean {
     if (this.photo === photo) {
       return true;
     }
 
-    const index = this.url.lastIndexOf('_thumb');
-    const photoUrl = this.url.slice(0, index) + this.url.slice(index + 6, this.url.length);
-
-    return photoUrl === photo.url;
+    return this.url === Thumbnail.toThumbnailUrl(photo.url);
   }
 
 }

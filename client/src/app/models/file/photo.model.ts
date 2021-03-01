@@ -17,10 +17,27 @@ export class Photo extends FileReference {
       return true;
     }
 
-    const index = thumbnail.url.lastIndexOf('_thumb');
-    const photoUrl = thumbnail.url.slice(0, index) + thumbnail.url.slice(index + 6, thumbnail.url.length);
+    return thumbnail.url === Thumbnail.toThumbnailUrl(this.url);
+  }
 
-    return photoUrl === this.url;
+  /**
+   * Tries to get the url of one of its thumbnails.  If there are none if falls back on its own url.
+   * @param maxSize the largest size that the thumbnail can be
+   * @return a thumbnail url, or the photo's url
+   */
+  getThumbnailUrl(maxSize?: number): string {
+    console.log(this.thumbnails);
+    if (this.thumbnails.size === 0) {
+      return this.url;
+    }
+    let thumbnailArray = [...this.thumbnails];
+    if (maxSize) {
+      thumbnailArray = thumbnailArray.filter(th => (th.size <= maxSize));
+    }
+    const thumbnail = thumbnailArray.reduce((th1, th2) => th1.size > th2.size ? th1 : th2);
+
+    console.log(thumbnail, thumbnail?.url);
+    return thumbnail.url;
   }
 
 }

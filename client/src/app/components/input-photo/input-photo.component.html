@@ -1,6 +1,6 @@
 
 <app-file-uploader [dirPathArray]="dirPathArray"
-                   (uploadStarted)="generateThumbnail($event)"
+                   (uploadStarted)="addThumbnail($event)"
                    (uploadFinished)="addPhoto($event)">
 
 </app-file-uploader>
@@ -12,7 +12,7 @@
 
     <div *ngFor="let photo of photos"
          class="grid-square-outer item">
-      <div [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}" class="grid-square-inner"></div>
+      <div [ngStyle]="{ 'background-image': 'url(' + photo.getThumbnailUrl() + ')'}" class="grid-square-inner"></div>
     </div>
 
   </div>
