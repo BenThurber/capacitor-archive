@@ -5,14 +5,14 @@
 
 </app-file-uploader>
 
-<h4 *ngIf="photos.size > 0">Drag photos into the desired order</h4>
+<h4 *ngIf="photos.length > 0">Drag photos into the desired order</h4>
 <div class="grid">
   <div class="col" [sortablejs]="photos" [sortablejsOptions]="options">
 
     <!--ToDo fix this iteration that is causing an error-->
-    <div *ngFor="let photoKeyValuePair of photos | keyvalue"
+    <div *ngFor="let photo of photos"
          class="grid-square-outer item">
-      <div [ngStyle]="{ 'background-image': 'url(' + photoKeyValuePair.value.url + ')'}" class="grid-square-inner"></div>
+      <div [ngStyle]="{ 'background-image': 'url(' + photo.url + ')'}" class="grid-square-inner"></div>
     </div>
 
   </div>

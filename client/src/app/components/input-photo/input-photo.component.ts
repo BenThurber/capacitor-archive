@@ -2,8 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
 import {Photo} from '../../models/file/photo.model';
 import {Thumbnail} from '../../models/file/thumbnail.model';
-import {FinishUploadEvent} from '../../models/finish-upload-event.model';
-import {StartUploadEvent} from '../../models/start-upload-event.model';
+import {FinishedUploadEvent} from '../../models/finished-upload-event.model';
+import {StartedUploadEvent} from '../../models/started-upload-event.model';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
@@ -18,9 +18,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
   @Input() dirPathArray: Array<string>;
 
-  // photos: Record<string, Photo> = {};
-  photos: Map<string, Photo> = new Map<string, Photo>();
-  thumbnails: Record<string, Thumbnail> = {};
+  photos: Array<Photo> = new Array<Photo>();
+  thumbnails: Array<Thumbnail> = new Array<Thumbnail>();
 
   options: any = {
     swapThreshold: 1.0,
@@ -70,18 +69,18 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     });
   }
 
-  addPhoto(uploadedFile: FinishUploadEvent): void {
+  addPhoto(uploadedFile: FinishedUploadEvent): void {
     const photo = new Photo(uploadedFile.url, null);
 
-    const thumbnail = this.thumbnails[uploadedFile.serverPath];
+    const thumbnail = this.thumbnails.filter(thumb => thumb.url.endsWith(uploadedFile.serverPath)).pop();
     if (thumbnail) {
       photo.thumbnails.push(thumbnail);
     }
 
-    this.photos.set(uploadedFile.serverPath, photo);
+    this.photos.push(photo);
   }
 
-  async generateThumbnail(uploadingFile: StartUploadEvent): Promise<void> {
+  generateThumbnail(uploadingFile: StartedUploadEvent): void {
 
     canvas.load( uploadingFile.file, (err1) => {
       if (err1) { throw err1; }

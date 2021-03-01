@@ -2,8 +2,8 @@ import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
 import {environment} from '../../../environments/environment';
-import {StartUploadEvent} from '../../models/start-upload-event.model';
-import {FinishUploadEvent} from '../../models/finish-upload-event.model';
+import {StartedUploadEvent} from '../../models/started-upload-event.model';
+import {FinishedUploadEvent} from '../../models/finished-upload-event.model';
 
 require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;
@@ -35,8 +35,8 @@ export class FileUploaderComponent implements OnInit {
 
   @Input() dirPathArray: Array<string>;
 
-  @Output() uploadStarted = new EventEmitter<StartUploadEvent>();
-  @Output() uploadFinished = new EventEmitter<FinishUploadEvent>();
+  @Output() uploadStarted = new EventEmitter<StartedUploadEvent>();
+  @Output() uploadFinished = new EventEmitter<FinishedUploadEvent>();
 
   files: Array<FileUpload> = [];
   currentUpload: any = null;
