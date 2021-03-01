@@ -125,7 +125,7 @@ export class FileUploaderComponent implements OnInit {
     this.currentUpload.send((err, data) => {
 
       if (err) {
-        console.warn('Could not upload photo: ' + err.message);
+        console.error('Could not upload photo: ' + err.message);
       } else {
         const url = data.Location;
         this.uploadFinished.emit({url, serverPath: params.Bucket + '/' + params.Key, file: params.Body});

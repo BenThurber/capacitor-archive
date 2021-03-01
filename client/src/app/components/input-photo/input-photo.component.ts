@@ -55,7 +55,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   addPhoto(uploadedFile: FinishedUploadEvent): void {
     const photo = new Photo(uploadedFile.url, null);
 
-    // Attach to photo and thumbnail
+    // Attach photo and thumbnail
     const thumbnail = this.thumbnails.filter(th => th.referencesPhoto(photo)).pop();
     if (thumbnail) {
       thumbnail.photo = photo;
@@ -73,7 +73,10 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   addThumbnail(uploadingFile: StartedUploadEvent): void {
 
     canvas.load( uploadingFile.file, (err1) => {
-      if (err1) { console.warn('Couldn\'t load file for thumbnail creation'); }
+      if (err1) {
+        console.error('Couldn\'t load file for thumbnail creation');
+        return;
+      }
 
       canvas.resize({
         width: this.THUMBNAIL_SIZE,
@@ -81,17 +84,13 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
       });
 
       canvas.write({format: 'jpeg', quality: this.THUMBNAIL_QUALITY}, (err2, buf) => {
-        if (err2) { console.warn('Couldn\'t create thumbnail'); }
+        if (err2) {
+          console.error('Couldn\'t create thumbnail');
+          return;
+        }
 
         // 'buf' will be a binary buffer containing final image...
         const blob = new Blob( [ buf ], { type: 'image/jpeg' } );
-
-        // insert new image into DOM (Just for debugging)
-        const objectUrl = URL.createObjectURL( blob );
-        const img = new Image();
-        img.src = objectUrl;
-        img.height = 130;
-        document.body.appendChild( img );
 
 
         const bucketDir = uploadingFile.serverPath.slice(0, uploadingFile.serverPath.lastIndexOf('/'));
@@ -105,7 +104,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   }
 
   /**
-   * Upload Blob to AWS S3 server.
+   * Upload thumbnail Blob to AWS S3 server.
    * @param thumbnailData Blob data of thumbnail
    * @param bucketDir the directory in the bucket where to put the file (not including file name).  i.e. bucketName/folder1/folder2
    * @param filename name of the file
@@ -121,19 +120,21 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     this.bucket.upload(params).send((err, data) => {
 
       if (err) {
-        console.warn('Could not upload thumbnail: ' + err.message);
-      } else {
-        const url = data.Location;
-        const thumbnail = new Thumbnail(url, this.THUMBNAIL_SIZE);
-        this.thumbnails.push(thumbnail);
-
-        // Attach to photo and thumbnail
-        const photo = this.photos.filter(p => p.referencesThumbnail(thumbnail)).pop();
-        if (photo) {
-          thumbnail.photo = photo;
-          photo.thumbnails.add(thumbnail);
-        }
+        console.error('Could not upload thumbnail: ' + err.message);
+        return;
       }
+
+      const url = data.Location;
+      const thumbnail = new Thumbnail(url, this.THUMBNAIL_SIZE);
+      this.thumbnails.push(thumbnail);
+
+      // Attach photo and thumbnail
+      const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
+      if (photo) {
+        thumbnail.photo = photo;
+        photo.thumbnails.add(thumbnail);
+      }
+
     });
 
   }
@@ -142,6 +143,9 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   // ------ControlValueAccessor implementations------
 
   writeValue(photos: Array<Photo>): void {
+    if (photos) {
+      this.photos = [...photos];
+    }
     this.onChange(photos);
   }
 

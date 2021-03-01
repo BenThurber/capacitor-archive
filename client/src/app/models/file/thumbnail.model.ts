@@ -22,13 +22,18 @@ export class Thumbnail extends FileReference {
     return url.slice(0, dotIndex) + '_thumb.jpg';
   }
 
-
+  /**
+   * Determines if this thumbnail can be attached to the given photo
+   * @param photo a photo object to test
+   */
   referencesPhoto(photo: Photo): boolean {
     if (this.photo === photo) {
       return true;
     }
 
-    return this.url === Thumbnail.toThumbnailUrl(photo.url);
+    // Compares URLs.  Needs to replace '+' with '%20' and decode URLs (for some reason decodeURIComponent doesn't decode spaces!?)
+    return decodeURIComponent(this.url.replace(/\+/g, '%20')) ===
+      decodeURIComponent(Thumbnail.toThumbnailUrl(photo.url.replace(/\+/g, '%20')));
   }
 
 }
