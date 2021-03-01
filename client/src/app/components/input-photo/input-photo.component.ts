@@ -5,6 +5,9 @@ import {Thumbnail} from '../../models/file/thumbnail.model';
 import {FinishUploadEvent} from '../../models/finish-upload-event.model';
 import {StartUploadEvent} from '../../models/start-upload-event.model';
 
+require('src/app/utilities/canvas-plus.js');
+const canvas = new (window as any).CanvasPlus();
+
 
 @Component({
   selector: 'app-input-photo',
@@ -15,7 +18,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
   @Input() dirPathArray: Array<string>;
 
-  photos: Record<string, Photo> = {};
+  // photos: Record<string, Photo> = {};
+  photos: Map<string, Photo> = new Map<string, Photo>();
   thumbnails: Record<string, Thumbnail> = {};
 
   options: any = {
@@ -37,6 +41,33 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   constructor() { }
 
   ngOnInit(): void {
+    console.log('canvas:', canvas);
+
+    canvas.load( '../../../assets/paper-labels.webp', (err1) => {
+      if (err1) { throw err1; }
+
+      canvas.resize({
+        width: 256,
+        mode: 'fit',
+      });
+
+      canvas.write({format: 'jpeg', quality: 35}, (err2, buf) => {
+        if (err2) { throw err2; }
+
+        // 'buf' will be a binary buffer containing final image...
+        const blob = new Blob( [ buf ], { type: 'image/jpeg' } );
+        const objectUrl = URL.createObjectURL( blob );
+
+        // insert new image into DOM
+        const img = new Image();
+        img.src = objectUrl;
+        img.width = 150;
+        console.log(img);
+        console.log(blob);
+        document.body.appendChild( img );
+      });
+
+    });
   }
 
   addPhoto(uploadedFile: FinishUploadEvent): void {
@@ -47,14 +78,35 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
       photo.thumbnails.push(thumbnail);
     }
 
-    this.photos[uploadedFile.serverPath] = photo;
+    this.photos.set(uploadedFile.serverPath, photo);
   }
 
   async generateThumbnail(uploadingFile: StartUploadEvent): Promise<void> {
 
-    const arrayBuffer: ArrayBuffer = await uploadingFile.file.arrayBuffer();
-    const buffer: Buffer = Buffer.from(arrayBuffer);  // Inefficient?
+    canvas.load( uploadingFile.file, (err1) => {
+      if (err1) { throw err1; }
 
+      canvas.resize({
+        width: 256,
+        mode: 'fit',
+      });
+
+      canvas.write({format: 'jpeg', quality: 35}, (err2, buf) => {
+        if (err2) { throw err2; }
+
+        // 'buf' will be a binary buffer containing final image...
+        const blob = new Blob( [ buf ], { type: 'image/jpeg' } );
+        const objectUrl = URL.createObjectURL( blob );
+
+        // insert new image into DOM
+        const img = new Image();
+        img.src = objectUrl;
+        img.height = 130;
+
+        document.body.appendChild( img );
+      });
+
+    });
 
   }
 
