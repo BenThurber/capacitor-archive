@@ -2,8 +2,8 @@ import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
 import {environment} from '../../../environments/environment';
-import {StartedUploadEvent} from '../../models/started-upload-event.model';
-import {FinishedUploadEvent} from '../../models/finished-upload-event.model';
+import {StartedUploadEvent} from '../../models/upload-event.model';
+import {FinishedUploadEvent} from '../../models/upload-event.model';
 
 require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;

@@ -2,8 +2,8 @@ import {Component, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor} from '@angular/forms';
 import {Photo} from '../../models/file/photo.model';
 import {Thumbnail} from '../../models/file/thumbnail.model';
-import {FinishedUploadEvent} from '../../models/finished-upload-event.model';
-import {StartedUploadEvent} from '../../models/started-upload-event.model';
+import {StartedUploadEvent} from '../../models/upload-event.model';
+import {FinishedUploadEvent} from '../../models/upload-event.model';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
