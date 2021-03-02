@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Thumbnail extends File {
+public class Thumbnail extends FileReference {
 
     @Column(name = "size", nullable = false)
     private Integer size;
