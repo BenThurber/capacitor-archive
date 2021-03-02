@@ -16,6 +16,9 @@ header {
   background-image: url('../../../assets/navbar-background.jpg');
   background-color: #844b13;
   background-size: cover;
+
+  margin-bottom: 15px;
+  margin-left: 6px;
 }
 
 .logo {
@@ -27,7 +30,7 @@ header {
 }
 
 .title__nav__links {
-  padding: 0px 20px;
+  padding: 0 20px;
   text-align: left;
 }
 
