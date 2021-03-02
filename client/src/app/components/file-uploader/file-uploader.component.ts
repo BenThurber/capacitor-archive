@@ -111,7 +111,7 @@ export class FileUploaderComponent implements OnInit {
       Body: file,
     };
 
-    this.uploadStarted.emit({serverPath: params.Bucket + '/' + params.Key, file: params.Body});
+    this.uploadStarted.emit({awsS3BucketDir: params.Bucket, filename: params.Key, file: params.Body});
 
     // Prepare the payload
     this.currentUpload = this.bucket.upload(params).on('httpUploadProgress', (evt) => {
@@ -128,7 +128,7 @@ export class FileUploaderComponent implements OnInit {
         console.error('Could not upload photo: ' + err.message);
       } else {
         const url = data.Location;
-        this.uploadFinished.emit({url, serverPath: params.Bucket + '/' + params.Key, file: params.Body});
+        this.uploadFinished.emit({url, awsS3BucketDir: params.Bucket, filename: params.Key});
       }
 
       this.files.shift();

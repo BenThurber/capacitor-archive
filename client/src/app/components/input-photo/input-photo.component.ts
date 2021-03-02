@@ -75,7 +75,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
       const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, this.THUMBNAIL_QUALITY, this.THUMBNAIL_SIZE);
 
-      const thumbnail = await this.uploadThumbnail(thumbnailBlob, uploadingFile.serverPath);
+      const thumbnailFilename = Thumbnail.toThumbnailUrl(uploadingFile.filename);
+      const thumbnail = await this.uploadFile(thumbnailBlob, uploadingFile.awsS3BucketDir, thumbnailFilename);
 
 
       // Attach thumbnail to photo
@@ -116,20 +117,19 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
 
   /**
-   * Upload thumbnail Blob to AWS S3 server.
-   * @param thumbnailData Blob data of thumbnail
-   * @param serverPath the directory to the file in the bucket.  i.e. bucketName/folder1/folder2/file.jpg
+   * Upload Blob to AWS S3 server.
+   * @param blob Blob data of file
+   * @param awsS3BucketDir  the directory in the bucket where to put the file (not including file name).
+   * i.e. bucketName/folder1/folder2
+   * @param filename what to name the file on the server
    * @return a new Thumbnail object
    */
-  async uploadThumbnail(thumbnailData: Blob, serverPath: string): Promise<Thumbnail> {
-
-    const bucketDir = serverPath.slice(0, serverPath.lastIndexOf('/'));
-    const filename = Thumbnail.toThumbnailUrl(serverPath).split('/').pop();
+  async uploadFile(blob: Blob, awsS3BucketDir: string, filename: string): Promise<Thumbnail> {
 
     const params = {
-      Bucket: bucketDir,
+      Bucket: awsS3BucketDir,
       Key: filename,
-      Body: thumbnailData,
+      Body: blob,
     };
 
     const awsUploadResponse = await awsUploadFile(this.bucket, params);

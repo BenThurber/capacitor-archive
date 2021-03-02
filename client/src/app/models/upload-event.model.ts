@@ -1,12 +1,15 @@
 export interface UploadEvent {
-  /** Path to the file from the server including the filename */
-  serverPath: string;
+  /** Path on the server.  i.e. bucketName/folder1/folder2 */
+  awsS3BucketDir: string;
 
-  file: File;
+  /** Name of the file on the server */
+  filename: string;
 }
 
 
 export interface StartedUploadEvent extends UploadEvent {
+  /** The file on the user's file system */
+  file: File;
 }
 
 
