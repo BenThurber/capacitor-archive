@@ -1,5 +1,5 @@
 
-export class File {
+export class FileReference {
 
   constructor(url: string) {
     this.url = url;

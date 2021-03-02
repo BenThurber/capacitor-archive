@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Photo extends File {
+public class Photo extends FileReference {
 
     @Column(name = "order")
     private Integer order;
