@@ -4,7 +4,7 @@
   display: inline-grid;
   grid-template-columns: auto 5% 220px 0%;
   grid-template-rows: 5% auto auto auto 5%;
-  margin-top: 10px
+  margin-top: 10px;
 }
 
 .edit__button {
@@ -36,6 +36,7 @@
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   padding: 20px 7px;
+  margin-bottom: 10px;
 }
 
 #all-types-box h3 {
