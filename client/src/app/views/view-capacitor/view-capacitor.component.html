@@ -14,7 +14,7 @@
     </div>
 
 
-    <div id="type-box" class="info__box">
+    <div id="type-box" class="info__box minor__shadow">
       <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
@@ -50,7 +50,7 @@
     </div>
 
 
-    <div id="unit-box" class="info__box">
+    <div id="unit-box" class="info__box minor__shadow">
       <span id="identifier" *ngIf="capacitorUnit && capacitorUnit.identifier">{{capacitorUnit.identifier}}</span>
       <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
 
@@ -71,7 +71,7 @@
     </div>
 
 
-    <div id="similar-units-box" class="info__box">
+    <div id="similar-units-box" class="info__box minor__shadow">
       <strong><label for="similar-menu">Similar Capacitors</label></strong><br>
       <select id="similar-menu" size="8" (change)="similarMenuChanged($event.target.value)" #similarMenu>
 
