@@ -2,7 +2,8 @@ import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
 import {SystemEnvironment} from '../../models/system-environment';
 import {randomString} from '../../utilities/text-utils';
 import {environment} from '../../../environments/environment';
-import {File as FileMetaData} from '../../models/file/file.model';   // Namespace conflict
+import {StartedUploadEvent} from '../../models/upload-event.model';
+import {FinishedUploadEvent} from '../../models/upload-event.model';
 
 require('aws-sdk/dist/aws-sdk');
 const AWS = (window as any).AWS;
@@ -34,7 +35,8 @@ export class FileUploaderComponent implements OnInit {
 
   @Input() dirPathArray: Array<string>;
 
-  @Output() photoUploaded = new EventEmitter<FileMetaData>();
+  @Output() uploadStarted = new EventEmitter<StartedUploadEvent>();
+  @Output() uploadFinished = new EventEmitter<FinishedUploadEvent>();
 
   files: Array<FileUpload> = [];
   currentUpload: any = null;
@@ -105,9 +107,11 @@ export class FileUploaderComponent implements OnInit {
 
     const params = {
       Bucket: bucketDir,
-      Key: filename + '_' + randomString(10) + extension,
+      Key: filename.substring(0, 255 - (10 + 6 + extension.length)) + '_' + randomString(10) + extension,
       Body: file,
     };
+
+    this.uploadStarted.emit({awsS3BucketDir: params.Bucket, filename: params.Key, file: params.Body});
 
     // Prepare the payload
     this.currentUpload = this.bucket.upload(params).on('httpUploadProgress', (evt) => {
@@ -121,10 +125,10 @@ export class FileUploaderComponent implements OnInit {
     this.currentUpload.send((err, data) => {
 
       if (err) {
-        console.warn(err.message);
+        console.error('Could not upload photo: ' + err.message);
       } else {
         const url = data.Location;
-        this.photoUploaded.emit(new FileMetaData(url));
+        this.uploadFinished.emit({url, awsS3BucketDir: params.Bucket, filename: params.Key});
       }
 
       this.files.shift();
