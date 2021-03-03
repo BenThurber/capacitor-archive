@@ -12,7 +12,9 @@
 
     <div *ngFor="let photo of photos"
          class="grid-square-outer item">
-      <div [ngStyle]="{ 'background-image': 'url(' + photo.getThumbnailUrl() + ')'}" class="grid-square-inner"></div>
+      <div [ngStyle]="{ 'background-image': 'url(' + photo.getThumbnailUrl() + ')'}" class="grid-square-inner">
+        <div class="circle" title="Delete"></div>
+      </div>
     </div>
 
   </div>
