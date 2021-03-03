@@ -127,3 +127,11 @@ a:hover {
   color: #c6b51b;
   text-decoration-color: #c6b51b
 }
+
+.major__shadow {
+  box-shadow: -2.5px 4px 8px;
+}
+
+.minor__shadow {
+  box-shadow: -2px 2px 3.5px dimgrey;
+}
