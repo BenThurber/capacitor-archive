@@ -10,9 +10,23 @@
   <div class="col" [sortablejs]="photos" [sortablejsOptions]="options">
 
 
-    <div *ngFor="let photo of photos"
+    <div *ngFor="let photo of photos; let i = index;"
          class="grid-square-outer item">
-      <div [ngStyle]="{ 'background-image': 'url(' + photo.getThumbnailUrl() + ')'}" class="grid-square-inner"></div>
+      <div [ngStyle]="{ 'background-image': 'url(' + photo.getThumbnailUrl() + ')'}" class="grid-square-inner">
+        <div class="circle" title="Delete" (click)="modalService.open(i.toString())"></div>
+      </div>
+
+      <jw-modal [id]="i.toString()">
+
+        <p>
+          Are you sure you want to delete the photo<br>
+          <strong>"{{photo.url.slice(photo.url.lastIndexOf('/') + 1, photo.url.length)}}"?</strong>
+        </p>
+
+        <button (click)="deletePhoto(photo)">Yes</button>
+        <button (click)="modalService.close(i.toString())">No</button>
+      </jw-modal>
+
     </div>
 
   </div>

@@ -4,6 +4,7 @@ import {Photo} from '../../models/file/photo.model';
 import {Thumbnail} from '../../models/file/thumbnail.model';
 import {FinishedUploadEvent, StartedUploadEvent} from '../../models/upload-event.model';
 import {AwsUploadResponse} from '../../models/aws-upload-response';
+import {ModalService} from '../modal';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
@@ -45,7 +46,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   onTouched = () => {};
 
 
-  constructor() { }
+  constructor(private modalService: ModalService) { }
 
   ngOnInit(): void {
     this.bucket = new AWS.S3({params: {}});
@@ -135,6 +136,12 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     const awsUploadResponse = await awsUploadFile(this.bucket, params);
 
     return new Thumbnail(awsUploadResponse.Location, this.THUMBNAIL_SIZE);
+  }
+
+
+  deletePhoto(photo: Photo): void {
+    const index = this.photos.findIndex(p => p === photo);
+    this.photos.splice(index, 1);
   }
 
 
