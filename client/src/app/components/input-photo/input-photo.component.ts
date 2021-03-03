@@ -25,7 +25,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
   @Input() dirPathArray: Array<string>;
 
-  public photos: Array<Photo> = [new Photo('Capacitor Photo.jpg', null)];
+  public photos: Array<Photo> = [];
   private thumbnails: Array<Thumbnail> = [];
 
   bucket: any;
