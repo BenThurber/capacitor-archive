@@ -36,6 +36,7 @@ import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.co
 import {SortablejsModule} from 'ngx-sortablejs';
 import { InputPhotoComponent } from './components/input-photo/input-photo.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
+import {ModalModule} from './components/modal';
 
 
 @NgModule({
@@ -78,6 +79,7 @@ import { FileUploaderComponent } from './components/file-uploader/file-uploader.
     MatTabsModule,
     MatExpansionModule,
     SortablejsModule.forRoot({ animation: 150 }),
+    ModalModule,
   ],
   providers: [RestService, QuillEditorComponent],
   bootstrap: [AppComponent],
