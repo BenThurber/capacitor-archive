@@ -20,10 +20,10 @@
 
         <p>
           Are you sure you want to delete the photo<br>
-          <strong>"{{photo.url.slice(photo.url.lastIndexOf('/') + 1, photo.url.length)}}"?</strong>
+          "{{photo.url.slice(photo.url.lastIndexOf('/') + 1, photo.url.length)}}"?
         </p>
 
-        <button (click)="deletePhoto(photo)">Yes</button>
+        <button (click)="modalService.close(i.toString()); deletePhoto(photo)">Yes</button>
         <button (click)="modalService.close(i.toString())">No</button>
       </jw-modal>
 
