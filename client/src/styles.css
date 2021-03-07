@@ -34,7 +34,7 @@ a:visited {
 }
 
 a:hover {
-  color: darkgoldenrod;
+  color: #C9950B;
 }
 
 .content {
@@ -50,8 +50,9 @@ a:hover {
 .nav__links li a {
   font-family: "Lilita One", serif;
   font-weight: 500;
-  font-size: 16px;
-  color: #bc8b0b;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: #C9950B;
   text-decoration: none;
   transition: all 0.3s ease 0s;
 }
@@ -70,7 +71,7 @@ a:hover {
 }
 
 .nav__link:hover {
-  color: #bc8b0b;
+  color: #C9950B;
 }
 
 .is-invalid {
