@@ -15,7 +15,10 @@ public class ThumbnailRequest extends FileReferenceRequest {
 
     @Min(value = 0, message = "thumbnail size must be non-negative")
     @JsonProperty("size")
-    private Short size;
+    private Integer size;
+
+    @JsonProperty("photo")
+    private PhotoRequest photo;
 
     public ThumbnailRequest() {
         super();
