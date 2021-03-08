@@ -1,7 +1,6 @@
 package com.example.demo.payload.response;
 
 import com.example.demo.model.Photo;
-import com.example.demo.model.Thumbnail;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -9,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -28,6 +28,9 @@ public class PhotoResponse extends FileReferenceResponse {
         super(photo);
         setOrder(photo.getOrder());
         setCapacitorUnitValue(photo.getCapacitorUnit().getValue());
+
+        // Convert Thumbnail List to ThumbnailResponse list
+        setThumbnails(photo.getThumbnails().stream().map(ThumbnailResponse::new).collect(Collectors.toList()));
     }
 
     public PhotoResponse() {
