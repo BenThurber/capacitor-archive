@@ -40,8 +40,7 @@ public class CapacitorUnitRequest {
     @JsonProperty("companyName")
     private String companyName;
 
-//  ToDo add this back in when front end is ready to add photos when creating/editing capacitor units
-//    @NotNull(message = "Photo Requests can not be null, must at least be an empty array\"")
+    @NotNull(message = "Photo Requests can not be null, must at least be an empty array\"")
     @JsonProperty("photos")
     private List<PhotoRequest> photos = new ArrayList<>();
 
