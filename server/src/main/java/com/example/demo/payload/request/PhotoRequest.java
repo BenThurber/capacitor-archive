@@ -1,6 +1,5 @@
 package com.example.demo.payload.request;
 
-import com.example.demo.model.Thumbnail;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -20,7 +19,7 @@ public class PhotoRequest extends FileReferenceRequest {
 
     @NotNull(message = "Photo Request thumbnails can not be null, must at least be an empty array")
     @JsonProperty("thumbnails")
-    private List<Thumbnail> thumbnails = new ArrayList<>();
+    private List<ThumbnailRequest> thumbnails = new ArrayList<>();
 
     public PhotoRequest() {
         super();

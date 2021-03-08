@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.payload.request.FileReferenceRequest;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -22,6 +23,11 @@ public abstract class FileReference {
 
     @Column(name = "url", length = 510, nullable = false)
     private String url;
+
+    FileReference(FileReferenceRequest fileReferenceRequest) {
+        this.id = fileReferenceRequest.getId();
+        setUrl(fileReferenceRequest.getUrl());
+    }
 
     FileReference() {}
 }
