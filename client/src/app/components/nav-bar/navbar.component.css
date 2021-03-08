@@ -19,6 +19,7 @@ header {
 
   margin-bottom: 15px;
   margin-left: 6px;
+  overflow: hidden;
 }
 
 .logo {
@@ -26,7 +27,7 @@ header {
   margin: -20px -20px;
 }
 .banner {
-  margin-left: 5%;
+  margin-left: 8px;
 }
 
 .title__nav__links {

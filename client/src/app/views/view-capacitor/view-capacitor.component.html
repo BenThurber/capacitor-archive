@@ -54,14 +54,15 @@
       <span id="identifier" *ngIf="capacitorUnit && capacitorUnit.identifier">{{capacitorUnit.identifier}}</span>
       <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
 
-      <!--This code could be improved.-->
-      Capacitance: <strong>
-      {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true).split(' ')[0]}}</strong>
-      <strong style="font-family: 'Courier New', serif; font-size: 16px; margin-left: -4px">
-        {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true).split(' ')[1]}}</strong><br>
+      Capacitance:
+      <span style="white-space: nowrap">
+        {{capacitorUnit && formattedCapacitance(capacitorUnit.capacitance, true)}}
+      </span><br>
+
       <ng-container *ngIf="capacitorUnit && capacitorUnit.voltage">
         Voltage: <strong>{{capacitorUnit.voltage}}V</strong><br>
       </ng-container>
+
       <ng-container *ngIf="capacitorUnit && capacitorUnit.notes">
         Notes:
         <span class="block__description">{{capacitorUnit.notes}}</span>
