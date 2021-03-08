@@ -108,7 +108,7 @@ export class CapacitorFormComponent implements OnInit {
         voltage: ['', [Validators.pattern(integerPattern)]],
         identifier: ['', [Validators.maxLength(12)]],
         notes: ['', []],
-        photos: ['', []],
+        photos: [new Array<Photo>(), []],
       }),
       captcha: ['', Validators.required],
     });
