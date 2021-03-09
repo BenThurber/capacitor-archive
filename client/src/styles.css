@@ -2,14 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 @import '~quill/dist/quill.core.css';
 @import '~quill/dist/quill.snow.css';
-@font-face {
-  font-family: "TELETYPE 1945";
-  src: url("assets/TELETYPE1945-1985.ttf");
-}
-@font-face {
-  font-family: "Teletype Regular";
-  src: url("assets/teletype.ttf");
-}
+
 
 body {
   background-color: #e8e8e8;
@@ -52,7 +45,7 @@ a:hover {
   font-weight: 500;
   font-size: 20px;
   letter-spacing: 0.5px;
-  color: #dea80a;
+  color: #e7b10a;
   text-decoration: none;
   transition: all 0.3s ease 0s;
 }
@@ -71,7 +64,7 @@ a:hover {
 }
 
 .nav__link:hover {
-  color: #C9950B;
+  color: #e7b10a;
 }
 
 .is-invalid {
@@ -96,7 +89,8 @@ a:hover {
 }
 
 .loading {
-  font-family: "TELETYPE 1945", "Courier", serif;
+  font-family: "Courier", serif;
+  font-weight: bold;
 }
 
 .info__box {
@@ -105,8 +99,9 @@ a:hover {
   padding: 14px 23px;
   margin-bottom: 10px;
 
-  font-family: "TELETYPE 1945", "Courier", serif;
-  font-size: 15px;
+  font-family: Courier, serif;
+  font-weight: bold;
+  font-size: 19px;
   line-height: 30px;
 }
 
