@@ -1,5 +1,6 @@
 package com.example.demo.model;
 
+import com.example.demo.payload.request.PhotoRequest;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,6 +24,12 @@ public class Photo extends FileReference {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "photo", cascade = CascadeType.ALL)
     private List<Thumbnail> thumbnails = new ArrayList<>();
+
+
+    public Photo(PhotoRequest photoRequest) {
+        super(photoRequest);
+        setOrder(photoRequest.getOrder());
+    }
 
     public Photo() {}
 
