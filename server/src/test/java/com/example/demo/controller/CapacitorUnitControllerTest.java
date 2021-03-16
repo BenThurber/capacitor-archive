@@ -1,13 +1,11 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.CapacitorType;
-import com.example.demo.model.CapacitorUnit;
-import com.example.demo.model.Construction;
-import com.example.demo.model.Manufacturer;
+import com.example.demo.model.*;
 import com.example.demo.payload.response.CapacitorUnitResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
 import com.example.demo.repository.ManufacturerRepository;
+import com.example.demo.repository.PhotoRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -50,12 +48,15 @@ class CapacitorUnitControllerTest {
     private CapacitorTypeRepository capacitorTypeRepository;
     @MockBean
     private CapacitorUnitRepository capacitorUnitRepository;
+    @MockBean
+    private PhotoRepository photoRepository;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private final List<Manufacturer> manufacturerMockTable = new ArrayList<>();
     private final List<CapacitorType> capacitorTypeMockTable = new ArrayList<>();
     private final List<CapacitorUnit> capacitorUnitMockTable = new ArrayList<>();
+    private final List<Photo> photoMockTable = new ArrayList<>();
 
     private static Long manufacturerCount = 0L;
     private static final Long DEFAULT_MANUFACTURER_ID = 1L;
@@ -63,6 +64,8 @@ class CapacitorUnitControllerTest {
     private static final Long DEFAULT_CAPACITOR_TYPE_ID = 1L;
     private static Long capacitorUnitCount = 0L;
     private static final Long DEFAULT_CAPACITOR_UNIT_ID = 1L;
+    private static Long photoCount = 0L;
+    private static final Long DEFAULT_PHOTO_ID = 1L;
 
 
     private Manufacturer manufacturer1;
@@ -267,6 +270,15 @@ class CapacitorUnitControllerTest {
             ).collect(Collectors.toList());
         });
 
+
+        //---- Photos ----
+
+        when(photoRepository.save(Mockito.any(Photo.class))).thenAnswer(i -> {
+            Photo photo = i.getArgument(0);
+            this.photoMockTable.add(photo);
+            return photo;
+        });
+
     }
 
 
@@ -278,6 +290,8 @@ class CapacitorUnitControllerTest {
         capacitorTypeCount = 0L;
         capacitorUnitMockTable.clear();
         capacitorUnitCount = 0L;
+        photoMockTable.clear();
+        photoCount = 0L;
     }
 
 
@@ -289,7 +303,17 @@ class CapacitorUnitControllerTest {
             "identifier", "35b",
             "notes", "A popular capacitor",
             "typeName", "sealdtite",
-            "companyName", "Solar"
+            "companyName", "Solar",
+            "photos", new Object[]{
+                    JsonConverter.toMap(
+                            "order", 1,
+                            "url", "www.example.com/images/example.jpg"
+                    ),
+                    JsonConverter.toMap(
+                            "order", 2,
+                            "url", "www.example.com/images/foobar.jpg"
+                    )
+            }
     );
 
     /**
@@ -308,8 +332,13 @@ class CapacitorUnitControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isCreated()).andReturn();
 
+        assertEquals(50000, capacitorUnitMockTable.get(0).getCapacitance());
         assertEquals("35b", capacitorUnitMockTable.get(0).getIdentifier());
         assertEquals(400, capacitorUnitMockTable.get(0).getVoltage());
+        assertEquals(2, capacitorUnitMockTable.get(0).getPhotos().size());
+        assertEquals("www.example.com/images/example.jpg",
+                capacitorUnitMockTable.get(0).getPhotos().get(0).getUrl());
+
     }
 
     private final String newCapacitorUnitNullableValuesJson = JsonConverter.toJson(true,
@@ -509,9 +538,6 @@ class CapacitorUnitControllerTest {
             "typeName", "sealdtite",
             "companyName", "Solar"
     );
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_onlyEditNotes_success() throws Exception {
         manufacturerRepository.save(manufacturer2);
@@ -539,9 +565,6 @@ class CapacitorUnitControllerTest {
             "typeName", "sealdtite",
             "companyName", "Solar"
     );
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_capacitanceOnly_success() throws Exception {
         manufacturerRepository.save(manufacturer2);
@@ -570,9 +593,6 @@ class CapacitorUnitControllerTest {
             "typeName", "sealdtite",
             "companyName", "Solar"
     );
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_capacitanceVoltageId_success() throws Exception {
         manufacturerRepository.save(manufacturer2);
@@ -595,9 +615,6 @@ class CapacitorUnitControllerTest {
     }
 
 
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_notFound_unsuccessful() throws Exception {
         manufacturerRepository.save(manufacturer2);
