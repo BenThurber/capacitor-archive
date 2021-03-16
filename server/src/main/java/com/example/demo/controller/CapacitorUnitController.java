@@ -2,10 +2,12 @@ package com.example.demo.controller;
 
 import com.example.demo.model.CapacitorType;
 import com.example.demo.model.CapacitorUnit;
+import com.example.demo.model.Photo;
 import com.example.demo.payload.request.CapacitorUnitRequest;
 import com.example.demo.payload.response.CapacitorUnitResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
+import com.example.demo.repository.PhotoRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,11 +27,14 @@ public class CapacitorUnitController {
 
     private final CapacitorTypeRepository capacitorTypeRepository;
     private final CapacitorUnitRepository capacitorUnitRepository;
+    private final PhotoRepository photoRepository;
 
     CapacitorUnitController(CapacitorTypeRepository capacitorTypeRepository,
-                            CapacitorUnitRepository capacitorUnitRepository) {
+                            CapacitorUnitRepository capacitorUnitRepository,
+                            PhotoRepository photoRepository) {
         this.capacitorTypeRepository = capacitorTypeRepository;
         this.capacitorUnitRepository = capacitorUnitRepository;
+        this.photoRepository = photoRepository;
     }
 
 
@@ -66,6 +71,11 @@ public class CapacitorUnitController {
                             newCapacitorUnit.getCapacitorType().getTypeName())
             );
         }
+
+        List<Photo> photos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toList());
+        photos.forEach(photo -> photo.setCapacitorUnit(newCapacitorUnit));
+        newCapacitorUnit.setPhotos(photos);
+        this.photoRepository.saveAll(photos);
 
         response.setStatus(HttpServletResponse.SC_CREATED);
         return new CapacitorUnitResponse(newCapacitorUnit);
