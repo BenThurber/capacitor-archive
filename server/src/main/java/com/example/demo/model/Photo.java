@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -29,6 +30,8 @@ public class Photo extends FileReference {
     public Photo(PhotoRequest photoRequest) {
         super(photoRequest);
         setOrder(photoRequest.getOrder());
+        setThumbnails(photoRequest.getThumbnails().stream().map(Thumbnail::new).collect(Collectors.toList()));
+        thumbnails.forEach(thumbnail -> thumbnail.setPhoto(this));
     }
 
     public Photo() {}
