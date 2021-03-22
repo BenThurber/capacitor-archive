@@ -79,8 +79,7 @@ public class CapacitorUnitController {
         }
 
         try {
-            List<Photo> photos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toList());
-            savePhotosAndThumbnails(newCapacitorUnit, photos);
+            savePhotosAndThumbnails(newCapacitorUnit, capacitorUnitRequest);
         } catch (Exception e) {
             // If there is an error with photos, un-save the capacitor unit
             this.capacitorUnitRepository.delete(newCapacitorUnit);
@@ -95,11 +94,13 @@ public class CapacitorUnitController {
     }
 
     /**
-     * Helper function that saves all Thumbnails and Photos to the database and attaches them to parentCapacitorUnit
+     * Helper function to save all Thumbnails and Photos to the database and attach them to parentCapacitorUnit
      * @param parentCapacitorUnit the CapacitorUnit to attach photos to
-     * @param photos photos with thumbnails
+     * @param capacitorUnitRequest the request with photoRequests
      */
-    private void savePhotosAndThumbnails(CapacitorUnit parentCapacitorUnit, List<Photo> photos) {
+    private void savePhotosAndThumbnails(CapacitorUnit parentCapacitorUnit, CapacitorUnitRequest capacitorUnitRequest) {
+        List<Photo> photos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toList());
+
         photos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
         parentCapacitorUnit.setPhotos(photos);
         this.photoRepository.saveAll(photos);
@@ -131,6 +132,7 @@ public class CapacitorUnitController {
         }
 
         capacitorUnit.edit(capacitorUnitRequest);
+        savePhotosAndThumbnails(capacitorUnit, capacitorUnitRequest);
 
         capacitorUnitRepository.save(capacitorUnit);
         response.setStatus(HttpServletResponse.SC_OK);
