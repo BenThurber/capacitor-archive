@@ -68,7 +68,8 @@ public class CapacitorUnit {
     @JoinColumn(name = "capacitor_type_id", nullable = false)
     private CapacitorType capacitorType;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorUnit", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorUnit", cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH})  // All except persist
     private List<Photo> photos = new ArrayList<>();
 
 
