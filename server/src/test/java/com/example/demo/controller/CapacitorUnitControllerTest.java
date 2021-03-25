@@ -363,7 +363,7 @@ class CapacitorUnitControllerTest {
         assertEquals("35b", capacitorUnitMockTable.get(0).getIdentifier());
         assertEquals(400, capacitorUnitMockTable.get(0).getVoltage());
         assertEquals(2, capacitorUnitMockTable.get(0).getPhotos().size());
-        assertEquals(1, capacitorUnitMockTable.get(0).getPhotos().get(0).getThumbnails().size());
+        assertEquals(1, capacitorUnitMockTable.get(0).getPhotos().iterator().next().getThumbnails().size());
 
     }
 

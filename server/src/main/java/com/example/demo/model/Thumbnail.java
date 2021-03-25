@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.ThumbnailRequest;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,6 +9,7 @@ import javax.persistence.*;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true, exclude = {"photo"})
 @Entity
 public class Thumbnail extends FileReference {
 
