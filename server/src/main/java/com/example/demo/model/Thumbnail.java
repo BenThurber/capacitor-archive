@@ -9,7 +9,6 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true)
 @Entity
 public class Thumbnail extends FileReference {
 

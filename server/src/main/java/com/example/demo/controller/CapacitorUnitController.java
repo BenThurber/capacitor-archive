@@ -16,7 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -93,21 +96,6 @@ public class CapacitorUnitController {
         return new CapacitorUnitResponse(newCapacitorUnit);
     }
 
-    /**
-     * Helper function to save all Thumbnails and Photos to the database and attach them to parentCapacitorUnit
-     * @param parentCapacitorUnit the CapacitorUnit to attach photos to
-     * @param capacitorUnitRequest the request with photoRequests
-     */
-    private void savePhotosAndThumbnails(CapacitorUnit parentCapacitorUnit, CapacitorUnitRequest capacitorUnitRequest) {
-        List<Photo> photos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toList());
-
-        photos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
-        parentCapacitorUnit.setPhotos(photos);
-        this.photoRepository.saveAll(photos);
-
-        photos.forEach(photo -> this.thumbnailRepository.saveAll(photo.getThumbnails()));
-    }
-
 
     /**
      * Edit a CapacitorUnit
@@ -134,9 +122,44 @@ public class CapacitorUnitController {
         capacitorUnit.edit(capacitorUnitRequest);
         savePhotosAndThumbnails(capacitorUnit, capacitorUnitRequest);
 
-        capacitorUnitRepository.save(capacitorUnit);
+        try {
+            capacitorUnitRepository.save(capacitorUnit);
+
+            // Catch Duplicate Entry
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format(UNIT_NAME_EXISTS_ERROR,
+                            capacitorUnit,
+                            capacitorUnit.getCapacitorType().getTypeName())
+            );
+        }
+
         response.setStatus(HttpServletResponse.SC_OK);
         return new CapacitorUnitResponse(capacitorUnit);
+    }
+
+
+    /**
+     * Helper function to save all Thumbnails and Photos to the database and attach them to parentCapacitorUnit
+     * @param parentCapacitorUnit the CapacitorUnit to attach photos to
+     * @param capacitorUnitRequest the request with photoRequests
+     */
+    private void savePhotosAndThumbnails(CapacitorUnit parentCapacitorUnit, CapacitorUnitRequest capacitorUnitRequest) {
+        Set<Photo> newPhotos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toSet());
+        newPhotos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
+        Set<Photo> currentPhotos = new HashSet<>(parentCapacitorUnit.getPhotos());
+        System.out.println("New: " + newPhotos);
+        System.out.println("Current: " + currentPhotos);
+        currentPhotos.removeAll(newPhotos);
+        System.out.println(currentPhotos);
+        this.photoRepository.deleteAll(currentPhotos);
+
+//        newPhotos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
+        parentCapacitorUnit.setPhotos(new ArrayList<>(newPhotos));
+        this.photoRepository.saveAll(newPhotos);
+
+        newPhotos.forEach(photo -> this.thumbnailRepository.saveAll(photo.getThumbnails()));
     }
 
 

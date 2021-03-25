@@ -10,7 +10,6 @@ import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Table(
         uniqueConstraints=
@@ -88,8 +87,6 @@ public class CapacitorUnit {
         setVoltage(r.getVoltage());
         setIdentifier(r.getIdentifier());
         setNotes(r.getNotes());
-
-        setPhotos(r.getPhotos().stream().map(Photo::new).collect(Collectors.toList()));
     }
 
 
