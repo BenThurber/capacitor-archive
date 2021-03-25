@@ -22,7 +22,7 @@ public class Photo extends FileReference {
     @JoinColumn(name = "capacitor_unit_id", nullable = false)
     private CapacitorUnit capacitorUnit;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "photo", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Thumbnail> thumbnails = new ArrayList<>();
 
 
