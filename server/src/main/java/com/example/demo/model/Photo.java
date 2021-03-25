@@ -7,7 +7,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -23,13 +25,13 @@ public class Photo extends FileReference {
     private CapacitorUnit capacitorUnit;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "photo", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Thumbnail> thumbnails = new ArrayList<>();
+    private Set<Thumbnail> thumbnails = new HashSet<>();
 
 
     public Photo(PhotoRequest photoRequest) {
         super(photoRequest);
         setOrder(photoRequest.getOrder());
-        setThumbnails(photoRequest.getThumbnails().stream().map(Thumbnail::new).collect(Collectors.toList()));
+        setThumbnails(photoRequest.getThumbnails().stream().map(Thumbnail::new).collect(Collectors.toSet()));
         thumbnails.forEach(thumbnail -> thumbnail.setPhoto(this));
     }
 

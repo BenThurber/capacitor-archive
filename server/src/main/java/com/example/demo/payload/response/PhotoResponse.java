@@ -6,8 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -19,7 +19,7 @@ public class PhotoResponse extends FileReferenceResponse {
     private Integer order;
 
     @JsonProperty("thumbnails")
-    private List<ThumbnailResponse> thumbnails = new ArrayList<>();
+    private Set<ThumbnailResponse> thumbnails = new HashSet<>();
 
     @JsonProperty("capacitorUnitValue")
     private String capacitorUnitValue;
@@ -30,7 +30,7 @@ public class PhotoResponse extends FileReferenceResponse {
         setCapacitorUnitValue(photo.getCapacitorUnit().getValue());
 
         // Convert Thumbnail List to ThumbnailResponse list
-        setThumbnails(photo.getThumbnails().stream().map(ThumbnailResponse::new).collect(Collectors.toList()));
+        setThumbnails(photo.getThumbnails().stream().map(ThumbnailResponse::new).collect(Collectors.toSet()));
     }
 
     public PhotoResponse() {

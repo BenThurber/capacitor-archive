@@ -9,9 +9,22 @@ export class CapacitorUnit {
   identifier: string;
   value: string;
   notes: string;
-  photos: Array<Photo>;
+  photos: Set<Photo>;
   typeName: string;
   companyName: string;
+
+  /**
+   * Takes an ordered Array of photos.  Assigns the index of each Photo in the Array to its order
+   * property and adds it to the internal Set<Photo>
+   * @param photoArray Ordered Array of Photos
+   */
+  setOrderedPhotos(photoArray: Array<Photo>): void {
+    for (let i = 0, photo: Photo; i < photoArray.length; i++) {
+      photo = photoArray[i];
+      photo.order = i;
+      this.photos.add(photo);
+    }
+  }
 
   /**
    * Create a formatted capacitance like 100pf or 50nf.

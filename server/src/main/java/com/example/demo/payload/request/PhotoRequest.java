@@ -6,8 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,7 +19,7 @@ public class PhotoRequest extends FileReferenceRequest {
 
     @NotNull(message = "Photo Request thumbnails can not be null, must at least be an empty array")
     @JsonProperty("thumbnails")
-    private List<ThumbnailRequest> thumbnails = new ArrayList<>();
+    private Set<ThumbnailRequest> thumbnails = new HashSet<>();
 
     public PhotoRequest() {
         super();

@@ -319,7 +319,7 @@ export class CapacitorFormComponent implements OnInit {
       capacitorUnit.voltage = capacitorForm.unit.voltage;
       capacitorUnit.identifier = capacitorForm.unit.identifier;
       capacitorUnit.notes = capacitorForm.unit.notes;
-      capacitorUnit.photos = capacitorForm.unit.photos;
+      capacitorUnit.setOrderedPhotos(capacitorForm.unit.photos);
       capacitorUnit.typeName = capacitorForm.type.typeContent ?
         capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect;
       capacitorUnit.companyName = capacitorForm.companyName;
