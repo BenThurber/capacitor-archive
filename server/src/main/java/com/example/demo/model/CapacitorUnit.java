@@ -9,7 +9,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Table(
         uniqueConstraints=
@@ -69,7 +71,7 @@ public class CapacitorUnit {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "capacitorUnit", cascade = {
             CascadeType.DETACH, CascadeType.MERGE, CascadeType.REMOVE, CascadeType.REFRESH})  // All except persist
-    private List<Photo> photos = new ArrayList<>();
+    private Set<Photo> photos = new HashSet<>();
 
 
     public CapacitorUnit(CapacitorUnitRequest capacitorUnitRequest) {

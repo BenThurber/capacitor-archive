@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.PhotoRequest;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
+@EqualsAndHashCode(callSuper = true, exclude = {"thumbnails", "capacitorUnit"})
 @Entity
 public class Photo extends FileReference {
 
