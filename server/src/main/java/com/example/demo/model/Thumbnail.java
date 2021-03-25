@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import com.example.demo.payload.request.ThumbnailRequest;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 

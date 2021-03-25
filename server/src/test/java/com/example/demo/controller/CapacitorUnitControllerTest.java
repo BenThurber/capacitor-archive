@@ -305,6 +305,8 @@ class CapacitorUnitControllerTest {
         capacitorUnitCount = 0L;
         photoMockTable.clear();
         photoCount = 0L;
+        thumbnailMockTable.clear();
+        thumbnailCount = 0L;
     }
 
 
