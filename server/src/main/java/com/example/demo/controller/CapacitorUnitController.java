@@ -151,7 +151,7 @@ public class CapacitorUnitController {
         currentPhotos.removeAll(newPhotos);
         this.photoRepository.deleteAll(currentPhotos);
 
-        parentCapacitorUnit.setPhotos(new ArrayList<>(newPhotos));
+        parentCapacitorUnit.setPhotos(newPhotos);
         this.photoRepository.saveAll(newPhotos);
 
         newPhotos.forEach(photo -> this.thumbnailRepository.saveAll(photo.getThumbnails()));
