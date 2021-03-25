@@ -3,7 +3,6 @@ package com.example.demo.controller;
 import com.example.demo.model.CapacitorType;
 import com.example.demo.model.CapacitorUnit;
 import com.example.demo.model.Photo;
-import com.example.demo.model.Thumbnail;
 import com.example.demo.payload.request.CapacitorUnitRequest;
 import com.example.demo.payload.response.CapacitorUnitResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
@@ -149,13 +148,9 @@ public class CapacitorUnitController {
         Set<Photo> newPhotos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toSet());
         newPhotos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
         Set<Photo> currentPhotos = new HashSet<>(parentCapacitorUnit.getPhotos());
-        System.out.println("New: " + newPhotos);
-        System.out.println("Current: " + currentPhotos);
         currentPhotos.removeAll(newPhotos);
-        System.out.println(currentPhotos);
         this.photoRepository.deleteAll(currentPhotos);
 
-//        newPhotos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
         parentCapacitorUnit.setPhotos(new ArrayList<>(newPhotos));
         this.photoRepository.saveAll(newPhotos);
 
