@@ -2,10 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.*;
 import com.example.demo.payload.response.CapacitorUnitResponse;
-import com.example.demo.repository.CapacitorTypeRepository;
-import com.example.demo.repository.CapacitorUnitRepository;
-import com.example.demo.repository.ManufacturerRepository;
-import com.example.demo.repository.PhotoRepository;
+import com.example.demo.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -50,6 +47,8 @@ class CapacitorUnitControllerTest {
     private CapacitorUnitRepository capacitorUnitRepository;
     @MockBean
     private PhotoRepository photoRepository;
+    @MockBean
+    private ThumbnailRepository thumbnailRepository;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -336,8 +335,6 @@ class CapacitorUnitControllerTest {
         assertEquals("35b", capacitorUnitMockTable.get(0).getIdentifier());
         assertEquals(400, capacitorUnitMockTable.get(0).getVoltage());
         assertEquals(2, capacitorUnitMockTable.get(0).getPhotos().size());
-        assertEquals("www.example.com/images/example.jpg",
-                capacitorUnitMockTable.get(0).getPhotos().get(0).getUrl());
 
     }
 
