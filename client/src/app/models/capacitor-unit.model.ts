@@ -9,7 +9,7 @@ export class CapacitorUnit {
   identifier: string;
   value: string;
   notes: string;
-  photos: Set<Photo>;
+  photos: Set<Photo> = new Set();
   typeName: string;
   companyName: string;
 
