@@ -1,12 +1,11 @@
 package com.example.demo.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.Min;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter

@@ -2,8 +2,6 @@ package com.example.demo.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.validation.constraints.NotNull;
-
 
 public class CaptchaVerifyRequest {
 

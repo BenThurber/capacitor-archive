@@ -1,13 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.CapacitorType;
-import com.example.demo.model.CapacitorUnit;
-import com.example.demo.model.Construction;
-import com.example.demo.model.Manufacturer;
+import com.example.demo.model.*;
 import com.example.demo.payload.response.CapacitorUnitResponse;
-import com.example.demo.repository.CapacitorTypeRepository;
-import com.example.demo.repository.CapacitorUnitRepository;
-import com.example.demo.repository.ManufacturerRepository;
+import com.example.demo.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -50,12 +45,18 @@ class CapacitorUnitControllerTest {
     private CapacitorTypeRepository capacitorTypeRepository;
     @MockBean
     private CapacitorUnitRepository capacitorUnitRepository;
+    @MockBean
+    private PhotoRepository photoRepository;
+    @MockBean
+    private ThumbnailRepository thumbnailRepository;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
     private final List<Manufacturer> manufacturerMockTable = new ArrayList<>();
     private final List<CapacitorType> capacitorTypeMockTable = new ArrayList<>();
     private final List<CapacitorUnit> capacitorUnitMockTable = new ArrayList<>();
+    private final List<Photo> photoMockTable = new ArrayList<>();
+    private final List<Thumbnail> thumbnailMockTable = new ArrayList<>();
 
     private static Long manufacturerCount = 0L;
     private static final Long DEFAULT_MANUFACTURER_ID = 1L;
@@ -63,6 +64,10 @@ class CapacitorUnitControllerTest {
     private static final Long DEFAULT_CAPACITOR_TYPE_ID = 1L;
     private static Long capacitorUnitCount = 0L;
     private static final Long DEFAULT_CAPACITOR_UNIT_ID = 1L;
+    private static Long photoCount = 0L;
+    private static final Long DEFAULT_PHOTO_ID = 1L;
+    private static Long thumbnailCount = 0L;
+    private static final Long DEFAULT_THUMBNAIL_ID = 1L;
 
 
     private Manufacturer manufacturer1;
@@ -267,6 +272,26 @@ class CapacitorUnitControllerTest {
             ).collect(Collectors.toList());
         });
 
+
+        //---- Photos ----
+
+        when(photoRepository.save(Mockito.any(Photo.class))).thenAnswer(i -> {
+            Photo photo = i.getArgument(0);
+            ReflectionTestUtils.setField(photo, "id", (DEFAULT_PHOTO_ID + photoCount++));
+            this.photoMockTable.add(photo);
+            return photo;
+        });
+
+
+        //---- Thumbnails ----
+
+        when(thumbnailRepository.save(Mockito.any(Thumbnail.class))).thenAnswer(i -> {
+            Thumbnail thumbnail = i.getArgument(0);
+            ReflectionTestUtils.setField(thumbnail, "id", (DEFAULT_THUMBNAIL_ID + thumbnailCount++));
+            this.thumbnailMockTable.add(thumbnail);
+            return thumbnail;
+        });
+
     }
 
 
@@ -278,6 +303,10 @@ class CapacitorUnitControllerTest {
         capacitorTypeCount = 0L;
         capacitorUnitMockTable.clear();
         capacitorUnitCount = 0L;
+        photoMockTable.clear();
+        photoCount = 0L;
+        thumbnailMockTable.clear();
+        thumbnailCount = 0L;
     }
 
 
@@ -289,7 +318,29 @@ class CapacitorUnitControllerTest {
             "identifier", "35b",
             "notes", "A popular capacitor",
             "typeName", "sealdtite",
-            "companyName", "Solar"
+            "companyName", "Solar",
+            "photos", new Object[]{
+                    JsonConverter.toMap(
+                            "order", 1,
+                            "url", "www.example.com/images/example.jpg",
+                            "thumbnails", new Object[]{
+                                    JsonConverter.toMap(
+                                            "size", 100,
+                                            "url", "www.example.com/images/example_thumb.jpg"
+                                    ),
+                            }
+                    ),
+                    JsonConverter.toMap(
+                            "order", 2,
+                            "url", "www.example.com/images/foobar.jpg",
+                            "thumbnails", new Object[]{
+                                    JsonConverter.toMap(
+                                            "size", 100,
+                                            "url", "www.example.com/images/foobar_thumb.jpg"
+                                    ),
+                            }
+                    )
+            }
     );
 
     /**
@@ -308,8 +359,12 @@ class CapacitorUnitControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isCreated()).andReturn();
 
+        assertEquals(50000, capacitorUnitMockTable.get(0).getCapacitance());
         assertEquals("35b", capacitorUnitMockTable.get(0).getIdentifier());
         assertEquals(400, capacitorUnitMockTable.get(0).getVoltage());
+        assertEquals(2, capacitorUnitMockTable.get(0).getPhotos().size());
+        assertEquals(1, capacitorUnitMockTable.get(0).getPhotos().get(0).getThumbnails().size());
+
     }
 
     private final String newCapacitorUnitNullableValuesJson = JsonConverter.toJson(true,
@@ -509,9 +564,6 @@ class CapacitorUnitControllerTest {
             "typeName", "sealdtite",
             "companyName", "Solar"
     );
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_onlyEditNotes_success() throws Exception {
         manufacturerRepository.save(manufacturer2);
@@ -539,9 +591,6 @@ class CapacitorUnitControllerTest {
             "typeName", "sealdtite",
             "companyName", "Solar"
     );
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_capacitanceOnly_success() throws Exception {
         manufacturerRepository.save(manufacturer2);
@@ -570,9 +619,6 @@ class CapacitorUnitControllerTest {
             "typeName", "sealdtite",
             "companyName", "Solar"
     );
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_capacitanceVoltageId_success() throws Exception {
         manufacturerRepository.save(manufacturer2);
@@ -595,9 +641,6 @@ class CapacitorUnitControllerTest {
     }
 
 
-    /**
-     * Test successful creation of new CapacitorType that creates a new construction.
-     */
     @Test
     void editCapacitorUnit_notFound_unsuccessful() throws Exception {
         manufacturerRepository.save(manufacturer2);
@@ -612,6 +655,44 @@ class CapacitorUnitControllerTest {
 
         mvc.perform(httpReq)
                 .andExpect(status().isNotFound());
+    }
+
+
+    private final String editedCapacitorUnitNoPhotosJson = JsonConverter.toJson(true,
+            "capacitance", 50000,
+            "voltage", 400,
+            "identifier", "35b",
+            "notes", "A popular capacitor",
+            "typeName", "sealdtite",
+            "companyName", "Solar",
+            "photos", new Object[]{}
+    );
+
+    /**
+     * Test successful creation of new CapacitorType that creates a new construction.
+     */
+    @Test
+    void deleteCapacitorUnitPhotos_success() throws Exception {
+        manufacturerRepository.save(manufacturer2);
+        capacitorTypeRepository.save(capacitorType1);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.post("/unit/create")
+                .content(newCapacitorUnit1Json)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq).andExpect(status().isCreated());
+
+
+        httpReq = MockMvcRequestBuilders.put("/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
+                .content(editedCapacitorUnitNoPhotosJson)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        assertEquals(0, capacitorUnitMockTable.get(0).getPhotos().size());
     }
 
 }

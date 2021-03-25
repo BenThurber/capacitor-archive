@@ -2,17 +2,23 @@ package com.example.demo.controller;
 
 import com.example.demo.model.CapacitorType;
 import com.example.demo.model.CapacitorUnit;
+import com.example.demo.model.Photo;
 import com.example.demo.payload.request.CapacitorUnitRequest;
 import com.example.demo.payload.response.CapacitorUnitResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.CapacitorUnitRepository;
+import com.example.demo.repository.PhotoRepository;
+import com.example.demo.repository.ThumbnailRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -22,14 +28,21 @@ public class CapacitorUnitController {
     private final static String PARENT_TYPE_NOT_FOUND_ERROR = "The CapacitorUnit references a CapacitorType \"%s\" that does not exist.";
     private final static String UNIT_NAME_EXISTS_ERROR = "The CapacitorUnit with the value (%s) already exists for the CapacitorType \"%s\"";
     private final static String UNIT_NOT_FOUND_ERROR = "The CapacitorUnit with companyName %s, typeName %s and value %s could not be found.";
+    private final static String PHOTOS_ERROR = "Error saving photos and thumbnails to the database.";
 
     private final CapacitorTypeRepository capacitorTypeRepository;
     private final CapacitorUnitRepository capacitorUnitRepository;
+    private final PhotoRepository photoRepository;
+    private final ThumbnailRepository thumbnailRepository;
 
     CapacitorUnitController(CapacitorTypeRepository capacitorTypeRepository,
-                            CapacitorUnitRepository capacitorUnitRepository) {
+                            CapacitorUnitRepository capacitorUnitRepository,
+                            PhotoRepository photoRepository,
+                            ThumbnailRepository thumbnailRepository) {
         this.capacitorTypeRepository = capacitorTypeRepository;
         this.capacitorUnitRepository = capacitorUnitRepository;
+        this.photoRepository = photoRepository;
+        this.thumbnailRepository = thumbnailRepository;
     }
 
 
@@ -67,6 +80,17 @@ public class CapacitorUnitController {
             );
         }
 
+        try {
+            savePhotosAndThumbnails(newCapacitorUnit, capacitorUnitRequest);
+        } catch (Exception e) {
+            // If there is an error with photos, un-save the capacitor unit
+            this.capacitorUnitRepository.delete(newCapacitorUnit);
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    PHOTOS_ERROR
+            );
+        }
+
         response.setStatus(HttpServletResponse.SC_CREATED);
         return new CapacitorUnitResponse(newCapacitorUnit);
     }
@@ -95,10 +119,42 @@ public class CapacitorUnitController {
         }
 
         capacitorUnit.edit(capacitorUnitRequest);
+        savePhotosAndThumbnails(capacitorUnit, capacitorUnitRequest);
 
-        capacitorUnitRepository.save(capacitorUnit);
+        try {
+            capacitorUnitRepository.save(capacitorUnit);
+
+            // Catch Duplicate Entry
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format(UNIT_NAME_EXISTS_ERROR,
+                            capacitorUnit,
+                            capacitorUnit.getCapacitorType().getTypeName())
+            );
+        }
+
         response.setStatus(HttpServletResponse.SC_OK);
         return new CapacitorUnitResponse(capacitorUnit);
+    }
+
+
+    /**
+     * Helper function to save all Thumbnails and Photos to the database and attach them to parentCapacitorUnit
+     * @param parentCapacitorUnit the CapacitorUnit to attach photos to
+     * @param capacitorUnitRequest the request with photoRequests
+     */
+    private void savePhotosAndThumbnails(CapacitorUnit parentCapacitorUnit, CapacitorUnitRequest capacitorUnitRequest) {
+        Set<Photo> newPhotos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toSet());
+        newPhotos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
+        Set<Photo> currentPhotos = new HashSet<>(parentCapacitorUnit.getPhotos());
+        currentPhotos.removeAll(newPhotos);
+        this.photoRepository.deleteAll(currentPhotos);
+
+        parentCapacitorUnit.setPhotos(new ArrayList<>(newPhotos));
+        this.photoRepository.saveAll(newPhotos);
+
+        newPhotos.forEach(photo -> this.thumbnailRepository.saveAll(photo.getThumbnails()));
     }
 
 
