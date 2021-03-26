@@ -3,6 +3,10 @@ import {Thumbnail} from './thumbnail.model';
 
 export class Photo extends FileReference {
 
+  order: number;
+  capacitorUnitValue: string;
+  thumbnails: Set<Thumbnail> = new Set();
+
   constructor(photo?: Photo) {
     super(photo);
     if (photo) {
@@ -12,10 +16,6 @@ export class Photo extends FileReference {
       photo.thumbnails.forEach(thumb => this.thumbnails.add(new Thumbnail(thumb)));
     }
   }
-
-  order: number;
-  capacitorUnitValue: string;
-  thumbnails: Set<Thumbnail> = new Set();
 
   static fromUrl(url: string, order?: number): Photo {
     const photo = new Photo();

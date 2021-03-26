@@ -1,15 +1,15 @@
 
 export class FileReference {
 
+  id: number;
+  url: string;
+
   constructor(fileReference?: FileReference) {
     if (fileReference) {
       this.id = fileReference.id;
       this.url = fileReference.url;
     }
   }
-
-  id: number;
-  url: string;
 
 
   static fromUrl(url: string): FileReference {

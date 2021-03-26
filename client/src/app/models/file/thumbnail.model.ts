@@ -3,15 +3,15 @@ import {Photo} from './photo.model';
 
 export class Thumbnail extends FileReference {
 
+  size: number;
+  photo: Photo;
+
   constructor(thumbnail?: Thumbnail) {
     super(thumbnail);
     if (thumbnail) {
       this.size = thumbnail.size;
     }
   }
-
-  size: number;
-  photo: Photo;
 
   static fromUrl(url: string, size?: number): Thumbnail {
     const thumbnail = new Thumbnail();
