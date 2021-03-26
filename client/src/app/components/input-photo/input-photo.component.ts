@@ -67,7 +67,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     const thumbnail = this.thumbnails.find(th => th.referencesPhoto(photo));
     if (thumbnail) {
       thumbnail.photo = photo;
-      photo.thumbnails.add(thumbnail);
+      photo.thumbnails.push(thumbnail);
     }
 
     this.photos.push(photo);
@@ -93,7 +93,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
       const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
       if (photo) {
         thumbnail.photo = photo;
-        photo.thumbnails.add(thumbnail);
+        photo.thumbnails.push(thumbnail);
       }
 
       this.thumbnails.push(thumbnail);

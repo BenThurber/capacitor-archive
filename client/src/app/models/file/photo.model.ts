@@ -5,15 +5,15 @@ export class Photo extends FileReference {
 
   order: number;
   capacitorUnitValue: string;
-  thumbnails: Set<Thumbnail> = new Set();
+  thumbnails: Array<Thumbnail> = [];
 
   constructor(photo?: Photo) {
     super(photo);
     if (photo) {
       this.order = photo.order;
       this.capacitorUnitValue = photo.capacitorUnitValue;
-      this.thumbnails = new Set();
-      photo.thumbnails.forEach(thumb => this.thumbnails.add(new Thumbnail(thumb)));
+      this.thumbnails = [];
+      photo.thumbnails.forEach(thumb => this.thumbnails.push(new Thumbnail(thumb)));
     }
   }
 
@@ -30,7 +30,7 @@ export class Photo extends FileReference {
    * @return a thumbnail url, or the photo's url
    */
   getThumbnailUrl(maxSize?: number): string {
-    if (this.thumbnails.size === 0) {
+    if (this.thumbnails.length === 0) {
       return this.url;
     }
 

@@ -9,7 +9,7 @@ export class CapacitorUnit {
   identifier: string;
   value: string;
   notes: string;
-  photos: Set<Photo> = new Set();
+  photos: Array<Photo> = [];
   typeName: string;
   companyName: string;
 
@@ -21,8 +21,8 @@ export class CapacitorUnit {
       this.identifier = capacitorUnit.identifier;
       this.value = capacitorUnit.value;
       if (capacitorUnit.photos) {
-        this.photos = new Set();
-        capacitorUnit.photos.forEach(photo => this.photos.add(new Photo(photo)));
+        this.photos = [];
+        capacitorUnit.photos.forEach(photo => this.photos.push(new Photo(photo)));
       }
       this.typeName = capacitorUnit.typeName;
       this.companyName = capacitorUnit.companyName;
@@ -82,14 +82,14 @@ export class CapacitorUnit {
 
   /**
    * Takes an ordered Array of photos.  Assigns the index of each Photo in the Array to its order
-   * property and adds it to the internal Set<Photo>
+   * property and adds it to the internal Array<Photo>
    * @param photoArray Ordered Array of Photos
    */
   public setOrderedPhotos(photoArray: Array<Photo>): void {
     for (let i = 0, photo: Photo; i < photoArray.length; i++) {
       photo = photoArray[i];
       photo.order = i;
-      this.photos.add(photo);
+      this.photos.push(photo);
     }
   }
 

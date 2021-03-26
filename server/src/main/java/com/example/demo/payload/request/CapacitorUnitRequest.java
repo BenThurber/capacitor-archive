@@ -8,8 +8,8 @@ import lombok.Setter;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -42,7 +42,7 @@ public class CapacitorUnitRequest {
 
     @NotNull(message = "Photo Requests can not be null, must at least be an empty array\"")
     @JsonProperty("photos")
-    private Set<PhotoRequest> photos = new HashSet<>();
+    private List<PhotoRequest> photos = new ArrayList<>();
 
     CapacitorUnitRequest() {}
 

@@ -114,7 +114,7 @@ export class ViewCapacitorComponent implements OnInit {
     if (!this.capacitorUnit) {
       return;
     }
-    if (this.capacitorUnit.photos.size === 0) {
+    if (this.capacitorUnit.photos.length === 0) {
       this.galleryImages.push({
         big: '../../../assets/no-capacitor-images-no-arrow.jpg',
         medium: '../../../assets/no-capacitor-images.jpg',
