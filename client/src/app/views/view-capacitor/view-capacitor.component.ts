@@ -6,6 +6,7 @@ import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml, caseInsensitiveCompare} from '../../utilities/text-utils';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
+import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery-9';
 
 @Component({
   selector: 'app-view-capacitor',
@@ -29,6 +30,9 @@ export class ViewCapacitorComponent implements OnInit {
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
 
+  galleryOptions: NgxGalleryOptions[];
+  galleryImages: NgxGalleryImage[];
+
 
   constructor(private activatedRoute: ActivatedRoute, private restService: RestService,  public dynamicRouter: DynamicRouterService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
@@ -37,6 +41,35 @@ export class ViewCapacitorComponent implements OnInit {
   }
 
   ngOnInit(): any {
+
+    this.galleryOptions = [
+      {
+        width: '100%',
+        height: '100%',
+        thumbnailsColumns: 4,
+        imageAnimation: NgxGalleryAnimation.Slide
+      },
+      // max-width 800
+      {
+        breakpoint: 800,
+        width: '100%',
+        height: '600px',
+        imagePercent: 80,
+        thumbnailsPercent: 20,
+        thumbnailsMargin: 20,
+        thumbnailMargin: 20
+      },
+      // max-width 400
+      {
+        breakpoint: 400,
+        preview: false
+      }
+    ];
+
+    this.galleryImages = [
+
+    ];
+
 
     if (this.value) {
       this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value)

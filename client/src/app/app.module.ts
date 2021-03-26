@@ -37,6 +37,7 @@ import {SortablejsModule} from 'ngx-sortablejs';
 import { InputPhotoComponent } from './components/input-photo/input-photo.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import {ModalModule} from './components/modal';
+import {NgxGalleryModule} from 'ngx-gallery-9';
 
 
 @NgModule({
@@ -80,6 +81,7 @@ import {ModalModule} from './components/modal';
     MatExpansionModule,
     SortablejsModule.forRoot({ animation: 150 }),
     ModalModule,
+    NgxGalleryModule,
   ],
   providers: [RestService, QuillEditorComponent],
   bootstrap: [AppComponent],
