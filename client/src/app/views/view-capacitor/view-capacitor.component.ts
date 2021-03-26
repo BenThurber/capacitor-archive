@@ -6,12 +6,12 @@ import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml, caseInsensitiveCompare} from '../../utilities/text-utils';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
-import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery-9';
+import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 
 @Component({
   selector: 'app-view-capacitor',
   templateUrl: './view-capacitor.component.html',
-  styleUrls: ['./view-capacitor.component.css', '../../styles/animations.css']
+  styleUrls: ['./view-capacitor.component.css']
 })
 export class ViewCapacitorComponent implements OnInit {
 
@@ -44,25 +44,20 @@ export class ViewCapacitorComponent implements OnInit {
 
     this.galleryOptions = [
       {
+        previewCloseOnClick: true,
+        previewCloseOnEsc: true,
+        previewKeyboardNavigation: true,
+        previewZoom: true,
+        previewZoomStep: 0.4,
+        previewZoomMax: 4,
+        previewDownload: true,
+        previewAnimation: false,
         width: '100%',
         height: '100%',
         thumbnailsColumns: 4,
-        imageAnimation: NgxGalleryAnimation.Slide
-      },
-      // max-width 800
-      {
-        breakpoint: 800,
-        width: '100%',
-        height: '600px',
-        imagePercent: 80,
-        thumbnailsPercent: 20,
-        thumbnailsMargin: 20,
-        thumbnailMargin: 20
-      },
-      // max-width 400
-      {
-        breakpoint: 400,
-        preview: false
+        imageInfinityMove: true,
+        imageSize: NgxGalleryImageSize.Contain,
+        imageAnimation: NgxGalleryAnimation.Slide,
       }
     ];
 
@@ -119,12 +114,19 @@ export class ViewCapacitorComponent implements OnInit {
     if (!this.capacitorUnit) {
       return;
     }
-    for (const photo of this.capacitorUnit.getOrderedPhotos()) {
+    if (this.capacitorUnit.photos.size === 0) {
       this.galleryImages.push({
-        big: photo.url,
-        medium: photo.url,
-        small: photo.getThumbnailUrl(),
+        big: '../../../assets/no-capacitor-images.jpg',
+        medium: '../../../assets/no-capacitor-images.jpg',
       });
+    } else {
+      for (const photo of this.capacitorUnit.getOrderedPhotos()) {
+        this.galleryImages.push({
+          big: photo.url,
+          medium: photo.url,
+          small: photo.getThumbnailUrl(),
+        });
+      }
     }
   }
 
