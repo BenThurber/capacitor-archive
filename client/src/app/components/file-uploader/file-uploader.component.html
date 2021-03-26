@@ -9,7 +9,10 @@
                 <p>
                   Drag files here or
                   <label class="upload-button">
-                    <input multiple type="file" (change)="addFilesToQueue($event.target.files)" placeholder="Upload file" accept="png,jpg,jpeg,gif,jfif,webp"> browse
+                    <input multiple type="file"
+                           (change)="addFilesToQueue($event.target.files)"
+                           placeholder="Upload file"
+                           accept=".png,.jpg,.jpeg,.gif,image/jpeg,image/png,image/gif"> browse
                   </label>
                   to upload.
                 </p>
