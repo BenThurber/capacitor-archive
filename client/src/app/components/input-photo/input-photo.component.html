@@ -20,7 +20,7 @@
 
         <p>
           Are you sure you want to delete the photo<br>
-          "{{photo.url.slice(photo.url.lastIndexOf('/') + 1, photo.url.length)}}"?
+          "{{decodeURIComponent(photo.url.slice(photo.url.lastIndexOf('/') + 1, photo.url.length))}}"?
         </p>
 
         <button (click)="modalService.close(i.toString()); deletePhoto(photo)">Yes</button>

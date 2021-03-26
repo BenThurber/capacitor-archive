@@ -41,6 +41,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     }
   };
 
+  decodeURIComponent = decodeURIComponent;
 
   onChange = event => {};
   onTouched = () => {};
