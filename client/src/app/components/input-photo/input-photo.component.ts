@@ -61,7 +61,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
 
   addPhoto(uploadedFile: FinishedUploadEvent): void {
-    const photo = new Photo(uploadedFile.url, null);
+    const photo = Photo.fromUrl(uploadedFile.url, null);
 
     // Attach photo to thumbnail
     const thumbnail = this.thumbnails.find(th => th.referencesPhoto(photo));
@@ -146,7 +146,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
     const awsUploadResponse = await awsUploadFile(this.bucket, params);
 
-    return new Thumbnail(awsUploadResponse.Location, this.THUMBNAIL_SIZE);
+    return Thumbnail.fromUrl(awsUploadResponse.Location, this.THUMBNAIL_SIZE);
   }
 
 

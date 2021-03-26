@@ -14,6 +14,22 @@ export class CapacitorUnit {
   companyName: string;
 
 
+  constructor(capacitorUnit?: CapacitorUnit) {
+    if (capacitorUnit) {
+      this.capacitance = capacitorUnit.capacitance;
+      this.voltage = capacitorUnit.voltage;
+      this.identifier = capacitorUnit.identifier;
+      this.value = capacitorUnit.value;
+      if (capacitorUnit.photos) {
+        this.photos = new Set();
+        capacitorUnit.photos.forEach(photo => this.photos.add(new Photo(photo)));
+      }
+      this.typeName = capacitorUnit.typeName;
+      this.companyName = capacitorUnit.companyName;
+    }
+  }
+
+
   /**
    * Create a formatted capacitance like 100pf or 50nf.
    * @param noNano if true, returns values like 0.01 uf instead of 10nf.
@@ -69,11 +85,19 @@ export class CapacitorUnit {
    * property and adds it to the internal Set<Photo>
    * @param photoArray Ordered Array of Photos
    */
-  setOrderedPhotos(photoArray: Array<Photo>): void {
+  public setOrderedPhotos(photoArray: Array<Photo>): void {
     for (let i = 0, photo: Photo; i < photoArray.length; i++) {
       photo = photoArray[i];
       photo.order = i;
       this.photos.add(photo);
     }
+  }
+
+  /**
+   * Returns an Array<Photo> that is sorted by the order property in each photo
+   * @return an ordered Array of Photos
+   */
+  public getOrderedPhotos(): Array<Photo> {
+    return [...this.photos].sort((a: Photo, b: Photo) => a.order - b.order);
   }
 }

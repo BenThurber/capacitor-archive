@@ -3,14 +3,26 @@ import {Thumbnail} from './thumbnail.model';
 
 export class Photo extends FileReference {
 
-  constructor(url: string, order: number) {
-    super(url);
-    this.order = order;
+  constructor(photo?: Photo) {
+    super(photo);
+    if (photo) {
+      this.order = photo.order;
+      this.capacitorUnitValue = photo.capacitorUnitValue;
+      this.thumbnails = new Set();
+      photo.thumbnails.forEach(thumb => this.thumbnails.add(new Thumbnail(thumb)));
+    }
   }
 
   order: number;
   capacitorUnitValue: string;
   thumbnails: Set<Thumbnail> = new Set();
+
+  static fromUrl(url: string, order?: number): Photo {
+    const photo = new Photo();
+    photo.url = url;
+    photo.order = order;
+    return photo;
+  }
 
   /**
    * Tries to get the url of a thumbnail.  If there are none, if falls back on its own Photo url.

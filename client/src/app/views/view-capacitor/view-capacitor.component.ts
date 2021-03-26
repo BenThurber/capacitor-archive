@@ -30,11 +30,11 @@ export class ViewCapacitorComponent implements OnInit {
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
 
-  galleryOptions: NgxGalleryOptions[];
-  galleryImages: NgxGalleryImage[];
+  galleryOptions: NgxGalleryOptions[] = [];
+  galleryImages: NgxGalleryImage[] = [];
 
 
-  constructor(private activatedRoute: ActivatedRoute, private restService: RestService,  public dynamicRouter: DynamicRouterService) {
+  constructor(private activatedRoute: ActivatedRoute, private restService: RestService, public dynamicRouter: DynamicRouterService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
     this.value = this.activatedRoute.snapshot.paramMap.get('value');
@@ -66,15 +66,12 @@ export class ViewCapacitorComponent implements OnInit {
       }
     ];
 
-    this.galleryImages = [
-
-    ];
-
 
     if (this.value) {
       this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value)
         .subscribe((capacitorUnit: CapacitorUnit) => {
-          this.capacitorUnit = capacitorUnit;
+          this.capacitorUnit = new CapacitorUnit(capacitorUnit);
+          this.updateGalleryImages();
           // Set focus on the similar menu
           setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
         });
@@ -88,12 +85,13 @@ export class ViewCapacitorComponent implements OnInit {
 
     return this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
       .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
-        this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
+        this.capacitorUnits = capacitorUnits.map(cu => new CapacitorUnit(cu)).sort(CapacitorUnit.compare);
         if (!this.value && this.capacitorUnits.length > 0) {
           this.capacitorUnit = this.capacitorUnits[0];
         } else if (this.capacitorUnits.length === 0) {
           this.capacitorUnit = new CapacitorUnit();
         }
+        this.updateGalleryImages();
         // Set focus on the similar menu
         setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
       });
@@ -102,6 +100,7 @@ export class ViewCapacitorComponent implements OnInit {
 
   similarMenuChanged(value): void {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
+    this.updateGalleryImages();
   }
 
   formatSimilarCapacitor(capacitorUnit: CapacitorUnit): string {
@@ -112,6 +111,21 @@ export class ViewCapacitorComponent implements OnInit {
     str += capacitorUnit.identifier ? capacitorUnit.identifier : '';
 
     return str;
+  }
+
+
+  updateGalleryImages(): void {
+    this.galleryImages = [];
+    if (!this.capacitorUnit) {
+      return;
+    }
+    for (const photo of this.capacitorUnit.getOrderedPhotos()) {
+      this.galleryImages.push({
+        big: photo.url,
+        medium: photo.url,
+        small: photo.getThumbnailUrl(),
+      });
+    }
   }
 
 }

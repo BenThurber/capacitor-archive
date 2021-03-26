@@ -3,13 +3,22 @@ import {Photo} from './photo.model';
 
 export class Thumbnail extends FileReference {
 
-  constructor(url: string, size: number) {
-    super(url);
-    this.size = size;
+  constructor(thumbnail?: Thumbnail) {
+    super(thumbnail);
+    if (thumbnail) {
+      this.size = thumbnail.size;
+    }
   }
 
   size: number;
   photo: Photo;
+
+  static fromUrl(url: string, size?: number): Thumbnail {
+    const thumbnail = new Thumbnail();
+    thumbnail.url = url;
+    thumbnail.size = size;
+    return thumbnail;
+  }
 
   /**
    * Takes a full or partial Photo url and converts it to a Thumbnail url.  Adds a '_thumb' substring and changes
