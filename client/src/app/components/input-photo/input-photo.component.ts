@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {ControlValueAccessor} from '@angular/forms';
+import {Component, forwardRef, Input, OnInit} from '@angular/core';
+import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {Photo} from '../../models/file/photo.model';
 import {Thumbnail} from '../../models/file/thumbnail.model';
 import {FinishedUploadEvent, StartedUploadEvent} from '../../models/upload-event.model';
@@ -17,6 +17,12 @@ const AWS = (window as any).AWS;
   selector: 'app-input-photo',
   templateUrl: './input-photo.component.html',
   styleUrls: ['./input-photo.component.css'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR, multi: true,
+      useExisting: forwardRef(() => InputPhotoComponent),
+    }
+  ],
 })
 export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
@@ -43,7 +49,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
   decodeURIComponent = decodeURIComponent;
 
-  onChange = event => {};
+  onChange = (value: Array<Photo>) => {};
   onTouched = () => {};
 
 
@@ -65,6 +71,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     }
 
     this.photos.push(photo);
+    this.onTouched();
+    this.onChange(this.photos);
   }
 
 
@@ -89,6 +97,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
       }
 
       this.thumbnails.push(thumbnail);
+      this.onTouched();
+      this.onChange(this.photos);
 
     } catch (err) {
       console.error('Could not add thumbnail.', err.message && 'Message: ' + err.message);
@@ -143,6 +153,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   deletePhoto(photo: Photo): void {
     const index = this.photos.findIndex(p => p === photo);
     this.photos.splice(index, 1);
+    this.onTouched();
+    this.onChange(this.photos);
   }
 
 
@@ -152,8 +164,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   writeValue(photos: Array<Photo>): void {
     if (photos) {
       this.photos = [...photos];
+      this.onChange(this.photos);
     }
-    this.onChange(photos);
   }
 
   registerOnChange(fn: any): void {
