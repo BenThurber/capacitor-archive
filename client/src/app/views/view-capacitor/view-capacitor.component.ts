@@ -116,8 +116,9 @@ export class ViewCapacitorComponent implements OnInit {
     }
     if (this.capacitorUnit.photos.size === 0) {
       this.galleryImages.push({
-        big: '../../../assets/no-capacitor-images.jpg',
+        big: '../../../assets/no-capacitor-images-no-arrow.jpg',
         medium: '../../../assets/no-capacitor-images.jpg',
+        small: '',
       });
     } else {
       for (const photo of this.capacitorUnit.getOrderedPhotos()) {
