@@ -118,7 +118,16 @@ public class CapacitorUnitController {
         }
 
         capacitorUnit.edit(capacitorUnitRequest);
-        savePhotosAndThumbnails(capacitorUnit, capacitorUnitRequest);
+        try {
+            savePhotosAndThumbnails(capacitorUnit, capacitorUnitRequest);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.CONFLICT,
+                    String.format(UNIT_NAME_EXISTS_ERROR,
+                            capacitorUnit,
+                            capacitorUnit.getCapacitorType().getTypeName())
+            );
+        }
 
         try {
             capacitorUnitRepository.save(capacitorUnit);
