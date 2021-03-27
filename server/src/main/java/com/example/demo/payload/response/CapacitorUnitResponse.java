@@ -6,7 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -37,7 +39,7 @@ public class CapacitorUnitResponse {
     private String companyName;
 
     @JsonProperty("photos")
-    private Set<PhotoResponse> photos = new HashSet<>();
+    private List<PhotoResponse> photos = new ArrayList<>();
 
 
     public CapacitorUnitResponse(CapacitorUnit capacitorUnit) {
@@ -52,7 +54,7 @@ public class CapacitorUnitResponse {
         setCompanyName(cu.getCapacitorType().getManufacturer().getCompanyName());
 
         // Convert Photo List to PhotoResponse list
-        setPhotos(cu.getPhotos().stream().map(PhotoResponse::new).collect(Collectors.toSet()));
+        setPhotos(cu.getPhotos().stream().map(PhotoResponse::new).collect(Collectors.toList()));
     }
 
     public CapacitorUnitResponse() {}
