@@ -20,6 +20,7 @@ export class CapacitorUnit {
       this.voltage = capacitorUnit.voltage;
       this.identifier = capacitorUnit.identifier;
       this.value = capacitorUnit.value;
+      this.notes = capacitorUnit.notes;
       if (capacitorUnit.photos) {
         this.photos = [];
         capacitorUnit.photos.forEach(photo => this.photos.push(new Photo(photo)));
