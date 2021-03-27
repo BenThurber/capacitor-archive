@@ -8,6 +8,9 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
   z-index: 9999;
+
+  margin-bottom: -8px;
+  display: inline-block;
 }
 
 .spinner--hidden {
