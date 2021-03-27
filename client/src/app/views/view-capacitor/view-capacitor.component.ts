@@ -65,7 +65,7 @@ export class ViewCapacitorComponent implements OnInit {
     if (this.value) {
       this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value)
         .subscribe((capacitorUnit: CapacitorUnit) => {
-          this.capacitorUnit = new CapacitorUnit(capacitorUnit);
+          this.capacitorUnit = capacitorUnit;
           this.updateGalleryImages();
           // Set focus on the similar menu
           setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
@@ -80,7 +80,7 @@ export class ViewCapacitorComponent implements OnInit {
 
     return this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
       .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
-        this.capacitorUnits = capacitorUnits.map(cu => new CapacitorUnit(cu)).sort(CapacitorUnit.compare);
+        this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
         if (!this.value && this.capacitorUnits.length > 0) {
           this.capacitorUnit = this.capacitorUnits[0];
         } else if (this.capacitorUnits.length === 0) {

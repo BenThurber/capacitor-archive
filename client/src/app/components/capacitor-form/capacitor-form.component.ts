@@ -142,7 +142,8 @@ export class CapacitorFormComponent implements OnInit {
         capacitance: capacitorUnit.capacitance,
         voltage: capacitorUnit.voltage,
         identifier: capacitorUnit.identifier,
-        notes: capacitorUnit.notes
+        notes: capacitorUnit.notes,
+        photos: capacitorUnit.getOrderedPhotos(),
       }
     });
   }
