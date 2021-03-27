@@ -142,7 +142,8 @@ export class CapacitorFormComponent implements OnInit {
         capacitance: capacitorUnit.capacitance,
         voltage: capacitorUnit.voltage,
         identifier: capacitorUnit.identifier,
-        notes: capacitorUnit.notes
+        notes: capacitorUnit.notes,
+        photos: capacitorUnit.getOrderedPhotos(),
       }
     });
   }
@@ -320,6 +321,8 @@ export class CapacitorFormComponent implements OnInit {
       capacitorUnit.identifier = capacitorForm.unit.identifier;
       capacitorUnit.notes = capacitorForm.unit.notes;
       capacitorUnit.setOrderedPhotos(capacitorForm.unit.photos);
+      // Remove circular references
+      capacitorUnit.photos.forEach(p => p.thumbnails.forEach(t => t.photo = null));
       capacitorUnit.typeName = capacitorForm.type.typeContent ?
         capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect;
       capacitorUnit.companyName = capacitorForm.companyName;
