@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, Output, ViewChild, EventEmitter} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
@@ -17,7 +17,7 @@ require('aws-sdk/dist/aws-sdk');
 @Component({
   selector: 'app-input-rich-text',
   templateUrl: './input-rich-text.component.html',
-  styleUrls: ['./input-rich-text.component.css'],
+  styleUrls: ['./input-rich-text.component.css', '../../styles/animations.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -29,7 +29,7 @@ require('aws-sdk/dist/aws-sdk');
 export class InputRichTextComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
 
   // File format configurations
-  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif', 'jfif', 'webp'];
+  static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif'];
   static readonly maxImageSize = 5000000;
 
 
@@ -39,10 +39,13 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
    * The name of the directory on the server to store media.  This should be unique like manufacturer.companyName
    */
   @Input() dirName: string;
+  @Output() filesUploading = new EventEmitter<Set<string>>();
 
   content = '';
 
   showBlankTab = true;
+
+  currentImageUploads = new Set<string>();
 
 
   quillConfig = {
@@ -73,6 +76,8 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
   ngOnInit(): void {
     // Set an attribute on the function uploadImage so it can be modified after passing the function to the imageUploader
     (uploadImage as any).dirName = this.dirName;
+    (uploadImage as any).currentImageUploads = this.currentImageUploads;
+    (uploadImage as any).filesUploading = this.filesUploading;
   }
 
 
@@ -122,6 +127,11 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
 
 function uploadImage(file: File): Promise<string> {
 
+  // Keep track of ongoing uploads
+  const uploadHash = randomString(10);
+  this.upload.currentImageUploads.add(uploadHash);
+  this.upload.filesUploading.emit(this.upload.currentImageUploads);
+
   let serverFilePath;
   if (this.upload && this.upload.dirName) {
     serverFilePath = '/manufacturer-editor/' + this.upload.dirName.toLowerCase();
@@ -134,10 +144,14 @@ function uploadImage(file: File): Promise<string> {
 
     // Check file attributes
     if (!InputRichTextComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+      this.upload.currentImageUploads.delete(uploadHash);
+      this.upload.filesUploading.emit(this.upload.currentImageUploads);
       reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + InputRichTextComponent.supportedImageTypes);
       return;
     }
     if (file.size > InputRichTextComponent.maxImageSize) {
+      this.upload.currentImageUploads.delete(uploadHash);
+      this.upload.filesUploading.emit(this.upload.currentImageUploads);
       reject('File is too large.  Must be less than ' + Math.floor(InputRichTextComponent.maxImageSize / 1000000) + 'MB');
       return;
     }
@@ -151,6 +165,8 @@ function uploadImage(file: File): Promise<string> {
     const params = {Key: uploadName, Body: file};
     return bucket.upload(params, (error, response) => {
 
+      this.upload.currentImageUploads.delete(uploadHash);
+      this.upload.filesUploading.emit(this.upload.currentImageUploads);
       if (error) {
         reject('Error uploading to server: ' + error);
       } else {
