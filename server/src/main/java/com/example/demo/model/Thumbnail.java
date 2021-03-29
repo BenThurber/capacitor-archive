@@ -27,4 +27,9 @@ public class Thumbnail extends FileReference {
 
     public Thumbnail() {}
 
+    @Override
+    public String toString() {
+        return super.toString() + " Size: " + size;
+    }
+
 }

@@ -156,6 +156,7 @@ public class CapacitorUnitController {
         Set<Photo> newPhotos = capacitorUnitRequest.getPhotos().stream().map(Photo::new).collect(Collectors.toSet());
         newPhotos.forEach(photo -> photo.setCapacitorUnit(parentCapacitorUnit));
         Set<Photo> currentPhotos = new HashSet<>(parentCapacitorUnit.getPhotos());
+
         currentPhotos.removeAll(newPhotos);
         this.photoRepository.deleteAll(currentPhotos);
 

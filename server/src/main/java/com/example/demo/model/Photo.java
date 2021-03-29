@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper = true, exclude = {"thumbnails", "capacitorUnit"})
+@EqualsAndHashCode(callSuper = true, exclude = {"thumbnails", "capacitorUnit", "order"})
 @Entity
 public class Photo extends FileReference {
 
@@ -35,5 +35,11 @@ public class Photo extends FileReference {
     }
 
     public Photo() {}
+
+
+    @Override
+    public String toString() {
+        return super.toString() + " Ord: " + order;
+    }
 
 }
