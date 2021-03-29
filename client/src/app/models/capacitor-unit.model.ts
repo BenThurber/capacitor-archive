@@ -66,8 +66,8 @@ export class CapacitorUnit {
    */
   static compare(u1: CapacitorUnit, u2: CapacitorUnit): number {
     let idOrder;
-    const id1 = u1.identifier && u1.identifier.toLowerCase();
-    const id2 = u2.identifier && u2.identifier.toLowerCase();
+    const id1 = u1.identifier ? u1.identifier.toLowerCase() : '';
+    const id2 = u2.identifier ? u2.identifier.toLowerCase() : '';
 
     if (id1 > id2) {
       idOrder = 1;
