@@ -23,8 +23,8 @@
           "{{decodeURIComponent(photo.url.slice(photo.url.lastIndexOf('/') + 1, photo.url.length))}}"?
         </p>
 
-        <button (click)="modalService.close(i.toString()); deletePhoto(photo)">Yes</button>
         <button (click)="modalService.close(i.toString())">No</button>
+        <button (click)="modalService.close(i.toString()); deletePhoto(photo)">Yes</button>
       </jw-modal>
 
     </div>

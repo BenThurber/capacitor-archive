@@ -44,7 +44,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     direction: 'horizontal',
     group: {
       name: 'shared',
-    }
+    },
+    onEnd: () => {this.onChange(this.photos); this.onTouched(); },
   };
 
   decodeURIComponent = decodeURIComponent;

@@ -87,8 +87,9 @@ export class CapacitorUnit {
    * @param photoArray Ordered Array of Photos
    */
   public setOrderedPhotos(photoArray: Array<Photo>): void {
+    this.photos = [];
     for (let i = 0, photo: Photo; i < photoArray.length; i++) {
-      photo = photoArray[i];
+      photo = new Photo(photoArray[i]);
       photo.order = i;
       this.photos.push(photo);
     }
