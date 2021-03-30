@@ -19,22 +19,12 @@ export class ManufacturerSidebarComponent implements OnInit {
 
   showShadow = null;
 
-  restService: RestService;
-  dynamicRouter: DynamicRouterService;
-  refreshManufacturers: RefreshManufacturersService;
-  showSidebar: ShowSidebarService;
-
-
-  constructor(restService: RestService, activatedRoute: ActivatedRoute, dynamicRouter: DynamicRouterService,
-              refreshManufacturers: RefreshManufacturersService, showSidebar: ShowSidebarService) {
-    this.restService = restService;
-    this.dynamicRouter = dynamicRouter;
-    this.refreshManufacturers = refreshManufacturers;
-    this.showSidebar = showSidebar;
+  constructor(private restService: RestService, private activatedRoute: ActivatedRoute, private dynamicRouter: DynamicRouterService,
+              private refreshManufacturers: RefreshManufacturersService, private showSidebarService: ShowSidebarService) {
 
     // Reload the component when a refresh is announced
     this.refreshManufacturers.refreshAnnounced$.subscribe(() => this.ngOnInit());
-    this.showSidebar.showSidebarAnnounced$.subscribe(shown => this.showShadow = shown);
+    this.showSidebarService.showSidebarAnnounced$.subscribe(shown => this.showShadow = shown);
   }
 
   ngOnInit(): Subscription {
