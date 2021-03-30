@@ -53,9 +53,10 @@
 
   cursor: pointer;
 
-  opacity: 45%
+  opacity: 45%;
+  z-index: 1000;
 }
 
 .circle:hover {
-  opacity: 85%
+  opacity: 85%;
 }

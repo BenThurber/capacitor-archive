@@ -4,15 +4,36 @@
 }
 
 p {
-  font-size: 20px;
+  font-size: 17px;
 }
 
-.emphasis__blue {
-  font-weight: bold;
-  color: #3fbbf2;
+.centered {
+  margin-left: 265px;
 }
 
-.not__implemented {
-  font-weight: bold;
-  text-decoration: underline;
+span app-image {
+  margin: 10px;
+}
+
+#find-button:hover {
+  cursor: pointer;
+}
+
+#add-button:hover {
+  cursor: pointer;
+}
+
+#title {
+  margin-bottom: -20px;
+}
+
+#arrow {
+  width: 33%;
+  margin-right: -18px;
+  margin-bottom: 35px;
+}
+
+#fixed__box {
+  position: absolute;
+  left: 12%;
 }

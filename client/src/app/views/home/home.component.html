@@ -1,26 +1,35 @@
 <div class="content">
 
-  <h1>Welcome</h1>
-
-  <p class="not__implemented">
-    This site is still under development.<br>
-    The ability to add Capacitor Photos will be coming soon.
-  </p>
 
   <br>
 
-  <p>
-    The capacitor archive is a place to find information on old vintage capacitors.  You don't need an account to add
-    information to this resource.
-    <br>
-    <br>
-    <!--ToDo: Add line back when search feature is implemented-->
-    <!--If you have an old capacitor, first try searching for it with <a routerLink="/not-implemented">Search a Capacitor</a>-->
-    If you have an old capacitor, first try searching for it with the
-    <span class="emphasis__blue">Manufacturer Sidebar</span> on the left.
-    If its not already in the archive, please
-    <a routerLink="/capacitor/create">add it!</a>
-  </p>
+  <div id="fixed__box">
+
+    <h2 id="title" class="centered">Vintage Capacitor Encyclopedia</h2>
+    <span>
+      <img id="arrow" src="../../../assets/manufacturer-sidebar-arrow.svg" alt="">
+      <app-image id="find-button" src="../../assets/find-capacitor.png" width="250px"></app-image>
+      <app-image id="add-button" routerLink="capacitor/create" src="../../assets/add-capacitor.png" width="250px"></app-image>
+    </span>
+
+    <div class="centered">
+      <br>
+      <br>
+
+      <p>
+        The Capacitor Archive is a free and open resource to document vintage capacitors.
+      </p>
+
+      <br>
+      <br>
+      <br>
+
+      <h3>How it works</h3>
+      <!--ToDo add a photo of the manufacturer -> capacitor hierarchy-->
+
+    </div>
+
+  </div>
 
 
 </div>
