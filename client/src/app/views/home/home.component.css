@@ -4,15 +4,57 @@
 }
 
 p {
-  font-size: 20px;
+  font-size: 17px;
 }
 
-.emphasis__blue {
-  font-weight: bold;
-  color: #3fbbf2;
+.centered {
+  margin-left: 265px;
 }
 
-.not__implemented {
-  font-weight: bold;
-  text-decoration: underline;
+span app-image {
+  margin: 10px;
+}
+
+#find-button:hover {
+  cursor: pointer;
+}
+
+#add-button:hover {
+  cursor: pointer;
+}
+
+#title {
+  margin-bottom: 8px;
+}
+
+#arrow {
+  width: 33%;
+  margin-right: -18px;
+  margin-bottom: 35px;
+}
+
+#fixed__box {
+  position: absolute;
+  left: 12%;
+}
+
+.find__message__box {
+  background-color: #a8c5a8;
+  margin-top: 30px;
+  color: black;
+  width: 307px;
+  font-size: 18px;
+  border-radius: 20px;
+
+  animation-duration: 0.6s;
+}
+
+@keyframes show-message {
+  from {opacity: 0}
+  to {opacity: 100}
+}
+
+@keyframes hide-message {
+  from {opacity: 100}
+  to {opacity: 0}
 }
