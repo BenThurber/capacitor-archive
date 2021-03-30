@@ -37,3 +37,24 @@ span app-image {
   position: absolute;
   left: 12%;
 }
+
+.find__message__box {
+  background-color: #a8c5a8;
+  margin-top: 30px;
+  color: black;
+  width: 307px;
+  font-size: 18px;
+  border-radius: 20px;
+
+  animation-duration: 0.6s;
+}
+
+@keyframes show-message {
+  from {opacity: 0}
+  to {opacity: 100}
+}
+
+@keyframes hide-message {
+  from {opacity: 100}
+  to {opacity: 0}
+}
