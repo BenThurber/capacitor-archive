@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ShowSidebarService} from '../../services/show-sidebar/show-sidebar.service';
 
 @Component({
   selector: 'app-home',
@@ -7,7 +8,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  showSidebar: ShowSidebarService;
+
+  constructor(showSidebar: ShowSidebarService) {
+    this.showSidebar = showSidebar;
+  }
 
   ngOnInit(): void {
   }

@@ -15,7 +15,10 @@
     </div>
     <span>
       <img id="arrow" src="../../../assets/manufacturer-sidebar-arrow.svg" alt="">
-      <app-image id="find-button" src="../../assets/find-capacitor.png" width="250px"></app-image>
+      <app-image id="find-button" src="../../assets/find-capacitor.png" width="250px"
+                 (mouseenter)="showSidebar.change(true)"
+                 (mouseleave)="showSidebar.change(false)"
+      ></app-image>
       <app-image id="add-button" routerLink="capacitor/create" src="../../assets/add-capacitor.png" width="250px"></app-image>
     </span>
 

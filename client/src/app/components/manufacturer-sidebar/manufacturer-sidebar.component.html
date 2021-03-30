@@ -1,4 +1,7 @@
-<div class="sidenav minor__shadow">
+<div class="sidenav"
+     [style.animation-name]="showShadow ? 'show-sidebar' : 'hide-sidebar'"
+     [style.box-shadow]="showShadow ? '-7.5px 12px 24px #005200' : '-1.25px 2px 4px'"
+>
 
   <h3>Manufacturers</h3>
 
