@@ -17,7 +17,7 @@ export class ManufacturerSidebarComponent implements OnInit {
 
   companyNames$: Array<string>;
 
-  showShadow = false;
+  showShadow = null;
 
   restService: RestService;
   dynamicRouter: DynamicRouterService;
@@ -46,6 +46,16 @@ export class ManufacturerSidebarComponent implements OnInit {
 
       error: () => console.error('Couldn\'t get company names')
     });
+  }
+
+  selectAnimation(showShadow: boolean): string {
+    if (showShadow === true) {
+      return 'show-sidebar';
+    } else if (showShadow === false) {
+      return 'hide-sidebar';
+    } else {
+      return '';
+    }
   }
 
 }
