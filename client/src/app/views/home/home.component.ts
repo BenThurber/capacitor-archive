@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {ShowSidebarService} from '../../services/show-sidebar/show-sidebar.service';
+import Timeout = NodeJS.Timeout;
 
 @Component({
   selector: 'app-home',
@@ -7,7 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  showSidebarService: ShowSidebarService;
+
+  sidebarMessageShown = null;
+  timeoutId: Timeout;
+
+  constructor(showSidebar: ShowSidebarService) {
+    this.showSidebarService = showSidebar;
+  }
+
+  displayMessage(): void {
+    this.sidebarMessageShown = true;
+    clearTimeout(this.timeoutId);
+    this.timeoutId = setTimeout(() => this.sidebarMessageShown = false, 5000);
+  }
 
   ngOnInit(): void {
   }
