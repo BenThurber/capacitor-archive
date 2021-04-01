@@ -41,26 +41,8 @@
   margin-right: 18px;
 }
 
-#expansion-panel-container {
-  background-color: rgba(193, 227, 242, 0.75);
-  margin-left: -25px;
-  margin-top: -2px;
+#date-expansion-panel {
   width: 280px;
-  border-radius: 10px;
-}
-
-mat-expansion-panel {
-  width: 280px;
-  background-color: transparent;
-  box-shadow: none !important;
-  border-radius: 10px !important;
-}
-
-mat-panel-title {
-  all: initial;
-  font-size: 16px;
-  font-family: 'Times New Roman', serif;
-  cursor: pointer;
 }
 
 .start__end__input {
