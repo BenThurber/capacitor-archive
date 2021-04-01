@@ -15,7 +15,7 @@ export class ViewManufacturerComponent implements OnInit {
   companyName: string;
   manufacturer$: Manufacturer;
 
-  constructor(private restService: RestService, public dynamicRouter: DynamicRouterService, activatedRoute: ActivatedRoute) {
+  constructor(public restService: RestService, public dynamicRouter: DynamicRouterService, activatedRoute: ActivatedRoute) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
   }
 

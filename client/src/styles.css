@@ -131,3 +131,10 @@ a:hover {
 .minor__shadow {
   box-shadow: -2px 2px 3.5px dimgrey;
 }
+
+.green_title {
+  text-align: center;
+  text-decoration: underline;
+  color: #007200;
+  font-family: serif;
+}
