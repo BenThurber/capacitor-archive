@@ -662,6 +662,7 @@ class CapacitorTypeControllerTest {
         // Because capacitor units are sorted from low to high, i.e. CapacitorUnit4, CapacitorUnit3, CapacitorUnit2...
         // So the *third* element in the list at index 2 is CapacitorUnit2.
         assertEquals("url2_thumb", receivedTypes.get(0).getThumbnailUrl());
+        assertNull(receivedTypes.get(1).getThumbnailUrl());
     }
 
 
