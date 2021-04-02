@@ -13,13 +13,14 @@ mat-panel-title p {
 }
 
 .panel__title {
-  display: inline;
+  display: inline-block;
 }
 
 .expand__msg {
 
   position: absolute;
   right: 50px;
+  top: 16px;
 
   opacity: 85%;
   font-family: "Courier New", serif;

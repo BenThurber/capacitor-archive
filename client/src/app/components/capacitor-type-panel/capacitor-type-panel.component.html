@@ -4,6 +4,7 @@
       <mat-panel-title>
         <div>
           <h3 class="green_title panel__title">Capacitor Types</h3>
+          <span *ngIf="capacitorTypesLoading" class="spinner" style="margin-left: 20px"></span>
           <span class="expand__msg">{{typesMenuIsExpanded ? '(Collapse)' : '(Expand)'}}</span>
         </div>
       </mat-panel-title>

@@ -17,12 +17,14 @@ export class CapacitorTypePanelComponent implements OnInit {
 
   capacitorTypes: Array<CapacitorTypeSearchResponse> = [];
   typesMenuIsExpanded = false;
+  capacitorTypesLoading = true;
 
   constructor(public dynamicRouter: DynamicRouterService) { }
 
   ngOnInit(): void {
     this.capacitorTypesObservable.subscribe((capacitorTypes: Array<CapacitorTypeSearchResponse>) => {
       this.capacitorTypes = capacitorTypes;
+      this.capacitorTypesLoading = false;
       setTimeout(() => this.typesMenuIsExpanded = true, 100);
     });
   }
