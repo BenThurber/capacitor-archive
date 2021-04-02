@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,12 @@ public class CapacitorTypeSearchResponse {
     @JsonProperty("numberOfUnits")
     private Integer numberOfUnits;
 
+    @JsonProperty("lowestCapacitance")
+    private Long lowestCapacitance;
+
+    @JsonProperty("highestCapacitance")
+    private Long highestCapacitance;
+
     @JsonProperty("thumbnailUrl")
     private String thumbnailUrl;
 
@@ -58,6 +65,8 @@ public class CapacitorTypeSearchResponse {
             return;
         } else {
             setNumberOfUnits(capacitorUnits.size());
+            setLowestCapacitance(capacitorUnits.stream().min(Comparator.comparing(CapacitorUnit::getCapacitance)).get().getCapacitance());
+            setHighestCapacitance(capacitorUnits.stream().max(Comparator.comparing(CapacitorUnit::getCapacitance)).get().getCapacitance());
         }
 
         List<CapacitorUnit> capacitorUnitsWithPhotos = capacitorUnits

@@ -12,8 +12,19 @@
   <p id="num-units">
     <strong>Contains:</strong><br>
     {{typeData.numberOfUnits}}<br>
-    <strong>Values:</strong><br>
-    {{'1000pf'}} - {{'0.02uf'}}
+    <ng-container *ngIf="typeData.lowestCapacitance || typeData.highestCapacitance">
+
+      <ng-container *ngIf="typeData.lowestCapacitance != typeData.highestCapacitance">
+        <strong>Values:</strong><br>
+        {{format(typeData.lowestCapacitance)}} <strong>-</strong> {{format(typeData.highestCapacitance)}}
+      </ng-container>
+
+      <ng-container *ngIf="typeData.lowestCapacitance == typeData.highestCapacitance">
+        <strong>Value:</strong><br>
+        {{format(typeData.lowestCapacitance)}}
+      </ng-container>
+
+    </ng-container>
   </p>
   <p id="description"><strong>Description: </strong>{{typeData.description}}</p>
 </div>

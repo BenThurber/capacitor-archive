@@ -9,6 +9,8 @@ export class CapacitorTypeSearchResponse {
   companyName: string;
 
   numberOfUnits: number;
+  lowestCapacitance: number;
+  highestCapacitance: number;
   thumbnailUrl: string;
 
 }

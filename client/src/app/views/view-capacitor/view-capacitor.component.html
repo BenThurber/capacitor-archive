@@ -30,7 +30,9 @@
 
       </select><br>
 
-      Made by: <strong>{{capacitorType && capacitorType.companyName}}</strong><br>
+      Made by: <a [routerLink]="" (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', capacitorType.companyName])">
+        {{capacitorType && capacitorType.companyName}}
+      </a><br>
 
       <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
         Produced: <strong>{{capacitorType.startYear}}-{{capacitorType.endYear}}</strong><br>
