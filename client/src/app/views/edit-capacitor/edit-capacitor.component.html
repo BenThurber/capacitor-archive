@@ -1,9 +1,17 @@
 <div class="content">
 
   <div *ngIf="companyName && capacitorType && capacitorUnit; else loading">
-    <h2>You Are Editing a Type <span class="highlight">{{capacitorUnit.typeName}}</span> Size
-      <span class="highlight">{{formattedCapacitance}}</span> capacitor
-      made by <span class="highlight">{{capacitorUnit && capacitorUnit.companyName}}</span></h2>
+    <h2>You Are Editing a Type
+      <a class="highlight" [routerLink]="" (click)="dynamicRouter.redirectTo(['/capacitor', 'view', companyName, capacitorUnit.typeName])">
+        {{capacitorUnit.typeName}}
+      </a>
+      Size
+      <a class="highlight">{{formattedCapacitance}}</a>
+      capacitor made by
+      <a class="highlight" [routerLink]="" (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', companyName])">
+        {{capacitorUnit && capacitorUnit.companyName}}
+      </a>
+    </h2>
 
     <app-capacitor-form [companyName]="companyName" [capacitorType]="capacitorType" [capacitorUnit]="capacitorUnit">
     </app-capacitor-form>

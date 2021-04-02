@@ -3,6 +3,7 @@ import {RestService} from '../../services/rest/rest.service';
 import {ActivatedRoute} from '@angular/router';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 @Component({
   selector: 'app-edit-capacitor',
@@ -19,7 +20,7 @@ export class EditCapacitorComponent implements OnInit {
   capacitorUnit: CapacitorUnit;
   formattedCapacitance = '';
 
-  constructor(private restService: RestService, private activatedRoute: ActivatedRoute) {
+  constructor(private restService: RestService, private activatedRoute: ActivatedRoute, public dynamicRouter: DynamicRouterService) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = activatedRoute.snapshot.paramMap.get('typeName');
     this.value = activatedRoute.snapshot.paramMap.get('value');
