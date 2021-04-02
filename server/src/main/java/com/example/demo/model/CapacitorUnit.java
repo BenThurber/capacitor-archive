@@ -148,7 +148,8 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
         comparison = voltage1 - voltage2;
         if (comparison != 0) return comparison;
 
-        return identifier1.compareTo(identifier2);
+        // identifier1 and identifier2 are purposely reversed
+        return identifier2.compareTo(identifier1);
     }
 
 

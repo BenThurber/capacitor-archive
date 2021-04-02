@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.model.*;
 import com.example.demo.payload.response.CapacitorTypeResponse;
+import com.example.demo.payload.response.CapacitorTypeSearchResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.ConstructionRepository;
 import com.example.demo.repository.ManufacturerRepository;
@@ -88,7 +89,6 @@ class CapacitorTypeControllerTest {
         thumbnail1.setUrl("url1_thumb");
         photo1 = new Photo();
         photo1.setOrder(1);
-        photo1.setCapacitorUnit(capacitorUnit1);
         photo1.setUrl("url1");
         photo1.setThumbnails(Collections.singleton(thumbnail1));
 
@@ -97,7 +97,6 @@ class CapacitorTypeControllerTest {
         thumbnail5.setUrl("url5_thumb");
         photo5 = new Photo();
         photo5.setOrder(2);
-        photo5.setCapacitorUnit(capacitorUnit1);
         photo5.setUrl("url5");
         photo5.setThumbnails(Collections.singleton(thumbnail5));
 
@@ -106,7 +105,6 @@ class CapacitorTypeControllerTest {
         thumbnail2.setUrl("url2_thumb");
         photo2 = new Photo();
         photo2.setOrder(1);
-        photo2.setCapacitorUnit(capacitorUnit2);
         photo2.setUrl("url2");
         photo2.setThumbnails(Collections.singleton(thumbnail2));
 
@@ -115,7 +113,6 @@ class CapacitorTypeControllerTest {
         thumbnail3.setUrl("url3_thumb");
         photo3 = new Photo();
         photo3.setOrder(1);
-        photo3.setCapacitorUnit(capacitorUnit3);
         photo3.setUrl("url3");
         photo3.setThumbnails(Collections.singleton(thumbnail3));
 
@@ -124,7 +121,6 @@ class CapacitorTypeControllerTest {
         thumbnail4.setUrl("url4_thumb");
         photo4 = new Photo();
         photo4.setOrder(1);
-        photo4.setCapacitorUnit(capacitorUnit4);
         photo4.setUrl("url4");
         photo4.setThumbnails(Collections.singleton(thumbnail4));
 
@@ -132,7 +128,7 @@ class CapacitorTypeControllerTest {
         capacitorUnit1 = new CapacitorUnit();
         capacitorUnit1.setCapacitance(2000000L);
         capacitorUnit1.setVoltage(600);
-        capacitorUnit1.setPhotos(new HashSet<>(Arrays.asList(photo1, photo2)));
+        capacitorUnit1.setPhotos(new HashSet<>(Arrays.asList(photo1, photo5)));
         photo1.setCapacitorUnit(capacitorUnit1);
         photo5.setCapacitorUnit(capacitorUnit1);
 
@@ -611,6 +607,64 @@ class CapacitorTypeControllerTest {
         mvc.perform(httpReq)
                 .andExpect(status().isBadRequest());
 
+    }
+
+
+    /**
+     * Test successful retrieval of CapacitorTypeResponse List.
+     */
+    @Test
+    void getAllCapacitorTypeSearchResponses_equality_success() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        List<CapacitorTypeSearchResponse> receivedTypes = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeSearchResponse.class));
+
+        List<CapacitorTypeSearchResponse> expectedTypes = Arrays.asList(new CapacitorTypeSearchResponse(capacitorType1), new CapacitorTypeSearchResponse(capacitorType2));
+
+        assertEquals(expectedTypes, receivedTypes);
+    }
+
+
+    /**
+     * Test successful retrieval of CapacitorTypeResponse List.
+     */
+    @Test
+    void getAllCapacitorTypeSearchResponses_correctUrl_success() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        System.out.println("Sorted units: " + capacitorType1.getSortedCapacitorUnits().stream().map(cu -> cu.getPhotos().iterator().next()).collect(Collectors.toList()));
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        List<CapacitorTypeSearchResponse> receivedTypes = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeSearchResponse.class));
+
+        System.out.println(capacitorType1.getCapacitorUnits());
+        // Explanation: List of capacitor units is length 4.  Middle index is 4 / 2 == 2.
+        // Because capacitor units are sorted from low to high, i.e. CapacitorUnit4, CapacitorUnit3, CapacitorUnit2...
+        // So the *third* element in the list at index 2 is CapacitorUnit2.
+        assertEquals("url2_thumb", receivedTypes.get(0).getThumbnailUrl());
     }
 
 

@@ -79,6 +79,7 @@ public class CapacitorTypeSearchResponse {
         }
 
         // Get the capacitor unit "In the middle" of all the units
+        System.out.println("CUs w/photos: " + capacitorUnitsWithPhotos.stream().map(cu -> cu.getPhotos().iterator().next()).collect(Collectors.toList()));
         CapacitorUnit medianCapacitorUnit = QuickSelect.select(capacitorUnitsWithPhotos.toArray(new CapacitorUnit[0]), capacitorUnitsWithPhotos.size() / 2);
         setThumbnailUrl(medianCapacitorUnit == null ? null : medianCapacitorUnit.getPrimaryThumbnail().getUrl());
     }
