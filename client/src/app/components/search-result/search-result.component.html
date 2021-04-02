@@ -2,13 +2,13 @@
 <div class="container">
   <div id="thumb" class="search__thumbnail">
     <img alt="icon"
-         [src]="typeData.thumbnailUrl || '../../../assets/falcor-cat.jpg'"
+         [src]="typeData.thumbnailUrl || '../../../assets/no-photo.png'"
          (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
   </div>
-  <a id="type-name" [routerLink]=""
+  <p><a id="type-name" [routerLink]=""
      (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
     {{typeData.typeName}}
-  </a>
+  </a></p>
   <p id="num-units">
     <strong>Contains:</strong><br>
     {{typeData.numberOfUnits}}<br>
