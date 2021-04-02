@@ -8,10 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Table(
         uniqueConstraints=
@@ -21,7 +18,7 @@ import java.util.Set;
 @Setter
 @EqualsAndHashCode
 @Entity
-public class CapacitorUnit {
+public class CapacitorUnit implements Comparable<CapacitorUnit> {
 
     private final static int IDENTIFIER_LEN = 60;
 
@@ -104,6 +101,54 @@ public class CapacitorUnit {
             identifier = null;
         }
         this.identifier = identifier;
+    }
+
+    /**
+     * Get the smallest thumbnail of the Photo that has the lowest order property.
+     * If the Photo doesn't have thumbnails, tries the next photo and so on.
+     * @return Thumbnail of the primary capacitor photo
+     */
+    public Thumbnail getPrimaryThumbnail() {
+        Photo firstPhotoWithThumbnail = this.getPrimaryPhoto();
+
+        if (firstPhotoWithThumbnail == null) {
+            return null;
+        }
+
+        return firstPhotoWithThumbnail.getThumbnails()
+                .stream()
+                .min(Comparator.comparing(Thumbnail::getSize))
+                .orElse(null);
+    }
+
+    /**
+     * the Photo that has the lowest order property and has at least one thumbnail
+     * @return Photo with >=1 thumbnails
+     */
+    public Photo getPrimaryPhoto() {
+        return this.getPhotos()
+                .stream()
+                .filter(p -> p.getThumbnails() != null && p.getThumbnails().size() > 0)
+                .min(Comparator.comparing(Photo::getOrder))
+                .orElse(null);
+    }
+
+    @Override
+    public int compareTo(CapacitorUnit other) {
+        long capacitance1 = this.getCapacitance() == null ? 0 : this.getCapacitance();
+        long capacitance2 = other.getCapacitance() == null ? 0 : other.getCapacitance();
+        int voltage1 = this.getVoltage() == null ? 0 : this.getVoltage();
+        int voltage2 = other.getVoltage() == null ? 0 : other.getVoltage();
+        String identifier1 = this.getIdentifier() == null ? "" : this.getIdentifier();
+        String identifier2 = other.getIdentifier() == null ? "" : other.getIdentifier();
+
+        int comparison = Long.compare(capacitance1, capacitance2);
+        if (comparison != 0) return comparison;
+
+        comparison = voltage1 - voltage2;
+        if (comparison != 0) return comparison;
+
+        return identifier1.compareTo(identifier2);
     }
 
 
