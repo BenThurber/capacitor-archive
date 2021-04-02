@@ -49,15 +49,4 @@ public class QuickSelect {
         }
         return null;
     }
-
-    public static void main(String[] args) {
-//        for (int i = 0; i < 10; i++) {
-//            Integer[] input = {1, 2, 3, 4};
-//            System.out.print(select(input, i));
-//            if (i < 9) System.out.print(", ");
-//        }
-//        System.out.println();
-        Integer[] input = {1, 2, 3, 4};
-        System.out.print(select(input, input.length / 2));
-    }
 }
