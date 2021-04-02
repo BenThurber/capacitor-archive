@@ -39,6 +39,7 @@ import { FileUploaderComponent } from './components/file-uploader/file-uploader.
 import {ModalModule} from './components/modal';
 import {NgxGalleryModule} from 'ngx-gallery-9';
 import { CapacitorTypePanelComponent } from './components/capacitor-type-panel/capacitor-type-panel.component';
+import { SearchResultComponent } from './components/search-result/search-result.component';
 
 
 @NgModule({
@@ -66,6 +67,7 @@ import { CapacitorTypePanelComponent } from './components/capacitor-type-panel/c
     InputPhotoComponent,
     FileUploaderComponent,
     CapacitorTypePanelComponent,
+    SearchResultComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

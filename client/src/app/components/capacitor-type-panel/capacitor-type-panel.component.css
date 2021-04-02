@@ -12,6 +12,18 @@ mat-panel-title p {
   font-weight: bold;
 }
 
-img{
-  cursor: pointer;
+.panel__title {
+  display: inline;
+}
+
+.expand__msg {
+
+  position: absolute;
+  right: 50px;
+
+  opacity: 85%;
+  font-family: "Courier New", serif;
+  font-weight: bold;
+  color: #848484;
+
 }

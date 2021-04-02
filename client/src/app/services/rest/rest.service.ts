@@ -10,6 +10,7 @@ import {CapacitorType} from '../../models/capacitor-type.model';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {map} from 'rxjs/operators';
 import urlcat from 'urlcat';
+import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
 
 
 @Injectable({
@@ -48,6 +49,11 @@ export class RestService {
   getAllTypes(companyName): Observable<Array<CapacitorType>> {
     const url = urlcat(this.baseUrl, '/type/all', {companyName});
     return this.httpClient.get<Array<CapacitorType>>(url, this.options);
+  }
+
+  getAllTypeSearchResponses(companyName): Observable<Array<CapacitorTypeSearchResponse>> {
+    const url = urlcat(this.baseUrl, '/type/all-results', {companyName});
+    return this.httpClient.get<Array<CapacitorTypeSearchResponse>>(url, this.options);
   }
 
   getAllConstructions(): Observable<Array<string>> {

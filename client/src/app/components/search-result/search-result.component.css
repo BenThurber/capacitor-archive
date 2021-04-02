@@ -1,0 +1,15 @@
+
+.search__thumbnail {
+  width: 100px;
+  min-height: 50px;
+  display: inline-flex;
+}
+
+.search__thumbnail img {
+  max-height: 135px;   /* Allow aspect ratio of 4:3 (135px/100px) before scaling */
+  max-width: 100%;
+  margin: auto;
+  cursor: pointer;
+
+  border: 2px solid rgba(233, 194, 29, 0.8);
+}

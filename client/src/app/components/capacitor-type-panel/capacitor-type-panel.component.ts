@@ -1,7 +1,7 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {CapacitorType} from '../../models/capacitor-type.model';
 import {Observable} from 'rxjs';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
+import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
 
 @Component({
   selector: 'app-capacitor-type-panel',
@@ -13,15 +13,15 @@ export class CapacitorTypePanelComponent implements OnInit {
   /**
    * An observable that returns an Array of CapacitorTypes.
    */
-  @Input() capacitorTypesObservable: Observable<Array<CapacitorType>>;
+  @Input() capacitorTypesObservable: Observable<Array<CapacitorTypeSearchResponse>>;
 
-  capacitorTypes: Array<CapacitorType> = [];
+  capacitorTypes: Array<CapacitorTypeSearchResponse> = [];
   typesMenuIsExpanded = false;
 
   constructor(public dynamicRouter: DynamicRouterService) { }
 
   ngOnInit(): void {
-    this.capacitorTypesObservable.subscribe((capacitorTypes: Array<CapacitorType>) => {
+    this.capacitorTypesObservable.subscribe((capacitorTypes: Array<CapacitorTypeSearchResponse>) => {
       this.capacitorTypes = capacitorTypes;
       setTimeout(() => this.typesMenuIsExpanded = true, 100);
     });

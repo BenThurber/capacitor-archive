@@ -1,0 +1,11 @@
+
+
+<div class="search__thumbnail">
+  <img alt="icon"
+       [src]="typeData.thumbnailUrl || '../../../assets/falcor-cat.jpg'"
+       (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
+</div>
+<a [routerLink]=""
+   (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
+  {{typeData.typeName}}
+</a>
