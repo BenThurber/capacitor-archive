@@ -8,7 +8,6 @@ import com.example.demo.repository.ConstructionRepository;
 import com.example.demo.repository.ManufacturerRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.mysql.cj.xdevapi.Collection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
