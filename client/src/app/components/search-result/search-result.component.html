@@ -1,11 +1,19 @@
 
-
-<div class="search__thumbnail">
-  <img alt="icon"
-       [src]="typeData.thumbnailUrl || '../../../assets/falcor-cat.jpg'"
-       (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
+<div class="container">
+  <div id="thumb" class="search__thumbnail">
+    <img alt="icon"
+         [src]="typeData.thumbnailUrl || '../../../assets/falcor-cat.jpg'"
+         (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
+  </div>
+  <a id="type-name" [routerLink]=""
+     (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
+    {{typeData.typeName}}
+  </a>
+  <p id="num-units">
+    <strong>Contains:</strong><br>
+    {{typeData.numberOfUnits}}<br>
+    <strong>Values:</strong><br>
+    {{'1000pf'}} - {{'0.02uf'}}
+  </p>
+  <p id="description"><strong>Description: </strong>{{typeData.description}}</p>
 </div>
-<a [routerLink]=""
-   (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
-  {{typeData.typeName}}
-</a>

@@ -1,6 +1,6 @@
 import {Photo} from './file/photo.model';
 
-const unitOptions = {farad: 'F', microFarad: 'uf', nanoFarad: 'nf', picoFarad: 'pf'};
+export const unitOptions = {farad: 'F', microFarad: 'uf', nanoFarad: 'nf', picoFarad: 'pf'};
 
 export class CapacitorUnit {
 

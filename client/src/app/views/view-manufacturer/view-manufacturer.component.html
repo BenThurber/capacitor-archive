@@ -44,7 +44,7 @@
     <app-capacitor-type-panel [capacitorTypesObservable]="capacitorTypesSearchResponseObservable">
     </app-capacitor-type-panel>
 
-
+    <br>
     <div *ngIf="manufacturer$.summary">
       <h2>History</h2>
       <div class="ql-editor quill__output" [innerHTML]="manufacturer$.summary | safeHtml"></div>

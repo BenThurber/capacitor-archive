@@ -14,7 +14,7 @@ mat-panel-title {
 }
 
 .blue-expansion-panel-container {
-  background-color: rgba(193, 227, 242, 0.75);
+  background-color: rgb(202, 228, 239);
   margin-left: -25px;
   margin-top: -2px;
   width: 280px;
