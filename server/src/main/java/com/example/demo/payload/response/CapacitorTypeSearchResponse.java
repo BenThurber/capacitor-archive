@@ -80,7 +80,10 @@ public class CapacitorTypeSearchResponse {
 
         // Get the capacitor unit "In the middle" of all the units
         CapacitorUnit medianCapacitorUnit = QuickSelect.select(capacitorUnitsWithPhotos.toArray(new CapacitorUnit[0]), capacitorUnitsWithPhotos.size() / 2);
-        setThumbnailUrl(medianCapacitorUnit == null ? null : medianCapacitorUnit.getPrimaryThumbnail().getUrl());
+        if (medianCapacitorUnit == null || medianCapacitorUnit.getPrimaryThumbnail() == null) {
+            return;
+        }
+        setThumbnailUrl(medianCapacitorUnit.getPrimaryThumbnail().getUrl());
     }
 
     public CapacitorTypeSearchResponse() {}

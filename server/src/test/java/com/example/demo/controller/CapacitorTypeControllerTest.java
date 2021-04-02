@@ -610,7 +610,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test successful retrieval of CapacitorTypeResponse List.
+     * Test successful retrieval of CapacitorTypeSearchResponse List.
      */
     @Test
     void getAllCapacitorTypeSearchResponses_equality_success() throws Exception {
@@ -638,7 +638,7 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test successful retrieval of CapacitorTypeResponse List.
+     * Test correct thumbnailUrl of CapacitorTypeResponse.
      */
     @Test
     void getAllCapacitorTypeSearchResponses_correctUrl_success() throws Exception {
@@ -659,7 +659,7 @@ class CapacitorTypeControllerTest {
                 TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeSearchResponse.class));
 
         // Explanation: List of capacitor units is length 4.  Middle index is 4 / 2 == 2.
-        // Because capacitor units are sorted from low to high, i.e. CapacitorUnit4, CapacitorUnit3, CapacitorUnit2...
+        // Capacitor units are sorted from low to high, i.e. CapacitorUnit4, CapacitorUnit3, CapacitorUnit2...
         // So the *third* element in the list at index 2 is CapacitorUnit2.
         assertEquals("url2_thumb", receivedTypes.get(0).getThumbnailUrl());
         assertNull(receivedTypes.get(1).getThumbnailUrl());
@@ -667,7 +667,36 @@ class CapacitorTypeControllerTest {
 
 
     /**
-     * Test unsuccessful retrieval of CapacitorTypeResponse List from Manufacturer that doesn't exist.
+     * Test correct thumbnailUrl of CapacitorTypeResponse.
+     */
+    @Test
+    void getAllCapacitorTypeSearchResponses_photoWithNoThumbnail_success() throws Exception {
+
+        // Set Photo without thumbnail
+        photo1.setThumbnails(new HashSet<>());
+        capacitorType2.getCapacitorUnits().get(0).setPhotos(Collections.singleton(photo1));
+
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        List<CapacitorTypeSearchResponse> receivedTypes = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeSearchResponse.class));
+
+        assertNull(receivedTypes.get(0).getThumbnailUrl());
+    }
+
+
+    /**
+     * Test unsuccessful retrieval of CapacitorTypeSearchResponse List from Manufacturer that doesn't exist.
      */
     @Test
     void getAllCapacitorTypeSearchResponses_noExistingManufacturer_fail() throws Exception {
