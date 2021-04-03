@@ -28,3 +28,9 @@ mat-panel-title p {
   color: #848484;
 
 }
+
+#add-capacitor {
+  display: inline;
+  text-decoration: underline;
+  margin-left: 20px;
+}
