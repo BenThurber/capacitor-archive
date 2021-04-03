@@ -1,6 +1,6 @@
 import {Photo} from './file/photo.model';
 
-const unitOptions = {farad: 'F', microFarad: 'uf', nanoFarad: 'nf', picoFarad: 'pf'};
+export const unitOptions = {farad: 'F', microFarad: 'uf', nanoFarad: 'nf', picoFarad: 'pf'};
 
 export class CapacitorUnit {
 
@@ -35,8 +35,9 @@ export class CapacitorUnit {
    * Create a formatted capacitance like 100pf or 50nf.
    * @param noNano if true, returns values like 0.01 uf instead of 10nf.
    * @param capacitance capacitance in pico farads.
+   * @param noSpace if true, excludes the space between value and unit.
    */
-  static formattedCapacitance(capacitance: number, noNano: boolean = false): string {
+  static formattedCapacitance(capacitance: number, noNano: boolean = false, noSpace: boolean = false): string {
     let unit: string;
     let num: number;
     if (capacitance == null) {
@@ -54,7 +55,7 @@ export class CapacitorUnit {
       unit = unitOptions.farad;
       num = capacitance / 1000000000000;
     }
-    return num + ' ' + unit;
+    return num + (noSpace ? '' : ' ') + unit;
   }
 
   /**

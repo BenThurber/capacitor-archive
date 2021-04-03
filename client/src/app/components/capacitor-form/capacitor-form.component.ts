@@ -38,7 +38,7 @@ class CapacitorForm {
 @Component({
   selector: 'app-capacitor-form',
   templateUrl: './capacitor-form.component.html',
-  styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css']
+  styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
 export class CapacitorFormComponent implements OnInit {
 

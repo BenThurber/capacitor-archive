@@ -5,6 +5,7 @@ import com.example.demo.model.Construction;
 import com.example.demo.model.Manufacturer;
 import com.example.demo.payload.request.CapacitorTypeRequest;
 import com.example.demo.payload.response.CapacitorTypeResponse;
+import com.example.demo.payload.response.CapacitorTypeSearchResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.ConstructionRepository;
 import com.example.demo.repository.ManufacturerRepository;
@@ -160,6 +161,22 @@ public class CapacitorTypeController {
 
     }
 
+    /**
+     * Helper function to query the database for a Manufacturer using companyName.  If no manufacturer with that
+     * name exists, an exception is thrown.
+     * @param companyName name of the Manufacturer to get
+     * @return Manufacturer object
+     */
+    private Manufacturer manufacturerFromCompanyName(String companyName) {
+        Manufacturer manufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
+
+        if (manufacturer == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    String.format(PARENT_MANUFACTURER_NOT_FOUND_ERROR,
+                            companyName));
+        }
+        return manufacturer;
+    }
 
     /**
      * Get List of all CapacitorTypeResponses from a Manufacturer, given companyName.
@@ -173,15 +190,8 @@ public class CapacitorTypeController {
                                                   @RequestParam(value="companyName") String companyName,
                                                   HttpServletResponse response) {
 
-        Manufacturer parentManufacturer = manufacturerRepository.findByCompanyNameLowerIgnoreCase(companyName);
-
-        if (parentManufacturer == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    String.format(PARENT_MANUFACTURER_NOT_FOUND_ERROR,
-                            companyName));
-        }
-
-        List<CapacitorTypeResponse> capacitorTypeResponses = parentManufacturer.getCapacitorTypes()
+        List<CapacitorTypeResponse> capacitorTypeResponses = manufacturerFromCompanyName(companyName)
+                .getCapacitorTypes()
                 .stream()
                 .map(CapacitorTypeResponse::new)
                 .collect(Collectors.toList());
@@ -189,6 +199,30 @@ public class CapacitorTypeController {
 
         response.setStatus(HttpServletResponse.SC_OK);
         return capacitorTypeResponses;
+    }
+
+
+    /**
+     * Get List of all CapacitorTypeResponses from a Manufacturer, given companyName.
+     * @param companyName name of the owning Manufacturer.  If one can not be found a 400 error is returned.
+     * @return the list of found type, empty list if none.
+     */
+    @GetMapping(value = "all-results",
+            params = { "companyName" }
+    )
+    public List<CapacitorTypeSearchResponse> getAllCapacitorTypeSearchResultsByManufacturer(
+            @RequestParam(value="companyName") String companyName,
+            HttpServletResponse response) {
+
+        List<CapacitorTypeSearchResponse> capacitorTypeSearchResults = manufacturerFromCompanyName(companyName)
+                .getCapacitorTypes()
+                .stream()
+                .map(CapacitorTypeSearchResponse::new)
+                .collect(Collectors.toList());
+
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        return capacitorTypeSearchResults;
     }
 
 }

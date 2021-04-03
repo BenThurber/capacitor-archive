@@ -2,14 +2,15 @@
 .content {
   min-width: 96%;
   display: inline-grid;
-  grid-template-columns: auto 5% 220px 0%;
+  grid-template-columns: auto 4% 160px 0%;
   grid-template-rows: 5% auto auto auto 5%;
   margin-top: 10px;
 }
 
 .edit__button {
   float: right;
-  margin-top: 5px;
+  margin-top: 50px;
+  margin-right: 2%;
 }
 
 .quill__output {
@@ -35,14 +36,11 @@
 
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
-  padding: 20px 7px;
+  padding: 10px 0 10px 10px;
   margin-bottom: 10px;
 }
 
 #all-types-box h3 {
-  text-align: center;
-  text-decoration: underline;
-  color: #007200;
   margin-bottom: 15px;
   margin-top: 5px;
 }
