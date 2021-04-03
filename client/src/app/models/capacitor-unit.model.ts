@@ -1,5 +1,6 @@
+import {Photo} from './file/photo.model';
 
-const unitOptions = {farad: 'F', microFarad: 'uf', nanoFarad: 'nf', picoFarad: 'pf'};
+export const unitOptions = {farad: 'F', microFarad: 'uf', nanoFarad: 'nf', picoFarad: 'pf'};
 
 export class CapacitorUnit {
 
@@ -8,15 +9,35 @@ export class CapacitorUnit {
   identifier: string;
   value: string;
   notes: string;
+  photos: Array<Photo> = [];
   typeName: string;
   companyName: string;
+
+
+  constructor(capacitorUnit?: CapacitorUnit) {
+    if (capacitorUnit) {
+      this.capacitance = capacitorUnit.capacitance;
+      this.voltage = capacitorUnit.voltage;
+      this.identifier = capacitorUnit.identifier;
+      this.value = capacitorUnit.value;
+      this.notes = capacitorUnit.notes;
+      if (capacitorUnit.photos) {
+        this.photos = [];
+        capacitorUnit.photos.forEach(photo => this.photos.push(new Photo(photo)));
+      }
+      this.typeName = capacitorUnit.typeName;
+      this.companyName = capacitorUnit.companyName;
+    }
+  }
+
 
   /**
    * Create a formatted capacitance like 100pf or 50nf.
    * @param noNano if true, returns values like 0.01 uf instead of 10nf.
    * @param capacitance capacitance in pico farads.
+   * @param noSpace if true, excludes the space between value and unit.
    */
-  static formattedCapacitance(capacitance: number, noNano: boolean = false): string {
+  static formattedCapacitance(capacitance: number, noNano: boolean = false, noSpace: boolean = false): string {
     let unit: string;
     let num: number;
     if (capacitance == null) {
@@ -34,7 +55,7 @@ export class CapacitorUnit {
       unit = unitOptions.farad;
       num = capacitance / 1000000000000;
     }
-    return num + ' ' + unit;
+    return num + (noSpace ? '' : ' ') + unit;
   }
 
   /**
@@ -46,8 +67,8 @@ export class CapacitorUnit {
    */
   static compare(u1: CapacitorUnit, u2: CapacitorUnit): number {
     let idOrder;
-    const id1 = u1.identifier && u1.identifier.toLowerCase();
-    const id2 = u2.identifier && u2.identifier.toLowerCase();
+    const id1 = u1.identifier ? u1.identifier.toLowerCase() : '';
+    const id2 = u2.identifier ? u2.identifier.toLowerCase() : '';
 
     if (id1 > id2) {
       idOrder = 1;
@@ -58,5 +79,28 @@ export class CapacitorUnit {
     }
 
     return u2.capacitance - u1.capacitance || u2.voltage - u1.voltage || idOrder;
+  }
+
+
+  /**
+   * Takes an ordered Array of photos.  Assigns the index of each Photo in the Array to its order
+   * property and adds it to the internal Array<Photo>
+   * @param photoArray Ordered Array of Photos
+   */
+  public setOrderedPhotos(photoArray: Array<Photo>): void {
+    this.photos = [];
+    for (let i = 0, photo: Photo; i < photoArray.length; i++) {
+      photo = new Photo(photoArray[i]);
+      photo.order = i;
+      this.photos.push(photo);
+    }
+  }
+
+  /**
+   * Returns an Array<Photo> that is sorted by the order property in each photo
+   * @return an ordered Array of Photos
+   */
+  public getOrderedPhotos(): Array<Photo> {
+    return [...this.photos].sort((a: Photo, b: Photo) => a.order - b.order);
   }
 }

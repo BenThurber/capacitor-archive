@@ -3,7 +3,9 @@
 
   <!--Errors-->
   <div *ngIf="errorsBackend.length > 0" class="error__submit input">
-    <div *ngFor="let error of errorsBackend"><strong>Error: </strong>{{error.message || error.error.message}}</div>
+    <div *ngFor="let error of errorsBackend"><strong>Error: </strong>
+      {{(error && (error.message || error.error.message)) || "An unknown error occurred"}}
+    </div>
   </div>
 
 
@@ -35,7 +37,7 @@
 
 
   <!--Capacitor Type Section-->
-  <div id="type-section" class="input__section" formGroupName="type" *ngIf="manufacturerIsSelected">
+  <div id="type-section" class="input__section" formGroupName="type" *ngIf="manufacturerIsSelected && !isNavigatingToCreateManufacturer">
 
     <div style="margin-bottom: 20px">
       <app-image src="../../../assets/aerovox-type.png" link="true" height="100px" style="margin-right: 20px; margin-bottom: 9px">
@@ -111,7 +113,7 @@
       </div>
       <br>
 
-      <div id="expansion-panel-container">
+      <div id="date-expansion-panel" class="blue-expansion-panel-container">
         <mat-expansion-panel [(expanded)]="yearsAreExpanded" class="input">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -158,7 +160,7 @@
 
   <!--Capacitor Unit Section-->
   <div id="capacitor-section" class="input__section" formGroupName="unit"
-       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected">
+       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected && !isNavigatingToCreateManufacturer">
 
     <label class="input__label__major">Add Capacitor:</label>
     <br>
@@ -197,6 +199,23 @@
       <br>
       <textarea id="notes" rows="4" cols="35" formControlName="notes" placeholder="optional"></textarea>
     </div>
+
+
+    <label class="input__label__major" for="input-photo">Add Photos:</label>
+    <br>
+    <br>
+    <div class="input">
+      <app-input-photo id="input-photo"
+                       [dirPathArray]="[
+                          'capacitor-photos',
+                          (formFields.companyName.value || editCompanyName).toLowerCase(),
+                          (typeFields.typeNameInput.value || '').toLowerCase()
+                       ]"
+                       ngDefaultControl
+                       formControlName="photos">
+      </app-input-photo>
+    </div>
+
 
     <hr>
   </div>

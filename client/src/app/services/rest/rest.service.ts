@@ -8,7 +8,9 @@ import {FormGroup} from '@angular/forms';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
+import {map} from 'rxjs/operators';
 import urlcat from 'urlcat';
+import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
 
 
 @Injectable({
@@ -47,6 +49,11 @@ export class RestService {
   getAllTypes(companyName): Observable<Array<CapacitorType>> {
     const url = urlcat(this.baseUrl, '/type/all', {companyName});
     return this.httpClient.get<Array<CapacitorType>>(url, this.options);
+  }
+
+  getAllTypeSearchResponses(companyName): Observable<Array<CapacitorTypeSearchResponse>> {
+    const url = urlcat(this.baseUrl, '/type/all-results', {companyName});
+    return this.httpClient.get<Array<CapacitorTypeSearchResponse>>(url, this.options);
   }
 
   getAllConstructions(): Observable<Array<string>> {
@@ -92,12 +99,14 @@ export class RestService {
 
   getCapacitorUnitByValue(companyName: string, typeName: string, value: string): Observable<CapacitorUnit> {
     const url = urlcat(this.baseUrl, '/unit/name', {companyName, typeName, value});
-    return this.httpClient.get<any>(url, this.options);
+    return this.httpClient.get<any>(url, this.options).pipe(
+      map(cu => new CapacitorUnit(cu)));
   }
 
   getAllCapacitorUnitsFromCapacitorType(companyName: string, typeName: string): Observable<Array<CapacitorUnit>> {
     const url = urlcat(this.baseUrl, '/unit/all', {companyName, typeName});
-    return this.httpClient.get<any>(url, this.options);
+    return this.httpClient.get<any>(url, this.options).pipe(
+      map(res => res.map(cu => new CapacitorUnit(cu))));
   }
 
   editManufacturer(companyName: string, manufacturer: Manufacturer): any {

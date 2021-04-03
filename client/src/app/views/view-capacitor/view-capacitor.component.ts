@@ -6,6 +6,7 @@ import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml, caseInsensitiveCompare} from '../../utilities/text-utils';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
+import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 
 @Component({
   selector: 'app-view-capacitor',
@@ -29,8 +30,11 @@ export class ViewCapacitorComponent implements OnInit {
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
 
+  galleryOptions: NgxGalleryOptions[] = [];
+  galleryImages: NgxGalleryImage[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private restService: RestService,  public dynamicRouter: DynamicRouterService) {
+
+  constructor(private activatedRoute: ActivatedRoute, private restService: RestService, public dynamicRouter: DynamicRouterService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
     this.value = this.activatedRoute.snapshot.paramMap.get('value');
@@ -38,10 +42,31 @@ export class ViewCapacitorComponent implements OnInit {
 
   ngOnInit(): any {
 
+    this.galleryOptions = [
+      {
+        previewCloseOnClick: true,
+        previewCloseOnEsc: true,
+        previewKeyboardNavigation: true,
+        previewZoom: true,
+        previewZoomStep: 0.4,
+        previewZoomMax: 4,
+        previewDownload: true,
+        previewAnimation: false,
+        width: '100%',
+        height: '100%',
+        thumbnailsColumns: 4,
+        imageInfinityMove: true,
+        imageSize: NgxGalleryImageSize.Contain,
+        imageAnimation: NgxGalleryAnimation.Slide,
+      }
+    ];
+
+
     if (this.value) {
       this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value)
         .subscribe((capacitorUnit: CapacitorUnit) => {
           this.capacitorUnit = capacitorUnit;
+          this.updateGalleryImages();
           // Set focus on the similar menu
           setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
         });
@@ -61,6 +86,7 @@ export class ViewCapacitorComponent implements OnInit {
         } else if (this.capacitorUnits.length === 0) {
           this.capacitorUnit = new CapacitorUnit();
         }
+        this.updateGalleryImages();
         // Set focus on the similar menu
         setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
       });
@@ -69,16 +95,39 @@ export class ViewCapacitorComponent implements OnInit {
 
   similarMenuChanged(value): void {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
+    this.updateGalleryImages();
   }
 
   formatSimilarCapacitor(capacitorUnit: CapacitorUnit): string {
     let str = '';
-    str += padEndHtml(CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true)
-      .replace(' ', ''), 9);
+    str += padEndHtml(CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true, true), 9);
     str += padEndHtml(String(capacitorUnit.voltage > 0 ? capacitorUnit.voltage + 'V' : ''), 8);
     str += capacitorUnit.identifier ? capacitorUnit.identifier : '';
 
     return str;
+  }
+
+
+  updateGalleryImages(): void {
+    this.galleryImages = [];
+    if (!this.capacitorUnit) {
+      return;
+    }
+    if (this.capacitorUnit.photos.length === 0) {
+      this.galleryImages.push({
+        big: '../../../assets/no-capacitor-images-no-arrow.jpg',
+        medium: '../../../assets/no-capacitor-images.jpg',
+        small: '',
+      });
+    } else {
+      for (const photo of this.capacitorUnit.getOrderedPhotos()) {
+        this.galleryImages.push({
+          big: photo.url,
+          medium: photo.url,
+          small: photo.getThumbnailUrl(),
+        });
+      }
+    }
   }
 
 }

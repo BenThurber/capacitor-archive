@@ -1,0 +1,25 @@
+<div id="types-expansion-panel" class="blue-expansion-panel-container minor__shadow">
+  <mat-expansion-panel [(expanded)]="typesMenuIsExpanded" class="input">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <div>
+          <h3 class="green_title panel__title">Capacitor Types</h3>
+          <span *ngIf="capacitorTypesLoading" class="spinner" style="margin-left: 20px"></span>
+          <span class="expand__msg">{{typesMenuIsExpanded ? '(Collapse)' : '(Expand)'}}</span>
+        </div>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ng-container *ngIf="capacitorTypes.length > 0; else noTypes">
+      <div *ngFor="let type of capacitorTypes">
+        <hr>
+        <app-search-result [typeData]="type"></app-search-result>
+      </div>
+      <hr>
+    </ng-container>
+    <ng-template #noTypes>
+      No Capacitors <a id="add-capacitor" class="grey__link" (click)="dynamicRouter.redirectTo(['/capacitor', 'create'])">+ Add Capacitor</a>
+    </ng-template>
+
+  </mat-expansion-panel>
+</div>

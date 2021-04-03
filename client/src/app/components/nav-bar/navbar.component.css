@@ -11,8 +11,15 @@ header {
   justify-content: flex-start;
   align-items: center;
   padding: 30px 3%;
-  background-color: #844b13;
   border-bottom-left-radius: 10px;
+
+  background-image: url('../../../assets/navbar-background.jpg');
+  background-color: #844b13;
+  background-size: cover;
+
+  margin-bottom: 15px;
+  margin-left: 6px;
+  overflow: hidden;
 }
 
 .logo {
@@ -20,11 +27,11 @@ header {
   margin: -20px -20px;
 }
 .banner {
-  margin-left: 5%;
+  margin-left: 8px;
 }
 
 .title__nav__links {
-  padding: 0px 20px;
+  padding: 0 20px;
   text-align: left;
 }
 

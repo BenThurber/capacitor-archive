@@ -45,7 +45,7 @@ public class JsonConverter {
      * @param args Key value pairs.  Keys should be strings, values should be strings, Maps or String arrays.
      * @return a Map<Object, Object>
      */
-    static Map toMap(Object ... args) {
+    public static Map toMap(Object ... args) {
         Map<Object, Object> jsonMap = new HashMap<>(args.length/2);
 
         int i = 0;

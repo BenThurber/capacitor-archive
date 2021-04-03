@@ -16,6 +16,7 @@
   background-color: #d0d0d0;
   padding: 10% 10%;
   border-radius: 10px;
+  height: 600px;
 }
 
 #type-box {
@@ -41,7 +42,7 @@
   overflow-wrap: break-word;
   font-family: "Courier New", serif;
   font-weight: bold;
-  font-size: small;
+  font-size: 15px;
   letter-spacing: 0.06em;
   line-height: 18px;
 }
@@ -53,15 +54,22 @@
   grid-row-start: 3;
   grid-row-end: 3;
 
-  min-height: 100px;
+  min-height: 130px;
 
   background-color: #a8c5a8;
 }
 
 #identifier {
   float: right;
-  font-family: 'Teletype Regular', "Courier New", serif;
-  font-weight: bolder;
+  font-family: Courier, serif;
+  font-weight: initial;
+  font-size: smaller;
+  line-break: anywhere;
+  line-height: 20px;
+  max-width: 20%;
+
+  margin-top: 7px;
+  margin-right: -8px;
 }
 
 #similar-units-box {

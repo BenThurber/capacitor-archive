@@ -8,8 +8,7 @@ import lombok.Setter;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Table(
@@ -93,6 +92,13 @@ public class CapacitorType {
         if (construction != null) {
             setConstruction(construction);
         }
+    }
+
+    public List<CapacitorUnit> getSortedCapacitorUnits() {
+        List<CapacitorUnit> sortedCapacitorUnits = new ArrayList<>(this.getCapacitorUnits());
+        Collections.sort(sortedCapacitorUnits);
+
+        return sortedCapacitorUnits;
     }
 
 

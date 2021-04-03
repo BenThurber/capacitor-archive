@@ -25,6 +25,8 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
 
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
+  currentImageUploads = new Set<string>();
+
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
   restService: RestService;

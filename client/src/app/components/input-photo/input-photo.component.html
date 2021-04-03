@@ -1,0 +1,36 @@
+
+<app-file-uploader [dirPathArray]="dirPathArray"
+                   (uploadStarted)="addThumbnail($event)"
+                   (uploadFinished)="addPhoto($event)">
+
+</app-file-uploader>
+
+<div *ngIf="photos.length > 0" style="margin: 20px 0;">
+  <img src="../../../assets/openhand.svg" alt="" style="margin-bottom:-11px">
+  <div id="drag-photos-msg">Drag photos to order</div>
+</div>
+<div class="grid">
+  <div class="col" [sortablejs]="photos" [sortablejsOptions]="options">
+
+
+    <div *ngFor="let photo of photos; let i = index;"
+         class="grid-square-outer item">
+      <div [ngStyle]="{ 'background-image': 'url(' + photo.getThumbnailUrl() + ')'}" class="grid-square-inner">
+        <div class="circle" title="Delete" (click)="modalService.open(i.toString())"></div>
+      </div>
+
+      <jw-modal [id]="i.toString()">
+
+        <p>
+          Are you sure you want to delete the photo<br>
+          "{{decodeURIComponent(photo.url.slice(photo.url.lastIndexOf('/') + 1, photo.url.length))}}"?
+        </p>
+
+        <button (click)="modalService.close(i.toString())">No</button>
+        <button (click)="modalService.close(i.toString()); deletePhoto(photo)">Yes</button>
+      </jw-modal>
+
+    </div>
+
+  </div>
+</div>

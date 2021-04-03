@@ -11,6 +11,7 @@ import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
+import {Photo} from '../../models/file/photo.model';
 
 class CapacitorForm {
   companyName: string;
@@ -30,13 +31,14 @@ class CapacitorForm {
     voltage: number;
     identifier: string;
     notes: string;
+    photos: Array<Photo>;
   };
 }
 
 @Component({
   selector: 'app-capacitor-form',
   templateUrl: './capacitor-form.component.html',
-  styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css']
+  styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
 export class CapacitorFormComponent implements OnInit {
 
@@ -106,6 +108,7 @@ export class CapacitorFormComponent implements OnInit {
         voltage: ['', [Validators.pattern(integerPattern)]],
         identifier: ['', [Validators.maxLength(12)]],
         notes: ['', []],
+        photos: [new Array<Photo>(), []],
       }),
       captcha: ['', Validators.required],
     });
@@ -139,7 +142,8 @@ export class CapacitorFormComponent implements OnInit {
         capacitance: capacitorUnit.capacitance,
         voltage: capacitorUnit.voltage,
         identifier: capacitorUnit.identifier,
-        notes: capacitorUnit.notes
+        notes: capacitorUnit.notes,
+        photos: capacitorUnit.getOrderedPhotos(),
       }
     });
   }
@@ -316,6 +320,9 @@ export class CapacitorFormComponent implements OnInit {
       capacitorUnit.voltage = capacitorForm.unit.voltage;
       capacitorUnit.identifier = capacitorForm.unit.identifier;
       capacitorUnit.notes = capacitorForm.unit.notes;
+      capacitorUnit.setOrderedPhotos(capacitorForm.unit.photos);
+      // Remove circular references
+      capacitorUnit.photos.forEach(p => p.thumbnails.forEach(t => t.photo = null));
       capacitorUnit.typeName = capacitorForm.type.typeContent ?
         capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect;
       capacitorUnit.companyName = capacitorForm.companyName;
@@ -367,19 +374,19 @@ export class CapacitorFormComponent implements OnInit {
     return this.formFields.type.controls.typeContent.controls;
   }
 
-  get manufacturerIsSelected(): any {
+  get manufacturerIsSelected(): boolean {
     return !this.formFields.companyName.invalid;
   }
 
-  get capacitorTypeIsSelected(): any {
+  get capacitorTypeIsSelected(): boolean {
     return !this.formFields.type.controls.typeNameSelect.invalid;
   }
 
-  get endYearBeforeStartYearError(): any {
+  get endYearBeforeStartYearError(): boolean {
     return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.endYearBeforeStartYear;
   }
 
-  get noNewConstructionEnteredError(): any {
+  get noNewConstructionEnteredError(): boolean {
     return this.formFields.type.controls.typeContent.errors && this.formFields.type.controls.typeContent.errors.noNewConstructionEntered;
   }
 

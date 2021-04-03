@@ -2,17 +2,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Lilita+One&display=swap');
 @import '~quill/dist/quill.core.css';
 @import '~quill/dist/quill.snow.css';
-@font-face {
-  font-family: "TELETYPE 1945";
-  src: url("assets/TELETYPE1945-1985.ttf");
-}
-@font-face {
-  font-family: "Teletype Regular";
-  src: url("assets/teletype.ttf");
-}
+
 
 body {
-  background-color: #e3e3e3;
+  background-color: #e8e8e8;
 }
 
 h1 {
@@ -34,7 +27,7 @@ a:visited {
 }
 
 a:hover {
-  color: darkgoldenrod;
+  color: #C9950B;
 }
 
 .content {
@@ -50,8 +43,9 @@ a:hover {
 .nav__links li a {
   font-family: "Lilita One", serif;
   font-weight: 500;
-  font-size: 16px;
-  color: darkgoldenrod;
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  color: #e7b10a;
   text-decoration: none;
   transition: all 0.3s ease 0s;
 }
@@ -70,7 +64,7 @@ a:hover {
 }
 
 .nav__link:hover {
-  color: darkgoldenrod;
+  color: #e7b10a;
 }
 
 .is-invalid {
@@ -95,7 +89,8 @@ a:hover {
 }
 
 .loading {
-  font-family: "TELETYPE 1945", "Courier", serif;
+  font-family: "Courier", serif;
+  font-weight: bold;
 }
 
 .info__box {
@@ -104,8 +99,9 @@ a:hover {
   padding: 14px 23px;
   margin-bottom: 10px;
 
-  font-family: "TELETYPE 1945", "Courier", serif;
-  font-size: 15px;
+  font-family: Courier, serif;
+  font-weight: bold;
+  font-size: 19px;
   line-height: 30px;
 }
 
@@ -126,4 +122,19 @@ a:hover {
 .grey__link:hover {
   color: #c6b51b;
   text-decoration-color: #c6b51b
+}
+
+.major__shadow {
+  box-shadow: -2.5px 4px 8px;
+}
+
+.minor__shadow {
+  box-shadow: -2px 2px 3.5px dimgrey;
+}
+
+.green_title {
+  text-align: center;
+  text-decoration: underline;
+  color: #007200;
+  font-family: serif;
 }

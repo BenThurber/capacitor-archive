@@ -22,7 +22,7 @@ import { EditManufacturerComponent } from './views/edit-manufacturer/edit-manufa
 import {CommonModule} from '@angular/common';
 import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/manufacturer-sidebar.component';
 import {QuillEditorComponent, QuillModule} from 'ngx-quill';
-import { RichTextInputComponent } from './components/rich-text-input/rich-text-input.component';
+import { InputRichTextComponent } from './components/input-rich-text/input-rich-text.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
@@ -33,6 +33,13 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { ImageComponent } from './components/image/image.component';
 import { ViewCapacitorComponent } from './views/view-capacitor/view-capacitor.component';
 import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.component';
+import {SortablejsModule} from 'ngx-sortablejs';
+import { InputPhotoComponent } from './components/input-photo/input-photo.component';
+import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
+import {ModalModule} from './components/modal';
+import {NgxGalleryModule} from 'ngx-gallery-9';
+import { CapacitorTypePanelComponent } from './components/capacitor-type-panel/capacitor-type-panel.component';
+import { SearchResultComponent } from './components/search-result/search-result.component';
 
 
 @NgModule({
@@ -49,7 +56,7 @@ import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.co
     PageNotFoundComponent,
     EditManufacturerComponent,
     ManufacturerSidebarComponent,
-    RichTextInputComponent,
+    InputRichTextComponent,
     SafeHtmlPipe,
     CreateCapacitorComponent,
     CapacitorFormComponent,
@@ -57,6 +64,10 @@ import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.co
     ImageComponent,
     ViewCapacitorComponent,
     EditCapacitorComponent,
+    InputPhotoComponent,
+    FileUploaderComponent,
+    CapacitorTypePanelComponent,
+    SearchResultComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -72,6 +83,9 @@ import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.co
     BrowserAnimationsModule,
     MatTabsModule,
     MatExpansionModule,
+    SortablejsModule.forRoot({ animation: 150 }),
+    ModalModule,
+    NgxGalleryModule,
   ],
   providers: [RestService, QuillEditorComponent],
   bootstrap: [AppComponent],
