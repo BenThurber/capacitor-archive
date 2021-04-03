@@ -677,7 +677,7 @@ class CapacitorTypeControllerTest {
         capacitorType2.getCapacitorUnits().get(0).setPhotos(Collections.singleton(photo1));
 
         capacitorTypeRepository.save(capacitorType2);
-        manufacturer2.setCapacitorTypes(Collections.singletonList(capacitorType2));
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
         manufacturerRepository.save(manufacturer2);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solar")
@@ -692,7 +692,7 @@ class CapacitorTypeControllerTest {
                 result.getResponse().getContentAsString(),
                 TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeSearchResponse.class));
 
-        assertNull(receivedTypes.get(0).getThumbnailUrl());
+        assertNull(receivedTypes.get(1).getThumbnailUrl());
     }
 
 
