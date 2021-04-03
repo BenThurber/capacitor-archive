@@ -18,7 +18,7 @@
       <hr>
     </ng-container>
     <ng-template #noTypes>
-      No Capacitors
+      No Capacitors <a id="add-capacitor" class="grey__link" (click)="dynamicRouter.redirectTo(['/capacitor', 'create'])">+ Add Capacitor</a>
     </ng-template>
 
   </mat-expansion-panel>
