@@ -687,7 +687,6 @@ class CapacitorTypeControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isOk()).andReturn();
 
-        System.out.println(result.getResponse().getContentAsString());
         List<CapacitorTypeSearchResponse> receivedTypes = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeSearchResponse.class));
