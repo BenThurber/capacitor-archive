@@ -52,13 +52,15 @@
   float: right;
 
   cursor: pointer;
-
-  /*Temporary to test on dev server*/
-  /*opacity: 45%;*/
   z-index: 1000;
 }
 
 .circle:hover {
-  /*Temporary to test on dev server*/
-  /*opacity: 85%;*/
+}
+
+#drag-photos-msg {
+  display: inline;
+  margin-left: 8px;
+  font-weight: bold;
+  font-size: 17px;
 }

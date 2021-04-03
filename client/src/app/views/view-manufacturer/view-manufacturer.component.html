@@ -2,7 +2,7 @@
 
 
   <div id="all-types-box" class="minor__shadow">
-    <h3>Capacitor Types</h3>
+    <h3 class="green_title">Capacitor Types</h3>
 
     <ng-container *ngIf="manufacturer$; else spinner">
       <div *ngFor="let typeName of manufacturer$.typeNames;">
@@ -29,7 +29,7 @@
     </div>
 
     <div *ngIf="manufacturer$.companyName">
-      <h2>{{manufacturer$.companyName}}</h2>
+      <h1>{{manufacturer$.companyName}}</h1>
     </div>
 
     <div *ngIf="manufacturer$.openYear">
@@ -40,7 +40,13 @@
       <strong>Closed: </strong>{{manufacturer$.closeYear}}
     </div>
 
+
+    <app-capacitor-type-panel [capacitorTypesObservable]="capacitorTypesSearchResponseObservable">
+    </app-capacitor-type-panel>
+
+    <br>
     <div *ngIf="manufacturer$.summary">
+      <h2>History</h2>
       <div class="ql-editor quill__output" [innerHTML]="manufacturer$.summary | safeHtml"></div>
     </div>
 

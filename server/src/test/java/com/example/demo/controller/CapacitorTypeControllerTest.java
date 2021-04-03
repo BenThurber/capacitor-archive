@@ -1,12 +1,12 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.CapacitorType;
-import com.example.demo.model.Construction;
-import com.example.demo.model.Manufacturer;
+import com.example.demo.model.*;
 import com.example.demo.payload.response.CapacitorTypeResponse;
+import com.example.demo.payload.response.CapacitorTypeSearchResponse;
 import com.example.demo.repository.CapacitorTypeRepository;
 import com.example.demo.repository.ConstructionRepository;
 import com.example.demo.repository.ManufacturerRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.AfterEach;
@@ -25,9 +25,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import testUtilities.JsonConverter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -61,13 +59,119 @@ class CapacitorTypeControllerTest {
     private static final Long DEFAULT_CAPACITOR_ID = 1L;
 
 
-    private Manufacturer manufacturer1;
-    private Manufacturer manufacturer2;
+    private Thumbnail thumbnail1;
+    private Thumbnail thumbnail2;
+    private Thumbnail thumbnail3;
+    private Thumbnail thumbnail4;
+    private Thumbnail thumbnail5;
+    private Photo photo1;
+    private Photo photo2;
+    private Photo photo3;
+    private Photo photo4;
+    private Photo photo5;
+    private CapacitorUnit capacitorUnit1;
+    private CapacitorUnit capacitorUnit2;
+    private CapacitorUnit capacitorUnit3;
+    private CapacitorUnit capacitorUnit4;
+    private CapacitorUnit capacitorUnit5;
     private CapacitorType capacitorType1;
     private CapacitorType capacitorType2;
+    private Manufacturer manufacturer1;
+    private Manufacturer manufacturer2;
+
 
     @BeforeEach
     void initializeTestEntities() {
+
+        //------Thumbnails and Photos-------
+        thumbnail1 = new Thumbnail();
+        thumbnail1.setPhoto(photo1);
+        thumbnail1.setUrl("url1_thumb");
+        photo1 = new Photo();
+        photo1.setOrder(1);
+        photo1.setUrl("url1");
+        photo1.setThumbnails(Collections.singleton(thumbnail1));
+
+        thumbnail5 = new Thumbnail();
+        thumbnail5.setPhoto(photo5);
+        thumbnail5.setUrl("url5_thumb");
+        photo5 = new Photo();
+        photo5.setOrder(2);
+        photo5.setUrl("url5");
+        photo5.setThumbnails(Collections.singleton(thumbnail5));
+
+        thumbnail2 = new Thumbnail();
+        thumbnail2.setPhoto(photo2);
+        thumbnail2.setUrl("url2_thumb");
+        photo2 = new Photo();
+        photo2.setOrder(1);
+        photo2.setUrl("url2");
+        photo2.setThumbnails(Collections.singleton(thumbnail2));
+
+        thumbnail3 = new Thumbnail();
+        thumbnail3.setPhoto(photo3);
+        thumbnail3.setUrl("url3_thumb");
+        photo3 = new Photo();
+        photo3.setOrder(1);
+        photo3.setUrl("url3");
+        photo3.setThumbnails(Collections.singleton(thumbnail3));
+
+        thumbnail4 = new Thumbnail();
+        thumbnail4.setPhoto(photo4);
+        thumbnail4.setUrl("url4_thumb");
+        photo4 = new Photo();
+        photo4.setOrder(1);
+        photo4.setUrl("url4");
+        photo4.setThumbnails(Collections.singleton(thumbnail4));
+
+        //------Capacitor Units-------
+        capacitorUnit1 = new CapacitorUnit();
+        capacitorUnit1.setCapacitance(2000000L);
+        capacitorUnit1.setVoltage(600);
+        capacitorUnit1.setPhotos(new HashSet<>(Arrays.asList(photo1, photo5)));
+        photo1.setCapacitorUnit(capacitorUnit1);
+        photo5.setCapacitorUnit(capacitorUnit1);
+
+        capacitorUnit2 = new CapacitorUnit();
+        capacitorUnit2.setCapacitance(1000000L);
+        capacitorUnit2.setVoltage(600);
+        capacitorUnit2.setPhotos(Collections.singleton(photo2));
+        photo2.setCapacitorUnit(capacitorUnit2);
+
+        capacitorUnit3 = new CapacitorUnit();
+        capacitorUnit3.setCapacitance(500000L);
+        capacitorUnit3.setVoltage(600);
+        capacitorUnit3.setPhotos(Collections.singleton(photo3));
+        photo3.setCapacitorUnit(capacitorUnit3);
+
+        capacitorUnit4 = new CapacitorUnit();
+        capacitorUnit4.setCapacitance(100000L);
+        capacitorUnit4.setVoltage(600);
+        capacitorUnit4.setPhotos(Collections.singleton(photo4));
+        photo4.setCapacitorUnit(capacitorUnit4);
+
+        capacitorUnit5 = new CapacitorUnit();
+        capacitorUnit5.setCapacitorType(capacitorType2);
+        capacitorUnit5.setCapacitance(300L);
+        capacitorUnit5.setVoltage(500);
+
+        //------Capacitor Types-------
+        capacitorType1 = new CapacitorType();
+        capacitorType1.setTypeName("Sealdtite");
+        capacitorType1.setConstruction(new Construction("Wax-Paper"));
+        capacitorType1.setCapacitorUnits(Arrays.asList(capacitorUnit1, capacitorUnit2, capacitorUnit3, capacitorUnit4));
+        capacitorUnit1.setCapacitorType(capacitorType1);
+        capacitorUnit2.setCapacitorType(capacitorType1);
+        capacitorUnit3.setCapacitorType(capacitorType1);
+        capacitorUnit4.setCapacitorType(capacitorType1);
+
+        capacitorType2 = new CapacitorType();
+        capacitorType2.setTypeName("Moulded Plastic Mica");
+        capacitorType2.setConstruction(new Construction("Mica"));
+        capacitorType2.setCapacitorUnits(Collections.singletonList(capacitorUnit5));
+        capacitorUnit5.setCapacitorType(capacitorType2);
+
+        //------Manufacturers-------
         manufacturer1 = new Manufacturer();
         manufacturer1.setCompanyName("Cornell Dubilier");
         manufacturer1.setOpenYear((short)1909);
@@ -78,16 +182,9 @@ class CapacitorTypeControllerTest {
         manufacturer2.setOpenYear((short)1917);
         manufacturer2.setCloseYear((short)1948);
         manufacturer2.setSummary("A company that made high quality wax paper capacitors");
-
-        capacitorType1 = new CapacitorType();
-        capacitorType1.setTypeName("Sealdtite");
         capacitorType1.setManufacturer(manufacturer2);
-        capacitorType1.setConstruction(new Construction("Wax-Paper"));
-
-        capacitorType2 = new CapacitorType();
-        capacitorType2.setTypeName("Moulded Plastic Mica");
         capacitorType2.setManufacturer(manufacturer2);
-        capacitorType2.setConstruction(new Construction("Mica"));
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
 
     }
 
@@ -470,7 +567,7 @@ class CapacitorTypeControllerTest {
      * Test successful retrieval of CapacitorTypeResponse List.
      */
     @Test
-    void getCapacitorTypes_success() throws Exception {
+    void getAllCapacitorTypes_success() throws Exception {
         capacitorTypeRepository.save(capacitorType1);
         capacitorTypeRepository.save(capacitorType2);
         manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
@@ -497,13 +594,89 @@ class CapacitorTypeControllerTest {
      * Test unsuccessful retrieval of CapacitorTypeResponse List from Manufacturer that doesn't exist.
      */
     @Test
-    void getCapacitorTypes_noExistingManufacturer_fail() throws Exception {
+    void getAllCapacitorTypes_noExistingManufacturer_fail() throws Exception {
         capacitorTypeRepository.save(capacitorType1);
         capacitorTypeRepository.save(capacitorType2);
         manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
         manufacturerRepository.save(manufacturer2);
 
-        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/name?companyName=solarus")
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all?companyName=solarus")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(httpReq)
+                .andExpect(status().isBadRequest());
+
+    }
+
+
+    /**
+     * Test successful retrieval of CapacitorTypeSearchResponse List.
+     */
+    @Test
+    void getAllCapacitorTypeSearchResponses_equality_success() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        JsonNode receivedTypesTree = objectMapper.readTree(
+                result.getResponse().getContentAsString());
+
+        List<CapacitorTypeSearchResponse> expectedTypes = Arrays.asList(new CapacitorTypeSearchResponse(capacitorType1), new CapacitorTypeSearchResponse(capacitorType2));
+        JsonNode expectedTypesTree = objectMapper.valueToTree(expectedTypes);
+
+        assertEquals(2, receivedTypesTree.size());
+        assertEquals(expectedTypesTree.toString(), receivedTypesTree.toString());
+    }
+
+
+    /**
+     * Test correct thumbnailUrl of CapacitorTypeResponse.
+     */
+    @Test
+    void getAllCapacitorTypeSearchResponses_correctUrl_success() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solar")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk()).andReturn();
+
+        JsonNode receivedTypes = objectMapper.readTree(
+                result.getResponse().getContentAsString());
+
+        // Explanation: List of capacitor units is length 4.  Middle index is 4 / 2 == 2.
+        // Capacitor units are sorted from low to high, i.e. CapacitorUnit4, CapacitorUnit3, CapacitorUnit2...
+        // So the *third* element in the list at index 2 is CapacitorUnit2.
+        assertEquals("url2_thumb", receivedTypes.get(0).get("thumbnailUrl").textValue());
+        assertNull(receivedTypes.get(1).get("thumbnailUrl").textValue());
+    }
+
+
+    /**
+     * Test unsuccessful retrieval of CapacitorTypeSearchResponse List from Manufacturer that doesn't exist.
+     */
+    @Test
+    void getAllCapacitorTypeSearchResponses_noExistingManufacturer_fail() throws Exception {
+        capacitorTypeRepository.save(capacitorType1);
+        capacitorTypeRepository.save(capacitorType2);
+        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType1, capacitorType2));
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solarus")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
