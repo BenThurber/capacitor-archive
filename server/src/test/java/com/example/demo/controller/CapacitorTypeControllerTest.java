@@ -677,7 +677,7 @@ class CapacitorTypeControllerTest {
         capacitorType2.getCapacitorUnits().get(0).setPhotos(Collections.singleton(photo1));
 
         capacitorTypeRepository.save(capacitorType2);
-        manufacturer2.setCapacitorTypes(Arrays.asList(capacitorType2));
+        manufacturer2.setCapacitorTypes(Collections.singletonList(capacitorType2));
         manufacturerRepository.save(manufacturer2);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/type/all-results?companyName=solar")
@@ -687,6 +687,7 @@ class CapacitorTypeControllerTest {
         MvcResult result = mvc.perform(httpReq)
                 .andExpect(status().isOk()).andReturn();
 
+        System.out.println(result.getResponse().getContentAsString());
         List<CapacitorTypeSearchResponse> receivedTypes = objectMapper.readValue(
                 result.getResponse().getContentAsString(),
                 TypeFactory.defaultInstance().constructCollectionType(List.class, CapacitorTypeSearchResponse.class));
