@@ -26,8 +26,10 @@ const AWS = (window as any).AWS;
 })
 export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
-  readonly THUMBNAIL_SIZE = 256;
-  readonly THUMBNAIL_QUALITY = 45;
+  readonly SMALL_THUMBNAIL_WIDTH = 256;
+  readonly SMALL_THUMBNAIL_QUALITY = 45;
+  readonly MEDIUM_THUMBNAIL_WIDTH = 768;
+  readonly MEDIUM_THUMBNAIL_QUALITY = 75;
 
   @Input() dirPathArray: Array<string>;
 
@@ -80,16 +82,19 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   /**
    * Generates a thumbnail, uploads it the AWS S3 server, and pushes it to this.thumbnails array
    * @param uploadingFile event from file-uploader
+   * @param jpegQuality the quality from 0 to 100 of the image to generate
+   * @param jpegWidth the width of the image to generate
    */
-  async addThumbnail(uploadingFile: StartedUploadEvent): Promise<void> {
+  async addThumbnail(uploadingFile: StartedUploadEvent, jpegQuality, jpegWidth): Promise<void> {
     try {
 
-      const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, this.THUMBNAIL_QUALITY, this.THUMBNAIL_SIZE);
+      const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, jpegQuality, jpegWidth);
 
-      const thumbnailFilename = Thumbnail.toThumbnailUrl(uploadingFile.filename);
-      const thumbnail = await this.uploadFile(thumbnailBlob, uploadingFile.awsS3BucketDir, thumbnailFilename);
+      const thumbnailFilename = Thumbnail.toThumbnailUrl(uploadingFile.filename, jpegWidth);
+      const thumbnail = await this.uploadFile(thumbnailBlob, uploadingFile.awsS3BucketDir, thumbnailFilename, jpegWidth);
 
 
+      console.log('Finished uploading ', jpegWidth);
       // Attach thumbnail to photo
       const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
       if (photo) {
@@ -135,9 +140,10 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
    * @param awsS3BucketDir  the directory in the bucket where to put the file (not including file name).
    * i.e. bucketName/folder1/folder2
    * @param filename what to name the file on the server
+   * @param width of image (used as meta data)
    * @return a new Thumbnail object
    */
-  async uploadFile(blob: Blob, awsS3BucketDir: string, filename: string): Promise<Thumbnail> {
+  async uploadFile(blob: Blob, awsS3BucketDir: string, filename: string, width: number): Promise<Thumbnail> {
 
     const params = {
       Bucket: awsS3BucketDir,
@@ -147,7 +153,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
     const awsUploadResponse = await awsUploadFile(this.bucket, params);
 
-    return Thumbnail.fromUrl(awsUploadResponse.Location, this.THUMBNAIL_SIZE);
+    return Thumbnail.fromUrl(awsUploadResponse.Location, width);
   }
 
 
