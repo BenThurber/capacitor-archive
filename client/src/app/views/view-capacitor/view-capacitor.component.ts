@@ -3,10 +3,11 @@ import {ActivatedRoute} from '@angular/router';
 import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
-import {padEndHtml, caseInsensitiveCompare} from '../../utilities/text-utils';
+import {padEndHtml, caseInsensitiveCompare, title} from '../../utilities/text-utils';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
+import {Title} from '@angular/platform-browser';
 
 @Component({
   selector: 'app-view-capacitor',
@@ -34,13 +35,15 @@ export class ViewCapacitorComponent implements OnInit {
   galleryImages: NgxGalleryImage[] = [];
 
 
-  constructor(private activatedRoute: ActivatedRoute, private restService: RestService, public dynamicRouter: DynamicRouterService) {
+  constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private restService: RestService,
+              public dynamicRouter: DynamicRouterService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
     this.value = this.activatedRoute.snapshot.paramMap.get('value');
   }
 
   ngOnInit(): any {
+    this.titleService.setTitle('Viewing ' + title(this.typeName) + (this.value ? ' ' + this.value : ''));
 
     this.galleryOptions = [
       {

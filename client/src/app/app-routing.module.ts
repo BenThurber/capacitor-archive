@@ -13,18 +13,18 @@ import {ViewCapacitorComponent} from './views/view-capacitor/view-capacitor.comp
 import {EditCapacitorComponent} from './views/edit-capacitor/edit-capacitor.component';
 
 const routes: Routes = [
-  {path: 'not-implemented', component: NotImplementedComponent},
-  {path: '', component: HomeComponent},
-  {path: 'about', component: AboutComponent},
-  {path: 'contact', component: ContactComponent},
-  {path: 'manufacturer/create', component: CreateManufacturerComponent},
-  {path: 'manufacturer/edit/:companyName', component: EditManufacturerComponent},
-  {path: 'manufacturer/view/:companyName', component: ViewManufacturerComponent},
-  {path: 'capacitor/create', component: CreateCapacitorComponent},
-  {path: 'capacitor/edit/:companyName/:typeName/:value', component: EditCapacitorComponent},
-  {path: 'capacitor/view/:companyName/:typeName', component: ViewCapacitorComponent},
-  {path: 'capacitor/view/:companyName/:typeName/:value', component: ViewCapacitorComponent},
-  {path: '**', component: PageNotFoundComponent },  // This must be the last element of the Routes array
+  {path: 'not-implemented', component: NotImplementedComponent, data: {title: 'Not Implemented'}},
+  {path: '', component: HomeComponent, data: {title: 'Capacitor Archive - Home'}},
+  {path: 'about', component: AboutComponent, data: {title: 'Capacitor Archive - About'}},
+  {path: 'contact', component: ContactComponent, data: {title: 'Capacitor Archive - Contact'}},
+  {path: 'manufacturer/create', component: CreateManufacturerComponent, data: {title: 'Creating Manufacturer'}},
+  {path: 'manufacturer/edit/:companyName', component: EditManufacturerComponent, data: {title: 'Editing Manufacturer'}},
+  {path: 'manufacturer/view/:companyName', component: ViewManufacturerComponent, data: {title: 'Viewing Manufacturer'}},
+  {path: 'capacitor/create', component: CreateCapacitorComponent, data: {title: 'Creating Capacitor'}},
+  {path: 'capacitor/edit/:companyName/:typeName/:value', component: EditCapacitorComponent, data: {title: 'Editing Capacitor'}},
+  {path: 'capacitor/view/:companyName/:typeName', component: ViewCapacitorComponent, data: {title: 'Viewing Capacitor'}},
+  {path: 'capacitor/view/:companyName/:typeName/:value', component: ViewCapacitorComponent, data: {title: 'Viewing Capacitor'}},
+  {path: '**', component: PageNotFoundComponent, data: {title: 'Page Not Found'}},  // This must be the last element of the Routes array
 ];
 
 @NgModule({

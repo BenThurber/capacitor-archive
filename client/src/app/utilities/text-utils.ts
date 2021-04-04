@@ -46,3 +46,32 @@ export function randomString(length: number): string {
   }
   return result;
 }
+
+/**
+ * Takes a string and capitalizes the first letter between each deliminator
+ * @param str the string to make a title
+ * @param deliminators An array of characters.  This could be [' ', '-'] that would capitalize words separated by
+ *                     spaces and dashes.
+ * @return capitalized string
+ */
+export function  title(str: string, deliminators?: Array<string>): string {
+  if (!deliminators) {deliminators = [' ']; }
+
+  const deliminatorSet = new Set<string>(deliminators);
+  const strArr = str.toLowerCase().split('');
+  let previousCharIsLetter = false;
+  for (let i = 0; i < str.length; i++) {
+    if (!previousCharIsLetter && isLetter(strArr[i])) {
+      strArr[i] = strArr[i].toUpperCase();
+      previousCharIsLetter = true;
+    } else if (deliminatorSet.has(strArr[i])) {
+      previousCharIsLetter = false;
+    }
+  }
+  return strArr.join('');
+
+}
+
+function isLetter(c): boolean {
+  return c.toLowerCase() !== c.toUpperCase();
+}
