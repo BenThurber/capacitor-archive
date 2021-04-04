@@ -15,7 +15,7 @@
 
     <div *ngFor="let photo of photos; let i = index;"
          class="grid-square-outer item">
-      <div [ngStyle]="{ 'background-image': 'url(' + photo.getThumbnailUrl() + ')'}" class="grid-square-inner">
+      <div [ngStyle]="{ 'background-image': 'url(' + photo.getSmallestThumbnail().url + ')'}" class="grid-square-inner">
         <div class="circle" title="Delete" (click)="modalService.open(i.toString())"></div>
       </div>
 

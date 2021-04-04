@@ -123,7 +123,7 @@ export class ViewCapacitorComponent implements OnInit {
       for (const photo of this.capacitorUnit.getOrderedPhotos()) {
         this.galleryImages.push({
           big: photo.url,
-          medium: photo.getLargestThumbnail().url,
+          medium: photo.getThumbnail(1000, 500).url,
           small: photo.getSmallestThumbnail().url,
         });
       }

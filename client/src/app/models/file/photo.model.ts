@@ -1,5 +1,6 @@
 import {FileReference} from './file-reference.model';
 import {Thumbnail} from './thumbnail.model';
+import {closestSearch} from '../../utilities/closest-search';
 
 export class Photo extends FileReference {
 
@@ -25,32 +26,12 @@ export class Photo extends FileReference {
   }
 
   /**
-   * Tries to get the url of a thumbnail.  If there are none, if falls back on its own Photo url.
-   * @param maxSize the largest size that the thumbnail can be
-   * @return a thumbnail url, or the photo's url
-   */
-  getThumbnailUrl(maxSize?: number): string {
-    if (!this.thumbnails || this.thumbnails.length === 0) {
-      return this.url;
-    }
-
-    let thumbnailArray = [...this.thumbnails];
-    if (maxSize) {
-      thumbnailArray = thumbnailArray.filter(th => (th.size <= maxSize));
-    }
-
-    const thumbnail = thumbnailArray.reduce((th1, th2) => th1.size > th2.size ? th1 : th2);
-
-    return thumbnail.url;
-  }
-
-  /**
    * Tries to get the smallest thumbnail.
    * @return The smallest thumbnail in the Photo
    */
   getSmallestThumbnail(): Thumbnail {
     if (!this.thumbnails || this.thumbnails.length === 0) {
-      return Thumbnail.fromUrl(this.url, undefined);
+      return Thumbnail.fromUrl(this.url);
     }
 
     // Get smallest thumbnail
@@ -63,10 +44,30 @@ export class Photo extends FileReference {
    */
   getLargestThumbnail(): Thumbnail {
     if (!this.thumbnails || this.thumbnails.length === 0) {
-      return Thumbnail.fromUrl(this.url, undefined);
+      return Thumbnail.fromUrl(this.url);
     }
+
     // Get largest thumbnail
     return this.thumbnails.reduce((th1, th2) => th1.size > th2.size ? th1 : th2);
+  }
+
+  /**
+   * Gets the thumbnail closest in size to targetSize.  If plusOrMinus is provided, then if (target - plusOrMinus) is greater
+   * than the closest thumbnail, a new thumbnail with the url of the photo is returned.
+   * @return The thumbnail closest in size to targetSize.
+   */
+  getThumbnail(targetSize: number, minimumSize?: number): Thumbnail {
+    if (!this.thumbnails || this.thumbnails.length === 0) {
+      return Thumbnail.fromUrl(this.url);
+    }
+
+    const closestThumbnail = closestSearch(targetSize, this.thumbnails, (th: Thumbnail) => th.size);
+
+    if (minimumSize && minimumSize > closestThumbnail.size) {
+      return Thumbnail.fromUrl(this.url);
+    }
+
+    return closestThumbnail;
   }
 
 
