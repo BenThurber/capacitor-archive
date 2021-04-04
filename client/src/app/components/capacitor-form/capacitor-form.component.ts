@@ -2,7 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
@@ -73,7 +73,8 @@ export class CapacitorFormComponent implements OnInit {
   readonly reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
 
-  constructor(public restService: RestService,
+  constructor(private activatedRoute: ActivatedRoute,
+              public restService: RestService,
               private router: Router,
               private dynamicRouter: DynamicRouterService,
               private formBuilder: FormBuilder,
@@ -116,7 +117,7 @@ export class CapacitorFormComponent implements OnInit {
     // Setup for editing
     if (this.editCompanyName && this.editCapacitorType && this.editCapacitorUnit) {
       this.editing = true;
-      this.populateFormFields(this.editCompanyName, this.editCapacitorType, this.editCapacitorUnit);
+      this.populateFormFieldsEditing(this.editCompanyName, this.editCapacitorType, this.editCapacitorUnit);
       this.formFields.type.controls.typeContent.enable();
     }
   }
@@ -124,7 +125,7 @@ export class CapacitorFormComponent implements OnInit {
   /**
    * Populates the fields of the FormGroup when editing.  Uses the values from @Input
    */
-  private populateFormFields(companyName: string, capacitorType: CapacitorType, capacitorUnit: CapacitorUnit): void {
+  private populateFormFieldsEditing(companyName: string, capacitorType: CapacitorType, capacitorUnit: CapacitorUnit): void {
     this.capacitorForm.patchValue({
       companyName,
       type: {
@@ -148,12 +149,55 @@ export class CapacitorFormComponent implements OnInit {
     });
   }
 
+  /** Inserts a manufacturer name into the dropdown menu if it exists in the url */
+  private populateManufacturerCreating(allCompanyNames: Array<string>): void {
+    if (this.editing) {
+      return;
+    }
+
+    const lowercaseCompanyName = this.activatedRoute.snapshot.paramMap.get('companyName');
+
+    let companyName;
+    allCompanyNames.forEach(name => {
+      if (name.toLocaleLowerCase() === lowercaseCompanyName) {
+        companyName = name;
+      }
+    });
+
+    if (companyName) {
+      this.capacitorForm.controls.companyName.setValue(companyName);
+      this.manufacturerMenuChanged(companyName);
+    }
+  }
+
+  /** Inserts a type into the dropdown menu if it exists in the url */
+  private populateTypeNameCreating(allTypes: Array<CapacitorType>): void {
+    if (this.editing) {
+      return;
+    }
+
+    const lowercaseTypeName = this.activatedRoute.snapshot.paramMap.get('typeName');
+
+    let typeName;
+    allTypes.forEach(type => {
+      if (type.typeName.toLocaleLowerCase() === lowercaseTypeName) {
+        typeName = type.typeName;
+      }
+    });
+
+    if (typeName) {
+      this.formFields.type.controls.typeNameSelect.setValue(typeName);
+      this.typeMenuChanged(typeName);
+    }
+  }
+
   /** Update this.companyNames$ */
   getManufacturerList(): Subscription {
     return this.restService.getAllCompanyNames().subscribe({
-      next: manufacturers => {
-        manufacturers.sort(caseInsensitiveCompare);
-        this.companyNames$ = manufacturers;
+      next: companyNames => {
+        companyNames.sort(caseInsensitiveCompare);
+        this.companyNames$ = companyNames;
+        this.populateManufacturerCreating(this.companyNames$);
       },
 
       error: () => console.error('Couldn\'t get company names')
@@ -166,7 +210,8 @@ export class CapacitorFormComponent implements OnInit {
       next: types => {
         types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
-        this.typeMenuChanged({target: {value: this.noneSelected}});
+        this.typeMenuChanged(this.noneSelected);
+        this.populateTypeNameCreating(this.capacitorTypes$);
       },
 
       error: () => console.error('Couldn\'t get capacitor types')

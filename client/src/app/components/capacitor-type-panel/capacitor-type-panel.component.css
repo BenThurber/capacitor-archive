@@ -29,7 +29,7 @@ mat-panel-title p {
 
 }
 
-#add-capacitor {
+.add-capacitor {
   display: inline;
   text-decoration: underline;
   margin-left: 20px;

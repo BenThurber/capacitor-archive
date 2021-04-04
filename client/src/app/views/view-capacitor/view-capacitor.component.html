@@ -85,7 +85,11 @@
         </option>
 
       </select><br>
-      <strong><a class="nav__link" [routerLink]="" (click)="dynamicRouter.redirectTo(['/capacitor', 'create'])">+ Add a Capacitor</a></strong>
+      <strong><a class="nav__link"
+                 [routerLink]=""
+                 (click)="dynamicRouter.redirectTo(['/capacitor', 'create', companyName.toLowerCase(), typeName.toLowerCase()])">
+        + Add a Capacitor
+      </a></strong>
     </div>
 
 
