@@ -5,6 +5,7 @@ import {Thumbnail} from '../../models/file/thumbnail.model';
 import {FinishedUploadEvent, StartedUploadEvent} from '../../models/upload-event.model';
 import {AwsUploadResponse} from '../../models/aws-upload-response';
 import {ModalService} from '../modal';
+import {ThumbnailProperty} from '../../models/thumbnail-property';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
@@ -26,8 +27,7 @@ const AWS = (window as any).AWS;
 })
 export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
-  readonly THUMBNAIL_SIZE = 256;
-  readonly THUMBNAIL_QUALITY = 45;
+  readonly THUMBNAILS_TO_CREATE: Array<ThumbnailProperty> = [{width: 256, quality: 45}, {width: 768, quality: 75}];
 
   @Input() dirPathArray: Array<string>;
 
@@ -64,12 +64,12 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   addPhoto(uploadedFile: FinishedUploadEvent): void {
     const photo = Photo.fromUrl(uploadedFile.url, null);
 
-    // Attach photo to thumbnail
-    const thumbnail = this.thumbnails.find(th => th.referencesPhoto(photo));
-    if (thumbnail) {
-      thumbnail.photo = photo;
-      photo.thumbnails.push(thumbnail);
-    }
+    // Attach photo to thumbnails
+    const thumbnails = this.thumbnails.filter(th => th.referencesPhoto(photo));
+    thumbnails.forEach(th => {
+      th.photo = photo;
+      photo.thumbnails.push(th);
+    });
 
     this.photos.push(photo);
     this.onTouched();
@@ -80,32 +80,39 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   /**
    * Generates a thumbnail, uploads it the AWS S3 server, and pushes it to this.thumbnails array
    * @param uploadingFile event from file-uploader
+   * @param thumbnailProperties an Array describing the properties of thumbnails to create; quality and width
    */
-  async addThumbnail(uploadingFile: StartedUploadEvent): Promise<void> {
+  async addThumbnails(uploadingFile: StartedUploadEvent, thumbnailProperties: Array<ThumbnailProperty>): Promise<void> {
     try {
 
-      const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, this.THUMBNAIL_QUALITY, this.THUMBNAIL_SIZE);
-
-      const thumbnailFilename = Thumbnail.toThumbnailUrl(uploadingFile.filename);
-      const thumbnail = await this.uploadFile(thumbnailBlob, uploadingFile.awsS3BucketDir, thumbnailFilename);
-
-
-      // Attach thumbnail to photo
-      const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
-      if (photo) {
-        thumbnail.photo = photo;
-        photo.thumbnails.push(thumbnail);
+      for (const thumbnailProperty of thumbnailProperties) {
+        const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, thumbnailProperty.quality, thumbnailProperty.width);
+        // upload and link asynchronously
+        this.uploadAndLinkThumb(uploadingFile, thumbnailBlob, thumbnailProperty);
       }
-
-      this.thumbnails.push(thumbnail);
-      this.onTouched();
-      this.onChange(this.photos);
 
     } catch (err) {
       console.error('Could not add thumbnail.', err.message && 'Message: ' + err.message);
       return;
     }
 
+  }
+
+  async uploadAndLinkThumb(uploadingFile: StartedUploadEvent, thumbnailBlob: Blob, thumbnailProperty: ThumbnailProperty): Promise<void> {
+    const thumbnail = await this.uploadThumbnail(
+      thumbnailBlob, uploadingFile.awsS3BucketDir, uploadingFile.filename, thumbnailProperty.width);
+
+
+    // Attach thumbnail to photo
+    const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
+    if (photo) {
+      thumbnail.photo = photo;
+      photo.thumbnails.push(thumbnail);
+    }
+
+    this.thumbnails.push(thumbnail);
+    this.onTouched();
+    this.onChange(this.photos);
   }
 
 
@@ -121,6 +128,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     canvas.resize({
       width,
       mode: 'fit',
+      background: '#ffffff',
     });
 
     const buffer = await canvasWriteFile({format: 'jpeg', quality: jpegQuality});
@@ -135,19 +143,22 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
    * @param awsS3BucketDir  the directory in the bucket where to put the file (not including file name).
    * i.e. bucketName/folder1/folder2
    * @param filename what to name the file on the server
+   * @param width of image (used as meta data)
    * @return a new Thumbnail object
    */
-  async uploadFile(blob: Blob, awsS3BucketDir: string, filename: string): Promise<Thumbnail> {
+  async uploadThumbnail(blob: Blob, awsS3BucketDir: string, filename: string, width: number): Promise<Thumbnail> {
+
+    const thumbnailFilename = Thumbnail.toThumbnailUrl(filename, width);
 
     const params = {
       Bucket: awsS3BucketDir,
-      Key: filename,
+      Key: thumbnailFilename,
       Body: blob,
     };
 
     const awsUploadResponse = await awsUploadFile(this.bucket, params);
 
-    return Thumbnail.fromUrl(awsUploadResponse.Location, this.THUMBNAIL_SIZE);
+    return Thumbnail.fromUrl(awsUploadResponse.Location, width);
   }
 
 
