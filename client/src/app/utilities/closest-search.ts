@@ -10,6 +10,8 @@ export function closestSearch<T>(target: any, items: Array<T>, accessor?: (item:
 
   if (items.length <= 0) {return null; }
   if (!accessor) {accessor = (item: any) => item; }
+  if (target === Infinity) {return items.reduce((it1, it2) => accessor(it1) > accessor(it2) ? it1 : it2); }
+  if (target === -Infinity) {return items.reduce((it1, it2) => accessor(it1) < accessor(it2) ? it1 : it2); }
 
   let bestIndex;
   let bestDelta = Infinity;
