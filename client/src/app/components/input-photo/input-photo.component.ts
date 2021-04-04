@@ -105,8 +105,6 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
       thumbnailBlob, uploadingFile.awsS3BucketDir, uploadingFile.filename, thumbnailProperty.width);
 
 
-    // ToDo Remove this
-    console.log('Finished uploading ', thumbnailProperty.width);
     // Attach thumbnail to photo
     const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
     if (photo) {
