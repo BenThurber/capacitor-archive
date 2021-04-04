@@ -130,6 +130,7 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     canvas.resize({
       width,
       mode: 'fit',
+      background: '#ffffff',
     });
 
     const buffer = await canvasWriteFile({format: 'jpeg', quality: jpegQuality});
