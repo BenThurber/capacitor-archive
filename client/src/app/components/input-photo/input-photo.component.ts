@@ -78,45 +78,45 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     this.onChange(this.photos);
   }
 
-  // ToDo move the iteration to only creating thumbnails so the second can be created while the other is uploading
-  async addThumbnails(uploadingFile: StartedUploadEvent, thumbnailProperties: Array<ThumbnailProperty>): Promise<void> {
-    for (const thumbnailProperty of thumbnailProperties) {
-      await this.addThumbnail(uploadingFile, thumbnailProperty);
-    }
-  }
 
   /**
    * Generates a thumbnail, uploads it the AWS S3 server, and pushes it to this.thumbnails array
    * @param uploadingFile event from file-uploader
-   * @param thumbnailProperty the quality and with of the thumbnail to create
+   * @param thumbnailProperties an Array describing the properties of thumbnails to create; quality and width
    */
-  async addThumbnail(uploadingFile: StartedUploadEvent, thumbnailProperty: ThumbnailProperty): Promise<void> {
+  async addThumbnails(uploadingFile: StartedUploadEvent, thumbnailProperties: Array<ThumbnailProperty>): Promise<void> {
     try {
 
-      const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, thumbnailProperty.quality, thumbnailProperty.width);
-
-      const thumbnail = await this.uploadThumbnail(
-        thumbnailBlob, uploadingFile.awsS3BucketDir, uploadingFile.filename, thumbnailProperty.width);
-
-
-      // ToDo Remove this
-      console.log('Finished uploading ', thumbnailProperty.width);
-      // Attach thumbnail to photo
-      const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
-      if (photo) {
-        thumbnail.photo = photo;
-        photo.thumbnails.push(thumbnail);
+      for (const thumbnailProperty of thumbnailProperties) {
+        const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, thumbnailProperty.quality, thumbnailProperty.width);
+        // upload and link asynchronously
+        this.uploadAndLinkThumb(uploadingFile, thumbnailBlob, thumbnailProperty);
       }
-
-      this.thumbnails.push(thumbnail);
-      this.onTouched();
-      this.onChange(this.photos);
 
     } catch (err) {
       console.error('Could not add thumbnail.', err.message && 'Message: ' + err.message);
       return;
     }
 
+  }
+
+  async uploadAndLinkThumb(uploadingFile: StartedUploadEvent, thumbnailBlob: Blob, thumbnailProperty: ThumbnailProperty): Promise<void> {
+    const thumbnail = await this.uploadThumbnail(
+      thumbnailBlob, uploadingFile.awsS3BucketDir, uploadingFile.filename, thumbnailProperty.width);
+
+
+    // ToDo Remove this
+    console.log('Finished uploading ', thumbnailProperty.width);
+    // Attach thumbnail to photo
+    const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
+    if (photo) {
+      thumbnail.photo = photo;
+      photo.thumbnails.push(thumbnail);
+    }
+
+    this.thumbnails.push(thumbnail);
+    this.onTouched();
+    this.onChange(this.photos);
   }
 
 
