@@ -21,6 +21,8 @@ const routes: Routes = [
   {path: 'manufacturer/edit/:companyName', component: EditManufacturerComponent, data: {title: 'Editing Manufacturer'}},
   {path: 'manufacturer/view/:companyName', component: ViewManufacturerComponent, data: {title: 'Viewing Manufacturer'}},
   {path: 'capacitor/create', component: CreateCapacitorComponent, data: {title: 'Creating Capacitor'}},
+  {path: 'capacitor/create/:companyName', component: CreateCapacitorComponent, data: {title: 'Creating Capacitor'}},
+  {path: 'capacitor/create/:companyName/:typeName', component: CreateCapacitorComponent, data: {title: 'Creating Capacitor'}},
   {path: 'capacitor/edit/:companyName/:typeName/:value', component: EditCapacitorComponent, data: {title: 'Editing Capacitor'}},
   {path: 'capacitor/view/:companyName/:typeName', component: ViewCapacitorComponent, data: {title: 'Viewing Capacitor'}},
   {path: 'capacitor/view/:companyName/:typeName/:value', component: ViewCapacitorComponent, data: {title: 'Viewing Capacitor'}},

@@ -20,8 +20,8 @@ export class ViewManufacturerComponent implements OnInit {
   capacitorTypesSearchResponseObservable: Observable<Array<CapacitorTypeSearchResponse>>;
 
   constructor(private titleService: Title, public restService: RestService, public dynamicRouter: DynamicRouterService,
-              activatedRoute: ActivatedRoute) {
-    this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
+              public activatedRoute: ActivatedRoute) {
+    this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.capacitorTypesSearchResponseObservable = this.restService.getAllTypeSearchResponses(this.companyName);
   }
 

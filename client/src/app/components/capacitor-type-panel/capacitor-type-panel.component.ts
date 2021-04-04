@@ -14,14 +14,19 @@ export class CapacitorTypePanelComponent implements OnInit {
    * An observable that returns an Array of CapacitorTypes.
    */
   @Input() capacitorTypesObservable: Observable<Array<CapacitorTypeSearchResponse>>;
+  @Input() companyName: string;
 
   capacitorTypes: Array<CapacitorTypeSearchResponse> = [];
   typesMenuIsExpanded = false;
   capacitorTypesLoading = true;
+  createNewCapacitorPath: Array<string>;
 
-  constructor(public dynamicRouter: DynamicRouterService) { }
+  constructor(public dynamicRouter: DynamicRouterService) {
+  }
 
   ngOnInit(): void {
+    this.createNewCapacitorPath = this.companyName ? ['/capacitor', 'create', this.companyName.toLowerCase()] : ['/capacitor', 'create'];
+
     this.capacitorTypesObservable.subscribe((capacitorTypes: Array<CapacitorTypeSearchResponse>) => {
       this.capacitorTypes = capacitorTypes;
       this.capacitorTypesLoading = false;
