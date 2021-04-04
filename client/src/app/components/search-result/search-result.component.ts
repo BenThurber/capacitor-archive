@@ -18,7 +18,7 @@ export class SearchResultComponent implements OnInit {
   constructor(public dynamicRouter: DynamicRouterService) { }
 
   ngOnInit(): void {
-    this.viewCapacitorPath = ['capacitor', 'view', this.typeData.companyName, this.typeData.typeName];
+    this.viewCapacitorPath = ['capacitor', 'view', this.typeData.companyName.toLowerCase(), this.typeData.typeName.toLowerCase()];
   }
 
 }
