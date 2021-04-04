@@ -187,7 +187,7 @@ export class CapacitorFormComponent implements OnInit {
 
     if (typeName) {
       this.formFields.type.controls.typeNameSelect.setValue(typeName);
-      this.typeMenuChanged({target: {value: typeName}});
+      this.typeMenuChanged(typeName);
     }
   }
 
@@ -210,7 +210,7 @@ export class CapacitorFormComponent implements OnInit {
       next: types => {
         types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
-        this.typeMenuChanged({target: {value: this.noneSelected}});
+        this.typeMenuChanged(this.noneSelected);
         this.populateTypeNameCreating(this.capacitorTypes$);
       },
 
