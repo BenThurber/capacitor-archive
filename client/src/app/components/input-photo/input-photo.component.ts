@@ -66,12 +66,10 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
     // Attach photo to thumbnails
     const thumbnails = this.thumbnails.filter(th => th.referencesPhoto(photo));
-    if (thumbnails.length > 0) {
-      thumbnails.forEach(th => {
-        th.photo = photo;
-        photo.thumbnails.push(th);
-      });
-    }
+    thumbnails.forEach(th => {
+      th.photo = photo;
+      photo.thumbnails.push(th);
+    });
 
     this.photos.push(photo);
     this.onTouched();

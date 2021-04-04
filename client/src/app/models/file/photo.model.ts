@@ -1,6 +1,7 @@
 import {FileReference} from './file-reference.model';
 import {Thumbnail} from './thumbnail.model';
 import {closestSearch} from '../../utilities/closest-search';
+import {min} from 'rxjs/operators';
 
 export class Photo extends FileReference {
 
@@ -26,7 +27,7 @@ export class Photo extends FileReference {
   }
 
   /**
-   * Tries to get the smallest thumbnail.
+   * Gets the smallest thumbnail.  Is there are none, it returns a new Thumbnail with the Photo's url.
    * @return The smallest thumbnail in the Photo
    */
   getSmallestThumbnail(): Thumbnail {
@@ -39,7 +40,7 @@ export class Photo extends FileReference {
   }
 
   /**
-   * Tries to get the smallest thumbnail.
+   * Gets the largest thumbnail.  Is there are none, it returns a new Thumbnail with the Photo's url.
    * @return The smallest thumbnail in the Photo
    */
   getLargestThumbnail(): Thumbnail {
@@ -52,8 +53,8 @@ export class Photo extends FileReference {
   }
 
   /**
-   * Gets the thumbnail closest in size to targetSize.  If plusOrMinus is provided, then if (target - plusOrMinus) is greater
-   * than the closest thumbnail, a new thumbnail with the url of the photo is returned.
+   * Gets the thumbnail closest in size to targetSize.  If minimumSize is provided, then the closest thumbnail size is smaller
+   * than minimumSize, a new thumbnail with the url of the photo is returned.
    * @return The thumbnail closest in size to targetSize.
    */
   getThumbnail(targetSize: number, minimumSize?: number): Thumbnail {
@@ -61,10 +62,15 @@ export class Photo extends FileReference {
       return Thumbnail.fromUrl(this.url);
     }
 
-    const closestThumbnail = closestSearch(targetSize, this.thumbnails, (th: Thumbnail) => th.size);
+    let closestThumbnail = closestSearch(targetSize, this.thumbnails, (th: Thumbnail) => th.size);
 
-    if (minimumSize && minimumSize > closestThumbnail.size) {
-      return Thumbnail.fromUrl(this.url);
+    if (minimumSize && closestThumbnail.size < minimumSize) {
+      closestThumbnail = this.getLargestThumbnail();
+      if (closestThumbnail.size < minimumSize) {
+        return Thumbnail.fromUrl(this.url);
+      } else {
+        return closestThumbnail;
+      }
     }
 
     return closestThumbnail;
