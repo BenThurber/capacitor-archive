@@ -5,6 +5,7 @@ import {Thumbnail} from '../../models/file/thumbnail.model';
 import {FinishedUploadEvent, StartedUploadEvent} from '../../models/upload-event.model';
 import {AwsUploadResponse} from '../../models/aws-upload-response';
 import {ModalService} from '../modal';
+import {ThumbnailProperty} from '../../models/thumbnail-property';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
@@ -26,10 +27,7 @@ const AWS = (window as any).AWS;
 })
 export class InputPhotoComponent implements OnInit, ControlValueAccessor {
 
-  readonly SMALL_THUMBNAIL_WIDTH = 256;
-  readonly SMALL_THUMBNAIL_QUALITY = 45;
-  readonly MEDIUM_THUMBNAIL_WIDTH = 768;
-  readonly MEDIUM_THUMBNAIL_QUALITY = 75;
+  readonly THUMBNAILS_TO_CREATE: Array<ThumbnailProperty> = [{width: 256, quality: 45}, {width: 768, quality: 75}];
 
   @Input() dirPathArray: Array<string>;
 
@@ -66,11 +64,13 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   addPhoto(uploadedFile: FinishedUploadEvent): void {
     const photo = Photo.fromUrl(uploadedFile.url, null);
 
-    // Attach photo to thumbnail
-    const thumbnail = this.thumbnails.find(th => th.referencesPhoto(photo));
-    if (thumbnail) {
-      thumbnail.photo = photo;
-      photo.thumbnails.push(thumbnail);
+    // Attach photo to thumbnails
+    const thumbnails = this.thumbnails.filter(th => th.referencesPhoto(photo));
+    if (thumbnails.length > 0) {
+      thumbnails.forEach(th => {
+        th.photo = photo;
+        photo.thumbnails.push(th);
+      });
     }
 
     this.photos.push(photo);
@@ -78,23 +78,29 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
     this.onChange(this.photos);
   }
 
+  // ToDo move the iteration to only creating thumbnails so the second can be created while the other is uploading
+  async addThumbnails(uploadingFile: StartedUploadEvent, thumbnailProperties: Array<ThumbnailProperty>): Promise<void> {
+    for (const thumbnailProperty of thumbnailProperties) {
+      await this.addThumbnail(uploadingFile, thumbnailProperty);
+    }
+  }
 
   /**
    * Generates a thumbnail, uploads it the AWS S3 server, and pushes it to this.thumbnails array
    * @param uploadingFile event from file-uploader
-   * @param jpegQuality the quality from 0 to 100 of the image to generate
-   * @param jpegWidth the width of the image to generate
+   * @param thumbnailProperty the quality and with of the thumbnail to create
    */
-  async addThumbnail(uploadingFile: StartedUploadEvent, jpegQuality, jpegWidth): Promise<void> {
+  async addThumbnail(uploadingFile: StartedUploadEvent, thumbnailProperty: ThumbnailProperty): Promise<void> {
     try {
 
-      const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, jpegQuality, jpegWidth);
+      const thumbnailBlob = await this.scaleImageToSize(uploadingFile.file, thumbnailProperty.quality, thumbnailProperty.width);
 
-      const thumbnailFilename = Thumbnail.toThumbnailUrl(uploadingFile.filename, jpegWidth);
-      const thumbnail = await this.uploadFile(thumbnailBlob, uploadingFile.awsS3BucketDir, thumbnailFilename, jpegWidth);
+      const thumbnail = await this.uploadThumbnail(
+        thumbnailBlob, uploadingFile.awsS3BucketDir, uploadingFile.filename, thumbnailProperty.width);
 
 
-      console.log('Finished uploading ', jpegWidth);
+      // ToDo Remove this
+      console.log('Finished uploading ', thumbnailProperty.width);
       // Attach thumbnail to photo
       const photo = this.photos.find(p => thumbnail.referencesPhoto(p));
       if (photo) {
@@ -143,11 +149,13 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
    * @param width of image (used as meta data)
    * @return a new Thumbnail object
    */
-  async uploadFile(blob: Blob, awsS3BucketDir: string, filename: string, width: number): Promise<Thumbnail> {
+  async uploadThumbnail(blob: Blob, awsS3BucketDir: string, filename: string, width: number): Promise<Thumbnail> {
+
+    const thumbnailFilename = Thumbnail.toThumbnailUrl(filename, width);
 
     const params = {
       Bucket: awsS3BucketDir,
-      Key: filename,
+      Key: thumbnailFilename,
       Body: blob,
     };
 

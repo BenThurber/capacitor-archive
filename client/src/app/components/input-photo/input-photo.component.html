@@ -1,8 +1,6 @@
 
 <app-file-uploader [dirPathArray]="dirPathArray"
-                   (uploadStarted)="
-                   addThumbnail($event, SMALL_THUMBNAIL_QUALITY, SMALL_THUMBNAIL_WIDTH);
-                   addThumbnail($event, MEDIUM_THUMBNAIL_QUALITY, MEDIUM_THUMBNAIL_WIDTH)"
+                   (uploadStarted)="addThumbnails($event, THUMBNAILS_TO_CREATE)"
                    (uploadFinished)="addPhoto($event)">
 
 </app-file-uploader>

@@ -65,7 +65,6 @@ export class Photo extends FileReference {
     if (!this.thumbnails || this.thumbnails.length === 0) {
       return Thumbnail.fromUrl(this.url, undefined);
     }
-    console.log(this.thumbnails)
     // Get largest thumbnail
     return this.thumbnails.reduce((th1, th2) => th1.size > th2.size ? th1 : th2);
   }

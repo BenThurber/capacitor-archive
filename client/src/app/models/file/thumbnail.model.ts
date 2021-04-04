@@ -21,7 +21,7 @@ export class Thumbnail extends FileReference {
   }
 
   /**
-   * Takes a full or partial Photo url and converts it to a Thumbnail url.  Adds a '_thumb' substring and changes
+   * Takes a full or partial Photo url and converts it to a Thumbnail url.  Adds a '_thumb<width>' substring and changes
    * the extension to '.jpg'.
    * @param url a url to a photo
    * @param width (optional) the width of the thumbnail.  Added to the url string.
@@ -40,10 +40,11 @@ export class Thumbnail extends FileReference {
     if (this.photo === photo) {
       return true;
     }
+    const photoUrlNoExtension = photo.url.slice(0, photo.url.lastIndexOf('.'));
 
     // Compares URLs.  Needs to replace '+' with '%20' and decode URLs (for some reason decodeURIComponent doesn't decode spaces!?)
-    return decodeURIComponent(this.url.replace(/\+/g, '%20')) ===
-      decodeURIComponent(Thumbnail.toThumbnailUrl(photo.url.replace(/\+/g, '%20'), this.size));
+    return decodeURIComponent(this.url.replace(/\+/g, '%20'))
+      .startsWith(decodeURIComponent(photoUrlNoExtension.replace(/\+/g, '%20')));
   }
 
 }
