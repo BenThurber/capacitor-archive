@@ -45,11 +45,11 @@ public class CapacitorType {
         this.typeNameLower = typeName == null ? null : typeName.toLowerCase();
     }
 
-    @Column(name = "start_year", columnDefinition = "SMALLINT")
+    @Column(name = "start_year")
     @Type(type = "org.hibernate.type.ShortType")
     private Short startYear;
 
-    @Column(name = "end_year", columnDefinition = "SMALLINT")
+    @Column(name = "end_year")
     @Type(type = "org.hibernate.type.ShortType")
     private Short endYear;
 
