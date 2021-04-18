@@ -14,7 +14,7 @@
       <label for="company-name">
         Manufacturer Name*
       </label>
-      <input id="company-name" type="text" formControlName="companyName" placeholder="e.g. Solar, Aerovox" required
+      <input id="company-name" type="text" size="30" formControlName="companyName" placeholder="e.g. Solar, Aerovox" required
              [ngClass]="{ 'is-invalid': formFields.companyName.errors }">
       <div class="error__msg" *ngIf="formFields.companyName.errors && formFields.companyName.errors.required">
         Please provide the name of the Manufacturer
@@ -25,7 +25,7 @@
       <label for="open-year">
         Year Opened
       </label>
-      <input id="open-year" type="text" formControlName="openYear" placeholder="optional"
+      <input id="open-year" type="text" size="15" formControlName="openYear" placeholder="optional"
              [ngClass]="{ 'is-invalid': formFields.openYear.errors || closeYearBeforeOpenYearError }">
       <div class="error__msg" *ngIf="formFields.openYear.errors">
         Year is not valid (YYY)
@@ -36,7 +36,7 @@
       <label for="close-year">
         Year Closed
       </label>
-      <input id="close-year" type="text" formControlName="closeYear" placeholder="optional"
+      <input id="close-year" type="text" size="15" formControlName="closeYear" placeholder="optional"
              [ngClass]="{ 'is-invalid': formFields.closeYear.errors || closeYearBeforeOpenYearError }">
       <div class="error__msg" *ngIf="formFields.closeYear.errors">
         Year is not valid (YYYY)
