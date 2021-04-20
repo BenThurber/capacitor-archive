@@ -32,6 +32,18 @@ public class CapacitorUnitResponse {
     @JsonProperty("notes")
     private String notes;
 
+    @JsonProperty("length")
+    private String length;
+
+    @JsonProperty("diameter")
+    private String diameter;
+
+    @JsonProperty("mounting_hole_diameter")
+    private String mountingHoleDiameter;
+
+    @JsonProperty("thickness")
+    private String thickness;
+
     @JsonProperty("typeName")
     private String typeName;
 
@@ -50,6 +62,12 @@ public class CapacitorUnitResponse {
         setIdentifier(cu.getIdentifier());
         setValue(cu.getValue());
         setNotes(cu.getNotes());
+
+        setLength(cu.getLength());
+        setDiameter(cu.getDiameter());
+        setMountingHoleDiameter(cu.getMountingHoleDiameter());
+        setThickness(cu.getThickness());
+
         setTypeName(cu.getCapacitorType().getTypeName());
         setCompanyName(cu.getCapacitorType().getManufacturer().getCompanyName());
 
