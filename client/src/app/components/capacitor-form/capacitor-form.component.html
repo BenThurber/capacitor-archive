@@ -122,23 +122,23 @@
           </mat-expansion-panel-header>
 
           <div style="all: initial">
-            <label class="input__label__minor start__end__label" for="start-year">Start Year</label>
-            <input id="start-year" type="text" formControlName="startYear" class="start__end__input" size="10"
+            <label class="input__label__minor expandable__label" for="start-year">Start Year</label>
+            <input id="start-year" type="text" formControlName="startYear" class="expandable__input" size="10"
                    placeholder="optional"
                    [ngClass]="{ 'is-invalid': typeFields.startYear.errors }">
-            <div class="start__end__label error__msg" *ngIf="typeFields.startYear.errors" style="margin-top: 0">
+            <div class="expandable__label error__msg" *ngIf="typeFields.startYear.errors" style="margin-top: 0">
               Year is not valid (YYYY)
             </div>
             <br>
 
-            <label class="input__label__minor start__end__label" for="end-year">End Year</label>
-            <input id="end-year" type="text" formControlName="endYear" class="start__end__input" size="10"
+            <label class="input__label__minor expandable__label" for="end-year">End Year</label>
+            <input id="end-year" type="text" formControlName="endYear" class="expandable__input" size="10"
                    placeholder="optional" [ngClass]="{ 'is-invalid': typeFields.endYear.errors }">
             <div>
-              <div class="start__end__label error__msg" *ngIf="typeFields.endYear.errors" style="margin-top: 0">
+              <div class="expandable__label error__msg" *ngIf="typeFields.endYear.errors" style="margin-top: 0">
                 Year is not valid (YYYY)
               </div>
-              <div class="start__end__label error__msg" *ngIf="endYearBeforeStartYearError" style="margin-top: 0">
+              <div class="expandable__label error__msg" *ngIf="endYearBeforeStartYearError" style="margin-top: 0">
                 {{typeFields.endYear.value}} is before {{typeFields.startYear.value}}
               </div>
             </div>
@@ -192,6 +192,39 @@
       <div class="error__msg" *ngIf="formFields.unit.controls.identifier.errors">
         Identifier is too long
       </div>
+    </div>
+
+    <div id="dimensions-expansion-panel" class="blue-expansion-panel-container">
+      <mat-expansion-panel [(expanded)]="dimensionsAreExpanded" class="input">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Include Dimensions
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div style="all: initial">
+          <label class="input__label__minor expandable__label" for="length">Length</label>
+          <input id="length" type="text" formControlName="length" class="expandable__input" size="10"
+                 placeholder="optional">
+          <br>
+
+          <label class="input__label__minor expandable__label" for="diameter">Diameter</label>
+          <input id="diameter" type="text" formControlName="diameter" class="expandable__input" size="10"
+                 placeholder="optional">
+          <br>
+
+          <label class="input__label__minor expandable__label" for="length">Thickness</label>
+          <input id="thickness" type="text" formControlName="thickness" class="expandable__input" size="10"
+                 placeholder="optional">
+          <br>
+
+          <label class="input__label__minor expandable__label" for="mounting-hole-diameter">Mounting Hole Diameter</label>
+          <input id="mounting-hole-diameter" type="text" formControlName="mountingHoleDiameter" class="expandable__input" size="10"
+                 placeholder="optional">
+          <br>
+        </div>
+
+      </mat-expansion-panel>
     </div>
 
     <div class="input">

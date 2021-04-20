@@ -9,6 +9,10 @@ export class CapacitorUnit {
   identifier: string;
   value: string;
   notes: string;
+  length: string;
+  diameter: string;
+  mountingHoleDiameter: string;
+  thickness: string;
   photos: Array<Photo> = [];
   typeName: string;
   companyName: string;
@@ -21,6 +25,10 @@ export class CapacitorUnit {
       this.identifier = capacitorUnit.identifier;
       this.value = capacitorUnit.value;
       this.notes = capacitorUnit.notes;
+      this.length = capacitorUnit.length;
+      this.diameter = capacitorUnit.diameter;
+      this.mountingHoleDiameter = capacitorUnit.mountingHoleDiameter;
+      this.thickness = capacitorUnit.thickness;
       if (capacitorUnit.photos) {
         this.photos = [];
         capacitorUnit.photos.forEach(photo => this.photos.push(new Photo(photo)));
@@ -102,5 +110,24 @@ export class CapacitorUnit {
    */
   public getOrderedPhotos(): Array<Photo> {
     return [...this.photos].sort((a: Photo, b: Photo) => a.order - b.order);
+  }
+
+  /**
+   * Formats the capacitor's length and diameter into a compact string
+   * @return formatted string of the capacitor's length and diameter
+   */
+  public getFormattedLengthDiameter(): string {
+
+    const dimensionList = [];
+
+    if (this.length) {
+      dimensionList.push('L: ' + this.length.trim());
+    }
+
+    if (this.diameter) {
+      dimensionList.push('D: ' + this.diameter.trim());
+    }
+
+    return dimensionList.join(', ');
   }
 }
