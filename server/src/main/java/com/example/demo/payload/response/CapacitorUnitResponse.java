@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Getter
@@ -38,7 +36,7 @@ public class CapacitorUnitResponse {
     @JsonProperty("diameter")
     private String diameter;
 
-    @JsonProperty("mounting_hole_diameter")
+    @JsonProperty("mountingHoleDiameter")
     private String mountingHoleDiameter;
 
     @JsonProperty("thickness")

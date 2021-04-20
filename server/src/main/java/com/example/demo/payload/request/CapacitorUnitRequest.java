@@ -38,7 +38,7 @@ public class CapacitorUnitRequest {
     @JsonProperty("diameter")
     private String diameter;
 
-    @JsonProperty("mounting_hole_diameter")
+    @JsonProperty("mountingHoleDiameter")
     private String mountingHoleDiameter;
 
     @JsonProperty("thickness")

@@ -31,6 +31,10 @@ class CapacitorForm {
     voltage: number;
     identifier: string;
     notes: string;
+    length: string;
+    diameter: string;
+    mountingHoleDiameter: string;
+    thickness: string;
     photos: Array<Photo>;
   };
 }
@@ -67,6 +71,7 @@ export class CapacitorFormComponent implements OnInit {
   readonly newConstructionOption = CapacitorFormComponent.newConstructionOption;
   constructionNames$: Array<string> = [];
   yearsAreExpanded = false;
+  dimensionsAreExpanded = false;
 
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
@@ -109,6 +114,10 @@ export class CapacitorFormComponent implements OnInit {
         voltage: ['', [Validators.pattern(integerPattern)]],
         identifier: ['', [Validators.maxLength(12)]],
         notes: ['', []],
+        length: ['', []],
+        diameter: ['', []],
+        mountingHoleDiameter: ['', []],
+        thickness: ['', []],
         photos: [new Array<Photo>(), []],
       }),
       captcha: ['', Validators.required],
@@ -118,6 +127,7 @@ export class CapacitorFormComponent implements OnInit {
     if (this.editCompanyName && this.editCapacitorType && this.editCapacitorUnit) {
       this.editing = true;
       this.populateFormFieldsEditing(this.editCompanyName, this.editCapacitorType, this.editCapacitorUnit);
+      this.expandMenus();
       this.formFields.type.controls.typeContent.enable();
     }
   }
@@ -144,9 +154,24 @@ export class CapacitorFormComponent implements OnInit {
         voltage: capacitorUnit.voltage,
         identifier: capacitorUnit.identifier,
         notes: capacitorUnit.notes,
+        length: capacitorUnit.length,
+        diameter: capacitorUnit.diameter,
+        mountingHoleDiameter: capacitorUnit.mountingHoleDiameter,
+        thickness: capacitorUnit.thickness,
         photos: capacitorUnit.getOrderedPhotos(),
       }
     });
+  }
+
+  /** Expand all menus that have data in them, collapse all that don't */
+  private expandMenus(): void {
+    this.yearsAreExpanded = Boolean(this.typeFields.startYear.value || this.typeFields.endYear.value);
+    this.dimensionsAreExpanded = Boolean(
+      this.formFields.unit.controls.length.value ||
+      this.formFields.unit.controls.diameter.value ||
+      this.formFields.unit.controls.mountingHoleDiameter.value ||
+      this.formFields.unit.controls.thickness.value
+    );
   }
 
   /** Inserts a manufacturer name into the dropdown menu if it exists in the url */
@@ -365,6 +390,10 @@ export class CapacitorFormComponent implements OnInit {
       capacitorUnit.voltage = capacitorForm.unit.voltage;
       capacitorUnit.identifier = capacitorForm.unit.identifier;
       capacitorUnit.notes = capacitorForm.unit.notes;
+      capacitorUnit.length = capacitorForm.unit.length;
+      capacitorUnit.diameter = capacitorForm.unit.diameter;
+      capacitorUnit.mountingHoleDiameter = capacitorForm.unit.mountingHoleDiameter;
+      capacitorUnit.thickness = capacitorForm.unit.thickness;
       capacitorUnit.setOrderedPhotos(capacitorForm.unit.photos);
       // Remove circular references
       capacitorUnit.photos.forEach(p => p.thumbnails.forEach(t => t.photo = null));
