@@ -65,6 +65,24 @@
         Voltage: <strong>{{capacitorUnit.voltage}}V</strong><br>
       </ng-container>
 
+      <ng-container *ngIf="capacitorUnit &&
+      (capacitorUnit.length || capacitorUnit.diameter)">
+        Dimensions: <span style="display: inline-block">{{capacitorUnit.getFormattedLengthDiameter()}}</span>
+        <br>
+      </ng-container>
+
+      <ng-container *ngIf="capacitorUnit && capacitorUnit.thickness">
+        Thickness: <span style="display: inline-block">{{capacitorUnit.thickness.trim()}}</span>
+        <br>
+      </ng-container>
+
+      <ng-container *ngIf="capacitorUnit && capacitorUnit.mountingHoleDiameter">
+        Mounting Hole Diameter: <span style="display: inline-block">{{capacitorUnit.mountingHoleDiameter.trim()}}</span>
+        <br>
+      </ng-container>
+
+
+
       <ng-container *ngIf="capacitorUnit && capacitorUnit.notes">
         Notes:
         <div class="block__description">{{capacitorUnit.notes}}</div>
