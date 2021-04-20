@@ -152,7 +152,7 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
     }
 
     /**
-     * Special compare function used for sorting
+     * Compare function used for sorting
      * @param other CapacitorUnit to compare to
      * @return integer corresponding to the difference between the two units
      */
