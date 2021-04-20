@@ -32,6 +32,18 @@ public class CapacitorUnitRequest {
     @JsonProperty("notes")
     private String notes;
 
+    @JsonProperty("length")
+    private String length;
+
+    @JsonProperty("diameter")
+    private String diameter;
+
+    @JsonProperty("mountingHoleDiameter")
+    private String mountingHoleDiameter;
+
+    @JsonProperty("thickness")
+    private String thickness;
+
     @NotNull(message = "CapacitorUnit must be associated with a CapacitorType.  No typeName is given.")
     @JsonProperty("typeName")
     private String typeName;

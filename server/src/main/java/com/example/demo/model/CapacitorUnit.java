@@ -25,6 +25,7 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
                                        // Long  'C' Int  'V'  VARCHAR
     private final static int VALUE_LENGTH = 20 + 1 + 10 + 1 + IDENTIFIER_LEN;
     private static final int NOTES_LEN = 5000;
+    private static final int DIMENSION_LEN = 25;
 
     @Id
     @Setter(AccessLevel.NONE)
@@ -62,6 +63,18 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
     @Column(name = "notes", length = NOTES_LEN)
     private String notes;
 
+    @Column(name = "length", length = DIMENSION_LEN)
+    private String length;
+
+    @Column(name = "diameter", length = DIMENSION_LEN)
+    private String diameter;
+
+    @Column(name = "mounting_hole_diameter", length = DIMENSION_LEN)
+    private String mountingHoleDiameter;
+
+    @Column(name = "thickness", length = DIMENSION_LEN)
+    private String thickness;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "capacitor_type_id", nullable = false)
     private CapacitorType capacitorType;
@@ -86,6 +99,11 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
         setVoltage(r.getVoltage());
         setIdentifier(r.getIdentifier());
         setNotes(r.getNotes());
+
+        setLength(r.getLength());
+        setDiameter(r.getDiameter());
+        setMountingHoleDiameter(r.getMountingHoleDiameter());
+        setThickness(r.getThickness());
     }
 
 
@@ -133,6 +151,11 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
                 .orElse(null);
     }
 
+    /**
+     * Compare function used for sorting
+     * @param other CapacitorUnit to compare to
+     * @return integer corresponding to the difference between the two units
+     */
     @Override
     public int compareTo(CapacitorUnit other) {
         long capacitance1 = this.getCapacitance() == null ? 0 : this.getCapacitance();

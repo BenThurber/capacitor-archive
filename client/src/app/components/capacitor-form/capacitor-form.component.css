@@ -45,12 +45,16 @@
   width: 280px;
 }
 
-.start__end__input {
+#dimensions-expansion-panel {
+  width: 400px;
+}
+
+.expandable__input {
   margin-bottom: 5px;
   margin-top: 5px;
 }
 
-.start__end__label {
+.expandable__label {
   margin-left: 15px;
   margin-right: 10px;
 }
