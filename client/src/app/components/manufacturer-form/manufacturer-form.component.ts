@@ -8,6 +8,7 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
+import {historicCountryList} from '../../utilities/countries';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
   currentImageUploads = new Set<string>();
+
+  countries = historicCountryList;
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -48,6 +51,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     const integerPattern: RegExp = /^\d+$/;
     this.manufacturerForm = this.formBuilder.group({
       companyName: ['', Validators.required],
+      country: ['', []],
       openYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
