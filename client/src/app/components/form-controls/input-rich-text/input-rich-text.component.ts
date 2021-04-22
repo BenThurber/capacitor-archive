@@ -4,9 +4,9 @@ import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
 import ImageResize from 'quill-image-resize-module';
-import {SystemEnvironment} from '../../models/system-environment';
-import {randomString} from '../../utilities/text-utils';
-import {environment} from '../../../environments/environment';
+import {SystemEnvironment} from '../../../models/system-environment';
+import {randomString} from '../../../utilities/text-utils';
+import {environment} from '../../../../environments/environment';
 
 Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/imageResize', ImageResize);
