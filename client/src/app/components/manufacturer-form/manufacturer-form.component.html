@@ -26,8 +26,8 @@
         Country of origin
       </label>
       <select id="country" [ngModel]="countries" formControlName="country">
-        <option value="" selected>--None selected--</option>
-        <option *ngFor="let country of countries" [value]="country">{{country}}</option>
+        <option [ngValue]="null" selected>--None selected--</option>
+        <option *ngFor="let country of countries" [ngValue]="country">{{country}}</option>
       </select>
     </div>
 

@@ -28,7 +28,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
 
   currentImageUploads = new Set<string>();
 
-  countries = historicCountryList;
+  countries = [...historicCountryList];
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -60,8 +60,14 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
 
     // Populate form values
     if (this.existingManufacturer) {
+      // Is country a non-null string that is not in the countries list?
+      if (this.existingManufacturer.country && !this.countries.includes(this.existingManufacturer.country)) {
+        this.countries.push(this.existingManufacturer.country);
+        this.countries.sort();
+      }
       this.manufacturerForm.setValue({
         companyName: this.existingManufacturer.companyName,
+        country: this.existingManufacturer.country,
         openYear: this.existingManufacturer.openYear,
         closeYear: this.existingManufacturer.closeYear,
         summary: this.existingManufacturer.summary,

@@ -17,7 +17,7 @@ require('aws-sdk/dist/aws-sdk');
 @Component({
   selector: 'app-input-rich-text',
   templateUrl: './input-rich-text.component.html',
-  styleUrls: ['./input-rich-text.component.css', '../../styles/animations.css'],
+  styleUrls: ['./input-rich-text.component.css', '../../../styles/animations.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

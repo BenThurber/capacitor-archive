@@ -8,7 +8,6 @@ import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 import {Title} from '@angular/platform-browser';
-import 'hammerjs';
 
 @Component({
   selector: 'app-view-capacitor',
@@ -62,7 +61,6 @@ export class ViewCapacitorComponent implements OnInit {
         imageInfinityMove: true,
         imageSize: NgxGalleryImageSize.Contain,
         imageAnimation: NgxGalleryAnimation.Slide,
-        imageSwipe: true,
       }
     ];
 
