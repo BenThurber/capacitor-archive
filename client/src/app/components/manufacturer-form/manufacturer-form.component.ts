@@ -22,7 +22,6 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
   submitting = false;
-  showCustomCountryNameInput = false;
   errorsBackend: Array<SpringErrorResponse> = [];
 
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
@@ -61,11 +60,6 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
 
     // Populate form values
     if (this.existingManufacturer) {
-      // Is country a non-null string that is not in the countries list?
-      if (this.existingManufacturer.country && !this.countries.includes(this.existingManufacturer.country)) {
-        this.countries.push(this.existingManufacturer.country);
-        this.countries.sort();
-      }
       this.manufacturerForm.setValue({
         companyName: this.existingManufacturer.companyName,
         country: this.existingManufacturer.country,

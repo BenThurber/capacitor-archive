@@ -16,21 +16,3 @@ label {
   font-weight: bold;
   margin-right: 10px;
 }
-
-select {
-  min-width: 210px;
-}
-
-#custom-country-input {
-  min-width: 202px;
-}
-
-#custom-country-checkbox-label {
-  all: initial;
-  margin: 0 0 0 15px;
-  cursor: pointer;
-}
-
-#custom-country-checkbox {
-  cursor: pointer;
-}
