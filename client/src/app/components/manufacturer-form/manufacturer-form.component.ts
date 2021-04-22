@@ -22,6 +22,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
   submitting = false;
+  showCustomCountryNameInput = false;
   errorsBackend: Array<SpringErrorResponse> = [];
 
   reCaptchaSiteKey = environment.reCaptchaSiteKey;

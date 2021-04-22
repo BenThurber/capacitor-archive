@@ -21,14 +21,23 @@
       </div>
     </div>
 
-    <div class="input">
+    <div style="line-height: 30px; display: inline-block" class="input">
       <label for="country">
         Country of origin
       </label>
-      <select id="country" [ngModel]="countries" formControlName="country">
+
+      <select [hidden]="showCustomCountryNameInput" id="country" [(ngModel)]="countries" formControlName="country">
         <option [ngValue]="null" selected>--None selected--</option>
         <option *ngFor="let country of countries" [ngValue]="country">{{country}}</option>
       </select>
+
+      <input [hidden]="!showCustomCountryNameInput" id="custom-country-input" placeholder="Enter Country Name" size="25">
+
+      <span style="float: right">
+        <label id="custom-country-checkbox-label" for="custom-country-checkbox">other:</label>
+        <input id="custom-country-checkbox" type="checkbox" [(ngModel)]="showCustomCountryNameInput" [ngModelOptions]="{standalone: true}">
+      </span>
+
     </div>
 
     <div class="input">
