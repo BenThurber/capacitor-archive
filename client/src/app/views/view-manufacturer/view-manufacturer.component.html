@@ -32,6 +32,10 @@
       <h1>{{manufacturer$.companyName}}</h1>
     </div>
 
+    <div *ngIf="manufacturer$.country">
+      <strong>Country: </strong>{{manufacturer$.country}}
+    </div>
+
     <div *ngIf="manufacturer$.openYear">
       <strong>Opened: </strong>{{manufacturer$.openYear}}
     </div>

@@ -27,6 +27,9 @@ public class ManufacturerRequest {
     @JsonProperty("companyName")
     private String companyName;
 
+    @JsonProperty("country")
+    private String country;
+
     @Max(value = 2050, message = "openYear is greater than 2050")
     @Min(value = 1000, message = "openYear is less than 1000")
     @JsonProperty("openYear")

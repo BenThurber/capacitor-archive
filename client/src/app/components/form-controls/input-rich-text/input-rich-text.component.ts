@@ -4,9 +4,9 @@ import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
 import ImageResize from 'quill-image-resize-module';
-import {SystemEnvironment} from '../../models/system-environment';
-import {randomString} from '../../utilities/text-utils';
-import {environment} from '../../../environments/environment';
+import {SystemEnvironment} from '../../../models/system-environment';
+import {randomString} from '../../../utilities/text-utils';
+import {environment} from '../../../../environments/environment';
 
 Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/imageResize', ImageResize);
@@ -17,7 +17,7 @@ require('aws-sdk/dist/aws-sdk');
 @Component({
   selector: 'app-input-rich-text',
   templateUrl: './input-rich-text.component.html',
-  styleUrls: ['./input-rich-text.component.css', '../../styles/animations.css'],
+  styleUrls: ['./input-rich-text.component.css', '../../../styles/animations.css'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

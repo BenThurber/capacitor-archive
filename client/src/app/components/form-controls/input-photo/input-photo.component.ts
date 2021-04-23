@@ -1,11 +1,11 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
-import {Photo} from '../../models/file/photo.model';
-import {Thumbnail} from '../../models/file/thumbnail.model';
-import {FinishedUploadEvent, StartedUploadEvent} from '../../models/upload-event.model';
-import {AwsUploadResponse} from '../../models/aws-upload-response';
-import {ModalService} from '../modal';
-import {ThumbnailProperty} from '../../models/thumbnail-property';
+import {Photo} from '../../../models/file/photo.model';
+import {Thumbnail} from '../../../models/file/thumbnail.model';
+import {FinishedUploadEvent, StartedUploadEvent} from '../../../models/upload-event.model';
+import {AwsUploadResponse} from '../../../models/aws-upload-response';
+import {ModalService} from '../../modal';
+import {ThumbnailProperty} from '../../../models/thumbnail-property';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();

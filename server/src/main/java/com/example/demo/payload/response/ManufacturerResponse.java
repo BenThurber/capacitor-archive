@@ -18,6 +18,9 @@ public class ManufacturerResponse {
     @JsonProperty("companyName")
     private String companyName;
 
+    @JsonProperty("country")
+    private String country;
+
     @JsonProperty("openYear")
     private Short openYear;
 
@@ -35,6 +38,7 @@ public class ManufacturerResponse {
         Manufacturer m = manufacturer;
 
         setCompanyName(m.getCompanyName());
+        setCountry(m.getCountry());
         setOpenYear(m.getOpenYear());
         setCloseYear(m.getCloseYear());
         setSummary(m.getSummary());
