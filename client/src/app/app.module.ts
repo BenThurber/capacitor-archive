@@ -22,24 +22,25 @@ import { EditManufacturerComponent } from './views/edit-manufacturer/edit-manufa
 import {CommonModule} from '@angular/common';
 import { ManufacturerSidebarComponent } from './components/manufacturer-sidebar/manufacturer-sidebar.component';
 import {QuillEditorComponent, QuillModule} from 'ngx-quill';
-import { InputRichTextComponent } from './components/input-rich-text/input-rich-text.component';
+import { InputRichTextComponent } from './components/form-controls/input-rich-text/input-rich-text.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MatTabsModule} from '@angular/material/tabs';
 import { SafeHtmlPipe } from './pipes/safe-html.pipe';
 import { CreateCapacitorComponent } from './views/create-capacitor/create-capacitor.component';
 import { CapacitorFormComponent } from './components/capacitor-form/capacitor-form.component';
-import { InputCapacitanceComponent } from './components/input-capacitance/input-capacitance.component';
+import { InputCapacitanceComponent } from './components/form-controls/input-capacitance/input-capacitance.component';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { ImageComponent } from './components/image/image.component';
 import { ViewCapacitorComponent } from './views/view-capacitor/view-capacitor.component';
 import { EditCapacitorComponent } from './views/edit-capacitor/edit-capacitor.component';
 import {SortablejsModule} from 'ngx-sortablejs';
-import { InputPhotoComponent } from './components/input-photo/input-photo.component';
+import { InputPhotoComponent } from './components/form-controls/input-photo/input-photo.component';
 import { FileUploaderComponent } from './components/file-uploader/file-uploader.component';
 import {ModalModule} from './components/modal';
 import {NgxGalleryModule} from 'ngx-gallery-9';
 import { CapacitorTypePanelComponent } from './components/capacitor-type-panel/capacitor-type-panel.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
+import { InputCountryComponent } from './components/form-controls/input-country/input-country.component';
 
 
 @NgModule({
@@ -68,6 +69,7 @@ import { SearchResultComponent } from './components/search-result/search-result.
     FileUploaderComponent,
     CapacitorTypePanelComponent,
     SearchResultComponent,
+    InputCountryComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

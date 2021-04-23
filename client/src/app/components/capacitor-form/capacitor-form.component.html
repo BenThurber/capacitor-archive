@@ -1,5 +1,6 @@
-<form style="margin: 35px 15px;" [formGroup]="capacitorForm"
-      (ngSubmit)="!capacitorForm.invalid && onSubmit(capacitorForm.value)">
+<form style="margin: 35px 15px;" [formGroup]="capacitorFormGroup"
+      (ngSubmit)="onSubmit(capacitorFormGroup)"
+      (keydown.enter)="handleEnterKeyPress($event)">
 
   <!--Errors-->
   <div *ngIf="errorsBackend.length > 0" class="error__submit input">
@@ -260,7 +261,7 @@
       #captchaElem
       [siteKey]="reCaptchaSiteKey"
       [useGlobalDomain]="false"
-      (success)="restService.handleCaptchaSuccess($event, capacitorForm, captchaElem)"
+      (success)="restService.handleCaptchaSuccess($event, capacitorFormGroup, captchaElem)"
       size="normal"
       hl="en"
       formControlName="captcha"
@@ -270,7 +271,7 @@
 
   <div class="submit">
     <button class="button" (click)="location.back()">Back</button>
-    <button class="button" [disabled]="capacitorForm.invalid || submitting" type="submit">Submit</button>
+    <button class="button" [disabled]="capacitorFormGroup.invalid || submitting" type="submit">Submit</button>
     <!--Spinner-->
     <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>
   </div>

@@ -41,6 +41,9 @@ public class Manufacturer {
         this.companyNameLower = companyName == null ? null : companyName.toLowerCase();
     }
 
+    @Column(name = "country", length = FIELD_LEN)
+    private String country;
+
     @Column(name = "open_year", columnDefinition = "SMALLINT")
     @Type(type = "org.hibernate.type.ShortType")
     private Short openYear;
@@ -68,6 +71,7 @@ public class Manufacturer {
         ManufacturerRequest r = manufacturerRequest;
 
         setCompanyName(r.getCompanyName());
+        setCountry(r.getCountry());
         setOpenYear(r.getOpenYear());
         setCloseYear(r.getCloseYear());
         setSummary(r.getSummary());

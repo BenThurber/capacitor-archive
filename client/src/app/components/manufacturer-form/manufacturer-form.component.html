@@ -2,7 +2,8 @@
 
   <form
     [formGroup]="manufacturerForm"
-    (ngSubmit)="!manufacturerForm.invalid && !(currentImageUploads.size > 0) && onSubmit(manufacturerForm.value)"
+    (ngSubmit)="onSubmit(manufacturerForm)"
+    (keydown.enter)="handleEnterKeyPress($event)"
   >
 
     <div *ngIf="errorsBackend.length > 0" class="error__submit">
@@ -19,6 +20,13 @@
       <div class="error__msg" *ngIf="formFields.companyName.errors && formFields.companyName.errors.required">
         Please provide the name of the Manufacturer
       </div>
+    </div>
+
+    <div style="line-height: 30px" class="input">
+      <label for="country">
+        Country of origin
+      </label>
+      <app-input-country id="country" formControlName="country"></app-input-country>
     </div>
 
     <div class="input">

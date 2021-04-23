@@ -8,6 +8,7 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
+import {historicCountryList} from '../../utilities/countries';
 
 
 @Component({
@@ -26,6 +27,8 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
   currentImageUploads = new Set<string>();
+
+  countries = [...historicCountryList];
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -48,6 +51,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     const integerPattern: RegExp = /^\d+$/;
     this.manufacturerForm = this.formBuilder.group({
       companyName: ['', Validators.required],
+      country: ['', []],
       openYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
@@ -58,6 +62,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     if (this.existingManufacturer) {
       this.manufacturerForm.setValue({
         companyName: this.existingManufacturer.companyName,
+        country: this.existingManufacturer.country,
         openYear: this.existingManufacturer.openYear,
         closeYear: this.existingManufacturer.closeYear,
         summary: this.existingManufacturer.summary,
@@ -78,13 +83,18 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   }
 
 
-  onSubmit(manufacturer: Manufacturer): void {
+  onSubmit(manufacturerFormGroup: FormGroup): void {
+
+    if (manufacturerFormGroup.invalid || this.currentImageUploads.size > 0) {
+      return;
+    }
+
     this.submitting = true;
     this.errorsBackend = [];
 
     if (this.existingManufacturer === undefined) {
 
-      this.submitCreate(manufacturer);
+      this.submitCreate(manufacturerFormGroup.value);
 
     } else {
 
@@ -93,7 +103,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
         return;
       }
 
-      this.submitEdit(manufacturer);
+      this.submitEdit(manufacturerFormGroup.value);
 
     }
 
@@ -119,6 +129,19 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
       ),
       error: error => this.handleBackendError(error.error),
     });
+  }
+
+
+  /**
+   * Handle enter keypress inside a form group.  Only submits a form if enter is pressed within an input element.
+   * @param event key event
+   */
+  handleEnterKeyPress(event): boolean {
+    const tagName = event.target.tagName.toLowerCase();
+    if (tagName === 'input') {
+      this.onSubmit(this.manufacturerForm);
+      return false;
+    }
   }
 
 
