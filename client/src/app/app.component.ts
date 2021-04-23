@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
 
 
   ngOnInit(): void {
+    preventWindowFileDrop();
+
     this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
@@ -35,7 +37,8 @@ export class AppComponent implements OnInit {
 
   /**
    * Prevent Delete/Backspace key from navigating the browser back a page.  This is an issue in Firefox, but not Chrome.
-   * Function is triggered anytime a key is pressed.  From: https://stackoverflow.com/a/54141162
+   * Function is triggered anytime a key is pressed.
+   * Credit: https://stackoverflow.com/a/54141162
    * @param evt a keyboard event.
    */
   @HostListener('document:keydown', ['$event'])
@@ -72,4 +75,20 @@ export class AppComponent implements OnInit {
   }
 
 
+}
+
+/**
+ * This function prevents files from being dropped into the browser window unless they are on
+ * an element that specifically supports drop events.  Normal behavior of a file drop event is
+ * for the browser to navigate to the dropped file.  This function prevents the user from losing
+ * work in, say CapacitorForm, if they drag a photo to the wrong place on the page.
+ * Credit: https://stackoverflow.com/a/47980517
+ */
+function preventWindowFileDrop(): void {
+  window.addEventListener('dragover', e => {
+    e && e.preventDefault();
+  }, false);
+  window.addEventListener('drop', e => {
+    e && e.preventDefault();
+  }, false);
 }
