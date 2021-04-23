@@ -4,6 +4,7 @@ export const historicCountryList =  [
   'Algeria',
   'Angola',
   'Argentina',
+  'Australia',
   'Austria',
   'Belgium',
   'Czechoslovakia',
