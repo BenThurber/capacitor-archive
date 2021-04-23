@@ -53,7 +53,7 @@ export class CapacitorFormComponent implements OnInit {
   @Input('capacitorType') editCapacitorType: CapacitorType;
   @Input('capacitorUnit') editCapacitorUnit: CapacitorUnit;
 
-  capacitorForm: FormGroup;
+  capacitorFormGroup: FormGroup;
   submitting = false;
   errorsBackend: Array<SpringErrorResponse> = [];
 
@@ -92,7 +92,7 @@ export class CapacitorFormComponent implements OnInit {
     const integerPattern: RegExp = /^\d+$/;
     // True when !== this.noneSelected
     const noneSelectedPattern: RegExp = new RegExp('^(?!.*^' + this.noneSelected + '$)');
-    this.capacitorForm = this.formBuilder.group({
+    this.capacitorFormGroup = this.formBuilder.group({
       companyName: ['', Validators.required],
       type: this.formBuilder.group({
         typeNameSelect: ['', Validators.required],
@@ -136,7 +136,7 @@ export class CapacitorFormComponent implements OnInit {
    * Populates the fields of the FormGroup when editing.  Uses the values from @Input
    */
   private populateFormFieldsEditing(companyName: string, capacitorType: CapacitorType, capacitorUnit: CapacitorUnit): void {
-    this.capacitorForm.patchValue({
+    this.capacitorFormGroup.patchValue({
       companyName,
       type: {
         typeNameSelect: capacitorType.typeName,
@@ -161,6 +161,18 @@ export class CapacitorFormComponent implements OnInit {
         photos: capacitorUnit.getOrderedPhotos(),
       }
     });
+  }
+
+  /**
+   * Handle enter keypress inside a form group.  Only submits a form if enter is pressed within an input element.
+   * @param event key event
+   */
+  handleEnterKeyPress(event): boolean {
+    const tagName = event.target.tagName.toLowerCase();
+    if (tagName === 'input') {
+      this.onSubmit(this.capacitorFormGroup);
+      return false;
+    }
   }
 
   /** Expand all menus that have data in them, collapse all that don't */
@@ -190,7 +202,7 @@ export class CapacitorFormComponent implements OnInit {
     });
 
     if (companyName) {
-      this.capacitorForm.controls.companyName.setValue(companyName);
+      this.capacitorFormGroup.controls.companyName.setValue(companyName);
       this.manufacturerMenuChanged(companyName);
     }
   }
@@ -267,7 +279,7 @@ export class CapacitorFormComponent implements OnInit {
       this.getTypeList(value);
     }
 
-    this.capacitorForm.patchValue({
+    this.capacitorFormGroup.patchValue({
       companyName: value
     });
 
@@ -283,7 +295,7 @@ export class CapacitorFormComponent implements OnInit {
       this.formFields.type.controls.typeContent.enable() :
       this.formFields.type.controls.typeContent.disable();
 
-    this.capacitorForm.patchValue({
+    this.capacitorFormGroup.patchValue({
       type: {
         typeContent: {
           typeNameInput: this.selectedCapacitorType && this.selectedCapacitorType.typeName,
@@ -314,7 +326,7 @@ export class CapacitorFormComponent implements OnInit {
 
   /** Called when the button "Add a new type" is pressed */
   gotoAddNewType(): void {
-    this.capacitorForm.patchValue({
+    this.capacitorFormGroup.patchValue({
       type: {
         typeNameSelect: this.newCapacitorTypeOption
       }
@@ -325,13 +337,17 @@ export class CapacitorFormComponent implements OnInit {
 
   /**
    * Function called when submitting the form.  Calls submitCreateEditRecursive.
-   * @param capacitorForm form data
+   * @param capacitorFormGroup form data
    */
-  onSubmit(capacitorForm: CapacitorForm): void {
+  onSubmit(capacitorFormGroup: FormGroup): void {
+    if (capacitorFormGroup.invalid) {
+      return;
+    }
+
     this.submitting = true;
     this.errorsBackend = [];
 
-    this.submitCreateEditRecursive(capacitorForm);
+    this.submitCreateEditRecursive(capacitorFormGroup.value);
   }
 
 
@@ -441,7 +457,7 @@ export class CapacitorFormComponent implements OnInit {
   }
 
   get formFields(): any {
-    return this.capacitorForm.controls;
+    return this.capacitorFormGroup.controls;
   }
 
   get typeFields(): any {

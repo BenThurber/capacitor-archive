@@ -83,13 +83,18 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   }
 
 
-  onSubmit(manufacturer: Manufacturer): void {
+  onSubmit(manufacturerFormGroup: FormGroup): void {
+
+    if (manufacturerFormGroup.invalid || this.currentImageUploads.size > 0) {
+      return;
+    }
+
     this.submitting = true;
     this.errorsBackend = [];
 
     if (this.existingManufacturer === undefined) {
 
-      this.submitCreate(manufacturer);
+      this.submitCreate(manufacturerFormGroup.value);
 
     } else {
 
@@ -98,7 +103,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
         return;
       }
 
-      this.submitEdit(manufacturer);
+      this.submitEdit(manufacturerFormGroup.value);
 
     }
 
@@ -124,6 +129,19 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
       ),
       error: error => this.handleBackendError(error.error),
     });
+  }
+
+
+  /**
+   * Handle enter keypress inside a form group.  Only submits a form if enter is pressed within an input element.
+   * @param event key event
+   */
+  handleEnterKeyPress(event): boolean {
+    const tagName = event.target.tagName.toLowerCase();
+    if (tagName === 'input') {
+      this.onSubmit(this.manufacturerForm);
+      return false;
+    }
   }
 
 
