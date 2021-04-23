@@ -164,12 +164,12 @@ export class CapacitorFormComponent implements OnInit {
   }
 
   /**
-   * Handle enter keypress inside a form group.  Doesn't submit the form if hitting enter within a textarea tag.
+   * Handle enter keypress inside a form group.  Only submits a form if enter is pressed within an input element.
    * @param event key event
    */
   handleEnterKeyPress(event): boolean {
     const tagName = event.target.tagName.toLowerCase();
-    if (tagName !== 'textarea') {
+    if (tagName === 'input') {
       this.onSubmit(this.capacitorFormGroup);
       return false;
     }

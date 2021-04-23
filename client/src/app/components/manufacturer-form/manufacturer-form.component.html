@@ -2,7 +2,8 @@
 
   <form
     [formGroup]="manufacturerForm"
-    (ngSubmit)="!manufacturerForm.invalid && !(currentImageUploads.size > 0) && onSubmit(manufacturerForm.value)"
+    (ngSubmit)="onSubmit(manufacturerForm)"
+    (keydown.enter)="handleEnterKeyPress($event)"
   >
 
     <div *ngIf="errorsBackend.length > 0" class="error__submit">
