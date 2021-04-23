@@ -1,0 +1,18 @@
+
+
+<select [hidden]="useCustomCountryName" id="country-select"
+        (ngModelChange)="selectValue = $event; onChange(selectValue)" [ngModel]="selectValue">
+  <option [ngValue]="null" selected>--None selected--</option>
+  <option *ngFor="let country of countries" [ngValue]="country">{{country}}</option>
+</select>
+
+<input [hidden]="!useCustomCountryName" (change)="inputValue = $event.target.value; onChange(inputValue)"
+       id="custom-country-input" placeholder="Enter Country Name" size="25">
+
+<label id="custom-country-checkbox-label" for="custom-country-checkbox">other: </label>
+<input id="custom-country-checkbox" type="checkbox"
+       (ngModelChange)="$event ? onChange(inputValue) : onChange(selectValue)"
+       [(ngModel)]="useCustomCountryName"
+       [ngModelOptions]="{standalone: true}">
+
+
