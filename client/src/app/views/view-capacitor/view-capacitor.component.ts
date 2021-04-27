@@ -9,6 +9,7 @@ import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router
 import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 import {Title} from '@angular/platform-browser';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
+import {ImageComponent} from '../../components/image/image.component';
 
 @Component({
   selector: 'app-view-capacitor',
@@ -127,8 +128,12 @@ export class ViewCapacitorComponent implements OnInit {
     }
     if (this.capacitorUnit.photos.length === 0) {
       this.galleryImages.push({
-        big: '../../../assets/no-capacitor-images-no-arrow.jpg',
-        medium: '../../../assets/no-capacitor-images.jpg',
+        big: ImageComponent.webpIsSupported ?
+          '../../../assets/no-capacitor-images-no-arrow.webp' : '../../../assets/no-capacitor-images-no-arrow.jpg',
+
+        medium: ImageComponent.webpIsSupported ?
+          '../../../assets/no-capacitor-images.webp' : '../../../assets/no-capacitor-images.jpg',
+
         small: '',
       });
     } else {
