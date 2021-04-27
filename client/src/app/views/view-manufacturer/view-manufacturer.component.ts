@@ -7,6 +7,7 @@ import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router
 import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
+import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
 
 @Component({
   selector: 'app-view-manufacturer',
@@ -20,7 +21,7 @@ export class ViewManufacturerComponent implements OnInit {
   capacitorTypesSearchResponseObservable: Observable<Array<CapacitorTypeSearchResponse>>;
 
   constructor(private titleService: Title, public restService: RestService, public dynamicRouter: DynamicRouterService,
-              public activatedRoute: ActivatedRoute) {
+              public activatedRoute: ActivatedRoute, private errorHandler: ErrorHandlerService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.capacitorTypesSearchResponseObservable = this.restService.getAllTypeSearchResponses(this.companyName);
   }
@@ -29,7 +30,10 @@ export class ViewManufacturerComponent implements OnInit {
     this.titleService.setTitle('Viewing ' + title(this.companyName));
 
     return this.restService.getManufacturerByName(this.companyName)
-      .subscribe((manufacturer: Manufacturer) => this.manufacturer$ = manufacturer);
+      .subscribe({
+        next: (manufacturer: Manufacturer) => this.manufacturer$ = manufacturer,
+        error: err => this.errorHandler.handleGetRequestError(err, 'Error getting manufacturer')
+      });
   }
 
 }

@@ -424,7 +424,7 @@ export class CapacitorFormComponent implements OnInit {
 
       return httpRequestObservable.subscribe({
         next: (createdCapacitorUnit: CapacitorUnit) => {
-          this.dynamicRouter.redirectTo([
+          this.dynamicRouter.navigate([
             '/capacitor',
             'view',
             createdCapacitorUnit.companyName.toLowerCase(),
@@ -438,7 +438,7 @@ export class CapacitorFormComponent implements OnInit {
 
     }
     // Only executed if a unit isn't created/edited
-    this.dynamicRouter.redirectTo([
+    this.dynamicRouter.navigate([
       '/capacitor',
       'view',
       (this.editCompanyName || capacitorForm.companyName).toLowerCase(),
