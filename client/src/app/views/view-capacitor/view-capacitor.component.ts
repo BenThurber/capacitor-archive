@@ -76,14 +76,14 @@ export class ViewCapacitorComponent implements OnInit {
             // Set focus on the similar menu
             setTimeout(() => this.similarMenu && this.similarMenu.nativeElement.focus(), 100);
           },
-          error: err => this.errorHandler.handleGetRequestError(err)
+          error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorUnit')
         });
     }
 
     this.restService.getCapacitorTypeByName(this.companyName, this.typeName)
       .subscribe({
         next: (capacitorType: CapacitorType) => this.capacitorType = capacitorType,
-        error: err => this.errorHandler.handleGetRequestError(err)
+        error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorType')
       });
 
 
