@@ -16,7 +16,7 @@
       <div style="display: flex; justify-content: center; padding-top: 10px"><div class="spinner"></div></div>
     </ng-template>
     <div>
-      <a id="add-capacitor" class="grey__link" (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName])">+ Add Capacitor</a>
+      <a id="add-capacitor" class="grey__link" (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName.toLowerCase()])">+ Add Capacitor</a>
     </div>
 
   </div>
