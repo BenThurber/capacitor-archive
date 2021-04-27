@@ -30,7 +30,7 @@
 
       </select><br>
 
-      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
+      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName.toLowerCase()])">
         {{capacitorType && capacitorType.companyName}}
       </a><br>
 
@@ -98,7 +98,8 @@
 
         <option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
                 [selected]="capacitorUnit.value === similarUnit.value"
-                (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName, similarUnit.typeName, similarUnit.value])">
+                (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName.toLowerCase(),
+                similarUnit.typeName.toLowerCase(), similarUnit.value])">
           {{formatSimilarCapacitor(similarUnit)}}
         </option>
 

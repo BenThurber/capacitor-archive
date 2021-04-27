@@ -24,7 +24,8 @@ const routes: Routes = [
   {path: 'capacitor/create/:companyName', component: CreateCapacitorComponent, data: {title: 'Creating Capacitor'}},
   {path: 'capacitor/create/:companyName/:typeName', component: CreateCapacitorComponent, data: {title: 'Creating Capacitor'}},
   {path: 'capacitor/edit/:companyName/:typeName/:value', component: EditCapacitorComponent, data: {title: 'Editing Capacitor'}},
-  {path: 'capacitor/view/:companyName/:typeName', component: ViewCapacitorComponent, data: {title: 'Viewing Capacitor'}},
+  {path: 'capacitor/view/:companyName/:typeName', data: {title: 'Viewing Capacitor'},
+    redirectTo: 'capacitor/view/:companyName/:typeName/', pathMatch: 'full'},
   {path: 'capacitor/view/:companyName/:typeName/:value', component: ViewCapacitorComponent, data: {title: 'Viewing Capacitor'}},
   {path: 'not-found', component: PageNotFoundComponent, data: {title: 'Page Not Found'}},
   {path: '**', component: PageNotFoundComponent, data: {title: 'Page Not Found'}},  // This must be the last element of the Routes array

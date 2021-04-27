@@ -4,7 +4,6 @@ import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml, caseInsensitiveCompare, title} from '../../utilities/text-utils';
-import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 import {Title} from '@angular/platform-browser';
@@ -92,10 +91,13 @@ export class ViewCapacitorComponent implements OnInit {
         this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
         if (!this.value && this.capacitorUnits.length > 0) {
           this.capacitorUnit = this.capacitorUnits[0];
+          this.similarMenuChanged(this.capacitorUnit.value);
+
         } else if (this.capacitorUnits.length === 0) {
           this.capacitorUnit = new CapacitorUnit();
+          this.updateGalleryImages();
         }
-        this.updateGalleryImages();
+
         // Set focus on the similar menu
         setTimeout(() => this.similarMenu && this.similarMenu.nativeElement.focus(), 100);
       });
@@ -108,6 +110,14 @@ export class ViewCapacitorComponent implements OnInit {
 
   similarMenuChanged(value): void {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
+    const cu = this.capacitorUnit;
+    this.dynamicRouter.router.navigate([
+      '/capacitor',
+      'view',
+      cu.companyName.toLowerCase(),
+      cu.typeName.toLowerCase(),
+      cu.value
+    ], { replaceUrl: true });
     this.updateGalleryImages();
   }
 
@@ -123,7 +133,7 @@ export class ViewCapacitorComponent implements OnInit {
 
   updateGalleryImages(): void {
     this.galleryImages = [];
-    if (!this.capacitorUnit) {
+    if (!this.capacitorUnit) {  // Don't show anything until capacitorUnit has loaded
       return;
     }
     if (this.capacitorUnit.photos.length === 0) {
