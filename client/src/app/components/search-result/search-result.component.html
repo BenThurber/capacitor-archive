@@ -3,10 +3,10 @@
   <div id="thumb" class="search__thumbnail">
     <img alt="icon"
          [src]="typeData.thumbnailUrl || '../../../assets/no-photo.png'"
-         (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
+         (click)="dynamicRouter.navigate(viewCapacitorPath)">
   </div>
   <p><a id="type-name" [routerLink]=""
-     (click)="dynamicRouter.redirectTo(viewCapacitorPath)">
+     (click)="dynamicRouter.navigate(viewCapacitorPath)">
     {{typeData.typeName}}
   </a></p>
   <p id="num-units">

@@ -6,6 +6,7 @@ import {CapacitorType} from '../../models/capacitor-type.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
+import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
 
 @Component({
   selector: 'app-edit-capacitor',
@@ -23,7 +24,7 @@ export class EditCapacitorComponent implements OnInit {
   formattedCapacitance = '';
 
   constructor(private titleService: Title, private restService: RestService, private activatedRoute: ActivatedRoute,
-              public dynamicRouter: DynamicRouterService) {
+              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = activatedRoute.snapshot.paramMap.get('typeName');
     this.value = activatedRoute.snapshot.paramMap.get('value');
@@ -32,17 +33,17 @@ export class EditCapacitorComponent implements OnInit {
   ngOnInit(): void {
     this.titleService.setTitle('Editing ' + title(this.typeName) + (this.value ? ' ' + this.value : ''));
 
-    this.restService.getCapacitorTypeByName(this.companyName, this.typeName).subscribe(
-      (capacitorType: CapacitorType) => this.capacitorType = capacitorType,
-      () => console.error('Could not get CapacitorType to edit.')
-    );
-    this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value).subscribe(
-      (capacitorUnit: CapacitorUnit) => {
-          this.capacitorUnit = capacitorUnit;
-          this.formattedCapacitance = CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true);
-        },
-      () => console.error('Could not get CapacitorUnit to edit')
-    );
+    this.restService.getCapacitorTypeByName(this.companyName, this.typeName).subscribe({
+      next: (capacitorType: CapacitorType) => this.capacitorType = capacitorType,
+      error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorType to edit.'),
+    });
+    this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value).subscribe({
+      next: (capacitorUnit: CapacitorUnit) => {
+        this.capacitorUnit = capacitorUnit;
+        this.formattedCapacitance = CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true);
+      },
+      error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorUnit to edit'),
+    });
   }
 
 }

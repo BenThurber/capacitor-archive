@@ -8,7 +8,7 @@
   <ng-container *ngIf="companyNames$; else loading">
     <div *ngFor="let barCompanyName of companyNames$;">
       <div class="link__padding">
-        <a class="grey__link" (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', barCompanyName.toLowerCase()])">{{barCompanyName}}</a>
+        <a class="grey__link" (click)="dynamicRouter.navigate(['/manufacturer', 'view', barCompanyName.toLowerCase()])">{{barCompanyName}}</a>
       </div>
     </div>
   </ng-container>
@@ -18,7 +18,7 @@
   </ng-template>
 
   <div id="add-manufacturer" class="link__padding">
-    <a class="grey__link" (click)="dynamicRouter.redirectTo(['/manufacturer', 'create'])">+ Add Manufacturer</a>
+    <a class="grey__link" (click)="dynamicRouter.navigate(['/manufacturer', 'create'])">+ Add Manufacturer</a>
   </div>
 
 </div>
