@@ -1,4 +1,4 @@
 FROM linuxserver/ddclient
 
-COPY ./ddclient.conf /config/ddclient.conf
+COPY ./ddclient.conf /etc/ddclient/ddclient.conf
 
