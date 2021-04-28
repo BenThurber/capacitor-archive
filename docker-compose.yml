@@ -33,6 +33,7 @@ services:
             # Start each backup at 9:05 PM NZST
             - DB_DUMP_BEGIN=0805
             - DB_DUMP_SAFECHARS
+            - MYSQLDUMP_OPTS="--ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats"
         env_file:
             - mysql-backup.env
         depends_on:
@@ -71,6 +72,7 @@ services:
             # Start each backup at 9:35 PM NZST
             - DB_DUMP_BEGIN=0835
             - DB_DUMP_SAFECHARS
+            - MYSQLDUMP_OPTS="--ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats"
         env_file:
             - mysql-backup.env
         depends_on:
@@ -106,6 +108,19 @@ services:
             - 'test-server-build:/home/gitlab-runner/test-server/'
             - 'prod-client-build:/home/gitlab-runner/prod-client/'
             - 'prod-server-build:/home/gitlab-runner/prod-server/'
+
+
+    ddclient:
+        image: 'capacitor-ddclient:latest'
+        build: ./dockerfiles/custom-ddclient-container/
+        container_name: ddclient
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ="New Zealand/Wellington"
+        volumes:
+            - 'ddclient-config:/config'
+        restart: unless-stopped
 
 
 
@@ -167,6 +182,9 @@ services:
 
 volumes:
     gitlab-runner-config:
+        external: false
+
+    ddclient-config:
         external: false
 
     test-mysql-data:
