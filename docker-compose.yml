@@ -33,6 +33,7 @@ services:
             # Start each backup at 9:05 PM NZST
             - DB_DUMP_BEGIN=0805
             - DB_DUMP_SAFECHARS
+            - 'MYSQLDUMP_OPTS=--ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats'
         env_file:
             - mysql-backup.env
         depends_on:
@@ -71,6 +72,7 @@ services:
             # Start each backup at 9:35 PM NZST
             - DB_DUMP_BEGIN=0835
             - DB_DUMP_SAFECHARS
+            - 'MYSQLDUMP_OPTS=--ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats'
         env_file:
             - mysql-backup.env
         depends_on:
