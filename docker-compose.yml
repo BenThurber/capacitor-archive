@@ -124,8 +124,6 @@ services:
             - TZ="New Zealand/Wellington"
         env_file:
             - ddclient.env
-        volumes:
-            - 'ddclient-config:/config'
         restart: unless-stopped
 
 
@@ -188,9 +186,6 @@ services:
 
 volumes:
     gitlab-runner-config:
-        external: false
-
-    ddclient-config:
         external: false
 
     test-mysql-data:
