@@ -1,22 +1,12 @@
 #!/bin/bash
 
-echo "Hello World"
-
+# Subsitute environment variables in config file
 envsubst < /defaults/ddclient.conf > /defaults/ddclient.conf.swp
 mv /defaults/ddclient.conf.swp /defaults/ddclient.conf
 cp /defaults/ddclient.conf /config/ddclient.conf
 cp /defaults/ddclient.conf /ddclient.conf
 
-for i in $(find -name ddclient.conf);
-do
-	echo "File:"
-	echo $i
-	grep "^password" $i
-	#envsubst < $i > ddclient.conf.swp
-	#mv ddclient.conf.swp $i
-	#grep "^password" $i
-done
-
+# Entrypoint for linuxserver/docker-ddclient
 /init
 
 
