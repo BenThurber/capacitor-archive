@@ -25,10 +25,6 @@ public class CapacitorUnitRequest {
     @JsonProperty("voltage")
     private Integer voltage;
 
-    @Size(max=12, message="Identifier is too long")
-    @JsonProperty("identifier")
-    private String identifier;
-
     @JsonProperty("notes")
     private String notes;
 

@@ -11,9 +11,8 @@ class CapacitorUnitTest {
         CapacitorUnit c = new CapacitorUnit();
         c.setCapacitance(100000000L);
         c.setVoltage(600);
-        c.setIdentifier("2b");
 
-        assertEquals("100uf 600V '2b'", c.toString());
+        assertEquals("100uf 600V", c.toString());
     }
 
     @Test
@@ -21,7 +20,6 @@ class CapacitorUnitTest {
         CapacitorUnit c = new CapacitorUnit();
         c.setCapacitance(100000000L);
         c.setVoltage(0);
-        c.setIdentifier("");
 
         assertEquals("100uf", c.toString());
     }
@@ -31,9 +29,8 @@ class CapacitorUnitTest {
         CapacitorUnit c = new CapacitorUnit();
         c.setCapacitance(100000000L);
         c.setVoltage(0);
-        c.setIdentifier("2b");
 
-        assertEquals("100uf '2b'", c.toString());
+        assertEquals("100uf", c.toString());
     }
 
     @Test
@@ -87,12 +84,10 @@ class CapacitorUnitTest {
         CapacitorUnit c1 = new CapacitorUnit();
         c1.setCapacitance(100000000L);
         c1.setVoltage(600);
-        c1.setIdentifier("2b");
 
         CapacitorUnit c2 = new CapacitorUnit();
         c2.setCapacitance(100000001L);
         c2.setVoltage(600);
-        c2.setIdentifier("2b");
 
         assertTrue(c1.compareTo(c2) < 0);
     }
@@ -102,27 +97,10 @@ class CapacitorUnitTest {
         CapacitorUnit c1 = new CapacitorUnit();
         c1.setCapacitance(100000000L);
         c1.setVoltage(601);
-        c1.setIdentifier("2b");
 
         CapacitorUnit c2 = new CapacitorUnit();
         c2.setCapacitance(100000000L);
         c2.setVoltage(600);
-        c2.setIdentifier("2b");
-
-        assertTrue(c1.compareTo(c2) > 0);
-    }
-
-    @Test
-    void comparisonTest__identifier() {
-        CapacitorUnit c1 = new CapacitorUnit();
-        c1.setCapacitance(100000000L);
-        c1.setVoltage(601);
-        c1.setIdentifier("2b");
-
-        CapacitorUnit c2 = new CapacitorUnit();
-        c2.setCapacitance(100000000L);
-        c2.setVoltage(600);
-        c2.setIdentifier(null);
 
         assertTrue(c1.compareTo(c2) > 0);
     }
@@ -132,12 +110,10 @@ class CapacitorUnitTest {
         CapacitorUnit c1 = new CapacitorUnit();
         c1.setCapacitance(100000000L);
         c1.setVoltage(600);
-        c1.setIdentifier("2b");
 
         CapacitorUnit c2 = new CapacitorUnit();
         c2.setCapacitance(100000000L);
         c2.setVoltage(600);
-        c2.setIdentifier("2b");
 
         assertEquals(0, c1.compareTo(c2));
     }
