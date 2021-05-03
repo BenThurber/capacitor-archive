@@ -86,6 +86,12 @@ Create a self-signed certificate and answer the prompts.  The common name should
 `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt`  
 
 
+### Configure a ddclient for Dynamic DNS
+If the network the site is run on has a dynamic ip address, the ddclient docker container can be used to automatically update the ip that the domain name points to.  The file dockerfiles/custom-ddclient-container/ddclient.conf is the config.  It is assumed that the hostname is provided through namecheap.com.
+- Login to namecheap, click manage next to the domain name capacitor-archive.com and click "Advanced DNS"
+- Enable Dynamic DNS and make note of the "Dynamic DNS Password"
+- In the root of the project directory create a file named `ddclient.env` and add the line NAMECHEAP_PASSWORD=<Password> with the password from the last step
+
 ### Create docker containers for mysql, phpmyadmin and gitlab-runner
 Run the following command which executes docker-compose.yml  
 `sudo docker-compose build`  
