@@ -19,11 +19,8 @@ import java.util.*;
 @EqualsAndHashCode
 @Entity
 public class CapacitorUnit implements Comparable<CapacitorUnit> {
-
-    private final static int IDENTIFIER_LEN = 60;
-
-                                       // Long  'C' Int  'V'  VARCHAR
-    private final static int VALUE_LENGTH = 20 + 1 + 10 + 1 + IDENTIFIER_LEN;
+                                       // Long  'C' Int  'V'
+    private final static int VALUE_LENGTH = 20 + 1 + 10 + 1;
     private static final int NOTES_LEN = 5000;
     private static final int DIMENSION_LEN = 25;
 
@@ -44,10 +41,6 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
     private Integer voltage;
 
     @Setter(AccessLevel.NONE)
-    @Column(name = "identifier", length = IDENTIFIER_LEN)
-    private String identifier;
-
-    @Setter(AccessLevel.NONE)
     @Column(name = "value", length = VALUE_LENGTH, nullable = false)
     private String value;
 
@@ -56,8 +49,7 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
     private void prepare() {
         Long capacitanceNonNull = capacitance != null ? capacitance : 0L;
         Integer voltageNonNull = voltage != null ? voltage : 0;
-        String identifierNonNull = identifier != null ? identifier : "";
-        this.value = String.format("%dC%dV%s", capacitanceNonNull, voltageNonNull, identifierNonNull);
+        this.value = String.format("%dC%dV", capacitanceNonNull, voltageNonNull);
     }
 
     @Column(name = "notes", length = NOTES_LEN)
@@ -97,7 +89,6 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
 
         setCapacitance(r.getCapacitance());
         setVoltage(r.getVoltage());
-        setIdentifier(r.getIdentifier());
         setNotes(r.getNotes());
 
         setLength(r.getLength());
@@ -112,13 +103,6 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
             voltage = null;
         }
         this.voltage = voltage;
-    }
-
-    public void setIdentifier(String identifier) {
-        if (identifier != null && identifier.trim().equals("")) {
-            identifier = null;
-        }
-        this.identifier = identifier;
     }
 
     /**
@@ -162,17 +146,11 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
         long capacitance2 = other.getCapacitance() == null ? 0 : other.getCapacitance();
         int voltage1 = this.getVoltage() == null ? 0 : this.getVoltage();
         int voltage2 = other.getVoltage() == null ? 0 : other.getVoltage();
-        String identifier1 = this.getIdentifier() == null ? "" : this.getIdentifier();
-        String identifier2 = other.getIdentifier() == null ? "" : other.getIdentifier();
 
         int comparison = Long.compare(capacitance1, capacitance2);
         if (comparison != 0) return comparison;
 
-        comparison = voltage1 - voltage2;
-        if (comparison != 0) return comparison;
-
-        // identifier1 and identifier2 are purposely reversed
-        return identifier2.compareTo(identifier1);
+        return voltage1 - voltage2;
     }
 
 
@@ -184,9 +162,7 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
         if (getVoltage() != null && getVoltage() > 0) {
             strList.add(getVoltage() + "V");
         }
-        if (getIdentifier() != null && !getIdentifier().equals("")) {
-            strList.add("'" + getIdentifier() + "'");
-        }
+
         return String.join(" ", strList);
     }
 

@@ -59,19 +59,6 @@
   background-color: #a8c5a8;
 }
 
-#identifier {
-  float: right;
-  font-family: Courier, serif;
-  font-weight: initial;
-  font-size: smaller;
-  line-break: anywhere;
-  line-height: 20px;
-  max-width: 20%;
-
-  margin-top: 7px;
-  margin-right: -8px;
-}
-
 #similar-units-box {
   grid-column-start: 3;
   grid-column-end: 3;

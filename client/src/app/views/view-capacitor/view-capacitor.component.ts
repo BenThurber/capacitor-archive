@@ -125,7 +125,6 @@ export class ViewCapacitorComponent implements OnInit {
     let str = '';
     str += padEndHtml(CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true, true), 9);
     str += padEndHtml(String(capacitorUnit.voltage > 0 ? capacitorUnit.voltage + 'V' : ''), 8);
-    str += capacitorUnit.identifier ? capacitorUnit.identifier : '';
 
     return str;
   }
