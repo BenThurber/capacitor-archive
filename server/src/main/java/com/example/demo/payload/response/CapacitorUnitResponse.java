@@ -21,9 +21,6 @@ public class CapacitorUnitResponse {
     @JsonProperty("voltage")
     private Integer voltage;
 
-    @JsonProperty("identifier")
-    private String identifier;
-
     @JsonProperty("value")
     private String value;
 
@@ -57,7 +54,6 @@ public class CapacitorUnitResponse {
 
         setCapacitance(cu.getCapacitance());
         setVoltage(cu.getVoltage());
-        setIdentifier(cu.getIdentifier());
         setValue(cu.getValue());
         setNotes(cu.getNotes());
 

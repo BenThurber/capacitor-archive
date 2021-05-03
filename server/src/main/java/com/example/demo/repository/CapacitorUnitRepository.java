@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface CapacitorUnitRepository extends JpaRepository<CapacitorUnit, Long> {
 
-    CapacitorUnit findByCapacitanceAndVoltageAndIdentifier(Long capacitance, Integer voltage, String identifier);
+    CapacitorUnit findByCapacitanceAndVoltage(Long capacitance, Integer voltage);
 
     /**
      * Gets a weak entity CapacitorUnit using its identifying entities typeName and companyName.

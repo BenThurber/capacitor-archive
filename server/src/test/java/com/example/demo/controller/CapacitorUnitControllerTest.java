@@ -98,21 +98,18 @@ class CapacitorUnitControllerTest {
         capacitorUnitNullVoltageAndId = new CapacitorUnit();
         capacitorUnitNullVoltageAndId.setCapacitance(50000L);
         capacitorUnitNullVoltageAndId.setVoltage(0);
-        capacitorUnitNullVoltageAndId.setIdentifier("");
         capacitorUnitNullVoltageAndId.setNotes("A popular capacitor");
         capacitorUnitNullVoltageAndId.setCapacitorType(capacitorType1);
 
         capacitorUnit1 = new CapacitorUnit();
         capacitorUnit1.setCapacitance(50000L);
         capacitorUnit1.setVoltage(400);
-        capacitorUnit1.setIdentifier("35b");
         capacitorUnit1.setNotes("A popular capacitor");
         capacitorUnit1.setCapacitorType(capacitorType1);
 
         capacitorUnit2 = new CapacitorUnit();
         capacitorUnit2.setCapacitance(20000L);
         capacitorUnit2.setVoltage(600);
-        capacitorUnit2.setIdentifier(null);
         capacitorUnit2.setNotes("Just another capacitor");
         capacitorUnit2.setCapacitorType(capacitorType1);
 
@@ -208,10 +205,9 @@ class CapacitorUnitControllerTest {
             CapacitorUnit capacitorUnit = i.getArgument(0);
 
             // Check if unique
-            if (capacitorUnit.getId() == null && capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
+            if (capacitorUnit.getId() == null && capacitorUnitRepository.findByCapacitanceAndVoltage(
                     capacitorUnit.getCapacitance(),
-                    capacitorUnit.getVoltage(),
-                    capacitorUnit.getIdentifier()) != null) {
+                    capacitorUnit.getVoltage()) != null) {
                 throw new org.springframework.dao.DataIntegrityViolationException("");
             }
 
@@ -230,18 +226,15 @@ class CapacitorUnitControllerTest {
             return capacitorUnit;
         });
 
-        when(capacitorUnitRepository.findByCapacitanceAndVoltageAndIdentifier(
+        when(capacitorUnitRepository.findByCapacitanceAndVoltage(
                 Mockito.any(Long.class),
-                Mockito.any(Integer.class),
-                Mockito.any(String.class))).thenAnswer(i -> {
+                Mockito.any(Integer.class))).thenAnswer(i -> {
             Long capacitance = i.getArgument(0);
             Integer voltage = i.getArgument(1);
-            String identifier = i.getArgument(2);
 
             return capacitorUnitMockTable.stream().filter(
                     cu -> Objects.equals(cu.getCapacitance(), capacitance) &&
-                            Objects.equals(cu.getVoltage(), voltage) &&
-                            Objects.equals(cu.getIdentifier(), identifier)
+                            Objects.equals(cu.getVoltage(), voltage)
             ).findFirst().orElse(null);
         });
 
@@ -315,7 +308,6 @@ class CapacitorUnitControllerTest {
     private final String newCapacitorUnit1Json = JsonConverter.toJson(true,
             "capacitance", 50000,
             "voltage", 400,
-            "identifier", "35b",
             "notes", "A popular capacitor",
             "typeName", "sealdtite",
             "companyName", "Solar",
@@ -360,7 +352,6 @@ class CapacitorUnitControllerTest {
                 .andExpect(status().isCreated()).andReturn();
 
         assertEquals(50000, capacitorUnitMockTable.get(0).getCapacitance());
-        assertEquals("35b", capacitorUnitMockTable.get(0).getIdentifier());
         assertEquals(400, capacitorUnitMockTable.get(0).getVoltage());
         assertEquals(2, capacitorUnitMockTable.get(0).getPhotos().size());
         assertEquals(1, capacitorUnitMockTable.get(0).getPhotos().iterator().next().getThumbnails().size());
@@ -370,7 +361,6 @@ class CapacitorUnitControllerTest {
     private final String newCapacitorUnitNullableValuesJson = JsonConverter.toJson(true,
             "capacitance", 50000,
             "voltage", 0,
-            "identifier", "",
             "notes", "A popular capacitor",
             "typeName", "sealdtite",
             "companyName", "Solar"
@@ -391,7 +381,6 @@ class CapacitorUnitControllerTest {
         mvc.perform(httpReq)
                 .andExpect(status().isCreated());
 
-        assertNull(capacitorUnitMockTable.get(0).getIdentifier());
         assertNull(capacitorUnitMockTable.get(0).getVoltage());
     }
 
@@ -468,7 +457,7 @@ class CapacitorUnitControllerTest {
         capacitorUnitRepository.save(capacitorUnit1);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
-                "/unit/name?companyName=solar&typeName=sealdtite&value=50000C400V35b")
+                "/unit/name?companyName=solar&typeName=sealdtite&value=50000C400V")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -492,7 +481,7 @@ class CapacitorUnitControllerTest {
         capacitorUnitRepository.save(capacitorUnit1);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get(
-                "/unit/name?companyName=soLAR&typeName=SeaLdtite&value=50000C400V35b")
+                "/unit/name?companyName=soLAR&typeName=SeaLdtite&value=50000C400V")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
 
@@ -559,7 +548,6 @@ class CapacitorUnitControllerTest {
     private final String editCapacitorUnitOnlyNotesJson = JsonConverter.toJson(true,
             "capacitance", 50000,
             "voltage", 400,
-            "identifier", "35b",
             "notes", "A new edited note",
             "typeName", "sealdtite",
             "companyName", "Solar"
@@ -571,7 +559,7 @@ class CapacitorUnitControllerTest {
         capacitorUnitRepository.save(capacitorUnit1);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put(
-                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
+                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V")
                 .content(editCapacitorUnitOnlyNotesJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -586,7 +574,6 @@ class CapacitorUnitControllerTest {
     private final String editCapacitorUnitCapacitanceOnlyJson = JsonConverter.toJson(true,
             "capacitance", 50001,
             "voltage", 400,
-            "identifier", "35b",
             "notes", "A popular capacitor",
             "typeName", "sealdtite",
             "companyName", "Solar"
@@ -598,7 +585,7 @@ class CapacitorUnitControllerTest {
         capacitorUnitRepository.save(capacitorUnit1);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put(
-                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
+                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V")
                 .content(editCapacitorUnitCapacitanceOnlyJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -607,14 +594,13 @@ class CapacitorUnitControllerTest {
                 .andExpect(status().isOk());
 
         assertEquals(50001, capacitorUnitMockTable.get(0).getCapacitance());
-        assertEquals("50001C400V35b", capacitorUnitMockTable.get(0).getValue());
+        assertEquals("50001C400V", capacitorUnitMockTable.get(0).getValue());
     }
 
 
     private final String editCapacitorUnitCapacitanceVoltageIdJson = JsonConverter.toJson(true,
             "capacitance", 50001,
             "voltage", 401,
-            "identifier", "35c",
             "notes", "A popular capacitor",
             "typeName", "sealdtite",
             "companyName", "Solar"
@@ -626,7 +612,7 @@ class CapacitorUnitControllerTest {
         capacitorUnitRepository.save(capacitorUnit1);
 
         MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.put(
-                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
+                "/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V")
                 .content(editCapacitorUnitCapacitanceVoltageIdJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
@@ -636,8 +622,7 @@ class CapacitorUnitControllerTest {
 
         assertEquals(50001, capacitorUnitMockTable.get(0).getCapacitance());
         assertEquals(401, capacitorUnitMockTable.get(0).getVoltage());
-        assertEquals("35c", capacitorUnitMockTable.get(0).getIdentifier());
-        assertEquals("50001C401V35c", capacitorUnitMockTable.get(0).getValue());
+        assertEquals("50001C401V", capacitorUnitMockTable.get(0).getValue());
     }
 
 
@@ -661,7 +646,6 @@ class CapacitorUnitControllerTest {
     private final String editedCapacitorUnitNoPhotosJson = JsonConverter.toJson(true,
             "capacitance", 50000,
             "voltage", 400,
-            "identifier", "35b",
             "notes", "A popular capacitor",
             "typeName", "sealdtite",
             "companyName", "Solar",
@@ -684,7 +668,7 @@ class CapacitorUnitControllerTest {
         mvc.perform(httpReq).andExpect(status().isCreated());
 
 
-        httpReq = MockMvcRequestBuilders.put("/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V35b")
+        httpReq = MockMvcRequestBuilders.put("/unit/edit?companyName=solar&typeName=sealdtite&value=50000C400V")
                 .content(editedCapacitorUnitNoPhotosJson)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON);
