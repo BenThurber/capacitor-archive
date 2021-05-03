@@ -1,4 +1,4 @@
-version: '3.3'
+version: '3.5'
 services:
     
     prodMySQL:
@@ -108,6 +108,20 @@ services:
             - 'test-server-build:/home/gitlab-runner/test-server/'
             - 'prod-client-build:/home/gitlab-runner/prod-client/'
             - 'prod-server-build:/home/gitlab-runner/prod-server/'
+
+
+    ddclient:
+        image: 'capacitor-ddclient:latest'
+        build: 
+            context: ./dockerfiles/custom-ddclient-container/
+        container_name: ddclient
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - 'TZ=New Zealand/Wellington'
+        env_file:
+            - ddclient.env
+        restart: unless-stopped
 
 
 
