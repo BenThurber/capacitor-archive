@@ -7,7 +7,6 @@ COPY ./ddclient.conf /defaults/ddclient.conf
 #RUN sed -i -e "s/DYNAMIC_DNS_PASSWORD/$DYNAMIC_DNS_PASSWORD/g" /etc/ddclient/ddclient.conf
 
 
-
 ##################
 # Install envsubst
 ##################
@@ -21,6 +20,8 @@ ADD entrypoint.sh /sbin/entrypoint.sh
 
 RUN chmod +x /sbin/entrypoint.sh
 
-CMD ["/sbin/entrypoint.sh", "set-password"]
+ENTRYPOINT /sbin/entrypoint.sh
+
+#CMD ["/sbin/entrypoint.sh", "set-password"]
 
 
