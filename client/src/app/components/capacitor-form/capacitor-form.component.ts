@@ -29,7 +29,6 @@ class CapacitorForm {
   unit: {
     capacitance: number
     voltage: number;
-    identifier: string;
     notes: string;
     length: string;
     diameter: string;
@@ -112,7 +111,6 @@ export class CapacitorFormComponent implements OnInit {
       unit: this.formBuilder.group({
         capacitance: ['', Validators.required],
         voltage: ['', [Validators.pattern(integerPattern)]],
-        identifier: ['', [Validators.maxLength(12)]],
         notes: ['', []],
         length: ['', []],
         diameter: ['', []],
@@ -152,7 +150,6 @@ export class CapacitorFormComponent implements OnInit {
       unit: {
         capacitance: capacitorUnit.capacitance,
         voltage: capacitorUnit.voltage,
-        identifier: capacitorUnit.identifier,
         notes: capacitorUnit.notes,
         length: capacitorUnit.length,
         diameter: capacitorUnit.diameter,
@@ -404,7 +401,6 @@ export class CapacitorFormComponent implements OnInit {
       const capacitorUnit: CapacitorUnit = new CapacitorUnit();
       capacitorUnit.capacitance = capacitorForm.unit.capacitance;
       capacitorUnit.voltage = capacitorForm.unit.voltage;
-      capacitorUnit.identifier = capacitorForm.unit.identifier;
       capacitorUnit.notes = capacitorForm.unit.notes;
       capacitorUnit.length = capacitorForm.unit.length;
       capacitorUnit.diameter = capacitorForm.unit.diameter;

@@ -185,15 +185,7 @@
         Voltage must be a whole number
       </div>
     </div>
-
-    <div class="input">
-      <label class="input__label__minor" for="identifier">Identifiers</label>
-      <input id="identifier" type="text" formControlName="identifier" placeholder="optional"
-             [ngClass]="{ 'is-invalid': formFields.unit.controls.identifier.errors }">
-      <div class="error__msg" *ngIf="formFields.unit.controls.identifier.errors">
-        Identifier is too long
-      </div>
-    </div>
+    <br>
 
     <div id="dimensions-expansion-panel" class="blue-expansion-panel-container">
       <mat-expansion-panel [(expanded)]="dimensionsAreExpanded" class="input">
