@@ -114,9 +114,6 @@ services:
         image: 'capacitor-ddclient:latest'
         build: 
             context: ./dockerfiles/custom-ddclient-container/
-            args:
-                 # Temporary literal until an environment variable solution can be found
-                 - DYNAMIC_DNS_PASSWORD=ad17ab5a5f824595abcb60d50d2b6c72
         container_name: ddclient
         environment:
             - PUID=1000
