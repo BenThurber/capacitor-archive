@@ -121,8 +121,6 @@ services:
             - TZ="New Zealand/Wellington"
         env_file:
             - ddclient.env
-        volumes:
-            - './ddclient/:/config'
         restart: unless-stopped
 
 
