@@ -1,4 +1,4 @@
-version: '3.5'
+version: '2.4'
 services:
     
     prodMySQL:
@@ -101,6 +101,7 @@ services:
         image: 'capacitor-gitlab-runner:latest'
         build: ./dockerfiles/custom-gitlab-runner-container/
         restart: always
+        cpus: 0.9
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
