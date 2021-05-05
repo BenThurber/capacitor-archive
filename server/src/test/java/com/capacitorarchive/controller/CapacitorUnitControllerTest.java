@@ -3,8 +3,6 @@ package com.capacitorarchive.controller;
 import com.capacitorarchive.model.*;
 import com.capacitorarchive.payload.response.CapacitorUnitResponse;
 import com.capacitorarchive.repository.*;
-import com.example.demo.model.*;
-import com.example.demo.repository.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.junit.jupiter.api.AfterEach;

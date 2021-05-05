@@ -1,7 +1,6 @@
 package com.capacitorarchive.controller;
 
 import com.capacitorarchive.model.*;
-import com.example.demo.model.*;
 import com.capacitorarchive.payload.response.CapacitorTypeResponse;
 import com.capacitorarchive.payload.response.CapacitorTypeSearchResponse;
 import com.capacitorarchive.repository.CapacitorTypeRepository;
