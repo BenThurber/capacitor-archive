@@ -137,7 +137,7 @@ services:
         build: ./dockerfiles/custom-httpd-container/
         restart: always
         ports:
-            - '35506:80'
+            - '35506:443'
         volumes:
             - 'test-client-build:/usr/local/apache2/htdocs/'
 
