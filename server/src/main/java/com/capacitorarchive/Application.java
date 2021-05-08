@@ -34,7 +34,11 @@ public class Application extends SpringBootServletInitializer {
 				"http://localhost:35504",
 				"http://localhost:35506",
 				"http://www.capacitor-archive.com",
-				"http://www.capacitor-archive.com:35506"));
+				"http://www.capacitor-archive.com:35506",
+				"https://localhost:35504",
+				"https://localhost:35506",
+				"https://www.capacitor-archive.com",
+				"https://www.capacitor-archive.com:35506"));
 		config.setAllowedMethods(Collections.singletonList("*"));
 		config.setAllowedHeaders(Collections.singletonList("*"));
 		config.setExposedHeaders(exposedHeaders);

@@ -2,7 +2,7 @@
 
 export const environment = {
   production: true,
-  serverBaseUrl: 'http://www.capacitor-archive.com:35505',
+  serverBaseUrl: 'https://www.capacitor-archive.com:35505',
   s3BucketName: 'capacitor-archive-media-dev',
   reCaptchaSiteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',   // Development key  (public key, safe to commit)
 };
