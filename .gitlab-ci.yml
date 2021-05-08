@@ -49,9 +49,9 @@ deploy-test-server:
     - rm -f /home/gitlab-runner/test-server/*.war || true
     - rm -rf /home/gitlab-runner/test-server/ROOT || true
     - cp ./build/libs/*.war /home/gitlab-runner/test-server/ROOT.war
-  only:
-    refs:
-      - development
+#  only:
+#    refs:
+#      - development
 
 
 
