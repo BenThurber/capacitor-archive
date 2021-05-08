@@ -144,10 +144,11 @@ services:
 
     testServer:
         container_name: test-server
-        image: 'tomcat:9.0'
+        image: 'tomcat-custom-config:latest'
+        build: ./dockerfiles/custom-tomcat-container/
         restart: always
         ports:
-            - '35505:8080'
+            - '35505:8443'
         depends_on:
             - testMySQL
         environment:
