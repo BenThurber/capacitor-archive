@@ -42,6 +42,7 @@ This project uses the following docker containers.
 | databack/mysql-backup  |  prod-mysql-backup |
 | phpmyadmin             |  phpmyadmin        |
 | gitlab-runner          |  gitlab-runner     |
+| ddclient               |  ddclient          |
 
 Gitlab Runner performs Continuous Integration/Deployment (automated building, testing and deployment) of the capacitor-archive application.  
 
@@ -78,12 +79,16 @@ AWS_DEFAULT_REGION=<Amazon Web Services Region>
 NOTE: DB_PASS is the same as MYSQL_ROOT_PASSWORD above.  
 
 
+### Create a directory for capacitor-archive.com SSL certificates
+`sudo mkdir -p /etc/capacitorarchive/ssl`
+Move the certificate and private key obtained for the domain capacitor-archive.com to this directory.  In order for them to be recognized, they must be named `www_capacitor-archive_com.crt` and `www_capacitor-archive_com.key` respectivley.  
+
 
 ### Create a self signed certificate for phpMyAdmin
-Create a directory to store certificates  
+Create a directory to store certificates for phpmyadmin.  
 `sudo mkdir -p /etc/apache2/ssl`  
 Create a self-signed certificate and answer the prompts.  The common name should be the domain name, i.e. capacitor-archive.com  
-`sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/apache.key -out /etc/apache2/ssl/apache.crt`  
+`sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/phpmyadmin.key -out /etc/apache2/ssl/phpmyadmin.crt`  
 
 
 ### Configure a ddclient for Dynamic DNS
