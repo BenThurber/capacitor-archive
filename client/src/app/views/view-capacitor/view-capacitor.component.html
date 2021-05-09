@@ -7,7 +7,7 @@
 
     <div id="image-box">
       <a id="edit-capacitor" [routerLink]=""
-         (click)="dynamicRouter.redirectTo(['/capacitor', 'edit', companyName.toLowerCase(), typeName.toLowerCase(), capacitorUnit.value])">
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName.toLowerCase(), typeName.toLowerCase(), capacitorUnit.value])">
         [Edit Capacitor]
       </a>
       <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
@@ -18,10 +18,10 @@
       <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
-      <select *ngIf="manufacturer" id="type-dropdown" (change)="dynamicRouter.redirectTo(
+      <select *ngIf="capacitorTypeNames" id="type-dropdown" (change)="dynamicRouter.navigate(
       ['/capacitor', 'view', companyName.toLowerCase(), $event.target.value.toLowerCase()])">
 
-        <option *ngFor="let typeNameDropdown of manufacturer.typeNames.sort(caseInsensitiveCompare)"
+        <option *ngFor="let typeNameDropdown of capacitorTypeNames.sort(caseInsensitiveCompare)"
                 [value]="typeNameDropdown" [selected]="typeNameDropdown.toLowerCase() === typeName.toLowerCase()">
 
           <strong class="type-name">{{typeNameDropdown}}</strong>
@@ -30,7 +30,7 @@
 
       </select><br>
 
-      Made by: <a [routerLink]="" (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', capacitorType.companyName])">
+      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName.toLowerCase()])">
         {{capacitorType && capacitorType.companyName}}
       </a><br>
 
@@ -53,7 +53,6 @@
 
 
     <div id="unit-box" class="info__box minor__shadow">
-      <span id="identifier" *ngIf="capacitorUnit && capacitorUnit.identifier">{{capacitorUnit.identifier}}</span>
       <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
 
       Capacitance:
@@ -98,14 +97,15 @@
 
         <option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
                 [selected]="capacitorUnit.value === similarUnit.value"
-                (dblclick)="dynamicRouter.redirectTo(['/capacitor', 'edit', similarUnit.companyName, similarUnit.typeName, similarUnit.value])">
+                (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName.toLowerCase(),
+                similarUnit.typeName.toLowerCase(), similarUnit.value])">
           {{formatSimilarCapacitor(similarUnit)}}
         </option>
 
       </select><br>
       <strong><a class="nav__link"
                  [routerLink]=""
-                 (click)="dynamicRouter.redirectTo(['/capacitor', 'create', companyName.toLowerCase(), typeName.toLowerCase()])">
+                 (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName.toLowerCase(), typeName.toLowerCase()])">
         + Add a Capacitor
       </a></strong>
     </div>

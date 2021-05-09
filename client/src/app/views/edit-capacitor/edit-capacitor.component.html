@@ -2,13 +2,13 @@
 
   <div *ngIf="companyName && capacitorType && capacitorUnit; else loading">
     <h2>You Are Editing a Type
-      <a class="highlight" [routerLink]="" (click)="dynamicRouter.redirectTo(['/capacitor', 'view', companyName, capacitorUnit.typeName])">
+      <a class="highlight" [routerLink]="" (click)="dynamicRouter.navigate(['/capacitor', 'view', companyName.toLowerCase(), capacitorUnit.typeName.toLowerCase()])">
         {{capacitorUnit.typeName}}
       </a>
       Size
       <a class="highlight">{{formattedCapacitance}}</a>
       capacitor made by
-      <a class="highlight" [routerLink]="" (click)="dynamicRouter.redirectTo(['/manufacturer', 'view', companyName])">
+      <a class="highlight" [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', companyName.toLowerCase()])">
         {{capacitorUnit && capacitorUnit.companyName}}
       </a>
     </h2>

@@ -5,6 +5,7 @@ import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
+import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
 
 @Component({
   selector: 'app-edit-manufacturer',
@@ -16,13 +17,9 @@ export class EditManufacturerComponent implements OnInit {
   companyName: string;
   manufacturer$: Manufacturer;
 
-  restService: RestService;
-  changeDetectorRef: ChangeDetectorRef;
-
-  constructor(private titleService: Title, restService: RestService, activatedRoute: ActivatedRoute, changeDetectorRef: ChangeDetectorRef) {
-    this.restService = restService;
+  constructor(private titleService: Title, private restService: RestService, private activatedRoute: ActivatedRoute,
+              private changeDetectorRef: ChangeDetectorRef, private errorHandler: ErrorHandlerService) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
-    this.changeDetectorRef = changeDetectorRef;
   }
 
   ngOnInit(): Subscription {
@@ -32,7 +29,8 @@ export class EditManufacturerComponent implements OnInit {
       next: manufacturer => {
         this.manufacturer$ = manufacturer;
         this.changeDetectorRef.detectChanges();
-      }
+      },
+      error: err => this.errorHandler.handleGetRequestError(err, 'Could not get Manufacturer to edit.'),
     });
   }
 

@@ -8,7 +8,7 @@ FROM gitlab/gitlab-runner:alpine
 
 # Also installs Node as a dependency of npm
 RUN echo "Installing Node" \
- && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm=12.18.4-r0 \
+ && apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/v3.12/main/ npm \
  && node -v \
  && npm install -g @angular/cli \
  && npm install -g http-server

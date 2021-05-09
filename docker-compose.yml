@@ -1,4 +1,4 @@
-version: '3.3'
+version: '2.4'
 services:
     
     prodMySQL:
@@ -33,6 +33,7 @@ services:
             # Start each backup at 9:05 PM NZST
             - DB_DUMP_BEGIN=0805
             - DB_DUMP_SAFECHARS
+            - 'MYSQLDUMP_OPTS=--ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats'
         env_file:
             - mysql-backup.env
         depends_on:
@@ -71,6 +72,7 @@ services:
             # Start each backup at 9:35 PM NZST
             - DB_DUMP_BEGIN=0835
             - DB_DUMP_SAFECHARS
+            - 'MYSQLDUMP_OPTS=--ignore-table=mysql.innodb_index_stats --ignore-table=mysql.innodb_table_stats'
         env_file:
             - mysql-backup.env
         depends_on:
@@ -99,6 +101,7 @@ services:
         image: 'capacitor-gitlab-runner:latest'
         build: ./dockerfiles/custom-gitlab-runner-container/
         restart: always
+        cpus: 1.2
         volumes:
             - '/var/run/docker.sock:/var/run/docker.sock'
             - 'gitlab-runner-config:/etc/gitlab-runner'
@@ -106,6 +109,20 @@ services:
             - 'test-server-build:/home/gitlab-runner/test-server/'
             - 'prod-client-build:/home/gitlab-runner/prod-client/'
             - 'prod-server-build:/home/gitlab-runner/prod-server/'
+
+
+    ddclient:
+        image: 'capacitor-ddclient:latest'
+        build: 
+            context: ./dockerfiles/custom-ddclient-container/
+        container_name: ddclient
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - 'TZ=New Zealand/Wellington'
+        env_file:
+            - ddclient.env
+        restart: unless-stopped
 
 
 
@@ -120,23 +137,26 @@ services:
         build: ./dockerfiles/custom-httpd-container/
         restart: always
         ports:
-            - '35506:80'
+            - '35506:443'
         volumes:
             - 'test-client-build:/usr/local/apache2/htdocs/'
+            - '/etc/capacitorarchive/ssl:/certs:ro'
 
 
     testServer:
         container_name: test-server
-        image: 'tomcat:9.0'
+        image: 'tomcat-custom-config:latest'
+        build: ./dockerfiles/custom-tomcat-container/
         restart: always
         ports:
-            - '35505:8080'
+            - '35505:8443'
         depends_on:
             - testMySQL
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=dev
         volumes:
             - 'test-server-build:/usr/local/tomcat/webapps/'
+            - '/etc/capacitorarchive/ssl:/certs:ro'
 
 
     prodClient:
@@ -145,23 +165,26 @@ services:
         build: ./dockerfiles/custom-httpd-container/
         restart: always
         ports:
-            - '35504:80'
+            - '35504:443'
         volumes:
             - 'prod-client-build:/usr/local/apache2/htdocs/'
+            - '/etc/capacitorarchive/ssl:/certs:ro'
 
 
     prodServer:
         container_name: prod-server
-        image: 'tomcat:9.0'
+        image: 'tomcat-custom-config:latest'
+        build: ./dockerfiles/custom-tomcat-container/
         restart: always
         ports:
-            - '35503:8080'
+            - '35503:8443'
         depends_on:
             - prodMySQL
         environment:
             - JAVA_OPTS=-Dspring.profiles.active=prod
         volumes:
             - 'prod-server-build:/usr/local/tomcat/webapps/'
+            - '/etc/capacitorarchive/ssl:/certs:ro'
 
 
 

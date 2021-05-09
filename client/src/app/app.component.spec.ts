@@ -31,13 +31,6 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it('should have as correct browser title', () => {
-    titleService = TestBed.inject(Title);
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(titleService.getTitle()).toEqual(app.title);
-  });
-
   it('should render header', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
