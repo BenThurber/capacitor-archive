@@ -166,6 +166,7 @@ services:
         restart: always
         ports:
             - '35504:443'
+            - '35502:80'
         volumes:
             - 'prod-client-build:/usr/local/apache2/htdocs/'
             - '/etc/capacitorarchive/ssl:/certs:ro'
