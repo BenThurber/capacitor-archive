@@ -1,8 +1,8 @@
 # Overview
 <sup>**If visiting from github please come to [gitlab.com](https://gitlab.com/capacitor-archive/capacitor-archive)**</sup>
 
-**View the site at [capacitor-archive.com](http://www.capacitor-archive.com)**  
-(And the test site [here](http://www.capacitor-archive.com:35506) from the development branch)  
+**View the site at [capacitor-archive.com](https://www.capacitor-archive.com)**  
+(And the test site [here](https://www.capacitor-archive.com:35506) from the development branch)  
 
 The web application capacitor-archive.com will allow users to upload images and historical information about vintage [electronic capacitors](https://en.wikipedia.org/wiki/Capacitor).  The format is similar to that of Wikipedia or [radiomuseum.org](https://www.radiomuseum.org/tubes/tube_5z3.html) where each vintage component (capacitor) has a page with links to similar pages.  **The hope is that this website will encourage the documentation of vintage electronic components, and aid in the creation of reproductions for radio and guitar restorations.**  
 
@@ -91,7 +91,7 @@ Create a self-signed certificate and answer the prompts.  The common name should
 `sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/apache2/ssl/phpmyadmin.key -out /etc/apache2/ssl/phpmyadmin.crt`  
 
 
-### Configure a ddclient for Dynamic DNS
+### Configure a Dynamic DNS Client with ddclient
 If the network the site is run on has a dynamic ip address, the ddclient docker container can be used to automatically update the ip that the domain name points to.  The file dockerfiles/custom-ddclient-container/ddclient.conf is the config.  It is assumed that the hostname is provided through namecheap.com.
 - Login to namecheap, click manage next to the domain name capacitor-archive.com and click "Advanced DNS"
 - Enable Dynamic DNS and make note of the "Dynamic DNS Password"
@@ -154,7 +154,7 @@ The container test-mysql has a database named capacitor_test.
 Allow ssh  
 `sudo ufw allow 22/tcp`  
 Allow server and client  
-`sudo ufw allow 35503:35506/tcp`  
+`sudo ufw allow 35502:35506/tcp`  
 Allow phpmyadmin  
 `sudo ufw allow 8081/tcp`  
 Allow phpmyadmin to connect to test and prod databases  
@@ -167,17 +167,23 @@ Turn on the firewall
 `curl -s https://gist.githubusercontent.com/rubot/418ecbcef49425339528233b24654a7d/raw/22bc857b97e63fa65eb4b89d2b2745289a51641c/docker_ufw_setup.sh | sudo bash`  
 
 
-## Port mappings
+## Port mappings and forwarding
 
-| service       | port  |
-|---------------|-------|
-| ssh           | 22    |
-| prod-database | 3306  |
-| test-database | 3307  |
-| phpmyadmin    | 8081  |
-| prod-server   | 35503 |
-| prod-client   | 35504 |
-| test-server   | 35505 |
-| test-client   | 35506 |
+| service       | host port | extern port |
+|---------------|-----------|-------------|
+| ssh           | 22        |             |
+| prod-database | 3306      |             |
+| test-database | 3307      |             |
+| phpmyadmin    | 8081      | 8081        |
+| prod-client*  | 35502     | 80          |
+| prod-server   | 35503     |             |
+| prod-client   | 35504     | 443         |
+| test-server   | 35505     |             |
+| test-client   | 35506     | 35506       |
+
+
+*Used to redirect http requests to https
+
+The network router need to forward the ports listed under extern port.
 
 
