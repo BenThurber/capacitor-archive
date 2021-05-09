@@ -4,10 +4,11 @@ import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml, caseInsensitiveCompare, title} from '../../utilities/text-utils';
-import {Manufacturer} from '../../models/manufacturer.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 import {Title} from '@angular/platform-browser';
+import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
+import {ImageComponent} from '../../components/image/image.component';
 
 @Component({
   selector: 'app-view-capacitor',
@@ -25,9 +26,9 @@ export class ViewCapacitorComponent implements OnInit {
   value: string;
 
   capacitorType: CapacitorType;
+  capacitorTypeNames: Array<string> = [];
   capacitorUnit: CapacitorUnit;
   capacitorUnits: Array<CapacitorUnit>;
-  manufacturer: Manufacturer;
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
 
@@ -36,7 +37,7 @@ export class ViewCapacitorComponent implements OnInit {
 
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private restService: RestService,
-              public dynamicRouter: DynamicRouterService) {
+              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
     this.value = this.activatedRoute.snapshot.paramMap.get('value');
@@ -67,37 +68,56 @@ export class ViewCapacitorComponent implements OnInit {
 
     if (this.value) {
       this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value)
-        .subscribe((capacitorUnit: CapacitorUnit) => {
-          this.capacitorUnit = capacitorUnit;
-          this.updateGalleryImages();
-          // Set focus on the similar menu
-          setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
+        .subscribe({
+          next: (capacitorUnit: CapacitorUnit) => {
+            this.capacitorUnit = capacitorUnit;
+            this.updateGalleryImages();
+            // Set focus on the similar menu
+            setTimeout(() => this.similarMenu && this.similarMenu.nativeElement.focus(), 100);
+          },
+          error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorUnit')
         });
     }
 
     this.restService.getCapacitorTypeByName(this.companyName, this.typeName)
-      .subscribe((capacitorType: CapacitorType) => this.capacitorType = capacitorType);
+      .subscribe({
+        next: (capacitorType: CapacitorType) => this.capacitorType = capacitorType,
+        error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorType')
+      });
 
-    this.restService.getManufacturerByName(this.companyName).subscribe(
-      (manufacturer: Manufacturer) => this.manufacturer = manufacturer);
 
-    return this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
+    this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
       .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
         this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
         if (!this.value && this.capacitorUnits.length > 0) {
           this.capacitorUnit = this.capacitorUnits[0];
+          this.similarMenuChanged(this.capacitorUnit.value);
+
         } else if (this.capacitorUnits.length === 0) {
           this.capacitorUnit = new CapacitorUnit();
+          this.updateGalleryImages();
         }
-        this.updateGalleryImages();
+
         // Set focus on the similar menu
-        setTimeout(() => this.similarMenu.nativeElement.focus(), 100);
+        setTimeout(() => this.similarMenu && this.similarMenu.nativeElement.focus(), 100);
       });
+
+
+    this.restService.getAllTypes(this.companyName).subscribe(
+      (capacitorTypeNames: Array<CapacitorType>) => this.capacitorTypeNames = capacitorTypeNames.map(ct => ct.typeName));
   }
 
 
   similarMenuChanged(value): void {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
+    const cu = this.capacitorUnit;
+    this.dynamicRouter.router.navigate([
+      '/capacitor',
+      'view',
+      cu.companyName.toLowerCase(),
+      cu.typeName.toLowerCase(),
+      cu.value
+    ], { replaceUrl: true });
     this.updateGalleryImages();
   }
 
@@ -105,7 +125,6 @@ export class ViewCapacitorComponent implements OnInit {
     let str = '';
     str += padEndHtml(CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true, true), 9);
     str += padEndHtml(String(capacitorUnit.voltage > 0 ? capacitorUnit.voltage + 'V' : ''), 8);
-    str += capacitorUnit.identifier ? capacitorUnit.identifier : '';
 
     return str;
   }
@@ -113,13 +132,17 @@ export class ViewCapacitorComponent implements OnInit {
 
   updateGalleryImages(): void {
     this.galleryImages = [];
-    if (!this.capacitorUnit) {
+    if (!this.capacitorUnit) {  // Don't show anything until capacitorUnit has loaded
       return;
     }
     if (this.capacitorUnit.photos.length === 0) {
       this.galleryImages.push({
-        big: '../../../assets/no-capacitor-images-no-arrow.jpg',
-        medium: '../../../assets/no-capacitor-images.jpg',
+        big: ImageComponent.webpIsSupported ?
+          '../../../assets/no-capacitor-images-no-arrow.webp' : '../../../assets/no-capacitor-images-no-arrow.jpg',
+
+        medium: ImageComponent.webpIsSupported ?
+          '../../../assets/no-capacitor-images.webp' : '../../../assets/no-capacitor-images.jpg',
+
         small: '',
       });
     } else {

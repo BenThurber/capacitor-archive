@@ -6,7 +6,6 @@ export class CapacitorUnit {
 
   capacitance: number;
   voltage: number;
-  identifier: string;
   value: string;
   notes: string;
   length: string;
@@ -22,7 +21,6 @@ export class CapacitorUnit {
     if (capacitorUnit) {
       this.capacitance = capacitorUnit.capacitance;
       this.voltage = capacitorUnit.voltage;
-      this.identifier = capacitorUnit.identifier;
       this.value = capacitorUnit.value;
       this.notes = capacitorUnit.notes;
       this.length = capacitorUnit.length;
@@ -67,26 +65,15 @@ export class CapacitorUnit {
   }
 
   /**
-   * Compares two CapacitorUnits first by capacitance, then by voltage, then by identifier.
+   * Compares two CapacitorUnits first by capacitance, then by voltage.
    * Intended to be passed in to array.prototype.sort().
    * @param u1 CapacitorUnit 1
    * @param u2 CapacitorUnit 2
    * @return a positive number if u1 > u2, negative number if u1 < u2, or 0 if they are equal.
    */
   static compare(u1: CapacitorUnit, u2: CapacitorUnit): number {
-    let idOrder;
-    const id1 = u1.identifier ? u1.identifier.toLowerCase() : '';
-    const id2 = u2.identifier ? u2.identifier.toLowerCase() : '';
 
-    if (id1 > id2) {
-      idOrder = 1;
-    } else if (id1 < id2) {
-      idOrder = -1;
-    } else {
-      idOrder = 0;
-    }
-
-    return u2.capacitance - u1.capacitance || u2.voltage - u1.voltage || idOrder;
+    return u2.capacitance - u1.capacitance || u2.voltage - u1.voltage;
   }
 
 
