@@ -68,7 +68,7 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
   };
 
   quillStyles = {
-    height: '450px',
+    'min-height': '250px',
     backgroundColor: '#ffff'
   };
 
