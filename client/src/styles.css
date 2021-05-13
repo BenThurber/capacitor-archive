@@ -105,6 +105,16 @@ a:hover {
   line-height: 30px;
 }
 
+.grey__link:link {
+  color: #565959;
+  font-weight: bold;
+}
+
+.grey__link:visited {
+  color: #565959;
+  font-weight: bold;
+}
+
 .grey__link {
   font-family: "Courier", serif;
   text-decoration: none;
