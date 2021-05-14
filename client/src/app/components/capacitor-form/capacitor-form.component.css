@@ -7,7 +7,7 @@
 }
 
 .type__info {
-  margin-top: 40px;
+  margin-top: 30px;
   margin-bottom: 40px;
   padding: 20px 20px;
   background-color: rgb(202, 228, 239);
@@ -72,6 +72,14 @@ hr {
 
 .manufacturer__spinner {
   margin-left: 18px;
+}
+
+.description-box {
+
+}
+
+.type-section {
+
 }
 
 .special__menu__item {

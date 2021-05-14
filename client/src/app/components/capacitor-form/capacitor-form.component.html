@@ -81,7 +81,7 @@
     </div>
     <ng-template #editLabel>
       <label class="input__label__major">Edit Type / Family:</label>
-      <br>
+      <br><br>
     </ng-template>
     <br>
 
@@ -119,45 +119,54 @@
       </div>
       <br>
 
-      <div id="date-expansion-panel" class="blue-expansion-panel-container">
-        <mat-expansion-panel [(expanded)]="yearsAreExpanded" class="input">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              Include Years Produced
-            </mat-panel-title>
-          </mat-expansion-panel-header>
+      <div style="min-height: 150px">  <!--Add a min-height so the page isn't extended when its expanded-->
+        <div id="date-expansion-panel" class="blue-expansion-panel-container">
+          <mat-expansion-panel [(expanded)]="yearsAreExpanded" class="input">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Include Years Produced
+              </mat-panel-title>
+            </mat-expansion-panel-header>
 
-          <div style="all: initial">
-            <label class="input__label__minor expandable__label" for="start-year">Start Year</label>
-            <input id="start-year" type="text" formControlName="startYear" class="expandable__input" size="10"
-                   placeholder="optional"
-                   [ngClass]="{ 'is-invalid': typeFields.startYear.errors }">
-            <div class="expandable__label error__msg" *ngIf="typeFields.startYear.errors" style="margin-top: 0">
-              Year is not valid (YYYY)
-            </div>
-            <br>
-
-            <label class="input__label__minor expandable__label" for="end-year">End Year</label>
-            <input id="end-year" type="text" formControlName="endYear" class="expandable__input" size="10"
-                   placeholder="optional" [ngClass]="{ 'is-invalid': typeFields.endYear.errors }">
-            <div>
-              <div class="expandable__label error__msg" *ngIf="typeFields.endYear.errors" style="margin-top: 0">
+            <div style="all: initial">
+              <label class="input__label__minor expandable__label" for="start-year">Start Year</label>
+              <input id="start-year" type="text" formControlName="startYear" class="expandable__input" size="10"
+                     placeholder="optional"
+                     [ngClass]="{ 'is-invalid': typeFields.startYear.errors }">
+              <div class="expandable__label error__msg" *ngIf="typeFields.startYear.errors" style="margin-top: 0">
                 Year is not valid (YYYY)
               </div>
-              <div class="expandable__label error__msg" *ngIf="endYearBeforeStartYearError" style="margin-top: 0">
-                {{typeFields.endYear.value}} is before {{typeFields.startYear.value}}
+              <br>
+
+              <label class="input__label__minor expandable__label" for="end-year">End Year</label>
+              <input id="end-year" type="text" formControlName="endYear" class="expandable__input" size="10"
+                     placeholder="optional" [ngClass]="{ 'is-invalid': typeFields.endYear.errors }">
+              <div>
+                <div class="expandable__label error__msg" *ngIf="typeFields.endYear.errors" style="margin-top: 0">
+                  Year is not valid (YYYY)
+                </div>
+                <div class="expandable__label error__msg" *ngIf="endYearBeforeStartYearError" style="margin-top: 0">
+                  {{typeFields.endYear.value}} is before {{typeFields.startYear.value}}
+                </div>
               </div>
             </div>
-          </div>
 
-        </mat-expansion-panel>
+          </mat-expansion-panel>
+        </div>
       </div>
 
 
-      <label class="input__label__minor" for="description">Description</label>
-      <br>
-      <textarea id="description" formControlName="description" class="input" rows="4" cols="35" placeholder="optional"></textarea>
-      <br>
+      <!--<br><br><br><br><br><br>-->
+      <div id="description-box">
+        <label class="input__label__minor" for="description"><strong>Description</strong></label>
+        <br><br>
+        <app-input-rich-text id="description"
+                             formControlName="description"
+                             [dirName]="formFields.companyName.value"
+                             (filesUploading)="currentImageUploads = $event"
+        ></app-input-rich-text>
+        <br>
+      </div>
     </div>
 
     <hr>
