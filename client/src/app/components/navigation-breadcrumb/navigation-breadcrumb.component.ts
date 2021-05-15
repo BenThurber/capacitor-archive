@@ -4,6 +4,9 @@ import {BreadcrumbService} from '../../services/breadcrumb/breadcrumb.service';
 import {NavigationStart} from '@angular/router';
 import {filter} from 'rxjs/operators';
 
+/**
+ * A breadcrumb navigator, i.e.   Home > Solar > ...
+ */
 @Component({
   selector: 'app-navigation-breadcrumb',
   templateUrl: './navigation-breadcrumb.component.html',
@@ -11,7 +14,7 @@ import {filter} from 'rxjs/operators';
 })
 export class NavigationBreadcrumbComponent implements OnInit {
 
-  @Input() links: Array<{name: string, url: Array<string>}>;
+  @Input() links: Array<{name: string, url: Array<string>}> = [];
 
   constructor(public dynamicRouter: DynamicRouterService, private breadcrumbService: BreadcrumbService) {
 
