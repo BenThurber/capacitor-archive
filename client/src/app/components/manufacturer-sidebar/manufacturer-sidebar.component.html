@@ -9,7 +9,7 @@
     <div *ngFor="let barCompanyName of companyNames$;">
       <div class="link__padding">
         <a class="grey__link" [routerLink]=""
-           (click)="dynamicRouter.navigate(['/manufacturer', 'view', barCompanyName.toLowerCase()])">
+           (click)="dynamicRouter.navigate(['/manufacturer', 'view', barCompanyName])">
           {{barCompanyName}}
         </a>
       </div>
