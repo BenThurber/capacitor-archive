@@ -53,13 +53,13 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
     const cu = capacitorUnit;
     this.breadcrumbService.change([
       {name: cu.companyName,
-        url: ['/manufacturer', 'view', cu.companyName]
+        url: ['/manufacturer', 'view', cu.companyName.toLowerCase()]
       },
       {name: cu.typeName,
-        url: ['/capacitor', 'view', cu.companyName, cu.typeName]
+        url: ['/capacitor', 'view', cu.companyName.toLowerCase(), cu.typeName.toLowerCase()]
       },
       {name: 'Edit ' + formattedCapacitance,
-        url: ['/capacitor', 'edit', cu.companyName, cu.typeName, cu.value]
+        url: ['/capacitor', 'edit', cu.companyName.toLowerCase(), cu.typeName.toLowerCase(), cu.value]
       },
     ]);
   }

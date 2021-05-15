@@ -10,7 +10,7 @@ export interface UpdateBreadcrumb {
 }
 
 /**
- * Updates the navigational breadcrumb, i.e.   Home > Solar > ...
+ * A shared service that updates the navigational breadcrumb, i.e.   Home > Solar > ...
  */
 @Injectable({
   providedIn: 'root'

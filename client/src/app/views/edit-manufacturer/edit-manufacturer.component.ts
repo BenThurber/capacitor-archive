@@ -40,7 +40,7 @@ export class EditManufacturerComponent implements OnInit, UpdateBreadcrumb {
   updateBreadcrumb(companyName: string): void {
     this.breadcrumbService.change([
       {name: 'Edit ' + companyName,
-        url: ['/manufacturer', 'edit', companyName]
+        url: ['/manufacturer', 'edit', companyName.toLowerCase()]
       }
     ]);
   }

@@ -116,10 +116,10 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
   updateBreadcrumb(companyName: string, typeName: string): void {
     this.breadcrumbService.change([
       {name: companyName,
-        url: ['/manufacturer', 'view', companyName]
+        url: ['/manufacturer', 'view', companyName.toLowerCase()]
       },
       {name: typeName,
-        url: ['/capacitor', 'view', companyName, typeName]
+        url: ['/capacitor', 'view', companyName.toLowerCase(), typeName.toLowerCase()]
       },
     ]);
   }
@@ -130,8 +130,8 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
     this.dynamicRouter.router.navigate([
       '/capacitor',
       'view',
-      cu.companyName,
-      cu.typeName,
+      cu.companyName.toLowerCase(),
+      cu.typeName.toLowerCase(),
       cu.value
     ], { replaceUrl: true });
     this.updateBreadcrumb(cu.companyName, cu.typeName);
