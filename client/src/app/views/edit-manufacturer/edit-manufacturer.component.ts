@@ -6,19 +6,21 @@ import {Subscription} from 'rxjs';
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
+import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
 
 @Component({
   selector: 'app-edit-manufacturer',
   templateUrl: './edit-manufacturer.component.html',
   styleUrls: ['./edit-manufacturer.component.css']
 })
-export class EditManufacturerComponent implements OnInit {
+export class EditManufacturerComponent implements OnInit, UpdateBreadcrumb {
 
   companyName: string;
   manufacturer$: Manufacturer;
 
   constructor(private titleService: Title, private restService: RestService, private activatedRoute: ActivatedRoute,
-              private changeDetectorRef: ChangeDetectorRef, private errorHandler: ErrorHandlerService) {
+              private changeDetectorRef: ChangeDetectorRef, private errorHandler: ErrorHandlerService,
+              private breadcrumbService: BreadcrumbService) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
   }
 
@@ -28,10 +30,19 @@ export class EditManufacturerComponent implements OnInit {
     return this.restService.getManufacturerByName(this.companyName).subscribe({
       next: manufacturer => {
         this.manufacturer$ = manufacturer;
+        this.updateBreadcrumb(manufacturer.companyName);
         this.changeDetectorRef.detectChanges();
       },
       error: err => this.errorHandler.handleGetRequestError(err, 'Could not get Manufacturer to edit.'),
     });
+  }
+
+  updateBreadcrumb(companyName: string): void {
+    this.breadcrumbService.change([
+      {name: 'Edit ' + companyName,
+        url: ['/manufacturer', 'edit', companyName.toLowerCase()]
+      }
+    ]);
   }
 
 }
