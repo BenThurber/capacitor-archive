@@ -423,8 +423,8 @@ export class CapacitorFormComponent implements OnInit {
           this.dynamicRouter.navigate([
             '/capacitor',
             'view',
-            createdCapacitorUnit.companyName.toLowerCase(),
-            createdCapacitorUnit.typeName.toLowerCase(),
+            createdCapacitorUnit.companyName,
+            createdCapacitorUnit.typeName,
             createdCapacitorUnit.value
           ]);
           return;
@@ -437,9 +437,9 @@ export class CapacitorFormComponent implements OnInit {
     this.dynamicRouter.navigate([
       '/capacitor',
       'view',
-      (this.editCompanyName || capacitorForm.companyName).toLowerCase(),
+      (this.editCompanyName || capacitorForm.companyName),
       ((capacitorForm.type.typeContent ? capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect)
-      || this.editCapacitorType.typeName).toLowerCase(),
+      || this.editCapacitorType.typeName),
       this.editCapacitorUnit && this.editCapacitorUnit.value
     ]);
 
