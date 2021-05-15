@@ -1,0 +1,12 @@
+
+
+<div id="breadcrumb-content">
+  <span>
+    <a class="nav__link" [routerLink]="" (click)="dynamicRouter.navigateByUrl('/')">Home</a>
+    <span class="arrow">{{links.length > 0 ? ' > ' : ''}}</span>
+  </span>
+  <span *ngFor="let link of links; let i = index;">
+    <a class="nav__link" [routerLink]="" (click)="dynamicRouter.navigate(link.url)">{{link.name}}</a>
+    <span class="arrow">{{i < links.length - 1 ? ' > ' : ''}}</span>
+  </span>
+</div>
