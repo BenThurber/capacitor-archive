@@ -7,7 +7,7 @@
 
     <div id="image-box">
       <a id="edit-capacitor" [routerLink]=""
-         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName.toLowerCase(), typeName.toLowerCase(), capacitorUnit.value])">
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value])">
         [Edit Capacitor]
       </a>
       <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
@@ -19,7 +19,7 @@
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
       <select *ngIf="capacitorTypeNames" id="type-dropdown" (change)="dynamicRouter.navigate(
-      ['/capacitor', 'view', companyName.toLowerCase(), $event.target.value.toLowerCase()])">
+      ['/capacitor', 'view', companyName, $event.target.value])">
 
         <option *ngFor="let typeNameDropdown of capacitorTypeNames.sort(caseInsensitiveCompare)"
                 [value]="typeNameDropdown" [selected]="typeNameDropdown.toLowerCase() === typeName.toLowerCase()">
@@ -30,7 +30,7 @@
 
       </select><br>
 
-      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName.toLowerCase()])">
+      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
         {{capacitorType && capacitorType.companyName}}
       </a><br>
 
@@ -97,15 +97,15 @@
 
         <option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
                 [selected]="capacitorUnit.value === similarUnit.value"
-                (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName.toLowerCase(),
-                similarUnit.typeName.toLowerCase(), similarUnit.value])">
+                (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName,
+                similarUnit.typeName, similarUnit.value])">
           {{formatSimilarCapacitor(similarUnit)}}
         </option>
 
       </select><br>
       <strong><a class="nav__link"
                  [routerLink]=""
-                 (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName.toLowerCase(), typeName.toLowerCase()])">
+                 (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName, typeName])">
         + Add a Capacitor
       </a></strong>
     </div>
