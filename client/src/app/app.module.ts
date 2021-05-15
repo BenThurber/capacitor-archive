@@ -41,6 +41,7 @@ import {NgxGalleryModule} from 'ngx-gallery-9';
 import { CapacitorTypePanelComponent } from './components/capacitor-type-panel/capacitor-type-panel.component';
 import { SearchResultComponent } from './components/search-result/search-result.component';
 import { InputCountryComponent } from './components/form-controls/input-country/input-country.component';
+import { NavigationBreadcrumbComponent } from './components/navigation-breadcrumb/navigation-breadcrumb.component';
 
 
 @NgModule({
@@ -70,6 +71,7 @@ import { InputCountryComponent } from './components/form-controls/input-country/
     CapacitorTypePanelComponent,
     SearchResultComponent,
     InputCountryComponent,
+    NavigationBreadcrumbComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),

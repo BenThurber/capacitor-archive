@@ -33,11 +33,12 @@ a:hover {
 .content {
   margin-left: 4%;
   margin-right: 20%;
+  margin-top: -5px;
 }
 
 .nav__links li {
   display: inline-block;
-  padding: 0px 20px;
+  padding: 0 20px;
 }
 
 .nav__links li a {
