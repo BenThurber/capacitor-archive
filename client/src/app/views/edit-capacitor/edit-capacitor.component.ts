@@ -7,13 +7,14 @@ import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
+import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
 
 @Component({
   selector: 'app-edit-capacitor',
   templateUrl: './edit-capacitor.component.html',
   styleUrls: ['./edit-capacitor.component.css']
 })
-export class EditCapacitorComponent implements OnInit {
+export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
   companyName: string;
   typeName: string;
@@ -24,7 +25,8 @@ export class EditCapacitorComponent implements OnInit {
   formattedCapacitance = '';
 
   constructor(private titleService: Title, private restService: RestService, private activatedRoute: ActivatedRoute,
-              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService) {
+              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService,
+              private breadcrumbService: BreadcrumbService) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = activatedRoute.snapshot.paramMap.get('typeName');
     this.value = activatedRoute.snapshot.paramMap.get('value');
@@ -41,9 +43,25 @@ export class EditCapacitorComponent implements OnInit {
       next: (capacitorUnit: CapacitorUnit) => {
         this.capacitorUnit = capacitorUnit;
         this.formattedCapacitance = CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true);
+        this.updateBreadcrumb(capacitorUnit, this.formattedCapacitance);
       },
       error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorUnit to edit'),
     });
+  }
+
+  updateBreadcrumb(capacitorUnit: CapacitorUnit, formattedCapacitance): void {
+    const cu = capacitorUnit;
+    this.breadcrumbService.change([
+      {name: cu.companyName,
+        url: ['/manufacturer', 'view', cu.companyName.toLowerCase()]
+      },
+      {name: cu.typeName,
+        url: ['/capacitor', 'view', cu.companyName.toLowerCase(), cu.typeName.toLowerCase()]
+      },
+      {name: 'Edit ' + formattedCapacitance,
+        url: ['/capacitor', 'edit', cu.companyName.toLowerCase(), cu.typeName.toLowerCase(), cu.value]
+      },
+    ]);
   }
 
 }
