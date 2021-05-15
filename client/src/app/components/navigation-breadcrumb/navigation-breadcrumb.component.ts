@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {BreadcrumbService} from '../../services/breadcrumb/breadcrumb.service';
 import {NavigationStart} from '@angular/router';
+import {filter} from 'rxjs/operators';
 
 @Component({
   selector: 'app-navigation-breadcrumb',
@@ -21,11 +22,9 @@ export class NavigationBreadcrumbComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dynamicRouter.router.events
-      .subscribe((event: NavigationStart) => {
-        // Clear breadcrumb on page navigation
-        this.links = [];
-      });
+    this.dynamicRouter.router.events.pipe(
+      filter(event => event instanceof NavigationStart),
+    ).subscribe(() => this.links = []);
   }
 
 }
