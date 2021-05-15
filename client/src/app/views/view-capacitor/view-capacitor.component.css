@@ -4,6 +4,7 @@
   display: inline-grid;
   grid-template-columns: 60% 5% 35% 0%;
   grid-template-rows: 5% auto auto auto auto auto 5%;
+  margin-top: 10px;
 }
 
 #image-box {

@@ -35,7 +35,6 @@ export class ViewManufacturerComponent implements OnInit, UpdateBreadcrumb {
       .subscribe({
         next: (manufacturer: Manufacturer) => {
           this.manufacturer$ = manufacturer;
-          // Update Breadcrumb Navigator
           this.updateBreadcrumb(manufacturer.companyName);
         },
         error: err => this.errorHandler.handleGetRequestError(err, 'Error getting manufacturer')
