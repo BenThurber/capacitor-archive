@@ -8,14 +8,14 @@ import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-re
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
-import {BreadcrumbService} from '../../services/breadcrumb/breadcrumb.service';
+import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
 
 @Component({
   selector: 'app-view-manufacturer',
   templateUrl: './view-manufacturer.component.html',
   styleUrls: ['./view-manufacturer.component.css', '../../styles/animations.css']
 })
-export class ViewManufacturerComponent implements OnInit {
+export class ViewManufacturerComponent implements OnInit, UpdateBreadcrumb {
 
   companyName: string;
   manufacturer$: Manufacturer;
@@ -36,12 +36,18 @@ export class ViewManufacturerComponent implements OnInit {
         next: (manufacturer: Manufacturer) => {
           this.manufacturer$ = manufacturer;
           // Update Breadcrumb Navigator
-          this.breadcrumbService.change(
-            [{name: manufacturer.companyName, url: ['/manufacturer', 'view', manufacturer.companyName.toLowerCase()]}]
-          );
+          this.updateBreadcrumb(manufacturer.companyName);
         },
         error: err => this.errorHandler.handleGetRequestError(err, 'Error getting manufacturer')
       });
+  }
+
+  updateBreadcrumb(companyName: string): void {
+    this.breadcrumbService.change([
+      {name: companyName,
+        url: ['/manufacturer', 'view', companyName.toLowerCase()]
+      }
+    ]);
   }
 
 }
