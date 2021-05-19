@@ -8,7 +8,6 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
-import {historicCountryList} from '../../utilities/countries';
 
 
 @Component({
@@ -27,8 +26,6 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
   currentImageUploads = new Set<string>();
-
-  countries = [...historicCountryList];
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
