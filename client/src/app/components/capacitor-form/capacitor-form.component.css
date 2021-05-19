@@ -4,6 +4,8 @@
   font-size: 15px;
   margin-right: 15%;
   display:block;
+  position: absolute;
+  left: 750px;
 }
 
 .type__info {

@@ -85,7 +85,7 @@
     </ng-template>
     <br>
 
-    <div *ngIf="capacitorTypeIsSelected" formGroupName="typeContent">
+    <div *ngIf="capacitorTypeIsSelected; else whiteSpace" formGroupName="typeContent">
       <div class="input">
         <label class="input__label__minor" for="type-name">Type Name*</label>
         <input id="type-name" size="30" formControlName="typeNameInput" placeholder="e.g. Sealdtite, 4424/E"
@@ -156,7 +156,7 @@
       </div>
 
 
-      <!--<br><br><br><br><br><br>-->
+      <br><br><br><br><br>
       <div id="description-box">
         <label class="input__label__minor" for="description"><strong>Description</strong></label>
         <br><br>
@@ -168,6 +168,9 @@
         <br>
       </div>
     </div>
+    <ng-template #whiteSpace>
+      <div style="min-height: 430px"></div>
+    </ng-template>
 
     <hr>
   </div>
