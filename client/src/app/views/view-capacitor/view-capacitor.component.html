@@ -18,8 +18,9 @@
       <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
-      <select *ngIf="capacitorTypeNames" id="type-dropdown" (change)="dynamicRouter.navigate(
-      ['/capacitor', 'view', companyName, $event.target.value])">
+      <select *ngIf="capacitorTypeNames" id="type-dropdown"
+              [ngStyle]="{'max-width': capacitorType.typeName.length < 20 ? capacitorType.typeName.length * 26 + 'px' : '95%'}"
+              (change)="dynamicRouter.navigate(['/capacitor', 'view', companyName, $event.target.value])">
 
         <option *ngFor="let typeNameDropdown of capacitorTypeNames.sort(caseInsensitiveCompare)"
                 [value]="typeNameDropdown" [selected]="typeNameDropdown.toLowerCase() === typeName.toLowerCase()">
@@ -29,10 +30,6 @@
         </option>
 
       </select><br>
-
-      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
-        {{capacitorType && capacitorType.companyName}}
-      </a><br>
 
       <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
         Produced: <strong>{{capacitorType.startYear}}-{{capacitorType.endYear}}</strong><br>
@@ -87,7 +84,7 @@
         <div class="block__description">{{capacitorUnit.notes}}</div>
       </ng-container>
 
-      
+
     </div>
 
 
@@ -110,7 +107,16 @@
       </a></strong>
     </div>
 
+    <div id="type-full">
+      <span>{{capacitorType.typeName}}</span><br>
+      <span>{{capacitorType.constructionName}}</span><br>
 
+      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
+      {{capacitorType && capacitorType.companyName}}</a><br>
+
+      Description
+      <div class="ql-editor" [innerHTML]="(capacitorType && capacitorType.description) | safeHtml"></div>
+    </div>
 
   </ng-container>
 

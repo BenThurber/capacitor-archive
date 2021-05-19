@@ -3,7 +3,7 @@
   min-width: 96%;
   display: inline-grid;
   grid-template-columns: 60% 5% 35% 0%;
-  grid-template-rows: 5% auto auto auto auto auto 5%;
+  grid-template-rows: 5% auto auto auto auto auto 5% auto 5%;
   margin-top: 10px;
 }
 
@@ -24,6 +24,7 @@
   grid-column-end: 3;
   grid-row-start: 2;
   grid-row-end: 2;
+  line-height: 35px;
 
   background: #c1e3f2;
 }
@@ -85,9 +86,19 @@
 }
 
 #type-dropdown {
-  max-width: 150px;
+  height: 32px;
+  font-size: 18px;
+  font-family: "Courier New", serif;
+  -webkit-appearance: none;
+  border-radius: 10px;
+  max-width: 95%;
   font-weight: bold;
   text-decoration: underline;
+  margin-left: -8px;
+  margin-bottom: 7px;
+  text-overflow: ellipsis;
+  background-color: #DBE5E9;
+  cursor: pointer;
 }
 
 #edit-capacitor {
@@ -95,5 +106,9 @@
   margin-top: -8%;
   margin-right: -5%;
 
+}
+
+#type-full {
+  grid-row: 7;
 }
 
