@@ -1,0 +1,17 @@
+
+
+#breadcrumb-content {
+  margin-top: 10px;
+  z-index:1000;
+  position: relative;
+}
+
+.arrow {
+  font-family: "Lilita One", serif;
+  padding: 0 7px;
+}
+
+a {
+  display: initial;
+  font-size: 15px;
+}
