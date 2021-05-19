@@ -43,7 +43,10 @@
 
       <ng-container *ngIf="capacitorType && capacitorType.description">
         Description:
-        <div class="block__description">{{capacitorType.description}}</div>
+        <div class="block__description abbreviated__block">
+          {{capacitorType.description}}
+          <a class="read__more" [routerLink]="">Read More</a>
+        </div>
       </ng-container>
 
     </div>

@@ -48,6 +48,32 @@
   line-height: 18px;
 }
 
+.abbreviated__block {
+  position: relative;
+  height: 3.75em; /* exactly two lines */
+
+  overflow: hidden;
+}
+
+.abbreviated__block:after {
+  content: "";
+  text-align: right;
+  position: absolute;
+  bottom: 5px;
+  right: 0;
+  width: 95%;
+  height: 1.2em;
+  background: linear-gradient(to right, rgba(202, 228, 239, 0), rgb(193, 227, 242) 60%);
+}
+
+.read__more {
+  position: absolute;
+  right:5px;
+  top: 2.4em;
+  z-index: 100;
+  font-weight: bold;
+}
+
 
 #unit-box {
   grid-column-start: 3;
