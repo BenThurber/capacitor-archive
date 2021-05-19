@@ -124,6 +124,11 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
     ]);
   }
 
+  scrollToElement($element): void {
+    console.log($element);
+    $element.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'});
+  }
+
   similarMenuChanged(value): void {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
     const cu = this.capacitorUnit;

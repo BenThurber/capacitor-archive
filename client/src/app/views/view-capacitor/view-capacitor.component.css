@@ -122,6 +122,8 @@
   text-decoration: underline;
   margin-left: -8px;
   margin-bottom: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
   text-overflow: ellipsis;
   background-color: #DBE5E9;
   cursor: pointer;
