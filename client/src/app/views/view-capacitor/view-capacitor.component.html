@@ -31,16 +31,6 @@
 
       </select><br>
 
-      <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
-        Produced: <strong>{{capacitorType.startYear}}-{{capacitorType.endYear}}</strong><br>
-      </ng-container>
-      <ng-container *ngIf="capacitorType && capacitorType.startYear && !capacitorType.endYear">
-        Started production: <strong>{{capacitorType.startYear}}</strong>
-      </ng-container>
-      <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
-        Ended production: <strong>{{capacitorType.endYear}}</strong>
-      </ng-container>
-
       <ng-container *ngIf="capacitorType && capacitorType.description">
         Description:
         <div class="block__description abbreviated__block">
@@ -111,13 +101,28 @@
     </div>
 
     <div id="type-full" #fullDescription>
-      <span>{{capacitorType.typeName}}</span><br>
-      <span>{{capacitorType.constructionName}}</span><br>
 
-      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
-      {{capacitorType && capacitorType.companyName}}</a><br>
+      <h2>Type: {{capacitorType && capacitorType.typeName}}</h2>
+      <div>
+        <strong>Construction: </strong>{{capacitorType && capacitorType.constructionName}}
+      </div>
 
-      Description
+      <div>
+        <strong>Made by: </strong><a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
+        {{capacitorType && capacitorType.companyName}}</a>
+      </div>
+
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
+        <strong>Produced: </strong>{{capacitorType.startYear}} - {{capacitorType.endYear}}<br>
+      </ng-container>
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && !capacitorType.endYear">
+        <strong>Started production: </strong>{{capacitorType.startYear}}
+      </ng-container>
+      <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
+        <strong>Ended production: </strong>{{capacitorType.endYear}}
+      </ng-container>
+
+      <strong>Description: </strong>
       <div class="ql-editor" [innerHTML]="(capacitorType && capacitorType.description) | safeHtml"></div>
     </div>
 
