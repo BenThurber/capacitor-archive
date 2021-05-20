@@ -75,3 +75,12 @@ export function  title(str: string, deliminators?: Array<string>): string {
 function isLetter(c): boolean {
   return c.toLowerCase() !== c.toUpperCase();
 }
+
+
+export const htmlToTextLibraryOptions = {
+  tags: {
+    img: { format: 'skip' },
+    h1: { format: 'skip' },
+    h2: { format: 'skip' },
+  },
+};

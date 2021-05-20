@@ -31,10 +31,10 @@
 
       </select><br>
 
-      <ng-container *ngIf="capacitorType && capacitorType.description">
+      <ng-container *ngIf="capacitorTypeDescriptionPlainText">
         Description:
         <div class="block__description abbreviated__block">
-          {{capacitorType.description}}
+          {{capacitorTypeDescriptionPlainText}}
           <a class="read__more" [routerLink]="" (click)="scrollToElement(fullDescription)">Read More</a>
         </div>
       </ng-container>
@@ -124,6 +124,8 @@
 
       <strong>Description: </strong>
       <div class="ql-editor" [innerHTML]="(capacitorType && capacitorType.description) | safeHtml"></div>
+
+      <br><br><br><br>
     </div>
 
   </ng-container>
