@@ -130,7 +130,6 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
   }
 
   scrollToElement($element): void {
-    console.log($element);
     $element.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'});
   }
 
