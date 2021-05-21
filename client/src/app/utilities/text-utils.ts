@@ -77,10 +77,3 @@ function isLetter(c): boolean {
 }
 
 
-export const htmlToTextLibraryOptions = {
-  tags: {
-    img: { format: 'skip' },
-    h1: { format: 'skip' },
-    h2: { format: 'skip' },
-  },
-};

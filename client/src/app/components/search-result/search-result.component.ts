@@ -2,9 +2,8 @@ import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
-import {htmlToTextLibraryOptions} from '../../utilities/text-utils';
+import {InputRichTextComponent} from '../form-controls/input-rich-text/input-rich-text.component';
 
-const { htmlToText } = require('html-to-text');
 
 @Component({
   selector: 'app-search-result',
@@ -26,7 +25,7 @@ export class SearchResultComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes): void {
-    this.capacitorTypeDescriptionPlainText = htmlToText(changes.typeData.currentValue.description, htmlToTextLibraryOptions);
+    this.capacitorTypeDescriptionPlainText = InputRichTextComponent.htmlToText(changes.typeData.currentValue.description);
   }
 
 }

@@ -12,6 +12,7 @@ Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/imageResize', ImageResize);
 require('aws-sdk/dist/aws-sdk');
 
+const { htmlToText } = require('html-to-text');
 
 
 @Component({
@@ -28,9 +29,18 @@ require('aws-sdk/dist/aws-sdk');
 })
 export class InputRichTextComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
 
+
   // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif'];
   static readonly maxImageSize = 5000000;
+
+  static htmlToTextLibraryOptions = {
+    tags: {
+      img: { format: 'skip' },
+      h1: { format: 'skip' },
+      h2: { format: 'skip' },
+    },
+  };
 
 
   @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
@@ -71,6 +81,11 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
     'min-height': '250px',
     backgroundColor: '#ffff'
   };
+
+  /** Used to convert html from Quill to plain text */
+  static htmlToText(html: string): string {
+    return htmlToText(html, this.htmlToTextLibraryOptions);
+  }
 
 
   ngOnInit(): void {

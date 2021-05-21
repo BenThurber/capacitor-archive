@@ -3,15 +3,14 @@ import {ActivatedRoute} from '@angular/router';
 import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
-import {padEndHtml, caseInsensitiveCompare, title, htmlToTextLibraryOptions} from '../../utilities/text-utils';
+import {padEndHtml, caseInsensitiveCompare, title} from '../../utilities/text-utils';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 import {Title} from '@angular/platform-browser';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
 import {ImageComponent} from '../../components/image/image.component';
 import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
-
-const { htmlToText } = require('html-to-text');
+import {InputRichTextComponent} from '../../components/form-controls/input-rich-text/input-rich-text.component';
 
 
 @Component({
@@ -89,7 +88,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
       .subscribe({
         next: (capacitorType: CapacitorType) => {
             this.capacitorType = capacitorType;
-            this.capacitorTypeDescriptionPlainText = htmlToText(capacitorType.description, htmlToTextLibraryOptions);
+            this.capacitorTypeDescriptionPlainText = InputRichTextComponent.htmlToText(capacitorType.description);
             this.updateBreadcrumb(capacitorType.companyName, capacitorType.typeName);
           },
         error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorType')
