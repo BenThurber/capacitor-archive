@@ -113,11 +113,18 @@
 }
 
 #type-dropdown {
+  -webkit-appearance: none;
+  border-radius: 10px;
+  border-style: outset;
+  border-left-color: #b2b2b2;
+  border-top-color: #afafaf;
+  border-right-color: #9c9c9c;
+  border-bottom-color: #858585;
+  /*box-shadow: 1.25px 2px 4px;*/
+
   height: 32px;
   font-size: 18px;
   font-family: "Courier New", serif;
-  -webkit-appearance: none;
-  border-radius: 10px;
   max-width: 95%;
   font-weight: bold;
   text-decoration: underline;
