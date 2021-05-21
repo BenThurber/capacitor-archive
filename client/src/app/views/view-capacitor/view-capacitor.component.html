@@ -18,8 +18,9 @@
       <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
-      <select *ngIf="capacitorTypeNames" id="type-dropdown" (change)="dynamicRouter.navigate(
-      ['/capacitor', 'view', companyName, $event.target.value])">
+      <select *ngIf="capacitorTypeNames" id="type-dropdown"
+              [ngStyle]="{'max-width': capacitorType.typeName.length < 20 ? capacitorType.typeName.length * 26 + 'px' : '95%'}"
+              (change)="dynamicRouter.navigate(['/capacitor', 'view', companyName, $event.target.value])">
 
         <option *ngFor="let typeNameDropdown of capacitorTypeNames.sort(caseInsensitiveCompare)"
                 [value]="typeNameDropdown" [selected]="typeNameDropdown.toLowerCase() === typeName.toLowerCase()">
@@ -30,23 +31,12 @@
 
       </select><br>
 
-      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
-        {{capacitorType && capacitorType.companyName}}
-      </a><br>
-
-      <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
-        Produced: <strong>{{capacitorType.startYear}}-{{capacitorType.endYear}}</strong><br>
-      </ng-container>
-      <ng-container *ngIf="capacitorType && capacitorType.startYear && !capacitorType.endYear">
-        Started production: <strong>{{capacitorType.startYear}}</strong>
-      </ng-container>
-      <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
-        Ended production: <strong>{{capacitorType.endYear}}</strong>
-      </ng-container>
-
-      <ng-container *ngIf="capacitorType && capacitorType.description">
+      <ng-container *ngIf="capacitorTypeDescriptionPlainText">
         Description:
-        <div class="block__description">{{capacitorType.description}}</div>
+        <div class="block__description abbreviated__block">
+          {{capacitorTypeDescriptionPlainText}}
+          <a class="read__more" [routerLink]="" (click)="scrollToElement(fullDescription)">Read More</a>
+        </div>
       </ng-container>
 
     </div>
@@ -87,7 +77,7 @@
         <div class="block__description">{{capacitorUnit.notes}}</div>
       </ng-container>
 
-      
+
     </div>
 
 
@@ -110,7 +100,33 @@
       </a></strong>
     </div>
 
+    <div id="type-full" #fullDescription>
 
+      <h2>Type: {{capacitorType && capacitorType.typeName}}</h2>
+      <div>
+        <strong>Construction: </strong>{{capacitorType && capacitorType.constructionName}}
+      </div>
+
+      <div>
+        <strong>Made by: </strong><a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
+        {{capacitorType && capacitorType.companyName}}</a>
+      </div>
+
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
+        <strong>Produced: </strong>{{capacitorType.startYear}} - {{capacitorType.endYear}}<br>
+      </ng-container>
+      <ng-container *ngIf="capacitorType && capacitorType.startYear && !capacitorType.endYear">
+        <strong>Started production: </strong>{{capacitorType.startYear}}
+      </ng-container>
+      <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
+        <strong>Ended production: </strong>{{capacitorType.endYear}}
+      </ng-container>
+
+      <strong>Description: </strong>
+      <div class="ql-editor" [innerHTML]="(capacitorType && capacitorType.description) | safeHtml"></div>
+
+      <br><br><br><br>
+    </div>
 
   </ng-container>
 

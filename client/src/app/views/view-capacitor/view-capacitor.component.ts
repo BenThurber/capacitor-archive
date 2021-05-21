@@ -10,6 +10,8 @@ import {Title} from '@angular/platform-browser';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
 import {ImageComponent} from '../../components/image/image.component';
 import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
+import {InputRichTextComponent} from '../../components/form-controls/input-rich-text/input-rich-text.component';
+
 
 @Component({
   selector: 'app-view-capacitor',
@@ -28,6 +30,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
   capacitorType: CapacitorType;
   capacitorTypeNames: Array<string> = [];
+  capacitorTypeDescriptionPlainText = '';
   capacitorUnit: CapacitorUnit;
   capacitorUnits: Array<CapacitorUnit>;
 
@@ -85,6 +88,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
       .subscribe({
         next: (capacitorType: CapacitorType) => {
             this.capacitorType = capacitorType;
+            this.capacitorTypeDescriptionPlainText = InputRichTextComponent.htmlToText(capacitorType.description);
             this.updateBreadcrumb(capacitorType.companyName, capacitorType.typeName);
           },
         error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorType')
@@ -122,6 +126,10 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
         url: ['/capacitor', 'view', companyName.toLowerCase(), typeName.toLowerCase()]
       },
     ]);
+  }
+
+  scrollToElement($element): void {
+    $element.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'});
   }
 
   similarMenuChanged(value): void {

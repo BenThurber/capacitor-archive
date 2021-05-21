@@ -12,7 +12,7 @@ export class DynamicRouterService {
 
   readonly UPPER_CASE_PATHS = [
 
-    /^[0-9]+C[0-9]+V$/    // CapacitorUnit value
+    /^[0-9]+C[0-9]+V/    // CapacitorUnit value
 
   ];
 

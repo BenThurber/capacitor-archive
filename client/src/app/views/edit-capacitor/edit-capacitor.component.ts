@@ -58,7 +58,7 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
       {name: cu.typeName,
         url: ['/capacitor', 'view', cu.companyName.toLowerCase(), cu.typeName.toLowerCase()]
       },
-      {name: 'Edit ' + formattedCapacitance,
+      {name: 'Editing ' + formattedCapacitance,
         url: ['/capacitor', 'edit', cu.companyName.toLowerCase(), cu.typeName.toLowerCase(), cu.value]
       },
     ]);
