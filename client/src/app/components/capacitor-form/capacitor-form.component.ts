@@ -71,6 +71,7 @@ export class CapacitorFormComponent implements OnInit {
   constructionNames$: Array<string> = [];
   yearsAreExpanded = false;
   dimensionsAreExpanded = false;
+  currentImageUploads = new Set<string>();
 
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
@@ -337,7 +338,7 @@ export class CapacitorFormComponent implements OnInit {
    * @param capacitorFormGroup form data
    */
   onSubmit(capacitorFormGroup: FormGroup): void {
-    if (capacitorFormGroup.invalid) {
+    if (capacitorFormGroup.invalid || this.currentImageUploads.size > 0) {
       return;
     }
 

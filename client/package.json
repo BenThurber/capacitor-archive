@@ -24,6 +24,7 @@
     "@niteshp/ngx-captcha": "^8.0.2",
     "aws-sdk": "^2.817.0",
     "font-awesome": "^4.7.0",
+    "html-to-text": "^7.1.1",
     "ngx-gallery-9": "^1.0.6",
     "ngx-quill": "^13.0.1",
     "ngx-sortablejs": "^11.1.0",

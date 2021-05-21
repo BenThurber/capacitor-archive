@@ -75,3 +75,5 @@ export function  title(str: string, deliminators?: Array<string>): string {
 function isLetter(c): boolean {
   return c.toLowerCase() !== c.toUpperCase();
 }
+
+
