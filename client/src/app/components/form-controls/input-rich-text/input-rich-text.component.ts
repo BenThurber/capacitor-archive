@@ -121,6 +121,7 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
   // ------ControlValueAccessor implementations------
 
   writeValue(obj: any): void {
+    this.content = obj;
     this.editorElementRef.writeValue(obj);
   }
 
