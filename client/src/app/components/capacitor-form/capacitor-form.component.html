@@ -280,7 +280,8 @@
 
   <div class="submit">
     <button class="button" (click)="location.back()">Back</button>
-    <button class="button" [disabled]="capacitorFormGroup.invalid || submitting" type="submit">Submit</button>
+    <button class="button" [disabled]="capacitorFormGroup.invalid || this.currentImageUploads.size <= 0 || submitting"
+            type="submit">Submit</button>
     <!--Spinner-->
     <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>
   </div>

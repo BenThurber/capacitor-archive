@@ -338,7 +338,7 @@ export class CapacitorFormComponent implements OnInit {
    * @param capacitorFormGroup form data
    */
   onSubmit(capacitorFormGroup: FormGroup): void {
-    if (capacitorFormGroup.invalid) {
+    if (capacitorFormGroup.invalid || this.currentImageUploads.size > 0) {
       return;
     }
 
