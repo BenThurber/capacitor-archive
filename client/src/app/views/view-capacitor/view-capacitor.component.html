@@ -6,16 +6,19 @@
 
 
     <div id="image-box">
-      <a id="edit-capacitor" [routerLink]=""
+      <a id="edit-photos" [routerLink]=""
          (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value])">
-        [Edit Capacitor]
+        Edit Photos
       </a>
       <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
     </div>
 
 
-    <div id="type-box" class="info__box minor__shadow">
-      <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
+    <div id="type-box" class="info__box__right minor__shadow">
+      <a *ngIf="capacitorType; else typeSpinner"
+         class="edit__button"
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value])"
+         [routerLink]="">Edit Type</a>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
       <select *ngIf="capacitorTypeNames" id="type-dropdown"
@@ -31,6 +34,11 @@
 
       </select><br>
 
+      <!--ToDo: Do we need construction?-->
+      <!--<div>-->
+        <!--{{capacitorType && capacitorType.constructionName}}-->
+      <!--</div>-->
+
       <ng-container *ngIf="capacitorTypeDescriptionPlainText">
         Description:
         <div class="block__description abbreviated__block">
@@ -42,7 +50,10 @@
     </div>
 
 
-    <div id="unit-box" class="info__box minor__shadow">
+    <div id="unit-box" class="info__box__right minor__shadow">
+      <a class="edit__button"
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value])"
+         [routerLink]="">Edit Value</a>
       <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
 
       Capacitance:
@@ -81,7 +92,7 @@
     </div>
 
 
-    <div id="similar-units-box" class="info__box minor__shadow">
+    <div id="similar-units-box" class="info__box__right minor__shadow">
       <strong><label for="similar-menu">Similar Capacitors</label></strong><br>
       <select id="similar-menu" size="8" (change)="similarMenuChanged($event.target.value)" #similarMenu>
 

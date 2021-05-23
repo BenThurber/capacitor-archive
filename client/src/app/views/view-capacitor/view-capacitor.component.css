@@ -2,7 +2,7 @@
 .content {
   min-width: 96%;
   display: inline-grid;
-  grid-template-columns: 60% 5% 35% 0%;
+  grid-template-columns: 60% 5% 35% 0;
   grid-template-rows: 5% auto auto auto auto auto 5% auto 5%;
   margin-top: 10px;
 }
@@ -65,6 +65,18 @@
   width: 95%;
   height: 1.2em;
   background: linear-gradient(to right, rgba(202, 228, 239, 0), rgb(193, 227, 242) 60%);
+}
+
+.edit__button {
+  float: right;
+  font-family: Courier, serif;
+  font-size: smaller;
+  font-weight: bold;
+  white-space: nowrap;
+  line-height: 20px;
+  max-width: 20%;
+
+  margin: 7px 15px 5px 0;
 }
 
 .read__more {
@@ -136,10 +148,12 @@
   cursor: pointer;
 }
 
-#edit-capacitor {
+#edit-photos {
   position: absolute;
   top: 10px;
   right: 20px;
+  font-weight: bold;
+  font-family: "Courier New", serif;
 }
 
 #type-full {
