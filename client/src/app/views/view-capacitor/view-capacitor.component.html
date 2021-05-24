@@ -17,7 +17,7 @@
     <div id="type-box" class="info__box__right minor__shadow">
       <a *ngIf="capacitorType; else typeSpinner"
          class="edit__button"
-         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value])"
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName], {queryParams: {only: 'type'}})"
          [routerLink]="">Edit Type</a>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
@@ -52,7 +52,8 @@
 
     <div id="unit-box" class="info__box__right minor__shadow">
       <a class="edit__button"
-         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value])"
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value],
+            {queryParams: {only: 'unit'}})"
          [routerLink]="">Edit Value</a>
       <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
 

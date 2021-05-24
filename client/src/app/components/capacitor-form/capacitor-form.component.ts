@@ -52,6 +52,8 @@ export class CapacitorFormComponent implements OnInit {
   @Input('capacitorType') editCapacitorType: CapacitorType;
   @Input('capacitorUnit') editCapacitorUnit: CapacitorUnit;
 
+  @Input() only: 'type' | 'unit' | 'photos';
+
   capacitorFormGroup: FormGroup;
   submitting = false;
   errorsBackend: Array<SpringErrorResponse> = [];
@@ -110,7 +112,7 @@ export class CapacitorFormComponent implements OnInit {
         }, {validator: [checkIfEndYearBeforeStartYear, checkNewConstruction]}),
       }),
       unit: this.formBuilder.group({
-        capacitance: ['', Validators.required],
+        capacitance: ['', this.only === 'type' ? [] : Validators.required],
         voltage: ['', [Validators.pattern(integerPattern)]],
         notes: ['', []],
         length: ['', []],
@@ -123,7 +125,7 @@ export class CapacitorFormComponent implements OnInit {
     });
 
     // Setup for editing
-    if (this.editCompanyName && this.editCapacitorType && this.editCapacitorUnit) {
+    if (this.editCompanyName && this.editCapacitorType) {
       this.editing = true;
       this.populateFormFieldsEditing(this.editCompanyName, this.editCapacitorType, this.editCapacitorUnit);
       this.expandMenus();
@@ -148,17 +150,21 @@ export class CapacitorFormComponent implements OnInit {
           description: capacitorType.description
         }
       },
-      unit: {
-        capacitance: capacitorUnit.capacitance,
-        voltage: capacitorUnit.voltage,
-        notes: capacitorUnit.notes,
-        length: capacitorUnit.length,
-        diameter: capacitorUnit.diameter,
-        mountingHoleDiameter: capacitorUnit.mountingHoleDiameter,
-        thickness: capacitorUnit.thickness,
-        photos: capacitorUnit.getOrderedPhotos(),
-      }
     });
+    if (this.only !== 'type' && capacitorUnit) {
+      this.capacitorFormGroup.patchValue({
+        unit: {
+          capacitance: capacitorUnit.capacitance,
+          voltage: capacitorUnit.voltage,
+          notes: capacitorUnit.notes,
+          length: capacitorUnit.length,
+          diameter: capacitorUnit.diameter,
+          mountingHoleDiameter: capacitorUnit.mountingHoleDiameter,
+          thickness: capacitorUnit.thickness,
+          photos: capacitorUnit.getOrderedPhotos(),
+        },
+      });
+    }
   }
 
   /**

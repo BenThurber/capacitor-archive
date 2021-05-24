@@ -20,6 +20,8 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
   typeName: string;
   value: string;
 
+  only: 'type' | 'unit' | 'photos';
+
   capacitorType: CapacitorType;
   capacitorUnit: CapacitorUnit;
   formattedCapacitance = '';
@@ -30,38 +32,60 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = activatedRoute.snapshot.paramMap.get('typeName');
     this.value = activatedRoute.snapshot.paramMap.get('value');
+    this.only = activatedRoute.snapshot.queryParamMap.get('only') as any;
   }
 
   ngOnInit(): void {
     this.titleService.setTitle('Editing ' + title(this.typeName) + (this.value ? ' ' + this.value : ''));
 
     this.restService.getCapacitorTypeByName(this.companyName, this.typeName).subscribe({
-      next: (capacitorType: CapacitorType) => this.capacitorType = capacitorType,
+      next: (ct: CapacitorType) => {
+        this.capacitorType = ct;
+        if (this.only === 'type') {
+          this.updateBreadcrumb(ct.companyName, ct.typeName);
+        }
+      },
       error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorType to edit.'),
     });
-    this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value).subscribe({
-      next: (capacitorUnit: CapacitorUnit) => {
-        this.capacitorUnit = capacitorUnit;
-        this.formattedCapacitance = CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true);
-        this.updateBreadcrumb(capacitorUnit, this.formattedCapacitance);
-      },
-      error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorUnit to edit'),
-    });
+    if (this.value) {
+      this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value).subscribe({
+        next: (cu: CapacitorUnit) => {
+          this.capacitorUnit = cu;
+          this.formattedCapacitance = CapacitorUnit.formattedCapacitance(cu.capacitance, true);
+          this.updateBreadcrumb(cu.companyName, cu.typeName, cu.value, this.formattedCapacitance);
+        },
+        error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorUnit to edit'),
+      });
+    }
   }
 
-  updateBreadcrumb(capacitorUnit: CapacitorUnit, formattedCapacitance): void {
-    const cu = capacitorUnit;
-    this.breadcrumbService.change([
-      {name: cu.companyName,
-        url: ['/manufacturer', 'view', cu.companyName.toLowerCase()]
+  updateBreadcrumb(companyName: string, typeName: string, value?: string, formattedCapacitance?: string): void {
+    const links = [
+      {name: companyName,
+        url: ['/manufacturer', 'view', companyName.toLowerCase()]
       },
-      {name: cu.typeName,
-        url: ['/capacitor', 'view', cu.companyName.toLowerCase(), cu.typeName.toLowerCase()]
+      {name: typeName,
+        url: ['/capacitor', 'view', companyName.toLowerCase(), typeName.toLowerCase()]
       },
-      {name: 'Editing ' + formattedCapacitance,
-        url: ['/capacitor', 'edit', cu.companyName.toLowerCase(), cu.typeName.toLowerCase(), cu.value]
-      },
-    ]);
+    ];
+    if (value && formattedCapacitance) {
+      links.push(
+        {name: 'Editing ' + formattedCapacitance,
+          url: ['/capacitor', 'edit', companyName.toLowerCase(), typeName.toLowerCase(), value]
+        },
+      );
+    } else {
+      links[1].name = 'Editing ' + typeName;
+    }
+    this.breadcrumbService.change(links);
   }
+  //
+  // get editingType(): boolean {
+  //   return Boolean(this.companyName && this.capacitorType && !this.capacitorUnit && !this.value);
+  // }
+  //
+  // get editingUnit(): boolean {
+  //   return Boolean(this.companyName && this.capacitorType && this.capacitorUnit);
+  // }
 
 }
