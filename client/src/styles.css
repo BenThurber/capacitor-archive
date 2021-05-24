@@ -94,7 +94,7 @@ a:hover {
   font-weight: bold;
 }
 
-.info__box {
+.info__box__right {
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   padding: 14px 23px;

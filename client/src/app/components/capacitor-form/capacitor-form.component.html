@@ -38,7 +38,8 @@
 
 
   <!--Capacitor Type Section-->
-  <div id="type-section" class="input__section" formGroupName="type" *ngIf="manufacturerIsSelected && !isNavigatingToCreateManufacturer">
+  <div id="type-section" class="input__section" formGroupName="type"
+       *ngIf="manufacturerIsSelected && !isNavigatingToCreateManufacturer && only !== 'unit' && only !== 'photos'">
 
     <div style="margin-bottom: 20px">
       <app-image src="../../../assets/aerovox-type.png" link="true" height="100px" style="margin-right: 20px; margin-bottom: 9px">
@@ -178,7 +179,7 @@
 
   <!--Capacitor Unit Section-->
   <div id="capacitor-section" class="input__section" formGroupName="unit"
-       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected && !isNavigatingToCreateManufacturer">
+       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected && !isNavigatingToCreateManufacturer && only !== 'type'">
 
     <label class="input__label__major">{{editing ? 'Edit Capacitor:' : 'Add Capacitor:'}}</label>
     <br>
@@ -278,9 +279,9 @@
     </ngx-recaptcha2>
   </span>
 
-  <div class="submit">
+  <div class="submit" #submitDiv>
     <button class="button" (click)="location.back()">Back</button>
-    <button class="button" [disabled]="capacitorFormGroup.invalid || this.currentImageUploads.size <= 0 || submitting"
+    <button class="button" [disabled]="capacitorFormGroup.invalid || this.currentImageUploads.size > 0 || submitting"
             type="submit">Submit</button>
     <!--Spinner-->
     <div [style.visibility]="submitting ? 'visible' : 'hidden'" class="spinner" style="margin-left: 14px"></div>

@@ -1,7 +1,10 @@
 
+.content {
+  margin-top: 25px;
+}
+
 h2 {
-  font-size: 27px;
-  margin-bottom: 80px;
+  font-size: 26px;
 }
 
 .highlight {

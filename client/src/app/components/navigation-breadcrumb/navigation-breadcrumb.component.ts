@@ -14,7 +14,7 @@ import {filter} from 'rxjs/operators';
 })
 export class NavigationBreadcrumbComponent implements OnInit {
 
-  @Input() links: Array<{name: string, url: Array<string>}> = [];
+  @Input() links: Array<{name: string, url: Array<string>, params?: object}> = [];
 
   constructor(public dynamicRouter: DynamicRouterService, private breadcrumbService: BreadcrumbService) {
 
