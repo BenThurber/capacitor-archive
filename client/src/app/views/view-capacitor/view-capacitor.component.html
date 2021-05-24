@@ -6,16 +6,20 @@
 
 
     <div id="image-box">
-      <a id="edit-capacitor" [routerLink]=""
-         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value])">
-        [Edit Capacitor]
+      <a id="edit-photos" [routerLink]=""
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value],
+         {queryParams: {only: 'photos'}})">
+        <img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Photos
       </a>
       <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
     </div>
 
 
-    <div id="type-box" class="info__box minor__shadow">
-      <span *ngIf="capacitorType; else typeSpinner" style="float: right">{{capacitorType.constructionName}}</span>
+    <div id="type-box" class="info__box__right minor__shadow">
+      <a *ngIf="capacitorType; else typeSpinner"
+         class="edit__button"
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, value], {queryParams: {only: 'type'}})"
+         [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
       <select *ngIf="capacitorTypeNames" id="type-dropdown"
@@ -42,7 +46,11 @@
     </div>
 
 
-    <div id="unit-box" class="info__box minor__shadow">
+    <div id="unit-box" class="info__box__right minor__shadow">
+      <a class="edit__button"
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value],
+            {queryParams: {only: 'unit'}})"
+         [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Value</a>
       <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
 
       Capacitance:
@@ -81,7 +89,7 @@
     </div>
 
 
-    <div id="similar-units-box" class="info__box minor__shadow">
+    <div id="similar-units-box" class="info__box__right minor__shadow">
       <strong><label for="similar-menu">Similar Capacitors</label></strong><br>
       <select id="similar-menu" size="8" (change)="similarMenuChanged($event.target.value)" #similarMenu>
 
@@ -101,6 +109,9 @@
     </div>
 
     <div id="type-full" #fullDescription>
+      <a class="edit__button" style="font-size: 17px; margin: 23px 18px 0 0;"
+         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, value], {queryParams: {only: 'type'}})"
+         [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
 
       <h2>Type: {{capacitorType && capacitorType.typeName}}</h2>
       <div>
@@ -125,7 +136,7 @@
       <strong>Description: </strong>
       <div class="ql-editor" [innerHTML]="(capacitorType && capacitorType.description) | safeHtml"></div>
 
-      <br><br><br><br>
+      <br><br><br><br><br><br>
     </div>
 
   </ng-container>

@@ -28,10 +28,10 @@ export class BreadcrumbService {
 
   /**
    * Should be called by View pages that use the breadcrumb.
-   * @param links an Array of Objects {name: string, url: Array<string>}
+   * @param links an Array of Objects {name: string, url: Array<string>, params?: object}
    * where the name is the string to display in the breadcrumb.
    */
-  public change(links: Array<{name: string, url: Array<string>}>): void {
+  public change(links: Array<{name: string, url: Array<string>, params?: object}>): void {
     this.changeAnnouncedSource.next(links);
   }
 

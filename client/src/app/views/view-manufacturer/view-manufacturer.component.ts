@@ -44,7 +44,7 @@ export class ViewManufacturerComponent implements OnInit, UpdateBreadcrumb {
   updateBreadcrumb(companyName: string): void {
     this.breadcrumbService.change([
       {name: companyName,
-        url: ['/manufacturer', 'view', companyName.toLowerCase()]
+        url: ['/manufacturer', 'view', companyName]
       }
     ]);
   }
