@@ -22,6 +22,8 @@
          [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
+      <span style="font-size: 22px">Type: </span>
+
       <select *ngIf="capacitorTypeNames" id="type-dropdown"
               [ngStyle]="{'max-width': capacitorType.typeName.length < 20 ? capacitorType.typeName.length * 26 + 'px' : '95%'}"
               (change)="dynamicRouter.navigate(['/capacitor', 'view', companyName, $event.target.value])">
@@ -34,6 +36,10 @@
         </option>
 
       </select><br>
+
+      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName.toLowerCase()])">
+      {{capacitorType && capacitorType.companyName}}
+      </a><br>
 
       <ng-container *ngIf="capacitorTypeDescriptionPlainText">
         Description:

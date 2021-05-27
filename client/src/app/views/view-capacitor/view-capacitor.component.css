@@ -1,4 +1,13 @@
 
+ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-right {
+  transform: scale(2.5);
+}
+
+ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
+  transform: scale(2.5);
+}
+
+
 .content {
   min-width: 96%;
   display: inline-grid;
@@ -41,7 +50,11 @@
 
 .block__description {
   margin-left: 10px;
-  overflow-wrap: break-word;
+
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
+
   font-family: "Courier New", serif;
   font-weight: bold;
   font-size: 15px;
