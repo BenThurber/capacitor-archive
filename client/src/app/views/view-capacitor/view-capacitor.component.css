@@ -45,15 +45,12 @@
   white-space: -moz-pre-wrap; /* Firefox */
   white-space: -o-pre-wrap;   /* Opera 7 */
   word-wrap: break-word;      /* IE */
-  word-break: break-all;
-  overflow-wrap: break-word;
 
   font-family: "Courier New", serif;
   font-weight: bold;
   font-size: 15px;
   letter-spacing: 0.06em;
   line-height: 18px;
-  line-break: anywhere;
 }
 
 .abbreviated__block {
