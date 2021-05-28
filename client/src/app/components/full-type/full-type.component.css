@@ -8,6 +8,7 @@
 }
 
 #description {
-  font-family: initial;
+  /*ToDo: Add Courier New to quill and uncomment this line*/
+  /*font-family: initial;*/
   margin-top: 13px;
 }
