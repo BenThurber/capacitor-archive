@@ -28,7 +28,10 @@
   <div id="manufacturer-box" *ngIf="manufacturer$; else loading">
 
     <div class="edit__button">
-      <a href [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'edit', manufacturer$.companyName])">[Edit Page]</a>
+      <a href [routerLink]="" style="font-size: 16px"
+         (click)="dynamicRouter.navigate(['/manufacturer', 'edit', manufacturer$.companyName])">
+        <img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Page
+      </a>
     </div>
 
     <div *ngIf="manufacturer$.companyName">

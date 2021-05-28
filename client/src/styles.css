@@ -149,3 +149,21 @@ a:hover {
   color: #007200;
   font-family: serif;
 }
+
+.edit__button {
+  float: right;
+  font-family: Courier, serif;
+  font-size: smaller;
+  font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+  line-height: 20px;
+
+  margin: 4px -12px 5px 0;
+}
+
+.edit__icon {
+  width: 20px;
+  margin-bottom: -5px;
+  margin-right: 6px;
+}
