@@ -114,8 +114,10 @@
       </a></strong>
     </div>
 
-    <app-full-type id="type-full-component" [capacitorType]="capacitorType" [capacitorUnitValue]="value" #fullDescription>
-    </app-full-type>
+    <div id="type-full-component" #fullDescription>
+      <app-full-type [capacitorType]="capacitorType" [capacitorUnitValue]="value">
+      </app-full-type>
+    </div>
 
   </ng-container>
 
