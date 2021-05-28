@@ -55,7 +55,13 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
 
   showBlankTab = true;
 
+  selectedTabIndex = 0;
+
   currentImageUploads = new Set<string>();
+
+  isDisabled = false;
+  readonly DISABLED_OPACITY = 0.65;
+  disabledStyle = {opacity: 1.0};
 
 
   quillConfig = {
@@ -136,6 +142,15 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
 
   setDisabledState(isDisabled: boolean): void {
     this.editorElementRef.setDisabledState(isDisabled);
+
+    this.isDisabled = isDisabled;
+    if (isDisabled) {
+      this.selectedTabIndex = 1;
+      this.disabledStyle.opacity = this.DISABLED_OPACITY;
+    } else {
+      this.selectedTabIndex = 0;
+      this.disabledStyle.opacity = 1.0;
+    }
   }
 
 }
