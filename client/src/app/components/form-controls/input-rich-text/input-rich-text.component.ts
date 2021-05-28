@@ -64,7 +64,8 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
       [{ color: [] }],
       [{ align: [false, 'center', 'right'] }],
       [{ size: ['small', false, 'large', 'huge'] }],
-      [{ font: [] }],
+      // ToDo: add custom fonts to quill like Courier New
+      // [{ font: [] }],
       [{ header: 1 }],   // This may be confusing to users
       [{ script: 'super' }],
       ['link', 'image'],

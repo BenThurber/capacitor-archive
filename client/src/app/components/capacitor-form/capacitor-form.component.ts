@@ -448,6 +448,14 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
 
     }
     // Only executed if a unit isn't created/edited
+
+    // If Capacitor Unit not given and type name has not changed go back a page on submit
+    if (!this.editCapacitorUnit && this.editCompanyName && this.editCapacitorType &&
+      this.editCapacitorType.typeName === capacitorForm.type.typeContent.typeNameInput) {
+      this.location.back();
+      return;
+    }
+
     const route = [
       '/capacitor',
       'view',

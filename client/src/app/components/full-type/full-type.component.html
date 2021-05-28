@@ -1,0 +1,32 @@
+<div id="type-full">
+  <a class="edit__button" style="font-size: 17px; margin: 23px 18px 0 0;"
+     (click)="dynamicRouter.navigate(['/capacitor', 'edit', capacitorType.companyName, capacitorType.typeName, value],
+     {queryParams: {only: 'type'}})"
+     [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
+
+  <h2>Type: {{capacitorType && capacitorType.typeName}}</h2>
+
+  <div style="margin-bottom: 4px;">
+    <strong>Made by: </strong><a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
+    {{capacitorType && capacitorType.companyName}}</a>
+  </div>
+
+  <ng-container *ngIf="capacitorType && capacitorType.startYear && capacitorType.endYear">
+    <strong>Produced: </strong>{{capacitorType.startYear}} - {{capacitorType.endYear}}<br>
+  </ng-container>
+  <ng-container *ngIf="capacitorType && capacitorType.startYear && !capacitorType.endYear">
+    <strong>Started production: </strong>{{capacitorType.startYear}}
+  </ng-container>
+  <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
+    <strong>Ended production: </strong>{{capacitorType.endYear}}
+  </ng-container>
+
+  <div>
+    <strong>Construction: </strong>{{capacitorType && capacitorType.constructionName}}
+  </div>
+
+  <strong>Description: </strong>
+  <div id="description" class="ql-editor" [innerHTML]="(capacitorType && capacitorType.description) | safeHtml"></div>
+
+  <br><br><br><br><br><br>
+</div>
