@@ -12,7 +12,7 @@ ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
   min-width: 96%;
   display: inline-grid;
   grid-template-columns: 60% 5% 35% 0;
-  grid-template-rows: 5% auto auto auto auto auto 5% auto 5%;
+  grid-template-rows: 5% auto auto auto auto auto 12px auto 5%;
   margin-top: 10px;
 }
 
@@ -157,7 +157,7 @@ ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
   font-family: "Courier New", serif;
 }
 
-#type-full {
-  grid-row: 7;
+#type-full-component {
+  grid-row: 8;
 }
 
