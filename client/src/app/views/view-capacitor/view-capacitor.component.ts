@@ -9,13 +9,16 @@ import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImage
 import {Title} from '@angular/platform-browser';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
 import {ImageComponent} from '../../components/image/image.component';
+import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
+import {InputRichTextComponent} from '../../components/form-controls/input-rich-text/input-rich-text.component';
+
 
 @Component({
   selector: 'app-view-capacitor',
   templateUrl: './view-capacitor.component.html',
   styleUrls: ['./view-capacitor.component.css', '../../styles/animations.css']
 })
-export class ViewCapacitorComponent implements OnInit {
+export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
   readonly caseInsensitiveCompare = caseInsensitiveCompare;
 
@@ -27,6 +30,7 @@ export class ViewCapacitorComponent implements OnInit {
 
   capacitorType: CapacitorType;
   capacitorTypeNames: Array<string> = [];
+  capacitorTypeDescriptionPlainText = '';
   capacitorUnit: CapacitorUnit;
   capacitorUnits: Array<CapacitorUnit>;
 
@@ -37,7 +41,8 @@ export class ViewCapacitorComponent implements OnInit {
 
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private restService: RestService,
-              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService) {
+              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService,
+              private breadcrumbService: BreadcrumbService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
     this.value = this.activatedRoute.snapshot.paramMap.get('value');
@@ -81,7 +86,11 @@ export class ViewCapacitorComponent implements OnInit {
 
     this.restService.getCapacitorTypeByName(this.companyName, this.typeName)
       .subscribe({
-        next: (capacitorType: CapacitorType) => this.capacitorType = capacitorType,
+        next: (capacitorType: CapacitorType) => {
+            this.capacitorType = capacitorType;
+            this.capacitorTypeDescriptionPlainText = InputRichTextComponent.htmlToText(capacitorType.description);
+            this.updateBreadcrumb(capacitorType.companyName, capacitorType.typeName);
+          },
         error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorType')
       });
 
@@ -108,16 +117,33 @@ export class ViewCapacitorComponent implements OnInit {
   }
 
 
+  updateBreadcrumb(companyName: string, typeName: string): void {
+    this.breadcrumbService.change([
+      {name: companyName,
+        url: ['/manufacturer', 'view', companyName]
+      },
+      {name: typeName,
+        url: ['/capacitor', 'view', companyName, typeName]
+      },
+    ]);
+  }
+
+  scrollToElement($element): void {
+    $element.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'});
+  }
+
   similarMenuChanged(value): void {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
+    this.value = value;
     const cu = this.capacitorUnit;
     this.dynamicRouter.router.navigate([
       '/capacitor',
       'view',
-      cu.companyName.toLowerCase(),
-      cu.typeName.toLowerCase(),
+      cu.companyName,
+      cu.typeName,
       cu.value
     ], { replaceUrl: true });
+    this.updateBreadcrumb(cu.companyName, cu.typeName);
     this.updateGalleryImages();
   }
 

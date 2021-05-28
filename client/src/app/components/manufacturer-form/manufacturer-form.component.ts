@@ -8,7 +8,6 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
-import {historicCountryList} from '../../utilities/countries';
 
 
 @Component({
@@ -27,8 +26,6 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
   currentImageUploads = new Set<string>();
-
-  countries = [...historicCountryList];
 
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
@@ -113,7 +110,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   submitCreate(manufacturer: Manufacturer): void {
 
     return this.restService.createManufacturer(manufacturer).subscribe({
-      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
+      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName]).then(
         () => this.refreshManufacturers.refresh()
       ),
       error: error => this.handleBackendError(error.error),
@@ -124,7 +121,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   submitEdit(manufacturer: Manufacturer): void {
 
     return this.restService.editManufacturer(this.existingManufacturer.companyName, manufacturer).subscribe({
-      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName.toLowerCase()]).then(
+      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName]).then(
         () => this.refreshManufacturers.refresh()
       ),
       error: error => this.handleBackendError(error.error),

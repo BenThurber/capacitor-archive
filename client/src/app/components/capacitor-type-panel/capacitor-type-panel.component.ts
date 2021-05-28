@@ -25,7 +25,7 @@ export class CapacitorTypePanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.createNewCapacitorPath = this.companyName ? ['/capacitor', 'create', this.companyName.toLowerCase()] : ['/capacitor', 'create'];
+    this.createNewCapacitorPath = this.companyName ? ['/capacitor', 'create', this.companyName] : ['/capacitor', 'create'];
 
     this.capacitorTypesObservable.subscribe((capacitorTypes: Array<CapacitorTypeSearchResponse>) => {
       this.capacitorTypes = capacitorTypes;

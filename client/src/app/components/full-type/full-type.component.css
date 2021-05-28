@@ -1,0 +1,17 @@
+
+#type-full {
+  font-family: "Courier New", serif;
+  border-radius: 10px 10px 0 0;
+  padding: 1px 20px;
+  background-color: #cee4ee;
+}
+
+#text-body {
+  line-height: 1.35em;
+}
+
+#description {
+  /*ToDo: Add Courier New to quill and uncomment this line*/
+  /*font-family: initial;*/
+  margin-top: 13px;
+}

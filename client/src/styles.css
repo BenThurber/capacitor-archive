@@ -33,11 +33,12 @@ a:hover {
 .content {
   margin-left: 4%;
   margin-right: 20%;
+  margin-top: -5px;
 }
 
 .nav__links li {
   display: inline-block;
-  padding: 0px 20px;
+  padding: 0 20px;
 }
 
 .nav__links li a {
@@ -93,7 +94,7 @@ a:hover {
   font-weight: bold;
 }
 
-.info__box {
+.info__box__right {
   border-top-left-radius: 30px;
   border-bottom-left-radius: 30px;
   padding: 14px 23px;
@@ -147,4 +148,22 @@ a:hover {
   text-decoration: underline;
   color: #007200;
   font-family: serif;
+}
+
+.edit__button {
+  float: right;
+  font-family: Courier, serif;
+  font-size: smaller;
+  font-weight: bold;
+  text-align: right;
+  white-space: nowrap;
+  line-height: 20px;
+
+  margin: 4px -12px 5px 0;
+}
+
+.edit__icon {
+  width: 20px;
+  margin-bottom: -5px;
+  margin-right: 6px;
 }

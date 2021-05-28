@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
@@ -43,7 +43,7 @@ class CapacitorForm {
   templateUrl: './capacitor-form.component.html',
   styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
-export class CapacitorFormComponent implements OnInit {
+export class CapacitorFormComponent implements OnInit, AfterViewInit {
 
   static readonly newConstructionOption = '+ Add Construction';
 
@@ -51,6 +51,8 @@ export class CapacitorFormComponent implements OnInit {
   @Input('companyName') editCompanyName: string;
   @Input('capacitorType') editCapacitorType: CapacitorType;
   @Input('capacitorUnit') editCapacitorUnit: CapacitorUnit;
+
+  @Input() only: 'type' | 'unit' | 'photos';
 
   capacitorFormGroup: FormGroup;
   submitting = false;
@@ -62,6 +64,7 @@ export class CapacitorFormComponent implements OnInit {
   readonly newManufacturerOption = '+ Add Manufacturer';
   companyNames$: Array<string> = [];
   isNavigatingToCreateManufacturer = false;
+  loadingManufacturerList = false;
 
   // Type Section
   readonly newCapacitorTypeOption = '+ Add New Type';
@@ -71,9 +74,12 @@ export class CapacitorFormComponent implements OnInit {
   constructionNames$: Array<string> = [];
   yearsAreExpanded = false;
   dimensionsAreExpanded = false;
+  currentImageUploads = new Set<string>();
+  loadingTypeList = false;
 
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
+  @ViewChild('submitDiv') submitDiv: ElementRef;
   readonly reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
 
@@ -109,7 +115,7 @@ export class CapacitorFormComponent implements OnInit {
         }, {validator: [checkIfEndYearBeforeStartYear, checkNewConstruction]}),
       }),
       unit: this.formBuilder.group({
-        capacitance: ['', Validators.required],
+        capacitance: ['', this.only === 'type' ? [] : Validators.required],
         voltage: ['', [Validators.pattern(integerPattern)]],
         notes: ['', []],
         length: ['', []],
@@ -122,11 +128,17 @@ export class CapacitorFormComponent implements OnInit {
     });
 
     // Setup for editing
-    if (this.editCompanyName && this.editCapacitorType && this.editCapacitorUnit) {
+    if (this.editCompanyName && this.editCapacitorType) {
       this.editing = true;
       this.populateFormFieldsEditing(this.editCompanyName, this.editCapacitorType, this.editCapacitorUnit);
       this.expandMenus();
       this.formFields.type.controls.typeContent.enable();
+    }
+  }
+
+  ngAfterViewInit(): void {
+    if (this.only === 'photos') {
+      this.submitDiv.nativeElement.scrollIntoView({behavior: 'auto', block: 'nearest', inline: 'nearest'});
     }
   }
 
@@ -147,17 +159,21 @@ export class CapacitorFormComponent implements OnInit {
           description: capacitorType.description
         }
       },
-      unit: {
-        capacitance: capacitorUnit.capacitance,
-        voltage: capacitorUnit.voltage,
-        notes: capacitorUnit.notes,
-        length: capacitorUnit.length,
-        diameter: capacitorUnit.diameter,
-        mountingHoleDiameter: capacitorUnit.mountingHoleDiameter,
-        thickness: capacitorUnit.thickness,
-        photos: capacitorUnit.getOrderedPhotos(),
-      }
     });
+    if (this.only !== 'type' && capacitorUnit) {
+      this.capacitorFormGroup.patchValue({
+        unit: {
+          capacitance: capacitorUnit.capacitance,
+          voltage: capacitorUnit.voltage,
+          notes: capacitorUnit.notes,
+          length: capacitorUnit.length,
+          diameter: capacitorUnit.diameter,
+          mountingHoleDiameter: capacitorUnit.mountingHoleDiameter,
+          thickness: capacitorUnit.thickness,
+          photos: capacitorUnit.getOrderedPhotos(),
+        },
+      });
+    }
   }
 
   /**
@@ -227,11 +243,13 @@ export class CapacitorFormComponent implements OnInit {
 
   /** Update this.companyNames$ */
   getManufacturerList(): Subscription {
+    this.loadingManufacturerList = true;
     return this.restService.getAllCompanyNames().subscribe({
       next: companyNames => {
         companyNames.sort(caseInsensitiveCompare);
         this.companyNames$ = companyNames;
         this.populateManufacturerCreating(this.companyNames$);
+        this.loadingManufacturerList = false;
       },
 
       error: () => console.error('Couldn\'t get company names')
@@ -240,12 +258,14 @@ export class CapacitorFormComponent implements OnInit {
 
   /** Update this.capacitorTypes$ */
   getTypeList(companyName: string): Subscription {
+    this.loadingTypeList = true;
     return this.restService.getAllTypes(companyName).subscribe({
       next: types => {
         types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
         this.typeMenuChanged(this.noneSelected);
         this.populateTypeNameCreating(this.capacitorTypes$);
+        this.loadingTypeList = false;
       },
 
       error: () => console.error('Couldn\'t get capacitor types')
@@ -337,7 +357,7 @@ export class CapacitorFormComponent implements OnInit {
    * @param capacitorFormGroup form data
    */
   onSubmit(capacitorFormGroup: FormGroup): void {
-    if (capacitorFormGroup.invalid) {
+    if (capacitorFormGroup.invalid || this.currentImageUploads.size > 0) {
       return;
     }
 
@@ -419,13 +439,13 @@ export class CapacitorFormComponent implements OnInit {
         this.restService.createCapacitorUnit(capacitorUnit);
 
       return httpRequestObservable.subscribe({
-        next: (createdCapacitorUnit: CapacitorUnit) => {
+        next: (returnedCapacitorUnit: CapacitorUnit) => {
           this.dynamicRouter.navigate([
             '/capacitor',
             'view',
-            createdCapacitorUnit.companyName.toLowerCase(),
-            createdCapacitorUnit.typeName.toLowerCase(),
-            createdCapacitorUnit.value
+            returnedCapacitorUnit.companyName,
+            returnedCapacitorUnit.typeName,
+            returnedCapacitorUnit.value
           ]);
           return;
         },
@@ -434,14 +454,23 @@ export class CapacitorFormComponent implements OnInit {
 
     }
     // Only executed if a unit isn't created/edited
-    this.dynamicRouter.navigate([
+
+    // If Capacitor Unit not given and type name has not changed go back a page on submit
+    if (!this.editCapacitorUnit && this.editCompanyName && this.editCapacitorType &&
+      this.editCapacitorType.typeName === capacitorForm.type.typeContent.typeNameInput) {
+      this.location.back();
+      return;
+    }
+
+    const route = [
       '/capacitor',
       'view',
-      (this.editCompanyName || capacitorForm.companyName).toLowerCase(),
+      (this.editCompanyName || capacitorForm.companyName),
       ((capacitorForm.type.typeContent ? capacitorForm.type.typeContent.typeNameInput : capacitorForm.type.typeNameSelect)
-      || this.editCapacitorType.typeName).toLowerCase(),
-      this.editCapacitorUnit && this.editCapacitorUnit.value
-    ]);
+        || this.editCapacitorType.typeName),
+    ];
+    if (this.editCapacitorUnit) { route.push(this.editCapacitorUnit.value); }
+    this.dynamicRouter.navigate(route);
 
   }
 

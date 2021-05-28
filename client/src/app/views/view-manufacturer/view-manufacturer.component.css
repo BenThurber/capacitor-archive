@@ -4,7 +4,6 @@
   display: inline-grid;
   grid-template-columns: auto 4% 160px 0%;
   grid-template-rows: 5% auto auto auto 5%;
-  margin-top: 10px;
 }
 
 .edit__button {

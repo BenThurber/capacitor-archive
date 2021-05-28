@@ -1,10 +1,19 @@
 
+ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-right {
+  transform: scale(2.5);
+}
+
+ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
+  transform: scale(2.5);
+}
+
+
 .content {
   min-width: 96%;
   display: inline-grid;
-  grid-template-columns: 60% 5% 35% 0%;
-  grid-template-rows: 5% auto auto auto auto auto 5%;
-  margin-top: 10px
+  grid-template-columns: 60% 5% 35% 0;
+  grid-template-rows: 5% auto auto auto auto auto 12px auto 5%;
+  margin-top: 10px;
 }
 
 #image-box {
@@ -13,8 +22,9 @@
   grid-row-start: 2;
   grid-row-end: 6;
 
+  position: relative;
   background-color: #d0d0d0;
-  padding: 10% 10%;
+  padding: 45px 20px 20px 20px;
   border-radius: 10px;
   height: 600px;
 }
@@ -24,6 +34,7 @@
   grid-column-end: 3;
   grid-row-start: 2;
   grid-row-end: 2;
+  line-height: 35px;
 
   background: #c1e3f2;
 }
@@ -39,12 +50,42 @@
 
 .block__description {
   margin-left: 10px;
-  overflow-wrap: break-word;
+
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -o-pre-wrap;   /* Opera 7 */
+  word-wrap: break-word;      /* IE */
+
   font-family: "Courier New", serif;
   font-weight: bold;
   font-size: 15px;
   letter-spacing: 0.06em;
   line-height: 18px;
+}
+
+.abbreviated__block {
+  position: relative;
+  height: 3.75em; /* exactly three lines */
+
+  overflow: hidden;
+}
+
+.abbreviated__block:after {
+  content: "";
+  text-align: right;
+  position: absolute;
+  bottom: 3px;
+  right: 0;
+  width: 95%;
+  height: 1.2em;
+  background: linear-gradient(to right, rgba(202, 228, 239, 0), rgb(193, 227, 242) 60%);
+}
+
+.read__more {
+  position: absolute;
+  right:5px;
+  top: 2.4em;
+  z-index: 100;
+  font-weight: bold;
 }
 
 
@@ -85,15 +126,38 @@
 }
 
 #type-dropdown {
-  max-width: 150px;
+  -webkit-appearance: none;
+  border-radius: 10px;
+  border-style: outset;
+  border-left-color: #b2b2b2;
+  border-top-color: #afafaf;
+  border-right-color: #9c9c9c;
+  border-bottom-color: #858585;
+
+  height: 32px;
+  font-size: 18px;
+  font-family: "Courier New", serif;
+  max-width: 95%;
   font-weight: bold;
   text-decoration: underline;
+  margin-left: -8px;
+  margin-bottom: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  text-overflow: ellipsis;
+  background-color: #DBE5E9;
+  cursor: pointer;
 }
 
-#edit-capacitor {
-  float: right;
-  margin-top: -8%;
-  margin-right: -5%;
+#edit-photos {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-weight: bold;
+  font-family: "Courier New", serif;
+}
 
+#type-full-component {
+  grid-row: 8;
 }
 

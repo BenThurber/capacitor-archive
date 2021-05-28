@@ -12,6 +12,7 @@ Quill.register('modules/imageUploader', ImageUploader);
 Quill.register('modules/imageResize', ImageResize);
 require('aws-sdk/dist/aws-sdk');
 
+const { htmlToText } = require('html-to-text');
 
 
 @Component({
@@ -28,9 +29,18 @@ require('aws-sdk/dist/aws-sdk');
 })
 export class InputRichTextComponent implements ControlValueAccessor, OnChanges, OnInit, AfterViewInit {
 
+
   // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif'];
   static readonly maxImageSize = 5000000;
+
+  static htmlToTextLibraryOptions = {
+    tags: {
+      img: { format: 'skip' },
+      h1: { format: 'skip' },
+      h2: { format: 'skip' },
+    },
+  };
 
 
   @ViewChild('editorElem', {static: true, read: QuillEditorComponent}) editorElementRef: QuillEditorComponent;
@@ -45,7 +55,13 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
 
   showBlankTab = true;
 
+  selectedTabIndex = 0;
+
   currentImageUploads = new Set<string>();
+
+  isDisabled = false;
+  readonly DISABLED_OPACITY = 0.65;
+  disabledStyle = {opacity: 1.0};
 
 
   quillConfig = {
@@ -54,7 +70,8 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
       [{ color: [] }],
       [{ align: [false, 'center', 'right'] }],
       [{ size: ['small', false, 'large', 'huge'] }],
-      [{ font: [] }],
+      // ToDo: add custom fonts to quill like Courier New
+      // [{ font: [] }],
       [{ header: 1 }],   // This may be confusing to users
       [{ script: 'super' }],
       ['link', 'image'],
@@ -68,9 +85,14 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
   };
 
   quillStyles = {
-    height: '450px',
+    'min-height': '250px',
     backgroundColor: '#ffff'
   };
+
+  /** Used to convert html from Quill to plain text */
+  static htmlToText(html: string): string {
+    return htmlToText(html, this.htmlToTextLibraryOptions);
+  }
 
 
   ngOnInit(): void {
@@ -106,6 +128,7 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
   // ------ControlValueAccessor implementations------
 
   writeValue(obj: any): void {
+    this.content = obj;
     this.editorElementRef.writeValue(obj);
   }
 
@@ -119,6 +142,15 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
 
   setDisabledState(isDisabled: boolean): void {
     this.editorElementRef.setDisabledState(isDisabled);
+
+    this.isDisabled = isDisabled;
+    if (isDisabled) {
+      this.selectedTabIndex = 1;
+      this.disabledStyle.opacity = this.DISABLED_OPACITY;
+    } else {
+      this.selectedTabIndex = 0;
+      this.disabledStyle.opacity = 1.0;
+    }
   }
 
 }
