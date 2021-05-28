@@ -64,6 +64,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
   readonly newManufacturerOption = '+ Add Manufacturer';
   companyNames$: Array<string> = [];
   isNavigatingToCreateManufacturer = false;
+  loadingManufacturerList = false;
 
   // Type Section
   readonly newCapacitorTypeOption = '+ Add New Type';
@@ -74,6 +75,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
   yearsAreExpanded = false;
   dimensionsAreExpanded = false;
   currentImageUploads = new Set<string>();
+  loadingTypeList = false;
 
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
@@ -241,11 +243,13 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
 
   /** Update this.companyNames$ */
   getManufacturerList(): Subscription {
+    this.loadingManufacturerList = true;
     return this.restService.getAllCompanyNames().subscribe({
       next: companyNames => {
         companyNames.sort(caseInsensitiveCompare);
         this.companyNames$ = companyNames;
         this.populateManufacturerCreating(this.companyNames$);
+        this.loadingManufacturerList = false;
       },
 
       error: () => console.error('Couldn\'t get company names')
@@ -254,12 +258,14 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
 
   /** Update this.capacitorTypes$ */
   getTypeList(companyName: string): Subscription {
+    this.loadingTypeList = true;
     return this.restService.getAllTypes(companyName).subscribe({
       next: types => {
         types.sort((a: CapacitorType, b: CapacitorType) => caseInsensitiveCompare(a.typeName, b.typeName));
         this.capacitorTypes$ = types;
         this.typeMenuChanged(this.noneSelected);
         this.populateTypeNameCreating(this.capacitorTypes$);
+        this.loadingTypeList = false;
       },
 
       error: () => console.error('Couldn\'t get capacitor types')

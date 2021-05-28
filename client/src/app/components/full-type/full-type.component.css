@@ -4,6 +4,9 @@
   border-radius: 10px 10px 0 0;
   padding: 1px 20px;
   background-color: #d8e5ec;
+}
+
+#text-body {
   line-height: 1.35em;
 }
 
