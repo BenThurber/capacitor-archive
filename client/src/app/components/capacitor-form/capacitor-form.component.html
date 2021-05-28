@@ -22,6 +22,7 @@
 
     <label class="input__label__major" for="manufacturer">Select manufacturer:</label>
     <select id="manufacturer" class="input" formControlName="companyName"
+            [attr.disabled]="loadingManufacturerList ? '' : null"
             (change)="manufacturerMenuChanged($event.target.value)">
 
       <option class="special__menu__item" selected value>{{noneSelected}}</option>
@@ -31,7 +32,8 @@
       </option>
 
     </select>
-    <span [style.visibility]="isNavigatingToCreateManufacturer ? 'visible' : 'hidden'" class="spinner manufacturer__spinner"></span>
+    <span [style.visibility]="isNavigatingToCreateManufacturer || loadingManufacturerList ? 'visible' : 'hidden'"
+          class="spinner manufacturer__spinner"></span>
 
     <hr>
   </div>
@@ -70,7 +72,9 @@
 
     <div *ngIf="!editing; else editLabel" class="input">
       <label class="input__label__major" for="type">Select Type/Series:</label>
-      <select id="type" formControlName="typeNameSelect" (change)="typeMenuChanged($event.target.value)">
+      <select id="type" formControlName="typeNameSelect"
+              [attr.disabled]="loadingTypeList ? '' : null"
+              (change)="typeMenuChanged($event.target.value)">
 
         <option class="special__menu__item" selected value>{{noneSelected}}</option>
         <option class="special__menu__item">{{newCapacitorTypeOption}}</option>
@@ -79,6 +83,8 @@
         </option>
 
       </select>
+      <span [style.visibility]="loadingTypeList ? 'visible' : 'hidden'"
+            class="spinner manufacturer__spinner"></span>
     </div>
     <ng-template #editLabel>
       <label class="input__label__major">Edit Type / Family:</label>
