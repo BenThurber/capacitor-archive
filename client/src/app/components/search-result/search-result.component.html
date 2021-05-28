@@ -27,4 +27,7 @@
     </ng-container>
   </p>
   <p id="description"><strong>Description: </strong>{{capacitorTypeDescriptionPlainText}}</p>
+  <img id="edit-icon" alt="" src="../../../assets/edit.svg"
+       (click)="dynamicRouter.navigate(['/capacitor', 'edit', typeData.companyName, typeData.typeName],
+         {queryParams: {only: 'type'}})">
 </div>
