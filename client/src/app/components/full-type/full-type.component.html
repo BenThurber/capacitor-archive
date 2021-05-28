@@ -5,11 +5,8 @@
      [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
 
   <h2>Type: {{capacitorType && capacitorType.typeName}}</h2>
-  <div>
-    <strong>Construction: </strong>{{capacitorType && capacitorType.constructionName}}
-  </div>
 
-  <div>
+  <div style="margin-bottom: 4px;">
     <strong>Made by: </strong><a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
     {{capacitorType && capacitorType.companyName}}</a>
   </div>
@@ -23,6 +20,10 @@
   <ng-container *ngIf="capacitorType && !capacitorType.startYear && capacitorType.endYear">
     <strong>Ended production: </strong>{{capacitorType.endYear}}
   </ng-container>
+
+  <div>
+    <strong>Construction: </strong>{{capacitorType && capacitorType.constructionName}}
+  </div>
 
   <strong>Description: </strong>
   <div id="description" class="ql-editor" [innerHTML]="(capacitorType && capacitorType.description) | safeHtml"></div>
