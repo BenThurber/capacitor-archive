@@ -80,24 +80,6 @@ ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
   background: linear-gradient(to right, rgba(202, 228, 239, 0), rgb(193, 227, 242) 60%);
 }
 
-.edit__button {
-  float: right;
-  font-family: Courier, serif;
-  font-size: smaller;
-  font-weight: bold;
-  text-align: right;
-  white-space: nowrap;
-  line-height: 20px;
-
-  margin: 4px -12px 5px 0;
-}
-
-.edit__icon {
-  width: 20px;
-  margin-bottom: -5px;
-  margin-right: 6px;
-}
-
 .read__more {
   position: absolute;
   right:5px;
@@ -175,10 +157,7 @@ ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
   font-family: "Courier New", serif;
 }
 
-#type-full {
+#type-full-component {
   grid-row: 8;
-  border-radius: 10px 10px 0 0;
-  padding: 0 20px;
-  background-color: #d8e5ec;
 }
 
