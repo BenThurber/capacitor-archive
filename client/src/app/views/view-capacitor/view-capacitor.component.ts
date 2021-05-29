@@ -128,7 +128,6 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
   }
 
   similarMenuChanged(value): void {
-    console.log(value)
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
     this.value = value;
     const cu = this.capacitorUnit;
