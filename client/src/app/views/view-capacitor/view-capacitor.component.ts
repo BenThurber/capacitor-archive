@@ -77,8 +77,6 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
           next: (capacitorUnit: CapacitorUnit) => {
             this.capacitorUnit = capacitorUnit;
             this.updateGalleryImages();
-            // Set focus on the similar menu
-            setTimeout(() => this.similarMenu && this.similarMenu.nativeElement.focus(), 100);
           },
           error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorUnit')
         });
@@ -106,9 +104,6 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
           this.capacitorUnit = new CapacitorUnit();
           this.updateGalleryImages();
         }
-
-        // Set focus on the similar menu
-        setTimeout(() => this.similarMenu && this.similarMenu.nativeElement.focus(), 100);
       });
 
 
@@ -133,6 +128,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
   }
 
   similarMenuChanged(value): void {
+    console.log(value)
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
     this.value = value;
     const cu = this.capacitorUnit;
@@ -149,8 +145,9 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
   formatSimilarCapacitor(capacitorUnit: CapacitorUnit): string {
     let str = '';
-    str += padEndHtml(CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true, true), 9);
-    str += padEndHtml(String(capacitorUnit.voltage > 0 ? capacitorUnit.voltage + 'V' : ''), 8);
+    str += padEndHtml(CapacitorUnit.formattedCapacitance(capacitorUnit.capacitance, true, true), 7);
+    str += ' ';
+    str += String(capacitorUnit.voltage > 0 ? capacitorUnit.voltage + 'V' : '');
 
     return str;
   }

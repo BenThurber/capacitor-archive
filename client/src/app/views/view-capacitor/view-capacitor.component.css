@@ -111,11 +111,50 @@ ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
 }
 
 #similar-menu {
-  min-width: 250px;
+  overflow: scroll;
   background-color: #eeeeee;
+  margin: 15px;
+  min-height: 190px;
+  max-height: 375px;
+
+  border: 3px inset rgba(113, 67, 0, 0.4);
+}
+
+::ng-deep .mat-list-option {
+  height: 100px !important;
+}
+
+.similar__unit__option__contents {
+  display: grid;
+  grid-template-columns: 95px auto;
+  grid-template-rows: auto;
+  grid-gap: 15px;
+}
+
+.similar-thumb {
+  grid-column-start: 1;
+  grid-column-end: 1;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  justify-self: center;
+
+  max-width: 90px;
+  max-height: 90px;
+
+  border: 2px solid rgba(134, 60, 255, 0.8);
+}
+
+.similar-value {
+  grid-column-start: 2;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 1;
+  align-self: center;
+  justify-self: start;
+
   font-family: "Courier New", serif;
-  font-weight: bolder;
-  font-size: 15px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .loading {
