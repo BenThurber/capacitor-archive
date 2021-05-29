@@ -109,7 +109,7 @@
                            similarUnit.typeName, similarUnit.value], {queryParams: {only: 'unit'}})">
 
             <div class="similar__unit__option__contents">
-              <img class="similar-thumb" [src]="similarUnit.photos[0] ? similarUnit.photos[0].getSmallestThumbnail().url : '../../../assets/no-photo.png'"
+              <img class="similar-thumb" [src]="similarUnit.photos[0] ? similarUnit.getFirstPhoto().getSmallestThumbnail().url : '../../../assets/no-photo.png'"
                    alt="">
               <span class="similar-value">{{formatSimilarCapacitor(similarUnit)}}</span>
             </div>
