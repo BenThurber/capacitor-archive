@@ -33,6 +33,10 @@ interface UploadProgress {
 })
 export class FileUploaderComponent implements OnInit {
 
+  static readonly AWS_CONFIG = {accessKeyId: SystemEnvironment.AWS_ACCESS_KEY_ID,
+                                secretAccessKey: SystemEnvironment.AWS_SECRET_ACCESS_KEY,
+                                region: 'ap-southeast-2'};
+
   @Input() dirPathArray: Array<string>;
 
   @Output() uploadStarted = new EventEmitter<StartedUploadEvent>();
@@ -46,11 +50,8 @@ export class FileUploaderComponent implements OnInit {
 
 
   ngOnInit(): void {
-    AWS.config.update({accessKeyId: SystemEnvironment.AWS_ACCESS_KEY_ID,
-      secretAccessKey: SystemEnvironment.AWS_SECRET_ACCESS_KEY,
-      region: 'ap-southeast-2',
-    });
-
+    // AWS config always needs be be set before a new bucket is created
+    AWS.config.update(FileUploaderComponent.AWS_CONFIG);
     this.bucket = new AWS.S3({params: {}});
   }
 

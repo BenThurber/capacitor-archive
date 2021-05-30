@@ -6,6 +6,7 @@ import {FinishedUploadEvent, StartedUploadEvent} from '../../../models/upload-ev
 import {AwsUploadResponse} from '../../../models/aws-upload-response';
 import {ModalService} from '../../modal';
 import {ThumbnailProperty} from '../../../models/thumbnail-property';
+import {FileUploaderComponent} from '../../file-uploader/file-uploader.component';
 
 require('src/app/utilities/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
@@ -57,6 +58,8 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   constructor(private modalService: ModalService) { }
 
   ngOnInit(): void {
+    // AWS config always needs be be set before a new bucket is created
+    AWS.config.update(FileUploaderComponent.AWS_CONFIG);
     this.bucket = new AWS.S3({params: {}});
   }
 
