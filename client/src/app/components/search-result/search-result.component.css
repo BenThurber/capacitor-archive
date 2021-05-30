@@ -12,7 +12,7 @@
 }
 
 .search__thumbnail img {
-  max-height: 135px;   /* Allow aspect ratio of 4:3 (135px/100px) before scaling */
+  max-height: 95%;
   max-width: 100%;
   margin: auto;
   cursor: pointer;
