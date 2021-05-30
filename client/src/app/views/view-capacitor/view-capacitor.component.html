@@ -25,7 +25,7 @@
       <span style="font-size: 22px">Type: </span>
 
       <select *ngIf="capacitorTypeNames" id="type-dropdown"
-              [ngStyle]="{'max-width': capacitorType.typeName.length < 20 ? capacitorType.typeName.length * 26 + 'px' : '95%'}"
+              [ngStyle]="{'max-width': capacitorType?.typeName.length < 20 ? capacitorType?.typeName.length * 26 + 'px' : '95%'}"
               (change)="dynamicRouter.navigate(['/capacitor', 'view', companyName, $event.target.value])">
 
         <option *ngFor="let typeNameDropdown of capacitorTypeNames.sort(caseInsensitiveCompare)"
@@ -96,18 +96,29 @@
 
 
     <div id="similar-units-box" class="info__box__right minor__shadow">
-      <strong><label for="similar-menu">Similar Capacitors</label></strong><br>
-      <select id="similar-menu" size="8" (change)="similarMenuChanged($event.target.value)" #similarMenu>
+      <strong><label for="similar-menu" title="These are the other capacitors in this type/family">
+        Similar Capacitors
+      </label></strong><br>
 
-        <option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
-                [selected]="capacitorUnit.value === similarUnit.value"
-                (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName,
-                similarUnit.typeName, similarUnit.value])">
-          {{formatSimilarCapacitor(similarUnit)}}
-        </option>
+      <div id="similar-menu">
+        <mat-selection-list #similarMenu [multiple]="false">
+          <mat-list-option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
+                           [selected]="capacitorUnit.value === similarUnit.value"
+                           (click)="similarMenuChanged(similarMenu.selectedOptions.selected[0]?.value)"
+                           (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName,
+                           similarUnit.typeName, similarUnit.value], {queryParams: {only: 'unit'}})">
 
-      </select><br>
-      <strong><a class="nav__link"
+            <div class="similar__unit__option__contents">
+              <img class="similar-thumb" [src]="similarUnit.photos[0] ? similarUnit.getFirstPhoto().getSmallestThumbnail().url : '../../../assets/no-photo-tan.png'"
+                   alt="">
+              <span class="similar-value">{{formatSimilarCapacitor(similarUnit)}}</span>
+            </div>
+
+          </mat-list-option>
+        </mat-selection-list>
+      </div>
+
+      <strong><a style="font-size: 20px" class="nav__link"
                  [routerLink]=""
                  (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName, typeName])">
         + Add a Capacitor

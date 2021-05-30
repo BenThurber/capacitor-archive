@@ -99,6 +99,10 @@ export class CapacitorUnit {
     return [...this.photos].sort((a: Photo, b: Photo) => a.order - b.order);
   }
 
+  public getFirstPhoto(): Photo {
+    return this.photos.reduce((p1, p2) => p1.order < p2.order ? p1 : p2);
+  }
+
   /**
    * Formats the capacitor's length and diameter into a compact string
    * @return formatted string of the capacitor's length and diameter
