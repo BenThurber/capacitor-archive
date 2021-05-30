@@ -1,7 +1,6 @@
 import {FileReference} from './file-reference.model';
 import {Thumbnail} from './thumbnail.model';
 import {closestSearch} from '../../utilities/closest-search';
-import {min} from 'rxjs/operators';
 
 export class Photo extends FileReference {
 

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,6 +37,19 @@ public class Photo extends FileReference {
 
     public Photo() {}
 
+
+    /**
+     * Get the smallest thumbnail.
+     * @return Thumbnail of the primary capacitor photo
+     */
+    public Thumbnail getSmallestThumbnail() {
+
+        if (getThumbnails() == null) {return null; }
+        return getThumbnails()
+                .stream()
+                .min(Comparator.comparing(t -> t.getSize() != null ? t.getSize() : Integer.MAX_VALUE))
+                .orElse(null);
+    }
 
     @Override
     public String toString() {
