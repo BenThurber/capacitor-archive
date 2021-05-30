@@ -2,6 +2,10 @@ package com.capacitorarchive.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CapacitorUnitTest {
@@ -116,5 +120,67 @@ class CapacitorUnitTest {
         c2.setVoltage(600);
 
         assertEquals(0, c1.compareTo(c2));
+    }
+
+    @Test
+    void getPrimaryPhoto__getsPhotoWithLowestOrder() {
+        Thumbnail thumbnail = new Thumbnail();
+
+        Photo photo1 = new Photo();
+        photo1.setOrder(0);
+        photo1.setThumbnails(new HashSet<>(Collections.singletonList(thumbnail)));
+
+        Photo photo2 = new Photo();
+        photo2.setOrder(1);
+        photo2.setThumbnails(new HashSet<>(Collections.singletonList(thumbnail)));
+
+        Photo photo3 = new Photo();
+        photo3.setOrder(2);
+        photo3.setThumbnails(new HashSet<>(Collections.singletonList(thumbnail)));
+
+        CapacitorUnit c1 = new CapacitorUnit();
+        c1.setPhotos(new HashSet<>(Arrays.asList(photo1, photo2, photo3)));
+
+        assertEquals(photo1, c1.getPrimaryPhoto());
+    }
+
+
+    @Test
+    void getPrimaryPhoto__onlyUsePhotosWithThumbs() {
+        Thumbnail thumbnail = new Thumbnail();
+
+        Photo photo1 = new Photo();
+        photo1.setOrder(0);
+
+        Photo photo2 = new Photo();
+        photo2.setOrder(1);
+        photo2.setThumbnails(new HashSet<>(Collections.singletonList(thumbnail)));
+
+        CapacitorUnit c1 = new CapacitorUnit();
+        c1.setPhotos(new HashSet<>(Arrays.asList(photo1, photo2)));
+
+        assertEquals(photo2, c1.getPrimaryPhoto());
+    }
+
+    @Test
+    void getPrimaryPhoto__photosWithNoThumbs() {
+
+        Photo photo1 = new Photo();
+        photo1.setOrder(0);
+
+        Photo photo2 = new Photo();
+        photo2.setOrder(1);
+
+        CapacitorUnit c1 = new CapacitorUnit();
+        c1.setPhotos(new HashSet<>(Arrays.asList(photo1, photo2)));
+
+        assertEquals(photo1, c1.getPrimaryPhoto());
+    }
+
+    @Test
+    void getPrimaryPhoto__noPhotos() {
+        CapacitorUnit c1 = new CapacitorUnit();
+
+        assertNull(c1.getPrimaryPhoto());
     }
 }

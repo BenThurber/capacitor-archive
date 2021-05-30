@@ -43,6 +43,7 @@ import { SearchResultComponent } from './components/search-result/search-result.
 import { InputCountryComponent } from './components/form-controls/input-country/input-country.component';
 import { NavigationBreadcrumbComponent } from './components/navigation-breadcrumb/navigation-breadcrumb.component';
 import { FullTypeComponent } from './components/full-type/full-type.component';
+import {MatListModule} from '@angular/material/list';
 
 
 @NgModule({
@@ -89,6 +90,7 @@ import { FullTypeComponent } from './components/full-type/full-type.component';
     BrowserAnimationsModule,
     MatTabsModule,
     MatExpansionModule,
+    MatListModule,
     SortablejsModule.forRoot({ animation: 150 }),
     ModalModule,
     NgxGalleryModule,
