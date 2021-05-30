@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Table(
         uniqueConstraints=
@@ -106,33 +107,21 @@ public class CapacitorUnit implements Comparable<CapacitorUnit> {
     }
 
     /**
-     * Get the smallest thumbnail of the Photo that has the lowest order property.
-     * If the Photo doesn't have thumbnails, tries the next photo and so on.
-     * @return Thumbnail of the primary capacitor photo
-     */
-    public Thumbnail getPrimaryThumbnail() {
-        Photo firstPhotoWithThumbnail = this.getPrimaryPhoto();
-
-        if (firstPhotoWithThumbnail == null) {
-            return null;
-        }
-
-        return firstPhotoWithThumbnail.getThumbnails()
-                .stream()
-                .min(Comparator.comparing(Thumbnail::getSize))
-                .orElse(null);
-    }
-
-    /**
-     * the Photo that has the lowest order property and has at least one thumbnail
-     * @return Photo with >=1 thumbnails
+     * Returns the Photo that has the lowest order property and has at least one thumbnail.
+     * If there are no photos with thumbnails, it returns the Photo with the lowest order property.
+     * @return Photo with lowest order
      */
     public Photo getPrimaryPhoto() {
-        return this.getPhotos()
+        if (getPhotos() == null) {return null; }
+
+        List<Photo> photosWithThumbnails = getPhotos()
                 .stream()
                 .filter(p -> p.getThumbnails() != null && p.getThumbnails().size() > 0)
-                .min(Comparator.comparing(Photo::getOrder))
-                .orElse(null);
+                .collect(Collectors.toList());
+
+        Collection<Photo> photos = photosWithThumbnails.size() > 0 ? photosWithThumbnails : getPhotos();
+
+        return photos.stream().min(Comparator.comparing(Photo::getOrder)).orElse(null);
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.capacitorarchive.payload.response;
 
+import com.capacitorarchive.model.Photo;
 import com.capacitorarchive.utility.QuickSelect;
 import com.capacitorarchive.model.CapacitorType;
 import com.capacitorarchive.model.CapacitorUnit;
@@ -88,7 +89,7 @@ public class CapacitorTypeSearchResponse {
     }
 
     /**
-     * Get a single thumbnail URL a given A list of CapacitorUnits.  Efficiently sorts all CapacitorUnits from
+     * Get a single thumbnail URL a given a list of CapacitorUnits.  Efficiently sorts all CapacitorUnits
      * and chooses the CapacitorUnit in the middle to take the thumbnail from.  Takes the thumbnail from the
      * primary Photo (Photo with the lowest order property).
      * @param capacitorUnits a List of capacitor units to choose from.
@@ -110,10 +111,14 @@ public class CapacitorTypeSearchResponse {
 
         // Get the median capacitor unit "In the middle" of all the sorted units
         CapacitorUnit medianCapacitorUnit = QuickSelect.select(capacitorUnitsWithPhotos.toArray(new CapacitorUnit[0]), capacitorUnitsWithPhotos.size() / 2);
-        if (medianCapacitorUnit == null || medianCapacitorUnit.getPrimaryThumbnail() == null) {
-            return null;
-        }
-        return medianCapacitorUnit.getPrimaryThumbnail().getUrl();
+
+        if (medianCapacitorUnit == null) {return null; }
+        Photo primaryPhoto = medianCapacitorUnit.getPrimaryPhoto();
+
+        if (primaryPhoto == null) {return null; }
+        return primaryPhoto.getThumbnails().size() > 0 ?
+                primaryPhoto.getSmallestThumbnail().getUrl() :
+                primaryPhoto.getUrl();
     }
 
 
