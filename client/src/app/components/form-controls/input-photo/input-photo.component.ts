@@ -128,6 +128,12 @@ export class InputPhotoComponent implements OnInit, ControlValueAccessor {
   async scaleImageToSize(file: Blob, jpegQuality: number, width = 256): Promise<Blob> {
     await canvasLoadFile(file);
 
+    // Test if new css property image-orientation is supported in this browser.
+    // If it is, don't rotate based on EXIF values, because the browser will do this automatically, and it will be rotated twice.
+    if (document.createElement('img').style.imageOrientation !== undefined) {
+      canvas.set( 'autoOrient', false );
+    }
+
     canvas.resize({
       width,
       mode: 'fit',
