@@ -7,6 +7,14 @@ ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
   transform: scale(2.5);
 }
 
+ngx-gallery /deep/ ngx-gallery-thumbnails .ngx-gallery-arrow-right {
+  transform: scale(1.5);
+}
+
+ngx-gallery /deep/ ngx-gallery-thumbnails .ngx-gallery-arrow-left {
+  transform: scale(1.5);
+}
+
 
 .content {
   min-width: 96%;
