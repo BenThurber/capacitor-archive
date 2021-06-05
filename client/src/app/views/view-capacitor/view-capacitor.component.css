@@ -1,11 +1,30 @@
 
-ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-right {
-  transform: scale(2.5);
+/*ngx-gallery Style Hacks*/
+ngx-gallery /deep/ .ngx-gallery-icon {
+  color: #ECF4F8;
 }
 
-ngx-gallery /deep/ ngx-gallery-image .ngx-gallery-arrow-left {
-  transform: scale(2.5);
+ngx-gallery /deep/ .ngx-gallery-arrow {
+  color: #ECF4F8;
+  background-color: black;
+  border-radius: 50%;
+  font-size: 50px;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  text-align: center;
+  vertical-align: middle;
 }
+
+ngx-gallery /deep/ ngx-gallery-thumbnails .ngx-gallery-arrow-right {
+transform: scale(0.75);
+}
+
+ngx-gallery /deep/ ngx-gallery-thumbnails .ngx-gallery-arrow-left {
+transform: scale(0.75);
+}
+
+
 
 
 .content {
