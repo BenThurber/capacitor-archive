@@ -8,7 +8,7 @@ import {ModalService} from '../../modal';
 import {ThumbnailProperty} from '../../../models/thumbnail-property';
 import {FileUploaderComponent} from '../../file-uploader/file-uploader.component';
 
-require('src/app/utilities/canvas-plus.js');
+require('../../../../../node_modules/pixl-canvas-plus/canvas-plus.js');
 const canvas = new (window as any).CanvasPlus();
 
 require('aws-sdk/dist/aws-sdk');
