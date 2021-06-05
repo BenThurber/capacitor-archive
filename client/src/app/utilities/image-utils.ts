@@ -1,5 +1,5 @@
 
-require('node_modules/pixl-canvas-plus/canvas-plus.js');  // Accessing node_modules directly may be dubious...
+require('./canvas-plus.js');
 
 
 
