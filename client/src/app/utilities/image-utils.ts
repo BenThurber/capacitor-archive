@@ -15,8 +15,9 @@ export async function scaleImageToSize(file: Blob, jpegQuality: number, width = 
   await canvasLoadFile(canvasPlus, file);
 
   // Test if new css property image-orientation is supported in this browser.
-  // If it is, don't rotate based on EXIF values, because the browser will do this automatically, and it will be rotated twice.
-  if (document.createElement('img').style.imageOrientation !== undefined) {
+  // If it is, don't rotate based on EXIF Orientation values, because the browser will do this automatically,
+  // and it will be rotated twice.
+  if (browserSupportsAutomaticImageOrientation()) {
     canvasPlus.set( 'autoOrient', false );
   }
 
@@ -30,6 +31,17 @@ export async function scaleImageToSize(file: Blob, jpegQuality: number, width = 
 
   return new Blob( [ buffer ], { type: 'image/jpeg' } );
 }
+
+
+/**
+ * Returns true if the browser supports the CSS3 property image-orientation.
+ * If this property is supported, it causes canvas images with an EXIF Orientation property > 1 to
+ * be rotated automatically (which needs to be compensated for by canvas-plus).
+ */
+export function browserSupportsAutomaticImageOrientation(): boolean {
+  return BROWSER_SUPPORTS_AUTOMATIC_IMAGE_ORIENTATION;
+}
+
 
 
 /**
@@ -59,3 +71,27 @@ function canvasWriteFile(canvasPlus, params: object): Promise<Buffer> {
     });
   });
 }
+
+
+
+// Code to test if the browser supports the CSS3 property image-orientation which would cause images with
+// EXIF Orientation properties to be automatically rotated.
+// Code is written in the global scope so it is only executed once.
+
+let BROWSER_SUPPORTS_AUTOMATIC_IMAGE_ORIENTATION;
+
+const TEST_IMAGE_BASE64_URL =
+  'data:image/jpeg;base64,/9j/4QAiRXhpZgAATU0AKgAAAAgAAQESAAMAAAABAAYAAAA' +
+  'AAAD/2wCEAAEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBA' +
+  'QEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE' +
+  'BAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAf/AABEIAAEAAgMBEQACEQEDEQH/x' +
+  'ABKAAEAAAAAAAAAAAAAAAAAAAALEAEAAAAAAAAAAAAAAAAAAAAAAQEAAAAAAAAAAAAAAAA' +
+  'AAAAAEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwA/8H//2Q==';
+
+const TEST_IMG = document.createElement('img');
+TEST_IMG.onload = () => {
+  // Check if browser supports automatic image orientation:
+  BROWSER_SUPPORTS_AUTOMATIC_IMAGE_ORIENTATION = TEST_IMG.width === 1 && TEST_IMG.height === 2;
+};
+
+TEST_IMG.src = TEST_IMAGE_BASE64_URL;
