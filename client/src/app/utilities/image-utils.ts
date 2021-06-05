@@ -73,10 +73,13 @@ function canvasWriteFile(canvasPlus, params: object): Promise<Buffer> {
 }
 
 
-
 // Code to test if the browser supports the CSS3 property image-orientation which would cause images with
 // EXIF Orientation properties to be automatically rotated.
+//
 // Code is written in the global scope so it is only executed once.
+//
+// Credit to the JavaScript-Load-Image library for this workaround:
+// https://github.com/blueimp/JavaScript-Load-Image/compare/v2.28.0...v2.29.0
 
 let BROWSER_SUPPORTS_AUTOMATIC_IMAGE_ORIENTATION;
 
