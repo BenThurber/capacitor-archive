@@ -3,7 +3,6 @@ package com.capacitorarchive.payload.response;
 import com.capacitorarchive.model.CapacitorType;
 import com.capacitorarchive.model.CapacitorUnit;
 import com.capacitorarchive.model.Manufacturer;
-import com.capacitorarchive.payload.response.ManufacturerListItemResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
