@@ -50,7 +50,7 @@ public class Construction {
      * @param constructionName a construction name of any case.
      */
     public void setConstructionName(String constructionName) {
-        this.constructionName = TextUtil.title(constructionName, new Character[]{' ', '-', '_'});
+        this.constructionName = TextUtil.title(constructionName.strip(), new Character[]{' ', '-', '_'});
     }
 
 }
