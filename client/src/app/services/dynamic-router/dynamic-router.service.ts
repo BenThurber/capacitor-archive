@@ -20,7 +20,7 @@ export class DynamicRouterService {
 
   constructor(router: Router) {
     this.router = router;
-    this.toLowerCaseIfNotMatch = this.toLowerCaseIfNotMatch.bind(this);   // Strange TS behavior requires this
+    this.toLowerCaseIfFilter = this.toLowerCaseIfFilter.bind(this);   // Strange TS behavior requires this
   }
 
   /**
@@ -40,7 +40,7 @@ export class DynamicRouterService {
    */
   async navigate(commands: any[], extras?: NavigationExtras): Promise<boolean> {
     await this.router.navigateByUrl('/', {skipLocationChange: true});
-    return this.router.navigate(commands.map(this.toLowerCaseIfNotMatch), extras);
+    return this.router.navigate(commands.map(this.toLowerCaseIfFilter), extras);
   }
 
   /**
@@ -64,7 +64,7 @@ export class DynamicRouterService {
    * Calls toLowerCase() on string unless it matches a regex in UPPER_CASE_PATHS.
    * @param param an unencoded url path parameter
    */
-  toLowerCaseIfNotMatch(param: string): string {
+  toLowerCaseIfFilter(param: string): string {
     if (this.UPPER_CASE_PATHS.some(regex => regex.test(param))) {
       return param;
     } else {

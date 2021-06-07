@@ -16,17 +16,17 @@ public class ManufacturerListItemResponse {
     @JsonProperty("companyName")
     private String companyName;
 
-    @JsonProperty("numCapacitorTypes")
-    private Integer numCapacitorTypes;
-
-    @JsonProperty("numCapacitorUnits")
-    private Integer numCapacitorUnits;
-
     @JsonProperty("openYear")
     private Short openYear;
 
     @JsonProperty("closeYear")
     private Short closeYear;
+
+    @JsonProperty("numCapacitorTypes")
+    private Integer numCapacitorTypes;
+
+    @JsonProperty("numCapacitorUnits")
+    private Integer numCapacitorUnits;
 
 
     public ManufacturerListItemResponse(Manufacturer manufacturer) {
