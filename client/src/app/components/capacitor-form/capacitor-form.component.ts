@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
@@ -12,6 +12,7 @@ import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {Photo} from '../../models/file/photo.model';
+import {scrollToElement} from '../../utilities/gui-utils';
 
 class CapacitorForm {
   companyName: string;
@@ -43,7 +44,7 @@ class CapacitorForm {
   templateUrl: './capacitor-form.component.html',
   styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
-export class CapacitorFormComponent implements OnInit, AfterViewInit {
+export class CapacitorFormComponent implements OnInit, AfterViewChecked {
 
   static readonly newConstructionOption = '+ Add Construction';
 
@@ -76,6 +77,10 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
   dimensionsAreExpanded = false;
   currentImageUploads = new Set<string>();
   loadingTypeList = false;
+
+  // Unit Section
+  @ViewChildren('unitElem') unitElemObservable: QueryList<any>;
+  unitElem: ElementRef;
 
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
@@ -135,9 +140,9 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     if (this.only === 'photos') {
-      this.submitDiv.nativeElement.scrollIntoView({behavior: 'auto', block: 'nearest', inline: 'nearest'});
+      scrollToElement(this.submitDiv?.nativeElement, 'auto');
     }
   }
 
@@ -217,6 +222,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       this.capacitorFormGroup.controls.companyName.setValue(companyName);
       this.manufacturerMenuChanged(companyName);
     }
+
   }
 
   /** Inserts a type into the dropdown menu if it exists in the url */
@@ -238,6 +244,10 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       this.formFields.type.controls.typeNameSelect.setValue(typeName);
       this.typeMenuChanged(typeName);
     }
+
+    this.unitElemObservable.changes.subscribe(
+      r => setTimeout(() => scrollToElement(r.first?.nativeElement, 'smooth'), 500)
+    );
   }
 
   /** Update this.companyNames$ */
