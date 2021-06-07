@@ -119,7 +119,7 @@ public class ManufacturerController {
      * @return a list of manufacturer names as strings
      */
     @GetMapping("sidebar-list")
-    public List<ManufacturerListItemResponse> getManufacturerSidebarData(HttpServletResponse response) {
+    public List<ManufacturerListItemResponse> getAllManufacturerListItems(HttpServletResponse response) {
 
         List<ManufacturerListItemResponse> manufacturersListItems = manufacturerRepository
                 .findAll()

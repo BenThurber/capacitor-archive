@@ -5,12 +5,13 @@
 
   <h3>Manufacturers</h3>
 
-  <ng-container *ngIf="companyNames$; else loading">
-    <div *ngFor="let barCompanyName of companyNames$;">
+  <ng-container *ngIf="manufacturerListItems; else loading">
+    <div *ngFor="let manufacturerListItem of manufacturerListItems;">
       <div class="link__padding">
         <a class="grey__link" [routerLink]=""
-           (click)="dynamicRouter.navigate(['/manufacturer', 'view', barCompanyName])">
-          {{barCompanyName}}
+           [ngClass]="manufacturerListItem.numCapacitorTypes > 0 ? 'bright' : 'dull'"
+           (click)="dynamicRouter.navigate(['/manufacturer', 'view', manufacturerListItem.companyName])">
+          {{manufacturerListItem.companyName}}
         </a>
       </div>
     </div>
