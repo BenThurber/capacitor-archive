@@ -1,5 +1,6 @@
 package com.capacitorarchive.controller;
 
+import com.capacitorarchive.payload.response.ManufacturerListItemResponse;
 import com.capacitorarchive.payload.response.ManufacturerResponse;
 import com.capacitorarchive.repository.ManufacturerRepository;
 import com.capacitorarchive.model.Manufacturer;
@@ -88,6 +89,8 @@ class ManufacturerControllerTest {
         when(manufacturerRepository.getAllCompanyNames()).thenAnswer(i ->  manufacturerMockTable.stream()
                 .map(Manufacturer::getCompanyName)
                 .collect(Collectors.toList()));
+
+        when(manufacturerRepository.findAll()).thenReturn(manufacturerMockTable);
     }
 
     @AfterEach
@@ -391,6 +394,29 @@ class ManufacturerControllerTest {
 
         assertTrue(nameList.containsAll(Arrays.asList("Cornell Dubilier", "Solar")));
 
+    }
+
+
+    /**
+     * Test getting all manufacturer list items for the ManufacturerSidebarComponent (front end).
+     */
+    @Test
+    void getAllManufacturerListItems_success() throws Exception {
+        manufacturerRepository.save(manufacturer1);
+        manufacturerRepository.save(manufacturer2);
+
+        MockHttpServletRequestBuilder httpReq = MockMvcRequestBuilders.get("/manufacturer/sidebar-list");
+
+        MvcResult result = mvc.perform(httpReq)
+                .andExpect(status().isOk())
+                .andReturn();
+
+        // Convert response json to List of Strings
+        List<ManufacturerListItemResponse> manufacturerList = objectMapper.readValue(
+                result.getResponse().getContentAsString(),
+                TypeFactory.defaultInstance().constructCollectionType(List.class, ManufacturerListItemResponse.class));
+
+        assertEquals(2, manufacturerList.size());
     }
 
 
