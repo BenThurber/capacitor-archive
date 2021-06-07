@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
+import {AfterViewChecked, AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
@@ -44,7 +44,7 @@ class CapacitorForm {
   templateUrl: './capacitor-form.component.html',
   styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
-export class CapacitorFormComponent implements OnInit, AfterViewInit {
+export class CapacitorFormComponent implements OnInit, AfterViewChecked {
 
   static readonly newConstructionOption = '+ Add Construction';
 
@@ -78,11 +78,13 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
   currentImageUploads = new Set<string>();
   loadingTypeList = false;
 
+  // Unit Section
+  @ViewChildren('unitElem') unitElemObservable: QueryList<any>;
+  unitElem: ElementRef;
+
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
   @ViewChild('submitDiv') submitDiv: ElementRef;
-  @ViewChild('typeDiv') typeDiv: ElementRef;
-  @ViewChild('unitDiv') unitDiv: ElementRef;
   readonly reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
 
@@ -138,9 +140,9 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
     }
   }
 
-  ngAfterViewInit(): void {
+  ngAfterViewChecked(): void {
     if (this.only === 'photos') {
-      scrollToElement(this.submitDiv.nativeElement, 'auto');
+      scrollToElement(this.submitDiv?.nativeElement, 'auto');
     }
   }
 
@@ -221,7 +223,6 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       this.manufacturerMenuChanged(companyName);
     }
 
-    scrollToElement(this.typeDiv);
   }
 
   /** Inserts a type into the dropdown menu if it exists in the url */
@@ -244,7 +245,9 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       this.typeMenuChanged(typeName);
     }
 
-    scrollToElement(this.unitDiv);
+    this.unitElemObservable.changes.subscribe(
+      r => setTimeout(() => scrollToElement(r.first?.nativeElement, 'smooth'), 500)
+    );
   }
 
   /** Update this.companyNames$ */
