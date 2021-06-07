@@ -11,6 +11,7 @@ import {ErrorHandlerService} from '../../services/error-handler/error-handler.se
 import {ImageComponent} from '../../components/image/image.component';
 import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
 import {InputRichTextComponent} from '../../components/form-controls/input-rich-text/input-rich-text.component';
+import {scrollToElement} from '../../utilities/gui-utils';
 
 
 @Component({
@@ -35,6 +36,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
   capacitorUnits: Array<CapacitorUnit>;
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
+  scrollToElement = scrollToElement;
 
   galleryOptions: NgxGalleryOptions[] = [];
   galleryImages: NgxGalleryImage[] = [];
@@ -123,9 +125,6 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
     ]);
   }
 
-  scrollToElement($element): void {
-    $element.scrollIntoView({behavior: 'smooth', block: 'nearest', inline: 'nearest'});
-  }
 
   similarMenuChanged(value): void {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();

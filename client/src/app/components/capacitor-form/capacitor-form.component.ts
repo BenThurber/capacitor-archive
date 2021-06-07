@@ -12,6 +12,7 @@ import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {Photo} from '../../models/file/photo.model';
+import {scrollToElement} from '../../utilities/gui-utils';
 
 class CapacitorForm {
   companyName: string;
@@ -137,7 +138,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit(): void {
     if (this.only === 'photos') {
-      this.submitDiv.nativeElement.scrollIntoView({behavior: 'auto', block: 'nearest', inline: 'nearest'});
+      scrollToElement(this.submitDiv.nativeElement, 'auto');
     }
   }
 
