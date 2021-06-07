@@ -28,6 +28,20 @@ a {
 }
 
 
+.dull:link, .dull:visited {
+  color: #6b7b81;
+}
+
+.bright:link, .bright:visited {
+  color: #313434;
+}
+
+.dull:hover, .bright:hover {
+  color: #c6b51b;
+  text-decoration-color: #c6b51b
+}
+
+
 h3 {
   text-align: center;
   text-decoration: underline;

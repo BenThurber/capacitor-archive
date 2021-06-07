@@ -85,7 +85,6 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
 
   constructor(private activatedRoute: ActivatedRoute,
               public restService: RestService,
-              private router: Router,
               private dynamicRouter: DynamicRouterService,
               private formBuilder: FormBuilder,
               public location: Location) { }
@@ -293,6 +292,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
     }
 
     if (this.manufacturerIsSelected) {
+      this.formFields.type.controls.typeNameSelect.setValue('');  // Reset type menu
       this.getTypeList(value);
     }
 
@@ -332,7 +332,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
     this.formFields.companyName.disable();
 
     setTimeout(() => {
-      this.router.navigate(['manufacturer', 'create']).catch(
+      this.dynamicRouter.navigate(['manufacturer', 'create']).catch(
         () => {
           this.isNavigatingToCreateManufacturer = false;
           this.formFields.companyName.enable();
@@ -384,13 +384,17 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       // Create new Construction
       if (capacitorTypeFields.construction === this.newConstructionOption) {
         return this.restService.createConstruction(capacitorTypeFields.constructionInput).subscribe({
-          next: () => {
-            capacitorForm.type.typeContent.construction = capacitorForm.type.typeContent.constructionInput;
+          next: capitalizedConstructionName => {
+            this.constructionNames$.push(capitalizedConstructionName);
+            this.constructionNames$.sort(caseInsensitiveCompare);
+            capacitorForm.type.typeContent.construction = capitalizedConstructionName;
             this.submitCreateEditRecursive(capacitorForm);
           },
           error: error => this.handleBackendError(error.error),
         });
       }
+
+      capacitorTypeFields.typeNameInput = capacitorTypeFields.typeNameInput.trim();  // Mutation is needed for capacitor unit
 
       const capacitorType: CapacitorType = new CapacitorType();
       capacitorType.typeName = capacitorTypeFields.typeNameInput;
@@ -398,8 +402,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       capacitorType.endYear = capacitorTypeFields.endYear;
       capacitorType.description = capacitorTypeFields.description;
       capacitorType.companyName = capacitorForm.companyName;
-      capacitorType.constructionName = capacitorTypeFields.construction === this.newConstructionOption ?
-        capacitorTypeFields.constructionInput : capacitorTypeFields.construction;
+      capacitorType.constructionName = capacitorTypeFields.construction;  // This is trimmed by the backend, so don't call trim()
 
       httpRequestObservable = this.editing ?
         this.restService.editCapacitorType(this.editCompanyName, this.editCapacitorType.typeName, capacitorType) :

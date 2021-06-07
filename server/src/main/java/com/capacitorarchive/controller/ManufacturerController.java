@@ -1,5 +1,6 @@
 package com.capacitorarchive.controller;
 
+import com.capacitorarchive.payload.response.ManufacturerListItemResponse;
 import com.capacitorarchive.repository.ManufacturerRepository;
 import com.capacitorarchive.model.Manufacturer;
 import com.capacitorarchive.payload.request.ManufacturerRequest;
@@ -11,6 +12,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/manufacturer")
@@ -109,5 +111,23 @@ public class ManufacturerController {
 
         response.setStatus(HttpServletResponse.SC_OK);
         return manufacturers;
+    }
+
+
+    /**
+     * Get a List of all manufacturer names in the Database.
+     * @return a list of manufacturer names as strings
+     */
+    @GetMapping("sidebar-list")
+    public List<ManufacturerListItemResponse> getAllManufacturerListItems(HttpServletResponse response) {
+
+        List<ManufacturerListItemResponse> manufacturersListItems = manufacturerRepository
+                .findAll()
+                .stream()
+                .map(ManufacturerListItemResponse::new)
+                .collect(Collectors.toList());
+
+        response.setStatus(HttpServletResponse.SC_OK);
+        return manufacturersListItems;
     }
 }
