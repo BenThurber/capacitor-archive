@@ -16,8 +16,6 @@ html, body {
 #topbar {
   grid-column: 1 / -1;
   grid-row: 1;
-
-  width: 100%;
 }
 
 #sidebar {
@@ -26,7 +24,7 @@ html, body {
 }
 
 #views {
-  grid-column: 2 / -1;
+  grid-column: 2;
   grid-row: 2;
 
   overflow: hidden;
