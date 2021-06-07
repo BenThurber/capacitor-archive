@@ -1,16 +1,16 @@
-<div class="wrapper">
+<div id="wrapper">
 
 
-  <app-navbar></app-navbar>
+    <app-navbar id="topbar"></app-navbar>
 
-  <app-manufacturer-sidebar></app-manufacturer-sidebar>
+    <app-manufacturer-sidebar id="sidebar"></app-manufacturer-sidebar>
 
-  <div class="views">
-    <app-navigation-breadcrumb></app-navigation-breadcrumb>
-    <router-outlet></router-outlet>
-    <!--Routed Views go here-->
-  </div>
+    <div id="views">
+      <app-navigation-breadcrumb></app-navigation-breadcrumb>
+      <router-outlet></router-outlet>
+      <!--Routed Views go here-->
+    </div>
 
 </div>
 
-<app-bottom-bar></app-bottom-bar>
+<app-bottom-bar id="bottombar"></app-bottom-bar>
