@@ -3,16 +3,28 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
-import ImageResize from 'quill-image-resize-module';
+import BlotFormatter, {AlignAction, DeleteAction, ImageSpec, ResizeAction} from 'quill-blot-formatter';
 import {SystemEnvironment} from '../../../models/system-environment';
 import {randomString} from '../../../utilities/text-utils';
 import {environment} from '../../../../environments/environment';
+import CustomImage from './custom-image';
 
-Quill.register('modules/imageUploader', ImageUploader);
-Quill.register('modules/imageResize', ImageResize);
 require('aws-sdk/dist/aws-sdk');
 
 const { htmlToText } = require('html-to-text');
+
+
+Quill.register('modules/imageUploader', ImageUploader);
+Quill.register('modules/blotFormatter', BlotFormatter);
+Quill.register({
+  'formats/image': CustomImage
+});
+
+class CustomImageSpec extends ImageSpec {
+  getActions(): Array<any> {
+    return [AlignAction, DeleteAction, ResizeAction];
+  }
+}
 
 
 @Component({
@@ -79,8 +91,16 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
     imageUploader: {
       upload: uploadImage
     },
-    imageResize: {
-      modules: ['Resize', 'DisplaySize', 'Toolbar']
+    blotFormatter: {
+      modules: ['Resize', 'DisplaySize', 'Toolbar'],
+      specs: [
+        CustomImageSpec,
+      ],
+      overlay: {
+        style: {
+          border: '2px solid red',
+        }
+      }
     },
   };
 
