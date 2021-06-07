@@ -293,6 +293,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
     }
 
     if (this.manufacturerIsSelected) {
+      this.formFields.type.controls.typeNameSelect.setValue('');  // Reset type menu
       this.getTypeList(value);
     }
 
