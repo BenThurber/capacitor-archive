@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@a
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
@@ -81,6 +81,8 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
   // Captcha and Submit
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
   @ViewChild('submitDiv') submitDiv: ElementRef;
+  @ViewChild('typeDiv') typeDiv: ElementRef;
+  @ViewChild('unitDiv') unitDiv: ElementRef;
   readonly reCaptchaSiteKey = environment.reCaptchaSiteKey;
 
 
@@ -218,6 +220,8 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       this.capacitorFormGroup.controls.companyName.setValue(companyName);
       this.manufacturerMenuChanged(companyName);
     }
+
+    scrollToElement(this.typeDiv);
   }
 
   /** Inserts a type into the dropdown menu if it exists in the url */
@@ -239,6 +243,8 @@ export class CapacitorFormComponent implements OnInit, AfterViewInit {
       this.formFields.type.controls.typeNameSelect.setValue(typeName);
       this.typeMenuChanged(typeName);
     }
+
+    scrollToElement(this.unitDiv);
   }
 
   /** Update this.companyNames$ */

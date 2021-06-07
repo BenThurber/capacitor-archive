@@ -41,7 +41,7 @@
 
   <!--Capacitor Type Section-->
   <div id="type-section" class="input__section" formGroupName="type"
-       *ngIf="manufacturerIsSelected && !isNavigatingToCreateManufacturer && only !== 'unit' && only !== 'photos'">
+       *ngIf="manufacturerIsSelected && !isNavigatingToCreateManufacturer && only !== 'unit' && only !== 'photos'" #typeDiv>
 
     <div style="margin-bottom: 20px">
       <app-image src="../../../assets/aerovox-type.png" link="true" height="100px" style="margin-right: 20px; margin-bottom: 9px">
@@ -185,7 +185,7 @@
 
   <!--Capacitor Unit Section-->
   <div id="capacitor-section" class="input__section" formGroupName="unit"
-       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected && !isNavigatingToCreateManufacturer && only !== 'type'">
+       *ngIf="manufacturerIsSelected && capacitorTypeIsSelected && !isNavigatingToCreateManufacturer && only !== 'type'" #unitDiv>
 
     <label class="input__label__major">{{editing ? 'Edit Capacitor:' : 'Add Capacitor:'}}</label>
     <br>
