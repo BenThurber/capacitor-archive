@@ -6,6 +6,7 @@ import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {ShowSidebarService} from '../../services/show-sidebar/show-sidebar.service';
+import {ManufacturerListItem} from '../../models/manufacturer-list-item';
 
 
 @Component({
@@ -15,7 +16,7 @@ import {ShowSidebarService} from '../../services/show-sidebar/show-sidebar.servi
 })
 export class ManufacturerSidebarComponent implements OnInit {
 
-  companyNames$: Array<string>;
+  manufacturerListItems: Array<ManufacturerListItem>;
 
   showShadow = null;
 
@@ -32,10 +33,10 @@ export class ManufacturerSidebarComponent implements OnInit {
   }
 
   ngOnInit(): Subscription {
-    return this.restService.getAllCompanyNames().subscribe({
-      next: companyNames => {
-        companyNames.sort(caseInsensitiveCompare);
-        this.companyNames$ = companyNames;
+    return this.restService.getAllManufacturerListItems().subscribe({
+      next: manufacturerListItems => {
+        manufacturerListItems.sort((li1, li2) => caseInsensitiveCompare(li1.companyName, li2.companyName));
+        this.manufacturerListItems = manufacturerListItems;
       },
 
       error: () => console.error('Couldn\'t get company names')

@@ -106,14 +106,13 @@ a:hover {
   line-height: 30px;
 }
 
-.grey__link:link {
+.grey__link:link, .grey__link:visited {
   color: #565959;
-  font-weight: bold;
 }
 
-.grey__link:visited {
-  color: #565959;
-  font-weight: bold;
+.grey__link:hover {
+  color: #c6b51b;
+  text-decoration-color: #c6b51b
 }
 
 .grey__link {
@@ -128,11 +127,6 @@ a:hover {
   color: #565959;
   display: block;
   cursor: pointer;
-}
-
-.grey__link:hover {
-  color: #c6b51b;
-  text-decoration-color: #c6b51b
 }
 
 .major__shadow {
