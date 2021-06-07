@@ -8,6 +8,7 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 
 @Component({
@@ -30,15 +31,15 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
   restService: RestService;
-  router: Router;
+  dynamicRouter: DynamicRouterService;
   location: Location;
   refreshManufacturers: RefreshManufacturersService;
 
-  constructor(formBuilder: FormBuilder, restService: RestService, router: Router, location: Location,
+  constructor(formBuilder: FormBuilder, restService: RestService, dynamicRouter: DynamicRouterService, location: Location,
               refreshManufacturers: RefreshManufacturersService) {
     this.formBuilder = formBuilder;
     this.restService = restService;
-    this.router = router;
+    this.dynamicRouter = dynamicRouter;
     this.location = location;
     this.refreshManufacturers = refreshManufacturers;
   }
@@ -89,6 +90,9 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     this.submitting = true;
     this.errorsBackend = [];
 
+
+    manufacturerFormGroup.value.companyName = manufacturerFormGroup.value.companyName.trim();  // Mutation is needed here
+
     if (this.existingManufacturer === undefined) {
 
       this.submitCreate(manufacturerFormGroup.value);
@@ -110,7 +114,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   submitCreate(manufacturer: Manufacturer): void {
 
     return this.restService.createManufacturer(manufacturer).subscribe({
-      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName]).then(
+      next: () => this.dynamicRouter.navigate(['manufacturer', 'view', manufacturer.companyName]).then(
         () => this.refreshManufacturers.refresh()
       ),
       error: error => this.handleBackendError(error.error),
@@ -121,7 +125,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   submitEdit(manufacturer: Manufacturer): void {
 
     return this.restService.editManufacturer(this.existingManufacturer.companyName, manufacturer).subscribe({
-      next: () => this.router.navigate(['manufacturer', 'view', manufacturer.companyName]).then(
+      next: () => this.dynamicRouter.navigate(['manufacturer', 'view', manufacturer.companyName]).then(
         () => this.refreshManufacturers.refresh()
       ),
       error: error => this.handleBackendError(error.error),
