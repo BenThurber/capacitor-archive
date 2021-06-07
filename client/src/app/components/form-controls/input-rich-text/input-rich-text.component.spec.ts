@@ -2,9 +2,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { InputRichTextComponent } from './input-rich-text.component';
 import Quill from 'quill';
-import ImageResize from 'quill-image-resize-module';
+import BlotFormatter from 'quill-blot-formatter';
 
-Quill.register('modules/imageResize', ImageResize);
+Quill.register('modules/blotFormatter', BlotFormatter);
 
 describe('InputRichTextComponent', () => {
   let component: InputRichTextComponent;
