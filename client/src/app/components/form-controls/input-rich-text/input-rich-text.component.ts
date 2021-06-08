@@ -3,16 +3,29 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {QuillEditorComponent} from 'ngx-quill';
 import Quill from 'quill';
 import ImageUploader from 'quill-image-uploader';
-import ImageResize from 'quill-image-resize-module';
+import BlotFormatter, {AlignAction, DeleteAction, ImageSpec, ResizeAction} from 'quill-blot-formatter';
 import {SystemEnvironment} from '../../../models/system-environment';
 import {randomString} from '../../../utilities/text-utils';
 import {environment} from '../../../../environments/environment';
+import CustomImage from './custom-image';
+import {getImageDimensions, scaleImageToSize} from '../../../utilities/image-utils';
 
-Quill.register('modules/imageUploader', ImageUploader);
-Quill.register('modules/imageResize', ImageResize);
 require('aws-sdk/dist/aws-sdk');
 
 const { htmlToText } = require('html-to-text');
+
+
+Quill.register('modules/imageUploader', ImageUploader);
+Quill.register('modules/blotFormatter', BlotFormatter);
+Quill.register({
+  'formats/image': CustomImage
+});
+
+class CustomImageSpec extends ImageSpec {
+  getActions(): Array<any> {
+    return [AlignAction, DeleteAction, ResizeAction];
+  }
+}
 
 
 @Component({
@@ -33,6 +46,8 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
   // File format configurations
   static readonly supportedImageTypes: ReadonlyArray<string> = ['png', 'jpg', 'jpeg', 'gif'];
   static readonly maxImageSize = 5000000;
+  static readonly maxImageDimension = 800;
+  static readonly scaledImageJpegQuality = 75;
 
   static htmlToTextLibraryOptions = {
     tags: {
@@ -79,8 +94,16 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
     imageUploader: {
       upload: uploadImage
     },
-    imageResize: {
-      modules: ['Resize', 'DisplaySize', 'Toolbar']
+    blotFormatter: {
+      modules: ['Resize', 'DisplaySize', 'Toolbar'],
+      specs: [
+        CustomImageSpec,
+      ],
+      overlay: {
+        style: {
+          border: '2px solid red',
+        }
+      }
     },
   };
 
@@ -172,39 +195,48 @@ function uploadImage(file: File): Promise<string> {
   }
 
 
-  return new Promise((resolve, reject) => {
+  return new Promise(  (resolve, reject) => {
+    (async () => {
+      let imageBlob: Blob;
 
-    // Check file attributes
-    if (!InputRichTextComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
-      this.upload.currentImageUploads.delete(uploadHash);
-      this.upload.filesUploading.emit(this.upload.currentImageUploads);
-      reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + InputRichTextComponent.supportedImageTypes);
-      return;
-    }
-    if (file.size > InputRichTextComponent.maxImageSize) {
-      this.upload.currentImageUploads.delete(uploadHash);
-      this.upload.filesUploading.emit(this.upload.currentImageUploads);
-      reject('File is too large.  Must be less than ' + Math.floor(InputRichTextComponent.maxImageSize / 1000000) + 'MB');
-      return;
-    }
-
-    const uploadName = randomString(10) + '_' + file.name;
-
-    const AWSService = (window as any).AWS;
-    AWSService.config.accessKeyId = SystemEnvironment.AWS_ACCESS_KEY_ID;
-    AWSService.config.secretAccessKey = SystemEnvironment.AWS_SECRET_ACCESS_KEY;
-    const bucket = new AWSService.S3({params: {Bucket: environment.s3BucketName + serverFilePath}});
-    const params = {Key: uploadName, Body: file};
-    return bucket.upload(params, (error, response) => {
-
-      this.upload.currentImageUploads.delete(uploadHash);
-      this.upload.filesUploading.emit(this.upload.currentImageUploads);
-      if (error) {
-        reject('Error uploading to server: ' + error);
-      } else {
-        resolve(response.Location);
+      // Check file attributes
+      if (!InputRichTextComponent.supportedImageTypes.map(s => 'image/' + s).includes(file.type)) {
+        this.upload.currentImageUploads.delete(uploadHash);
+        this.upload.filesUploading.emit(this.upload.currentImageUploads);
+        reject('Unsupported file type ' + file.type + '. Files must be one of following: ' + InputRichTextComponent.supportedImageTypes);
+        return;
       }
 
-    });
+      const imageDimensions = await getImageDimensions(file);
+
+      // Image too large?  Scale it.
+      if (file.size > InputRichTextComponent.maxImageSize ||
+        imageDimensions.width > InputRichTextComponent.maxImageDimension ||
+        imageDimensions.height > InputRichTextComponent.maxImageDimension) {
+        imageBlob = await scaleImageToSize(file,
+          InputRichTextComponent.scaledImageJpegQuality, InputRichTextComponent.maxImageDimension);
+      } else {
+        imageBlob = file;
+      }
+
+      const uploadName = randomString(10) + '_' + file.name;
+
+      const AWSService = (window as any).AWS;
+      AWSService.config.accessKeyId = SystemEnvironment.AWS_ACCESS_KEY_ID;
+      AWSService.config.secretAccessKey = SystemEnvironment.AWS_SECRET_ACCESS_KEY;
+      const bucket = new AWSService.S3({params: {Bucket: environment.s3BucketName + serverFilePath}});
+      const params = {Key: uploadName, Body: imageBlob};
+      return bucket.upload(params, (error, response) => {
+
+        this.upload.currentImageUploads.delete(uploadHash);
+        this.upload.filesUploading.emit(this.upload.currentImageUploads);
+        if (error) {
+          reject('Error uploading to server: ' + error);
+        } else {
+          resolve(response.Location);
+        }
+
+      });
+    })();
   });
 }
