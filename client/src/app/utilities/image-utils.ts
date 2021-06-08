@@ -2,6 +2,20 @@
 require('./canvas-plus.js');
 
 
+export async function getImageDimensions(blob: Blob): Promise<{width: number, height: number}> {
+  return new Promise(resolve => {
+    const dataUrl = URL.createObjectURL(blob);
+    const img = new Image();
+    img.onload = () => {
+      resolve({
+        height: img.height,
+        width: img.width
+      });
+    };
+    img.src = dataUrl;
+  });
+}
+
 
 /**
  * Convert a Blob image file to JPG.  Supports JPEG, PNG, GIF, BMP, WebP.
