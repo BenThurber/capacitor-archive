@@ -20,7 +20,7 @@ export function caseInsensitiveCompare(a: string, b: string): number {
  * If the value is less than str.length, then str is returned as-is.
  */
 export function padEndHtml(str: string, targetLength: number): string {
-  return str + ' \u200B'.repeat(targetLength - str.length);
+  return str + ' \u200B'.repeat(Math.max(targetLength - str.length, 0));
 }
 
 /**
@@ -31,7 +31,7 @@ export function padEndHtml(str: string, targetLength: number): string {
  * If the value is less than str.length, then str is returned as-is.
  */
 export function padStartHtml(str: string, targetLength: number): string {
-  return ' \u200B'.repeat(targetLength - str.length) + str;
+  return ' \u200B'.repeat(Math.max(targetLength - str.length, 0)) + str;
 }
 
 /**
