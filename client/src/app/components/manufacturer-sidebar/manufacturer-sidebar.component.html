@@ -9,6 +9,7 @@
     <div *ngFor="let manufacturerListItem of manufacturerListItems;">
       <div class="link__padding">
         <a class="grey__link" [routerLink]=""
+           [title]="toolTipMsg(manufacturerListItem.numCapacitorUnits)"
            [ngClass]="manufacturerListItem.numCapacitorTypes > 0 ? 'bright' : 'dull'"
            (click)="dynamicRouter.navigate(['/manufacturer', 'view', manufacturerListItem.companyName])">
           {{manufacturerListItem.companyName}}
@@ -22,7 +23,7 @@
   </ng-template>
 
   <div id="add-manufacturer" class="link__padding">
-    <a class="grey__link" [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'create'])">
+    <a class="grey__link" [routerLink]="['/manufacturer', 'create']">
       + Add Manufacturer
     </a>
   </div>

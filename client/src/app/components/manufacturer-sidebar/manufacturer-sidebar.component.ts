@@ -53,4 +53,14 @@ export class ManufacturerSidebarComponent implements OnInit {
     }
   }
 
+  toolTipMsg(numCapacitorUnits): string {
+    if (numCapacitorUnits <= 0) {
+      return 'No Capacitors';
+    } else if (numCapacitorUnits === 1) {
+      return numCapacitorUnits + ' Capacitor';
+    } else {
+      return numCapacitorUnits + ' Capacitors';
+    }
+  }
+
 }
