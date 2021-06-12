@@ -243,11 +243,11 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
     if (typeName) {
       this.formFields.type.controls.typeNameSelect.setValue(typeName);
       this.typeMenuChanged(typeName);
-    }
 
-    this.unitElemObservable.changes.subscribe(
-      r => setTimeout(() => scrollToElement(r.first?.nativeElement, 'smooth'), 500)
-    );
+      this.unitElemObservable.changes.subscribe(
+        r => setTimeout(() => scrollToElement(r.first?.nativeElement, 'smooth'), 500)
+      );
+    }
   }
 
   /** Update this.companyNames$ */
