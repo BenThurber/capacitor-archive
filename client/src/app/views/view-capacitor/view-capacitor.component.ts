@@ -37,6 +37,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
   scrollToElement = scrollToElement;
+  Math = Math;
 
   galleryOptions: NgxGalleryOptions[] = [];
   galleryImages: NgxGalleryImage[] = [];

@@ -25,7 +25,7 @@
       <span style="font-size: 22px">Type: </span>
 
       <select *ngIf="capacitorTypeNames" id="type-dropdown"
-              [ngStyle]="{'max-width': capacitorType?.typeName.length < 20 ? capacitorType?.typeName.length * 26 + 'px' : '95%'}"
+              [ngStyle]="{'max-width': capacitorType?.typeName.length < 20 ? Math.max(capacitorType?.typeName.length * 26, 45) + 'px' : '95%'}"
               (change)="dynamicRouter.navigate(['/capacitor', 'view', companyName, $event.target.value])">
 
         <option *ngFor="let typeNameDropdown of capacitorTypeNames.sort(caseInsensitiveCompare)"
