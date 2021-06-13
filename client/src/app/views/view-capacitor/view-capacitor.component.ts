@@ -74,6 +74,8 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
       if (params.get('typeName')?.toLowerCase() === this.typeName?.toLowerCase()) {
         return;
       }
+      this.capacitorType = null;
+      this.capacitorUnit = null;
 
       this.companyName = params.get('companyName');
       this.typeName = params.get('typeName');
