@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
@@ -8,7 +8,7 @@ import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-re
   templateUrl: './capacitor-type-panel.component.html',
   styleUrls: ['./capacitor-type-panel.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
-export class CapacitorTypePanelComponent implements OnInit {
+export class CapacitorTypePanelComponent implements OnInit, OnChanges {
 
   /**
    * An observable that returns an Array of CapacitorTypes.
@@ -25,6 +25,9 @@ export class CapacitorTypePanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.capacitorTypesLoading = true;
+    this.typesMenuIsExpanded = false;
+
     this.createNewCapacitorPath = this.companyName ? ['/capacitor', 'create', this.companyName] : ['/capacitor', 'create'];
 
     this.capacitorTypesObservable.subscribe((capacitorTypes: Array<CapacitorTypeSearchResponse>) => {
@@ -32,6 +35,11 @@ export class CapacitorTypePanelComponent implements OnInit {
       this.capacitorTypesLoading = false;
       setTimeout(() => this.typesMenuIsExpanded = true, 100);
     });
+  }
+
+  ngOnChanges(changes): void {
+    this.capacitorTypesObservable = changes.capacitorTypesObservable.currentValue;
+    this.ngOnInit();
   }
 
 }
