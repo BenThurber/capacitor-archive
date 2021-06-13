@@ -34,82 +34,91 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
   capacitorTypeNames: Array<string> = [];
   capacitorTypeDescriptionPlainText = '';
   capacitorUnit: CapacitorUnit;
-  capacitorUnits: Array<CapacitorUnit>;
+  capacitorUnits: Array<CapacitorUnit> = [];
 
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
   scrollToElement = scrollToElement;
   Math = Math;
 
-  galleryOptions: NgxGalleryOptions[] = [];
+  galleryOptions: NgxGalleryOptions[] = [
+    {
+      previewCloseOnClick: true,
+      previewCloseOnEsc: true,
+      previewKeyboardNavigation: true,
+      previewZoom: true,
+      previewZoomStep: 0.4,
+      previewZoomMax: 4,
+      previewDownload: true,
+      previewAnimation: false,
+      width: '100%',
+      height: '100%',
+      thumbnailsColumns: 4,
+      imageInfinityMove: true,
+      imageSize: NgxGalleryImageSize.Contain,
+      imageAnimation: NgxGalleryAnimation.Slide,
+    }
+  ];
   galleryImages: NgxGalleryImage[] = [];
 
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private restService: RestService,
               public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService,
               private breadcrumbService: BreadcrumbService) {
-    this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
-    this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
-    this.value = this.activatedRoute.snapshot.paramMap.get('value');
   }
 
-  ngOnInit(): any {
-    this.titleService.setTitle('Viewing ' + title(this.typeName) + (this.value ? ' ' + this.value : ''));
 
-    this.galleryOptions = [
-      {
-        previewCloseOnClick: true,
-        previewCloseOnEsc: true,
-        previewKeyboardNavigation: true,
-        previewZoom: true,
-        previewZoomStep: 0.4,
-        previewZoomMax: 4,
-        previewDownload: true,
-        previewAnimation: false,
-        width: '100%',
-        height: '100%',
-        thumbnailsColumns: 4,
-        imageInfinityMove: true,
-        imageSize: NgxGalleryImageSize.Contain,
-        imageAnimation: NgxGalleryAnimation.Slide,
+  ngOnInit(): void {
+
+    this.activatedRoute.paramMap.subscribe(params => {
+
+      if (params.get('typeName')?.toLowerCase() === this.typeName?.toLowerCase()) {
+        return;
       }
-    ];
 
-    this.restService.getCapacitorTypeByName(this.companyName, this.typeName)
-      .subscribe({
-        next: (capacitorType: CapacitorType) => {
+      this.companyName = params.get('companyName');
+      this.typeName = params.get('typeName');
+      this.value = params.get('value');
+
+      this.titleService.setTitle('Viewing ' + title(this.typeName) + (this.value ? ' ' + this.value : ''));
+
+      this.restService.getCapacitorTypeByName(this.companyName, this.typeName)
+        .subscribe({
+          next: (capacitorType: CapacitorType) => {
             this.capacitorType = capacitorType;
             this.capacitorTypeDescriptionPlainText = InputRichTextComponent.htmlToText(capacitorType.description);
             this.updateBreadcrumb(capacitorType.companyName, capacitorType.typeName);
           },
-        error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorType')
-      });
+          error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorType')
+        });
 
 
-    this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
-      .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
+      this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
+        .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
 
-        this.capacitorUnit = capacitorUnits.filter(cu => cu.value === this.value).pop();
-        if (this.value && !this.capacitorUnit) {
-          const err = new SpringErrorResponse();
-          err.status = 404;
-          this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorUnit from value');
-        }
+          this.capacitorUnit = capacitorUnits.filter(cu => cu.value === this.value).pop();
+          if (this.value && !this.capacitorUnit) {
+            const err = new SpringErrorResponse();
+            err.status = 404;
+            this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorUnit from value');
+          }
 
-        this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
-        if (!this.value && this.capacitorUnits.length > 0) {
-          this.capacitorUnit = this.capacitorUnits[0];
-          this.similarMenuChanged(this.capacitorUnit.value);
+          this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
+          if (!this.value && this.capacitorUnits.length > 0) {
+            this.capacitorUnit = this.capacitorUnits[0];
+            this.similarMenuChanged(this.capacitorUnit.value);
 
-        } else if (this.capacitorUnits.length === 0) {
-          this.capacitorUnit = new CapacitorUnit();
-        }
+          } else if (this.capacitorUnits.length === 0) {
+            this.capacitorUnit = new CapacitorUnit();
+          }
 
-        this.updateGalleryImages();
-      });
+          this.updateGalleryImages();
+        });
 
 
-    this.restService.getAllTypes(this.companyName).subscribe(
-      (capacitorTypeNames: Array<CapacitorType>) => this.capacitorTypeNames = capacitorTypeNames.map(ct => ct.typeName));
+      this.restService.getAllTypes(this.companyName).subscribe(
+        (capacitorTypeNames: Array<CapacitorType>) => this.capacitorTypeNames = capacitorTypeNames.map(ct => ct.typeName));
+    });
+
   }
 
 
