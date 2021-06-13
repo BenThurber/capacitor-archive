@@ -12,6 +12,7 @@ import {ImageComponent} from '../../components/image/image.component';
 import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/breadcrumb.service';
 import {InputRichTextComponent} from '../../components/form-controls/input-rich-text/input-rich-text.component';
 import {scrollToElement} from '../../utilities/gui-utils';
+import {SpringErrorResponse} from '../../models/spring-error-response.model';
 
 
 @Component({
@@ -73,18 +74,6 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
       }
     ];
 
-
-    if (this.value) {
-      this.restService.getCapacitorUnitByValue(this.companyName, this.typeName, this.value)
-        .subscribe({
-          next: (capacitorUnit: CapacitorUnit) => {
-            this.capacitorUnit = capacitorUnit;
-            this.updateGalleryImages();
-          },
-          error: err => this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorUnit')
-        });
-    }
-
     this.restService.getCapacitorTypeByName(this.companyName, this.typeName)
       .subscribe({
         next: (capacitorType: CapacitorType) => {
@@ -98,6 +87,14 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
     this.restService.getAllCapacitorUnitsFromCapacitorType(this.companyName, this.typeName)
       .subscribe((capacitorUnits: Array<CapacitorUnit>) => {
+
+        this.capacitorUnit = capacitorUnits.filter(cu => cu.value === this.value).pop();
+        if (this.value && !this.capacitorUnit) {
+          const err = new SpringErrorResponse();
+          err.status = 404;
+          this.errorHandler.handleGetRequestError(err, 'Error getting CapacitorUnit from value');
+        }
+
         this.capacitorUnits = capacitorUnits.sort(CapacitorUnit.compare);
         if (!this.value && this.capacitorUnits.length > 0) {
           this.capacitorUnit = this.capacitorUnits[0];
@@ -105,8 +102,9 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
         } else if (this.capacitorUnits.length === 0) {
           this.capacitorUnit = new CapacitorUnit();
-          this.updateGalleryImages();
         }
+
+        this.updateGalleryImages();
       });
 
 
