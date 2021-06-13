@@ -8,10 +8,9 @@
   <ng-container *ngIf="manufacturerListItems; else loading">
     <div *ngFor="let manufacturerListItem of manufacturerListItems;">
       <div class="link__padding">
-        <a class="grey__link" [routerLink]=""
+        <a class="grey__link" [routerLink]="['/manufacturer', 'view', manufacturerListItem.companyName]"
            [title]="toolTipMsg(manufacturerListItem.numCapacitorUnits)"
-           [ngClass]="manufacturerListItem.numCapacitorTypes > 0 ? 'bright' : 'dull'"
-           (click)="dynamicRouter.navigate(['/manufacturer', 'view', manufacturerListItem.companyName])">
+           [ngClass]="manufacturerListItem.numCapacitorTypes > 0 ? 'bright' : 'dull'">
           {{manufacturerListItem.companyName}}
         </a>
       </div>
