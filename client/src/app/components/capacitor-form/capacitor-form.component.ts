@@ -209,7 +209,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    const lowercaseCompanyName = this.activatedRoute.snapshot.paramMap.get('companyName');
+    const lowercaseCompanyName = this.activatedRoute.snapshot.paramMap.get('companyName')?.toLowerCase();
 
     let companyName;
     allCompanyNames.forEach(name => {
@@ -231,7 +231,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
       return;
     }
 
-    const lowercaseTypeName = this.activatedRoute.snapshot.paramMap.get('typeName');
+    const lowercaseTypeName = this.activatedRoute.snapshot.paramMap.get('typeName')?.toLowerCase();
 
     let typeName;
     allTypes.forEach(type => {

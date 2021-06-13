@@ -4,11 +4,11 @@
 
     <ng-container *ngIf="only === 'type'; else withUnit">
       <h2>Editing Type
-        <a class="highlight" [routerLink]="" (click)="dynamicRouter.navigate(['/capacitor', 'view', companyName, capacitorType.typeName])">
+        <a class="highlight" [routerLink]="['/capacitor', 'view', companyName, capacitorType.typeName]">
           {{capacitorType && capacitorType.typeName}}
         </a>
         &nbsp;made by
-        <a class="highlight" [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', companyName])">
+        <a class="highlight" [routerLink]="['/manufacturer', 'view', companyName]">
           {{capacitorType && capacitorType.companyName}}
         </a>
       </h2>
@@ -19,16 +19,15 @@
 
     <ng-template #withUnit>
       <h2>Editing a Type
-        <a class="highlight" [routerLink]="" (click)="dynamicRouter.navigate(['/capacitor', 'view', companyName, capacitorUnit.typeName])">
+        <a class="highlight" [routerLink]="['/capacitor', 'view', companyName, capacitorUnit.typeName]">
           {{capacitorUnit && capacitorUnit.typeName}}
         </a>
         &nbsp;Size
-        <a class="highlight" [routerLink]=""
-           (click)="dynamicRouter.navigate(['/capacitor', 'view', companyName, capacitorUnit.typeName, capacitorUnit.value])">
+        <a class="highlight" [routerLink]="['/capacitor', 'view', companyName, capacitorUnit.typeName, capacitorUnit.value]">
           {{formattedCapacitance}}
         </a>
         made by
-        <a class="highlight" [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', companyName])">
+        <a class="highlight" [routerLink]="['/manufacturer', 'view', companyName]">
           {{capacitorUnit && capacitorUnit.companyName}}
         </a>
       </h2>
