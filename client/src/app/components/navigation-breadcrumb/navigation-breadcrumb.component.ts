@@ -1,7 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {BreadcrumbService} from '../../services/breadcrumb/breadcrumb.service';
-import {NavigationStart} from '@angular/router';
+import {NavigationStart, Router} from '@angular/router';
 import {filter} from 'rxjs/operators';
 
 /**
@@ -16,7 +15,7 @@ export class NavigationBreadcrumbComponent implements OnInit {
 
   @Input() links: Array<{name: string, url: Array<string>, params?: object}> = [];
 
-  constructor(public dynamicRouter: DynamicRouterService, private breadcrumbService: BreadcrumbService) {
+  constructor(public router: Router, private breadcrumbService: BreadcrumbService) {
 
     this.breadcrumbService.changeAnnounced$.subscribe(links => {
       links.unshift({name: 'Home', url: ['/']});
@@ -25,7 +24,7 @@ export class NavigationBreadcrumbComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dynamicRouter.router.events.pipe(
+    this.router.events.pipe(
       filter(event => event instanceof NavigationStart),
     ).subscribe(() => this.links = []);
   }
