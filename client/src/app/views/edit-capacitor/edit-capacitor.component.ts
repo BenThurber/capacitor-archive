@@ -3,7 +3,6 @@ import {RestService} from '../../services/rest/rest.service';
 import {ActivatedRoute} from '@angular/router';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
@@ -27,8 +26,7 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
   formattedCapacitance = '';
 
   constructor(private titleService: Title, private restService: RestService, private activatedRoute: ActivatedRoute,
-              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService,
-              private breadcrumbService: BreadcrumbService) {
+              private errorHandler: ErrorHandlerService, private breadcrumbService: BreadcrumbService) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = activatedRoute.snapshot.paramMap.get('typeName');
     this.value = activatedRoute.snapshot.paramMap.get('value');
@@ -45,7 +43,7 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
       next: (ct: CapacitorType) => {
         this.capacitorType = ct;
         if (this.only === 'type') {
-          this.updateBreadcrumb(ct.companyName, ct.typeName);
+          this.updateBreadcrumb(ct.companyName, ct.typeName, this.value);
         }
       },
       error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorType to edit.'),
@@ -78,7 +76,7 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
       links.push(
         {name: 'Editing ' + formattedCapacitance,
           url: ['/capacitor', 'edit', companyName, typeName, value],
-          params: {queryParams: {only: 'unit'}},
+          params: {only: 'unit'},
         } as any,
       );
       links[1].url.push(value);
@@ -87,10 +85,13 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
     } else {
       links.push(
         {name: 'Editing ' + typeName,
-          url: ['/capacitor', 'edit', companyName, typeName, value],
-          params: {queryParams: {only: 'type'}},
+          url: ['/capacitor', 'edit', companyName, typeName],
+          params: {only: 'type'},
         } as any,
       );
+      if (value) {
+        links[links.length - 1].url.push(value);
+      }
     }
     this.breadcrumbService.change(links);
   }

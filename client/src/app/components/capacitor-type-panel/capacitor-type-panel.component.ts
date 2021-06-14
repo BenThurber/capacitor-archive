@@ -1,6 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
 
 @Component({
@@ -21,10 +20,11 @@ export class CapacitorTypePanelComponent implements OnInit {
   capacitorTypesLoading = true;
   createNewCapacitorPath: Array<string>;
 
-  constructor(public dynamicRouter: DynamicRouterService) {
+  constructor() {
   }
 
   ngOnInit(): void {
+
     this.createNewCapacitorPath = this.companyName ? ['/capacitor', 'create', this.companyName] : ['/capacitor', 'create'];
 
     this.capacitorTypesObservable.subscribe((capacitorTypes: Array<CapacitorTypeSearchResponse>) => {

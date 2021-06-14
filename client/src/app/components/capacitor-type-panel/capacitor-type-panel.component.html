@@ -16,13 +16,13 @@
         <app-search-result [typeData]="type"></app-search-result>
       </div>
       <hr>
-      <a class="grey__link add-capacitor" [routerLink]=""
-         (click)="dynamicRouter.navigate(createNewCapacitorPath)">
+      <a class="grey__link add-capacitor"
+         [appRouterLink]="createNewCapacitorPath">
         + Add Capacitor
       </a>
     </ng-container>
     <ng-template #noTypes>
-      No Capacitors <a class="grey__link add-capacitor" (click)="dynamicRouter.navigate(createNewCapacitorPath)">+ Add Capacitor</a>
+      No Capacitors <a class="grey__link add-capacitor" [appRouterLink]="createNewCapacitorPath">+ Add Capacitor</a>
     </ng-template>
 
   </mat-expansion-panel>
