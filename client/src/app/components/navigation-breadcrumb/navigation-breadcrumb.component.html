@@ -4,7 +4,7 @@
 
   <span *ngFor="let link of links; let i = index;">
     <a class="grey__link"
-      [routerLink]="link.url"
+      [appRouterLink]="link.url"
       [queryParams]="link.params ? link.params.queryParams ? link.params.queryParams : link.params : {}">{{link.name}}</a>
     <span class="arrow">{{i < links.length - 1 ? ' > ' : ''}}</span>
   </span>

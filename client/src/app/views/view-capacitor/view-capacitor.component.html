@@ -6,9 +6,9 @@
 
 
     <div id="image-box">
-      <a id="edit-photos" [routerLink]=""
-         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value],
-         {queryParams: {only: 'photos'}})">
+      <a id="edit-photos"
+         [appRouterLink]="['/capacitor', 'edit', companyName, typeName, capacitorUnit.value]"
+         [queryParams]="{only: 'photos'}">
         <img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Photos
       </a>
       <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
@@ -18,8 +18,8 @@
     <div id="type-box" class="info__box__right minor__shadow">
       <a *ngIf="capacitorType; else typeSpinner"
          class="edit__button"
-         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, value], {queryParams: {only: 'type'}})"
-         [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
+         [appRouterLink]="['/capacitor', 'edit', companyName, typeName, value]"
+         [queryParams]="{only: 'type'}"><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
       <ng-template #typeSpinner><span class="spinner" style="float: right; margin-top: 5px"></span></ng-template>
 
       <span style="font-size: 22px">Type: </span>
@@ -37,7 +37,7 @@
 
       </select><br>
 
-      Made by: <a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName.toLowerCase()])">
+      Made by: <a [appRouterLink]="['/manufacturer', 'view', capacitorType.companyName]">
       {{capacitorType && capacitorType.companyName}}
       </a><br>
 
@@ -54,9 +54,9 @@
 
     <div id="unit-box" class="info__box__right minor__shadow">
       <a class="edit__button"
-         (click)="dynamicRouter.navigate(['/capacitor', 'edit', companyName, typeName, capacitorUnit.value],
-            {queryParams: {only: 'unit'}})"
-         [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Value</a>
+         [appRouterLink]="['/capacitor', 'edit', companyName, typeName, capacitorUnit.value]"
+         [queryParams]="{only: 'unit'}"
+      ><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Value</a>
       <span *ngIf="!capacitorUnit" class="spinner" style="float: right; margin-top: 5px"></span>
 
       Capacitance:
@@ -119,8 +119,7 @@
       </div>
 
       <strong><a style="font-size: 20px" class="nav__link"
-                 [routerLink]=""
-                 (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName, typeName])">
+                 [appRouterLink]="['/capacitor', 'create', companyName, typeName]">
         + Add a Capacitor
       </a></strong>
     </div>
