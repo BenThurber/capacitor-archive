@@ -16,7 +16,7 @@ export class DynamicRouterLinkDirective extends RouterLinkWithHref implements On
 
   ngOnInit(): void {
     this.routerLink = this.appRouterLink;
-    this.href = this.appRouterLink.join('/');
+    (this as any).updateTargetUrlAndHref();
   }
 
   /**
@@ -34,6 +34,7 @@ export class DynamicRouterLinkDirective extends RouterLinkWithHref implements On
       replaceUrl: attrBoolValue(this.replaceUrl),
       state: this.state
     };
+    // This line causes component reload and is different from RouterLinkWithHref's onClick()
     this.router2.navigateByUrl('/', {skipLocationChange: true}).then(
       () => this.router2.navigateByUrl(this.urlTree, extras)
     );

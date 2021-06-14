@@ -18,7 +18,7 @@ export class SearchResultComponent implements OnInit, OnChanges {
 
   format = (capacitance: number) => CapacitorUnit.formattedCapacitance(capacitance, true, true);
 
-  constructor(private router: Router) { }
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
     this.viewCapacitorPath = ['/capacitor', 'view', this.typeData.companyName, this.typeData.typeName];

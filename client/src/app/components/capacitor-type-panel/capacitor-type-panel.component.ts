@@ -7,7 +7,7 @@ import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-re
   templateUrl: './capacitor-type-panel.component.html',
   styleUrls: ['./capacitor-type-panel.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
-export class CapacitorTypePanelComponent implements OnInit, OnChanges {
+export class CapacitorTypePanelComponent implements OnInit {
 
   /**
    * An observable that returns an Array of CapacitorTypes.
@@ -24,8 +24,6 @@ export class CapacitorTypePanelComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.capacitorTypesLoading = true;
-    this.typesMenuIsExpanded = false;
 
     this.createNewCapacitorPath = this.companyName ? ['/capacitor', 'create', this.companyName] : ['/capacitor', 'create'];
 
@@ -34,11 +32,6 @@ export class CapacitorTypePanelComponent implements OnInit, OnChanges {
       this.capacitorTypesLoading = false;
       setTimeout(() => this.typesMenuIsExpanded = true, 100);
     });
-  }
-
-  ngOnChanges(changes): void {
-    this.capacitorTypesObservable = changes.capacitorTypesObservable.currentValue;
-    this.ngOnInit();
   }
 
 }
