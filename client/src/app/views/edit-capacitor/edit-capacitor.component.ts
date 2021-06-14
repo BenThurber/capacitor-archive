@@ -45,7 +45,7 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
       next: (ct: CapacitorType) => {
         this.capacitorType = ct;
         if (this.only === 'type') {
-          this.updateBreadcrumb(ct.companyName, ct.typeName);
+          this.updateBreadcrumb(ct.companyName, ct.typeName, this.value);
         }
       },
       error: err => this.errorHandler.handleGetRequestError(err, 'Could not get CapacitorType to edit.'),
@@ -78,7 +78,7 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
       links.push(
         {name: 'Editing ' + formattedCapacitance,
           url: ['/capacitor', 'edit', companyName, typeName, value],
-          params: {queryParams: {only: 'unit'}},
+          params: {only: 'unit'},
         } as any,
       );
       links[1].url.push(value);
@@ -87,10 +87,13 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
     } else {
       links.push(
         {name: 'Editing ' + typeName,
-          url: ['/capacitor', 'edit', companyName, typeName, value],
-          params: {queryParams: {only: 'type'}},
+          url: ['/capacitor', 'edit', companyName, typeName],
+          params: {only: 'type'},
         } as any,
       );
+      if (value) {
+        links[links.length - 1].url.push(value);
+      }
     }
     this.breadcrumbService.change(links);
   }

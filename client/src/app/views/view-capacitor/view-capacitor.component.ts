@@ -129,11 +129,11 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
     this.value = value;
     const cu = this.capacitorUnit;
-    this.dynamicRouter.router.navigate([
+    this.dynamicRouter.navigate([
       '/capacitor',
       'view',
-      cu.companyName.toLowerCase(),
-      cu.typeName.toLowerCase(),
+      cu.companyName,
+      cu.typeName,
       cu.value
     ], { replaceUrl: true });
     this.updateBreadcrumb(cu.companyName, cu.typeName);
