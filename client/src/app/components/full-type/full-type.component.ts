@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {CapacitorType} from '../../models/capacitor-type.model';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-full-type',
@@ -12,7 +12,7 @@ export class FullTypeComponent implements OnInit {
   @Input() capacitorType: CapacitorType;
   @Input('capacitorUnitValue') value: string;
 
-  constructor(public dynamicRouter: DynamicRouterService) { }
+  constructor(public router: Router) { }
 
   ngOnInit(): void {
   }

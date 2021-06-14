@@ -26,7 +26,7 @@
 
       <select *ngIf="capacitorTypeNames" id="type-dropdown"
               [ngStyle]="{'max-width': capacitorType?.typeName.length < 20 ? Math.max(capacitorType?.typeName.length * 26, 45) + 'px' : '95%'}"
-              (change)="dynamicRouter.navigate(['/capacitor', 'view', companyName, $event.target.value])">
+              (change)="router.navigate(['/capacitor', 'view', companyName, $event.target.value])">
 
         <option *ngFor="let typeNameDropdown of capacitorTypeNames.sort(caseInsensitiveCompare)"
                 [value]="typeNameDropdown" [selected]="typeNameDropdown.toLowerCase() === typeName.toLowerCase()">
@@ -105,7 +105,7 @@
           <mat-list-option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
                            [selected]="capacitorUnit.value === similarUnit.value"
                            (click)="similarMenuChanged(similarMenu.selectedOptions.selected[0]?.value)"
-                           (dblclick)="dynamicRouter.navigate(['/capacitor', 'edit', similarUnit.companyName,
+                           (dblclick)="router.navigate(['/capacitor', 'edit', similarUnit.companyName,
                            similarUnit.typeName, similarUnit.value], {queryParams: {only: 'unit'}})">
 
             <div class="similar__unit__option__contents">
