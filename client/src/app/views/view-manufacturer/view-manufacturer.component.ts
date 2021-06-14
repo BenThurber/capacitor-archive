@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Manufacturer} from '../../models/manufacturer.model';
 import {RestService} from '../../services/rest/rest.service';
 import {ActivatedRoute} from '@angular/router';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
 import {Title} from '@angular/platform-browser';
 import {title} from '../../utilities/text-utils';
@@ -21,17 +20,17 @@ export class ViewManufacturerComponent implements OnInit, UpdateBreadcrumb {
   manufacturer$: Manufacturer;
   capacitorTypesSearchResponseObservable: Observable<Array<CapacitorTypeSearchResponse>>;
 
-  constructor(private titleService: Title, public restService: RestService, public dynamicRouter: DynamicRouterService,
+  constructor(private titleService: Title, public restService: RestService,
               public activatedRoute: ActivatedRoute, private errorHandler: ErrorHandlerService,
               private breadcrumbService: BreadcrumbService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.capacitorTypesSearchResponseObservable = this.restService.getAllTypeSearchResponses(this.companyName);
   }
 
-  ngOnInit(): Subscription {
+  ngOnInit(): void {
     this.titleService.setTitle('Viewing ' + title(this.companyName));
 
-    return this.restService.getManufacturerByName(this.companyName)
+    this.restService.getManufacturerByName(this.companyName)
       .subscribe({
         next: (manufacturer: Manufacturer) => {
           this.manufacturer$ = manufacturer;

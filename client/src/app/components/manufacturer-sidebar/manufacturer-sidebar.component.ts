@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {RestService} from '../../services/rest/rest.service';
 import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {ShowSidebarService} from '../../services/show-sidebar/show-sidebar.service';
@@ -20,12 +19,8 @@ export class ManufacturerSidebarComponent implements OnInit {
 
   showShadow = null;
 
-  dynamicRouter: DynamicRouterService;
-
-  constructor(private restService: RestService, private activatedRoute: ActivatedRoute, dynamicRouter: DynamicRouterService,
+  constructor(private restService: RestService, private activatedRoute: ActivatedRoute,
               private refreshManufacturers: RefreshManufacturersService, private showSidebarService: ShowSidebarService) {
-
-    this.dynamicRouter = dynamicRouter;
 
     // Reload the component when a refresh is announced
     this.refreshManufacturers.refreshAnnounced$.subscribe(() => this.ngOnInit());

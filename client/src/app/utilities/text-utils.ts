@@ -77,3 +77,19 @@ function isLetter(c): boolean {
 }
 
 
+const UPPER_CASE_PATHS = [
+  /^[0-9]+C[0-9]+V/    // CapacitorUnit value
+];
+
+/**
+ * Converts a string to lower case if it isn't the value of a CapacitorUnit
+ * @param param an unencoded url path parameter, a string
+ */
+export function toLowerCaseIfNotValue(param: string): string {
+  if (UPPER_CASE_PATHS.some(regex => regex.test(param))) {
+    return param;
+  } else {
+    return param.toLowerCase();
+  }
+}
+
