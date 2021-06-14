@@ -1,6 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CapacitorType} from '../../models/capacitor-type.model';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-full-type',
@@ -12,7 +11,7 @@ export class FullTypeComponent implements OnInit {
   @Input() capacitorType: CapacitorType;
   @Input('capacitorUnitValue') value: string;
 
-  constructor(public router: Router) { }
+  constructor() { }
 
   ngOnInit(): void {
   }

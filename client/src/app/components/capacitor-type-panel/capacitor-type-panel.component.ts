@@ -1,7 +1,6 @@
 import {Component, Input, OnChanges, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
 import {CapacitorTypeSearchResponse} from '../../models/capacitor-type-search-response.model';
-import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-capacitor-type-panel',
@@ -21,7 +20,7 @@ export class CapacitorTypePanelComponent implements OnInit, OnChanges {
   capacitorTypesLoading = true;
   createNewCapacitorPath: Array<string>;
 
-  constructor(public router: Router) {
+  constructor() {
   }
 
   ngOnInit(): void {
