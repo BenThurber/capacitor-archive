@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {NavigationExtras, Router, UrlTree} from '@angular/router';
+import {toLowerCaseIfNotValue} from '../../utilities/text-utils';
 
 /**
  * This component is a wrapper for @angular/router.  This service overcomes the problem of views
@@ -10,17 +11,10 @@ import {NavigationExtras, Router, UrlTree} from '@angular/router';
 })
 export class DynamicRouterService {
 
-  readonly UPPER_CASE_PATHS = [
-
-    /^[0-9]+C[0-9]+V/    // CapacitorUnit value
-
-  ];
-
   router: Router;
 
   constructor(router: Router) {
     this.router = router;
-    this.toLowerCaseIfFilter = this.toLowerCaseIfFilter.bind(this);   // Strange TS behavior requires this
   }
 
   /**
@@ -39,7 +33,7 @@ export class DynamicRouterService {
    *     interpreted.
    */
   async navigate(commands: any[], extras?: NavigationExtras): Promise<boolean> {
-    return this.router.navigate(commands.map(this.toLowerCaseIfFilter), extras);
+    return this.router.navigate(commands, extras);
   }
 
   /**
@@ -55,18 +49,5 @@ export class DynamicRouterService {
    */
   async navigateByUrl(url: string | UrlTree, extras?: NavigationExtras): Promise<boolean> {
     return this.router.navigateByUrl(url, extras);
-  }
-
-
-  /**
-   * Calls toLowerCase() on string unless it matches a regex in UPPER_CASE_PATHS.
-   * @param param an unencoded url path parameter
-   */
-  private toLowerCaseIfFilter(param: string): string {
-    if (this.UPPER_CASE_PATHS.some(regex => regex.test(param))) {
-      return param;
-    } else {
-      return param.toLowerCase();
-    }
   }
 }
