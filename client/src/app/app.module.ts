@@ -46,6 +46,7 @@ import { InputCountryComponent } from './components/form-controls/input-country/
 import { NavigationBreadcrumbComponent } from './components/navigation-breadcrumb/navigation-breadcrumb.component';
 import { FullTypeComponent } from './components/full-type/full-type.component';
 import {MatListModule} from '@angular/material/list';
+import { DynamicRouterLinkDirective } from './directives/dynamic-router-link/dynamic-router-link.directive';
 
 
 /**
@@ -104,6 +105,7 @@ export class LowerCaseUrlSerializer extends DefaultUrlSerializer {
     InputCountryComponent,
     NavigationBreadcrumbComponent,
     FullTypeComponent,
+    DynamicRouterLinkDirective,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
