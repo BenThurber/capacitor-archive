@@ -1,10 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {RestService} from '../../services/rest/rest.service';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {padEndHtml, caseInsensitiveCompare, title} from '../../utilities/text-utils';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation, NgxGalleryImageSize} from 'ngx-gallery-9';
 import {Title} from '@angular/platform-browser';
 import {ErrorHandlerService} from '../../services/error-handler/error-handler.service';
@@ -62,7 +61,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private restService: RestService,
-              public dynamicRouter: DynamicRouterService, private errorHandler: ErrorHandlerService,
+              public router: Router, private errorHandler: ErrorHandlerService,
               private breadcrumbService: BreadcrumbService) {
   }
 
@@ -140,7 +139,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
     this.capacitorUnit = this.capacitorUnits.filter(u => u.value === value).pop();
     this.value = value;
     const cu = this.capacitorUnit;
-    this.dynamicRouter.navigate([
+    this.router.navigate([
       '/capacitor',
       'view',
       cu.companyName,

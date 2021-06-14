@@ -2,7 +2,7 @@ import {AfterViewChecked, Component, ElementRef, Input, OnInit, QueryList, ViewC
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AbstractControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
@@ -10,7 +10,6 @@ import {Location} from '@angular/common';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 import {Photo} from '../../models/file/photo.model';
 import {scrollToElement} from '../../utilities/gui-utils';
 
@@ -90,7 +89,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
 
   constructor(private activatedRoute: ActivatedRoute,
               public restService: RestService,
-              private dynamicRouter: DynamicRouterService,
+              private router: Router,
               private formBuilder: FormBuilder,
               public location: Location) { }
 
@@ -342,7 +341,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
     this.formFields.companyName.disable();
 
     setTimeout(() => {
-      this.dynamicRouter.navigate(['/manufacturer', 'create']).catch(
+      this.router.navigate(['/manufacturer', 'create']).catch(
         () => {
           this.isNavigatingToCreateManufacturer = false;
           this.formFields.companyName.enable();
@@ -453,7 +452,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
 
       return httpRequestObservable.subscribe({
         next: (returnedCapacitorUnit: CapacitorUnit) => {
-          this.dynamicRouter.navigate([
+          this.router.navigate([
             '/capacitor',
             'view',
             returnedCapacitorUnit.companyName,
@@ -483,7 +482,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
         || this.editCapacitorType.typeName),
     ];
     if (this.editCapacitorUnit) { route.push(this.editCapacitorUnit.value); }
-    this.dynamicRouter.navigate(route);
+    this.router.navigate(route);
 
   }
 

@@ -8,7 +8,6 @@ import {RefreshManufacturersService} from '../../services/refresh-manufacturers/
 import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
-import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 
 @Component({
@@ -31,15 +30,15 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   manufacturerForm: FormGroup;
   formBuilder: FormBuilder;
   restService: RestService;
-  dynamicRouter: DynamicRouterService;
+  router: Router;
   location: Location;
   refreshManufacturers: RefreshManufacturersService;
 
-  constructor(formBuilder: FormBuilder, restService: RestService, dynamicRouter: DynamicRouterService, location: Location,
+  constructor(formBuilder: FormBuilder, restService: RestService, router: Router, location: Location,
               refreshManufacturers: RefreshManufacturersService) {
     this.formBuilder = formBuilder;
     this.restService = restService;
-    this.dynamicRouter = dynamicRouter;
+    this.router = router;
     this.location = location;
     this.refreshManufacturers = refreshManufacturers;
   }
@@ -114,7 +113,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   submitCreate(manufacturer: Manufacturer): void {
 
     return this.restService.createManufacturer(manufacturer).subscribe({
-      next: () => this.dynamicRouter.navigate(['/manufacturer', 'view', manufacturer.companyName]).then(
+      next: () => this.router.navigate(['/manufacturer', 'view', manufacturer.companyName]).then(
         () => this.refreshManufacturers.refresh()
       ),
       error: error => this.handleBackendError(error.error),
@@ -125,7 +124,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
   submitEdit(manufacturer: Manufacturer): void {
 
     return this.restService.editManufacturer(this.existingManufacturer.companyName, manufacturer).subscribe({
-      next: () => this.dynamicRouter.navigate(['/manufacturer', 'view', manufacturer.companyName]).then(
+      next: () => this.router.navigate(['/manufacturer', 'view', manufacturer.companyName]).then(
         () => this.refreshManufacturers.refresh()
       ),
       error: error => this.handleBackendError(error.error),
