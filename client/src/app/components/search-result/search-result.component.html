@@ -3,7 +3,7 @@
   <div id="thumb" class="search__thumbnail">
     <img alt="icon"
          [src]="typeData.thumbnailUrl || '../../../assets/no-photo-green.png'"
-         (click)="dynamicRouter.navigate(viewCapacitorPath)">
+         (click)="router.navigate(viewCapacitorPath)">
   </div>
   <p><a id="type-name" [appRouterLink]="viewCapacitorPath">
     {{typeData.typeName}}
@@ -27,6 +27,6 @@
   </p>
   <p id="description"><strong>Description: </strong>{{capacitorTypeDescriptionPlainText}}</p>
   <img id="edit-icon" alt="" title="Edit" src="../../../assets/edit.svg"
-       [appRouterLink]="['/capacitor', 'edit', typeData.companyName, typeData.typeName]"
-       [queryParams]="{only: 'type'}">
+       (click)="router.navigate(['/capacitor', 'edit', typeData.companyName, typeData.typeName],
+       {queryParams: {only: 'type'}})">
 </div>

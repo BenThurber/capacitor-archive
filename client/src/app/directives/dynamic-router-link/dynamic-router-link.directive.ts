@@ -8,6 +8,7 @@ import {LocationStrategy} from '@angular/common';
 export class DynamicRouterLinkDirective extends RouterLinkWithHref implements OnInit {
 
   @Input() appRouterLink: Array<string>;
+  @Input() queryParams: object;
 
   constructor(private router2: Router, private route2: ActivatedRoute, private locationStrategy2: LocationStrategy) {
     super(router2, route2, locationStrategy2);
