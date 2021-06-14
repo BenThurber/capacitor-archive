@@ -342,7 +342,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
     this.formFields.companyName.disable();
 
     setTimeout(() => {
-      this.dynamicRouter.navigate(['manufacturer', 'create']).catch(
+      this.dynamicRouter.navigate(['/manufacturer', 'create']).catch(
         () => {
           this.isNavigatingToCreateManufacturer = false;
           this.formFields.companyName.enable();
