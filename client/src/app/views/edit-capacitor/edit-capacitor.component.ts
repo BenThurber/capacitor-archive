@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RestService} from '../../services/rest/rest.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {CapacitorUnit} from '../../models/capacitor-unit.model';
 import {CapacitorType} from '../../models/capacitor-type.model';
 import {Title} from '@angular/platform-browser';
@@ -26,8 +26,7 @@ export class EditCapacitorComponent implements OnInit, UpdateBreadcrumb {
   formattedCapacitance = '';
 
   constructor(private titleService: Title, private restService: RestService, private activatedRoute: ActivatedRoute,
-              public router: Router, private errorHandler: ErrorHandlerService,
-              private breadcrumbService: BreadcrumbService) {
+              private errorHandler: ErrorHandlerService, private breadcrumbService: BreadcrumbService) {
     this.companyName = activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = activatedRoute.snapshot.paramMap.get('typeName');
     this.value = activatedRoute.snapshot.paramMap.get('value');

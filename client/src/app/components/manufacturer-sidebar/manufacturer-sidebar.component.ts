@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {RestService} from '../../services/rest/rest.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {Subscription} from 'rxjs';
 import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
@@ -19,12 +19,8 @@ export class ManufacturerSidebarComponent implements OnInit {
 
   showShadow = null;
 
-  router: Router;
-
-  constructor(private restService: RestService, private activatedRoute: ActivatedRoute, router: Router,
+  constructor(private restService: RestService, private activatedRoute: ActivatedRoute,
               private refreshManufacturers: RefreshManufacturersService, private showSidebarService: ShowSidebarService) {
-
-    this.router = router;
 
     // Reload the component when a refresh is announced
     this.refreshManufacturers.refreshAnnounced$.subscribe(() => this.ngOnInit());
