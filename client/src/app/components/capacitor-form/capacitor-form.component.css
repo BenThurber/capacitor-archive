@@ -47,10 +47,6 @@
   width: 280px;
 }
 
-#dimensions-expansion-panel {
-  width: 400px;
-}
-
 .expandable__input {
   margin-bottom: 5px;
   margin-top: 5px;
@@ -91,4 +87,67 @@ hr {
 #volt-unit {
   margin-left: 5px;
   font-size: 14px;
+}
+
+
+/* Dimension Expansion Panel */
+
+#dimensions-expansion-panel {
+  width: 650px;
+}
+
+#dimension-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto auto auto;
+  grid-gap: 5px;
+  align-items: center;
+}
+
+#length-grid {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#tubular-cap-img {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  justify-self: end;
+
+  height: 90px;
+}
+
+#diameter-grid {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+#thickness-grid {
+  grid-column: 1;
+  grid-row: 3;
+}
+
+#flat-cap-img {
+  grid-column: 2;
+  grid-row: 3;
+  justify-self: end;
+
+  height: 110px;
+}
+
+#mounting-hole-diameter-grid {
+  grid-column: 1;
+  grid-row: 4;
+}
+
+#can-cap-img {
+  grid-column: 2;
+  grid-row: 4;
+  justify-self: end;
+
+  height: 110px;
+}
+
+.dimension__img {
+  margin: 10px 0 20px 0
 }

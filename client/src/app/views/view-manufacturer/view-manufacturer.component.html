@@ -6,8 +6,8 @@
 
     <ng-container *ngIf="manufacturer$; else spinner">
       <div *ngFor="let typeName of manufacturer$.typeNames;">
-        <a class="grey__link" [title]="typeName" [routerLink]=""
-           (click)="dynamicRouter.navigate(['/capacitor', 'view', companyName, typeName])">
+        <a class="grey__link" [title]="typeName"
+           [appRouterLink]="['/capacitor', 'view', companyName, typeName]">
           {{typeName}}
         </a>
       </div>
@@ -16,8 +16,8 @@
       <div style="display: flex; justify-content: center; padding-top: 10px"><div class="spinner"></div></div>
     </ng-template>
     <div>
-      <a id="add-capacitor" class="grey__link" [routerLink]=""
-         (click)="dynamicRouter.navigate(['/capacitor', 'create', companyName])">
+      <a id="add-capacitor" class="grey__link"
+         [appRouterLink]="['/capacitor', 'create', companyName]">
         + Add Capacitor
       </a>
     </div>
@@ -28,8 +28,8 @@
   <div id="manufacturer-box" *ngIf="manufacturer$; else loading">
 
     <div class="edit__button">
-      <a href [routerLink]="" style="font-size: 16px"
-         (click)="dynamicRouter.navigate(['/manufacturer', 'edit', manufacturer$.companyName])">
+      <a href style="font-size: 16px"
+         [appRouterLink]="['/manufacturer', 'edit', manufacturer$.companyName]">
         <img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Page
       </a>
     </div>

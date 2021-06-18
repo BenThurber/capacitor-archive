@@ -2,6 +2,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import {DefaultUrlSerializer, UrlSegmentGroup, UrlSerializer, UrlTree} from '@angular/router';
+import {toLowerCaseIfNotValue} from './utilities/text-utils';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -44,6 +46,34 @@ import { InputCountryComponent } from './components/form-controls/input-country/
 import { NavigationBreadcrumbComponent } from './components/navigation-breadcrumb/navigation-breadcrumb.component';
 import { FullTypeComponent } from './components/full-type/full-type.component';
 import {MatListModule} from '@angular/material/list';
+import { DynamicRouterLinkDirective } from './directives/dynamic-router-link/dynamic-router-link.directive';
+
+
+/**
+ * Converts all url parameters to lower case unless they are a CapacitorUnit value.
+ */
+export class LowerCaseUrlSerializer extends DefaultUrlSerializer {
+
+  private _traverseTree(tree: UrlSegmentGroup): void {
+    if (tree) {
+      if (tree.segments) {
+        for (const segment of tree.segments) {
+          segment.path = toLowerCaseIfNotValue(segment.path);
+        }
+      }
+
+      this._traverseTree(tree.children?.primary);
+    }
+  }
+
+  serialize(tree: UrlTree): string {
+    if (tree.root) {
+      this._traverseTree(tree.root);
+    }
+
+    return super.serialize(tree);
+  }
+}
 
 
 @NgModule({
@@ -75,6 +105,7 @@ import {MatListModule} from '@angular/material/list';
     InputCountryComponent,
     NavigationBreadcrumbComponent,
     FullTypeComponent,
+    DynamicRouterLinkDirective,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -95,7 +126,14 @@ import {MatListModule} from '@angular/material/list';
     ModalModule,
     NgxGalleryModule,
   ],
-  providers: [RestService, QuillEditorComponent],
+  providers: [
+    RestService,
+    QuillEditorComponent,
+    {
+      provide: UrlSerializer,
+      useClass: LowerCaseUrlSerializer
+    }
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

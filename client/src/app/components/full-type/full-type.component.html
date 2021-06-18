@@ -1,14 +1,13 @@
 <div id="type-full">
   <a class="edit__button" style="font-size: 17px; margin: 23px 18px 0 0;"
-     (click)="dynamicRouter.navigate(['/capacitor', 'edit', capacitorType.companyName, capacitorType.typeName, value],
-     {queryParams: {only: 'type'}})"
-     [routerLink]=""><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
+     [appRouterLink]="['/capacitor', 'edit', capacitorType.companyName, capacitorType.typeName, value]"
+     [queryParams]="{only: 'type'}"><img class="edit__icon" src="../../../assets/edit.svg" alt="">Edit Type</a>
 
   <h2>Type: {{capacitorType && capacitorType.typeName}}</h2>
 
   <ng-container id="text-body">
     <div style="margin-bottom: 2px;">
-      <strong>Made by: </strong><a [routerLink]="" (click)="dynamicRouter.navigate(['/manufacturer', 'view', capacitorType.companyName])">
+      <strong>Made by: </strong><a [appRouterLink]="['/manufacturer', 'view', capacitorType.companyName]">
       {{capacitorType && capacitorType.companyName}}</a>
     </div>
 

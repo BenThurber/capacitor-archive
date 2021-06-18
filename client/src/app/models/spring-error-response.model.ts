@@ -1,5 +1,5 @@
 
-export interface SpringErrorResponse {
+export class SpringErrorResponse {
   error: any;
   message: string;
   path: string;
