@@ -219,26 +219,38 @@
           </mat-panel-title>
         </mat-expansion-panel-header>
 
-        <div style="all: initial">
-          <label class="input__label__minor expandable__label" for="length">Length</label>
+        <div id="dimension-grid" style="font-family: initial">
+
+          <div id="length-grid">
+          <label class="input__label__minor expandable__label" for="length">Length (L)</label>
           <input id="length" type="text" formControlName="length" class="expandable__input" size="10"
                  placeholder="optional">
-          <br>
+          </div>
 
-          <label class="input__label__minor expandable__label" for="diameter">Diameter</label>
+          <img id="tubular-cap-img" class="dimension__img" src="../../../assets/tubular-dimensions.svg">
+
+          <div id="diameter-grid">
+          <label class="input__label__minor expandable__label" for="diameter">Diameter (D)</label>
           <input id="diameter" type="text" formControlName="diameter" class="expandable__input" size="10"
                  placeholder="optional">
-          <br>
+          </div>
 
-          <label class="input__label__minor expandable__label" for="length">Thickness</label>
+          <div id="thickness-grid">
+          <label class="input__label__minor expandable__label" for="length">Thickness (T)</label>
           <input id="thickness" type="text" formControlName="thickness" class="expandable__input" size="10"
                  placeholder="optional">
-          <br>
+          </div>
 
+          <img id="flat-cap-img" class="dimension__img" src="../../../assets/flat-dimensions.svg">
+
+          <div id="mounting-hole-diameter-grid">
           <label class="input__label__minor expandable__label" for="mounting-hole-diameter">Mounting Hole Diameter</label>
           <input id="mounting-hole-diameter" type="text" formControlName="mountingHoleDiameter" class="expandable__input" size="10"
                  placeholder="optional">
-          <br>
+          </div>
+
+          <img id="can-cap-img" class="dimension__img" src="../../../assets/tubular-dimensions.svg">
+
         </div>
 
       </mat-expansion-panel>

@@ -48,7 +48,64 @@
 }
 
 #dimensions-expansion-panel {
-  width: 400px;
+  width: 600px;
+}
+
+#dimension-grid {
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto auto auto;
+  grid-gap: 5px;
+}
+
+#length-grid {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+}
+
+#tubular-cap-img {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: start;
+
+  height: 90px;
+}
+
+#diameter-grid {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: center;
+}
+
+#thickness-grid {
+  grid-column: 1;
+  grid-row: 3;
+  align-self: center;
+}
+
+#flat-cap-img {
+  grid-column: 2;
+  grid-row: 3;
+
+  height: 110px;
+}
+
+#mounting-hole-diameter-grid {
+  grid-column: 1;
+  grid-row: 4;
+  align-self: center;
+}
+
+#can-cap-img {
+  grid-column: 2;
+  grid-row: 4;
+
+  height: 90px;
+}
+
+.dimension__img {
+  margin: 10px 0 20px 0
 }
 
 .expandable__input {
