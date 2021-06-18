@@ -36,6 +36,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
   capacitorUnit: CapacitorUnit;
   capacitorUnits: Array<CapacitorUnit>;
 
+  similarMenuSelectedOptions: Array<string>;
   formattedCapacitance = CapacitorUnit.formattedCapacitance;
   scrollToElement = scrollToElement;
   Math = Math;
@@ -138,6 +139,24 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
     ], { replaceUrl: true });
     this.updateBreadcrumb(cu.companyName, cu.typeName);
     this.updateGalleryImages();
+  }
+
+  /**
+   * Moves the selected item in the similarMenu up or down.
+   * @param i how far to move the selected item up or down, positive moves up, negative moves down.
+   */
+  similarMenuMove(i): void {
+    const len = this.capacitorUnits.length;
+    let j = this.capacitorUnits.lastIndexOf(this.capacitorUnit);
+
+    i = -i;
+    j = (((j + i) % len) + len) % len;       // Wrap if index overflows array bounds
+
+    const value = this.capacitorUnits[j]?.value;
+    if (value) {
+      this.similarMenuSelectedOptions = [value];
+      this.similarMenuChanged(value);
+    }
   }
 
   formatSimilarCapacitor(capacitorUnit: CapacitorUnit): string {

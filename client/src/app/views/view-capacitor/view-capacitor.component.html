@@ -101,10 +101,13 @@
       </label></strong><br>
 
       <div id="similar-menu">
-        <mat-selection-list #similarMenu [multiple]="false">
+        <mat-selection-list #similarMenu [multiple]="false"
+                            (keydown.arrowup)="similarMenuMove(+1)"
+                            (keydown.arrowdown)="similarMenuMove(-1)"
+                            [(ngModel)]="similarMenuSelectedOptions"
+                            (selectionChange)="similarMenuChanged($event.options[0]?.value)">
           <mat-list-option *ngFor="let similarUnit of capacitorUnits" [value]="similarUnit.value"
                            [selected]="capacitorUnit.value === similarUnit.value"
-                           (click)="similarMenuChanged(similarMenu.selectedOptions.selected[0]?.value)"
                            (dblclick)="router.navigate(['/capacitor', 'edit', similarUnit.companyName,
                            similarUnit.typeName, similarUnit.value], {queryParams: {only: 'unit'}})">
 
