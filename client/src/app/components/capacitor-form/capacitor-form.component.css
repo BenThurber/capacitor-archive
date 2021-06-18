@@ -47,6 +47,51 @@
   width: 280px;
 }
 
+.expandable__input {
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.expandable__label {
+  margin-left: 15px;
+  margin-right: 10px;
+}
+
+hr {
+  border: 0;
+  clear:both;
+  display:block;
+  background-color: #5a5a5a;
+  height: 1.5px;
+  margin-top: 15px;
+  margin-bottom: 45px;
+  margin-left: -25px;
+}
+
+.manufacturer__spinner {
+  margin-left: 18px;
+}
+
+.special__menu__item {
+  font-weight: bold;
+}
+
+.captcha {
+}
+
+.submit {
+  display: inline-flex;
+  margin-top: 100px;
+}
+
+#volt-unit {
+  margin-left: 5px;
+  font-size: 14px;
+}
+
+
+/* Dimension Expansion Panel */
+
 #dimensions-expansion-panel {
   width: 600px;
 }
@@ -106,46 +151,4 @@
 
 .dimension__img {
   margin: 10px 0 20px 0
-}
-
-.expandable__input {
-  margin-bottom: 5px;
-  margin-top: 5px;
-}
-
-.expandable__label {
-  margin-left: 15px;
-  margin-right: 10px;
-}
-
-hr {
-  border: 0;
-  clear:both;
-  display:block;
-  background-color: #5a5a5a;
-  height: 1.5px;
-  margin-top: 15px;
-  margin-bottom: 45px;
-  margin-left: -25px;
-}
-
-.manufacturer__spinner {
-  margin-left: 18px;
-}
-
-.special__menu__item {
-  font-weight: bold;
-}
-
-.captcha {
-}
-
-.submit {
-  display: inline-flex;
-  margin-top: 100px;
-}
-
-#volt-unit {
-  margin-left: 5px;
-  font-size: 14px;
 }
