@@ -12,6 +12,7 @@ import {BreadcrumbService, UpdateBreadcrumb} from '../../services/breadcrumb/bre
 import {InputRichTextComponent} from '../../components/form-controls/input-rich-text/input-rich-text.component';
 import {scrollToElement} from '../../utilities/gui-utils';
 import {SpringErrorResponse} from '../../models/spring-error-response.model';
+import {DynamicRouterService} from '../../services/dynamic-router/dynamic-router.service';
 
 
 @Component({
@@ -45,7 +46,7 @@ export class ViewCapacitorComponent implements OnInit, UpdateBreadcrumb {
 
   constructor(private titleService: Title, private activatedRoute: ActivatedRoute, private restService: RestService,
               public router: Router, private errorHandler: ErrorHandlerService,
-              private breadcrumbService: BreadcrumbService) {
+              private breadcrumbService: BreadcrumbService, public dynamicRouter: DynamicRouterService) {
     this.companyName = this.activatedRoute.snapshot.paramMap.get('companyName');
     this.typeName = this.activatedRoute.snapshot.paramMap.get('typeName');
     this.value = this.activatedRoute.snapshot.paramMap.get('value');
