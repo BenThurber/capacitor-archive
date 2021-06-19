@@ -74,6 +74,41 @@ public class NumberParserTest {
         assertEquals(new BigDecimal("-3.25"), NumberParser.parse("-3 1/4"));
     }
 
+    @Test
+    void positiveMixedNumber() {
+        assertEquals(new BigDecimal("3.25"), NumberParser.parse("+3 1/4"));
+    }
+
+    @Test
+    void mixedNumberMinusSpace() {
+        assertEquals(new BigDecimal("3.25"), NumberParser.parse("3 - 1/4"));
+    }
+
+    @Test
+    void mixedNumberMinus() {
+        assertEquals(new BigDecimal("3.25"), NumberParser.parse("3-1/4"));
+    }
+
+    @Test
+    void negativeMixedNumberMinus() {
+        assertEquals(new BigDecimal("-3.25"), NumberParser.parse("-3 - 1/4"));
+    }
+
+    @Test
+    void negativeMixedNumberMinusSpace() {
+        assertEquals(new BigDecimal("-3.25"), NumberParser.parse("-3 - 1 /   4"));
+    }
+
+    @Test
+    void tooManyMinuses__fail() {
+        assertThrows(NumberFormatException.class, () -> NumberParser.parse("-3 -- 1 /   4"));
+    }
+
+    @Test
+    void doubleNegative__fail() {
+        assertThrows(NumberFormatException.class, () -> NumberParser.parse("--3 - 1 /   4"));
+    }
+
 
 
 }

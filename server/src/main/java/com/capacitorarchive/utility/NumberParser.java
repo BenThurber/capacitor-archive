@@ -38,17 +38,7 @@ public class NumberParser {
             result = parseFraction(str);
 
         } else if (MIXED_NUMBER.matcher(str).matches()) {
-
-            String[] mixedNumber = str.split(MIXED_NUMBER_SEPARATOR);
-            System.out.println(mixedNumber[1]);
-            BigDecimal wholeNum = new BigDecimal(mixedNumber[0]);
-            BigDecimal fraction = parseFraction(mixedNumber[1]);
-
-            if (wholeNum.compareTo(BigDecimal.ZERO) < 0) {
-                fraction = fraction.negate();
-            }
-
-            result = wholeNum.add(fraction);
+            result = parseMixedNumber(str);
 
         } else {
             throw new NumberFormatException(String.format("For input string: \"%s\"", numStr));
@@ -64,6 +54,23 @@ public class NumberParser {
         BigDecimal denominator = new BigDecimal(frac[1]);
 
         return numerator.divide(denominator, FRACTION_PRECISION, RoundingMode.HALF_UP).stripTrailingZeros();
+    }
+
+    public static BigDecimal parseMixedNumber(String mixedNumStr) {
+        boolean negative = mixedNumStr.startsWith("-");
+        if (negative) {
+            mixedNumStr = mixedNumStr.substring(1);
+        }
+
+        String wholeNumStr = mixedNumStr.split(FRACTION_SEPARATOR)[0].split(MIXED_NUMBER_SEPARATOR)[0];
+        String[] mixedNumberArr = mixedNumStr.replaceAll("\\s*/\\s*", "/").split(MIXED_NUMBER_SEPARATOR);
+        String fractionStr = mixedNumberArr[mixedNumberArr.length - 1];
+
+        BigDecimal wholeNum = new BigDecimal(wholeNumStr);
+        BigDecimal fraction = parseFraction(fractionStr);
+
+
+        return negative ? wholeNum.add(fraction).negate() : wholeNum.add(fraction);
     }
 
 }
