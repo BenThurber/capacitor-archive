@@ -55,6 +55,7 @@ export class InputRichTextComponent implements ControlValueAccessor, OnChanges, 
       h1: { format: 'skip' },
       h2: { format: 'skip' },
     },
+    ignoreHref: true,
   };
 
 
