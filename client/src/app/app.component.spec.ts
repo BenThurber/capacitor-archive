@@ -35,7 +35,7 @@ describe('AppComponent', () => {
     titleService = TestBed.inject(Title);
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(titleService.getTitle()).toEqual(app.title);
+    expect(titleService.getTitle()).toEqual(app.defaultTitle);
   });
 
   it('should render header', () => {

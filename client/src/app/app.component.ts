@@ -2,6 +2,7 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Title} from '@angular/platform-browser';
 import {ActivatedRoute, NavigationEnd, NavigationStart, Router} from '@angular/router';
 import {map, filter, mergeMap} from 'rxjs/operators';
+import {DynamicRouterService} from './services/dynamic-router/dynamic-router.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ export class AppComponent implements OnInit {
   defaultTitle = 'Capacitor Archive';
 
   public constructor(private titleService: Title, private router: Router,
-                     private activatedRoute: ActivatedRoute) {
+                     private activatedRoute: ActivatedRoute, private dynamicRouter: DynamicRouterService) {
     // Set the title in the browser window
     this.titleService.setTitle(this.defaultTitle);
   }
@@ -39,7 +40,7 @@ export class AppComponent implements OnInit {
     this.router.events
       .subscribe((event: NavigationStart) => {
         if (event.navigationTrigger === 'popstate') {
-          this.router.navigateByUrl(event.url);
+          this.dynamicRouter.navigateByUrl(event.url);
         }
       });
   }
