@@ -34,6 +34,7 @@ public class Measurement {
     @Column(name = "unit", nullable = false)
     private Unit unit;
 
+    @Setter(AccessLevel.NONE)
     @Column(name = "measurement_str", length = MEASUREMENT_LEN, nullable = false)
     private String measurementStr;
 
@@ -46,7 +47,7 @@ public class Measurement {
      */
     @PrePersist
     @PreUpdate
-    private void generateMeasurementStr() {
+    private void generateMeasurementUm() {
 
         BigDecimal number;
         try {
@@ -70,12 +71,16 @@ public class Measurement {
         }
     }
 
+    public void setMeasurementStr(String measurementStr) {
+        this.measurementStr = measurementStr;
+        generateMeasurementUm();
+    }
+
     public Measurement() { }
 
     public Measurement(String measurementStr, Unit unit) {
         setMeasurementStr(measurementStr);
         setUnit(unit);
-        generateMeasurementStr();
     }
 
 }

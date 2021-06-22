@@ -12,6 +12,7 @@ import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {Photo} from '../../models/file/photo.model';
 import {scrollToElement} from '../../utilities/gui-utils';
+import {ALL_UNITS, Unit} from '../../models/measurement-unit.model';
 
 class CapacitorForm {
   companyName: string;
@@ -59,6 +60,8 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
   errorsBackend: Array<SpringErrorResponse> = [];
 
   readonly noneSelected = 'Choose...';
+
+  readonly allMeasurementUnits = ALL_UNITS;
 
   // Manufacturer Section
   readonly newManufacturerOption = '+ Add Manufacturer';
@@ -121,10 +124,22 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
         capacitance: ['', this.only === 'type' ? [] : Validators.required],
         voltage: ['', [Validators.pattern(integerPattern)]],
         notes: ['', []],
-        length: ['', []],
-        diameter: ['', []],
-        mountingHoleDiameter: ['', []],
-        thickness: ['', []],
+        length: this.formBuilder.group({
+          lengthInput: ['', []],
+          lengthUnit: [this.allMeasurementUnits[0], []],
+        }),
+        diameter: this.formBuilder.group({
+          diameterInput: ['', []],
+          diameterUnit: [this.allMeasurementUnits[0], []],
+        }),
+        mountingHoleDiameter: this.formBuilder.group({
+          mountingHoleDiameterInput: ['', []],
+          mountingHoleDiameterUnit: [this.allMeasurementUnits[0], []],
+        }),
+        thickness: this.formBuilder.group({
+          thicknessInput: ['', []],
+          thicknessUnit: [this.allMeasurementUnits[0], []],
+        }),
         photos: [new Array<Photo>(), []],
       }),
       captcha: ['', Validators.required],

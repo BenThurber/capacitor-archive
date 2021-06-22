@@ -221,33 +221,45 @@
 
         <div id="dimension-grid" style="font-family: initial">
 
-          <div id="length-grid">
-          <label class="input__label__minor expandable__label" for="length">Length (L)</label>
-          <input id="length" type="text" formControlName="length" class="expandable__input" size="10"
-                 placeholder="optional">
-          </div>
+          <span id="length-grid" formGroupName="length">
+            <label class="input__label__minor expandable__label" for="length">Length (L)</label>
+            <input id="length" type="text" formControlName="lengthInput" class="expandable__input" size="10"
+                   placeholder="optional">
+            <select id="length-unit" formControlName="lengthUnit">
+              <option *ngFor="let unit of allMeasurementUnits" [ngValue]="unit">{{unit}}</option>
+            </select>
+          </span>
 
           <img id="tubular-cap-img" class="dimension__img" src="../../../assets/tubular-dimensions.svg">
 
-          <div id="diameter-grid">
-          <label class="input__label__minor expandable__label" for="diameter">Diameter (D)</label>
-          <input id="diameter" type="text" formControlName="diameter" class="expandable__input" size="10"
-                 placeholder="optional">
-          </div>
+          <span id="diameter-grid" formGroupName="diameter">
+            <label class="input__label__minor expandable__label" for="diameter">Diameter (D)</label>
+            <input id="diameter" type="text" formControlName="diameterInput" class="expandable__input" size="10"
+                   placeholder="optional">
+            <select id="diameter-unit" formControlName="diameterUnit">
+              <option *ngFor="let unit of allMeasurementUnits" [ngValue]="unit">{{unit}}</option>
+            </select>
+          </span>
 
-          <div id="thickness-grid">
-          <label class="input__label__minor expandable__label" for="length">Thickness (T)</label>
-          <input id="thickness" type="text" formControlName="thickness" class="expandable__input" size="10"
-                 placeholder="optional">
-          </div>
+          <span id="thickness-grid" formGroupName="thickness">
+            <label class="input__label__minor expandable__label" for="length">Thickness (T)</label>
+            <input id="thickness" type="text" formControlName="thicknessInput" class="expandable__input" size="10"
+                   placeholder="optional">
+            <select id="thickness-unit" formControlName="thicknessUnit">
+              <option *ngFor="let unit of allMeasurementUnits" [ngValue]="unit">{{unit}}</option>
+            </select>
+          </span>
 
           <img id="flat-cap-img" class="dimension__img" src="../../../assets/flat-dimensions.svg">
 
-          <div id="mounting-hole-diameter-grid">
-          <label class="input__label__minor expandable__label" for="mounting-hole-diameter">Mounting Hole Diameter (M)</label>
-          <input id="mounting-hole-diameter" type="text" formControlName="mountingHoleDiameter" class="expandable__input" size="10"
-                 placeholder="optional">
-          </div>
+          <span id="mounting-hole-diameter-grid" formGroupName="mountingHoleDiameter">
+            <label class="input__label__minor expandable__label" for="mounting-hole-diameter">Mounting Hole<br>Diameter (M)</label>
+            <input id="mounting-hole-diameter" type="text" formControlName="mountingHoleDiameterInput" class="expandable__input" size="10"
+                   placeholder="optional">
+            <select id="mounting-hole-diameter-unit" formControlName="mountingHoleDiameterUnit">
+              <option *ngFor="let unit of allMeasurementUnits" [ngValue]="unit">{{unit}}</option>
+            </select>
+          </span>
 
           <img id="can-cap-img" class="dimension__img" src="../../../assets/can-dimensions.svg">
 
