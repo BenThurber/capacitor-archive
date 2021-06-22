@@ -17,8 +17,8 @@ import {historicCountryList} from '../../../utilities/countries';
 })
 export class InputCountryComponent implements ControlValueAccessor, OnInit {
 
-  selectValue: string;
-  inputValue: string;
+  selectValue: string = null;
+  inputValue = '';
 
   useCustomCountryName = false;
   countries = historicCountryList;
@@ -41,7 +41,7 @@ export class InputCountryComponent implements ControlValueAccessor, OnInit {
       this.countries.sort();
     }
 
-    this.selectValue = country;
+    this.selectValue = country ? country : null;
     if (this.changeDetectorRef) {
       this.changeDetectorRef.markForCheck();
     }

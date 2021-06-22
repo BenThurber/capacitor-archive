@@ -48,7 +48,7 @@ export class ManufacturerFormComponent implements OnInit, OnChanges {
     const integerPattern: RegExp = /^\d+$/;
     this.manufacturerForm = this.formBuilder.group({
       companyName: ['', Validators.required],
-      country: ['', []],
+      country: [null, []],
       openYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       closeYear: ['', [Validators.pattern(integerPattern), Validators.min(1000), Validators.max(new Date().getFullYear())]],
       summary: ['', []],
