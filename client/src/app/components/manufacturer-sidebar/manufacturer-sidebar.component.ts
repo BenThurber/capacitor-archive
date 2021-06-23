@@ -24,6 +24,15 @@ export class ManufacturerSidebarComponent implements OnInit {
 
     // Reload the component when a refresh is announced
     this.refreshManufacturers.refreshAnnounced$.subscribe(() => this.ngOnInit());
+
+    this.refreshManufacturers.manufacturerAddedCapacitorUnit$.subscribe(companyName => {
+      this.manufacturerListItems.filter(li => li.companyName?.toLowerCase() === companyName?.toLowerCase())[0].numCapacitorUnits++;
+    });
+
+    this.refreshManufacturers.manufacturerAddedCapacitorType$.subscribe(companyName => {
+      this.manufacturerListItems.filter(li => li.companyName?.toLowerCase() === companyName?.toLowerCase())[0].numCapacitorTypes++;
+    });
+
     this.showSidebarService.showSidebarAnnounced$.subscribe(shown => this.showShadow = shown);
   }
 
