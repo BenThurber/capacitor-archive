@@ -12,6 +12,7 @@ import {environment} from '../../../environments/environment';
 import {ReCaptcha2Component} from '@niteshp/ngx-captcha';
 import {Photo} from '../../models/file/photo.model';
 import {scrollToElement} from '../../utilities/gui-utils';
+import {RefreshManufacturersService} from '../../services/refresh-manufacturers/refresh-manufacturers.service';
 
 class CapacitorForm {
   companyName: string;
@@ -91,6 +92,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
               public restService: RestService,
               private router: Router,
               private formBuilder: FormBuilder,
+              private refreshManufacturer: RefreshManufacturersService,
               public location: Location) { }
 
   ngOnInit(): void {
@@ -420,6 +422,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
       return httpRequestObservable.subscribe({
         next: () => {
           this.formFields.type.controls.typeContent.markAsPristine();
+          if (!this.editing) {this.refreshManufacturer.addedNewCapacitorType(capacitorType?.companyName); }
           this.submitCreateEditRecursive(capacitorForm);
         },
         error: error => this.handleBackendError(error.error),
@@ -452,6 +455,9 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
 
       return httpRequestObservable.subscribe({
         next: (returnedCapacitorUnit: CapacitorUnit) => {
+
+          if (!this.editing) {this.refreshManufacturer.addedNewCapacitorUnit(capacitorUnit?.companyName); }
+
           this.router.navigate([
             '/capacitor',
             'view',
