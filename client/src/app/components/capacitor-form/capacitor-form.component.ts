@@ -1,4 +1,4 @@
-import {AfterViewChecked, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {Subscription} from 'rxjs';
 import {caseInsensitiveCompare} from '../../utilities/text-utils';
 import {RestService} from '../../services/rest/rest.service';
@@ -44,7 +44,7 @@ class CapacitorForm {
   templateUrl: './capacitor-form.component.html',
   styleUrls: ['./capacitor-form.component.css', '../../styles/animations.css', '../../styles/expansion-panel.css']
 })
-export class CapacitorFormComponent implements OnInit, AfterViewChecked {
+export class CapacitorFormComponent implements OnInit, AfterViewInit {
 
   static readonly newConstructionOption = '+ Add Construction';
 
@@ -141,7 +141,7 @@ export class CapacitorFormComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  ngAfterViewChecked(): void {
+  ngAfterViewInit(): void {
     if (this.only === 'photos') {
       scrollToElement(this.submitDiv?.nativeElement, 'auto');
     }
