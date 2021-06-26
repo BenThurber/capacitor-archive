@@ -44,15 +44,13 @@ public class Manufacturer {
     @Column(name = "country", length = FIELD_LEN)
     private String country;
 
-    @Column(name = "open_year", columnDefinition = "SMALLINT")
-    @Type(type = "org.hibernate.type.ShortType")
+    @Column(name = "open_year")
     private Short openYear;
 
-    @Column(name = "close_year", columnDefinition = "SMALLINT")
-    @Type(type = "org.hibernate.type.ShortType")
+    @Column(name = "close_year")
     private Short closeYear;
 
-    @Column(name = "summary", columnDefinition="MEDIUMTEXT")
+    @Column(name = "summary")
     private String summary;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "manufacturer", cascade = CascadeType.ALL)

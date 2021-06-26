@@ -18,6 +18,7 @@ public class User {
 
     private final static int FIELD_LEN = 45;
     private final static int BIO_LEN = 500;
+    private final static int PASSWORD_LEN = 60;
     private static PasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @Id
@@ -37,7 +38,7 @@ public class User {
 
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
-    @Column(name = "password_hash", columnDefinition="CHAR(60)", nullable = false)
+    @Column(name = "password_hash", length = PASSWORD_LEN, nullable = false)
     private String passwordHash;
 
     @Column(name = "email_visible", nullable = false)
