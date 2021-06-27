@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Entity
 public class Photo extends FileReference {
 
-    @Column(name = "order")
+    @Column(name = "`order`")    // Needs tick marks around it because order is a reserved SQL keyword
     private Integer order;
 
     @ManyToOne(fetch = FetchType.EAGER)
